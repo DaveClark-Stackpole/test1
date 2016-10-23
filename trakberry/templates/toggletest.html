@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+<!-- Load Bootstrap toggle button -->
+
+  
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script>
+
+	$('#toggle-demo').bootstrapToggle('off')
+	
+</script>
+
+<script>
+function myFunction() {
+    window.print();}
+    
+    $(document).on('click', '.toggle-button', function() {
+    $(this).toggleClass('toggle-button-selected'); 
+});
+</script>
+
+
+
+	<form action="" method="post">{% csrf_token %}
+
+
+
+
+	
+<center>
+<input "checked" data-toggle="toggle" data-on="Day" data-off="Day" data-onstyle="primary"  type="checkbox" data-size="mini" data-width="100" name="shift_test">
+<input  data-toggle="toggle" data-on="Aft" data-off="Aft"data-onstyle="primary" type="checkbox" data-size="mini" data-width="100" name="shift_test">
+<input data-toggle="toggle" data-on="Mid" data-off="Mid" data-onstyle="primary" type="checkbox" data-size="mini" data-width="100" name="shift_test">
+
+
+
+<br>
+
+<input style="background-color: #2A93BD;border-radius: 10px;width:205px;height:25px;font-weight: 600;" type="submit" value="FILTER">
+
+
+</form>
+
+
+</body>
+</html>
