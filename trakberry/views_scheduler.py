@@ -1,0 +1,627 @@
+from django.shortcuts import render
+from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
+from views_vacation import vacation_set_current2, vacation_temp
+from views_db import db_open
+from forms import toggletest_Form, views_scheduler_selectionForm
+from trakberry.forms import emp_training_form, emp_info_form, job_info_form
+import MySQLdb
+# import time
+# import datetime
+from time import mktime
+from datetime import datetime, date
+
+
+from django.core.context_processors import csrf
+from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
+
+
+	
+def current_schedule(request):
+	db, cur = db_open() 
+	sql = "SELECT * FROM tkb_jobs ORDER BY %s %s, %s %s" %('Description', 'ASC', 'Job_Name','ASC')
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	return render(request,"test3.html",{'total':tmp})
+
+def set_rotation(request):
+	db, cur =db_open()
+	x = 0			
+	mql = ('update tkb_employee_matrix SET Rotation="%s"' % (x))
+	cur.execute(mql)
+	db.commit()
+	
+	db.close()
+	
+	return render(request, "done_test.html")
+
+# Display the Job Rotation for the shift 
+def rotation_info_display(request):
+	db, cur = db_open()
+	curr_shift = request.session["matrix_shift"]
+	sql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' ORDER BY %s %s , %s %s" %(curr_shift,'Employee', 'ASC','Job','ASC')
+	cur.execute(sql)
+	tmp = cur.fetchall()
+
+	cql = "SELECT COUNT(*) from tkb_jobs"
+	cur.execute(cql)
+	tmp2 = cur.fetchall()
+	tmp3 = tmp2[0]
+	job_ctr = tmp3[0]
+		
+	jql = "SELECT * FROM tkb_jobs ORDER BY  %s %s, %s %s" %('Description','ASC','Job_Name','ASC')
+	cur.execute(jql)
+	jmp = cur.fetchall()
+
+
+	ct = 1
+	jct = 0
+
+	j = []
+	jc = []
+	pj = ""
+	for i in jmp:
+
+		if ct == 1:
+			pj = i[1]
+		if i[1] != pj:
+			j.append(str(pj))
+			jc.append(jct)
+			pj = i[1]
+			jct = 0
+
+		ct = ct + 1
+		jct = jct + 1
+
+	# *************  ??  **************
+	j.append(str(pj))
+	jc.append(jct)
+	# *********************************
+
+	db.close()
+	a = 1
+	c =int(job_ctr + 1)
+	
+	tjobs = zip(j,jc)
+	
+	ctr1 = 0
+	k = []
+	sw = -1
+	c1 = '#DCDDDE'
+	c2 = '#ffffff'
+	jb = ""
+	for i in tmp:
+		if i[2] != jb:
+			sw = sw * -1
+			if sw == 1:
+				ccc = c1
+			else:
+				ccc = c2
+			jb = i[2]
+		ctr1 = ctr1 + 1	
+		if ctr1 == (job_ctr+1):
+			sw = 1
+			ctr1 = 1
+		if ctr1 == 1:
+			ccc = c1
+			
+				
+		k.append(str(ccc))	
+				
+	#return render(request, "test67.html", {'tjobs':tjobs})
+	col_jobs = float(94 / job_ctr)
+	
+	# Form for shift selection
+	if request.POST:
+		shift = request.POST.get("shift")
+		request.session["matrix_shift"] = shift
+		return rotation_info_reload(request)
+	else:
+		form = toggletest_Form
+	args ={}
+	args.update(csrf(request))
+	args['form'] = form
+	
+	tmp4 = map(None,tmp,k)
+	#tmp4 = zip(tmp,jc)	
+	#return render(request, "test67.html", {'List':tmp,'List2':tmp4,'List3':jc})	
+	return render(request, "rotation_info_display.html", {'List':tmp4,'B':job_ctr,'A':a,'C':c,'Jobs':jmp,'tjobs':tjobs,'D':col_jobs,'args':args})
+
+def rotation_update(request, index):
+	db, cur =db_open()
+	sql = "SELECT Rotation FROM tkb_employee_matrix where Id='%s'" %(index)
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	level = int(tmp2[0])
+
+	new_level = 0
+	
+	if level == 0:
+		new_level = 1
+	if level == 1:
+		new_level = 0
+
+	level = new_level				
+	mql = ('update tkb_employee_matrix SET Rotation="%s" WHERE Id="%s"' % (level,index))
+	cur.execute(mql)
+	db.commit()
+	
+	db.close()
+	
+	return render(request, "done_rotation.html")	
+	
+def rotation_info_reload(request):
+	return render(request, "done_rotation.html")		
+
+def schedule_set(request):
+	current_first = vacation_set_current2()
+	request.session["current_first"] = current_first
+	db, cur = db_open()
+	sql = "SELECT * FROM tkb_jobs ORDER BY  %s %s, %s %s" %('Description','ASC','Job_Name','ASC')
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	return render(request, "schedule_info_display.html", {'List':tmp})
+
+
+# ****************************************************
+# *     Scheduling Section                           *
+# ****************************************************
+
+#	+++++ Module for ensuring priority is numbered sequentially again after changes  +++++++++++++++++++++++
+def schedule_init(request):
+	r = 1
+	try:
+		shift = request.session["matrix_shift"]
+	except:
+		shift = request.session["shift_priority"]
+		
+	db, cur = db_open()	
+	aql = "SELECT COUNT(*) from tkb_employee_matrix WHERE Shift = '%s' and Rotation = '%s'" %(shift,r)
+	cur.execute(aql)
+	tmp2 = cur.fetchall()
+	tmp3 = tmp2[0]
+	job_count = tmp3[0]
+	
+	bql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' and Rotation = '%s' ORDER BY %s %s , %s %s" %(shift,r,'Employee', 'ASC','Priority','ASC')	
+	cur.execute(bql)
+	tmp = cur.fetchall()
+	
+	ct = 1
+	current_employee = ''
+	new_employee = 'start'
+	for x in tmp:
+		i_d = x[0]
+		new_employee = x[1]
+		if new_employee != current_employee:
+			current_employee = new_employee
+			ct = 1
+		sql = ('update tkb_employee_matrix SET Priority="%s" WHERE Id ="%s"' % (ct, i_d))
+		cur.execute(sql)
+		db.commit()
+		ct = ct + 1
+	db.close()	 
+			
+	return render(request,'test22.html',{'tmp':tmp,'ID':i_d})
+	
+
+# Set Schedule in table along with preselected jobs that could run
+def schedule_set2(request):
+	rotation = 1
+	shift = 'Cont A Nights CSD 2'
+	db, cur = db_open()
+	
+	employee = '---'
+	final = 0
+	dql = ('DELETE FROM tkb_schedule WHERE Finalize = "%s"'% (final))
+	cur.execute(dql)
+	db.commit()
+	
+	try:
+		cql = "SELECT MAX(Id) from tkb_schedule"
+		cur.execute(cql)
+		tmp2 = cur.fetchall()
+		tmp3 = tmp2[0]
+		ctr_sched = tmp3[0]
+		id_ctr = ctr_sched + 1
+	except:
+		id_ctr = 0	
+			
+	# Select all the Job_Names and Descriptions linked together that this shift rotation is eligible for
+	# tmp(0) = Job_Name  :  tmp[1] = Description  :  tmp[2] = number of this combos in selected list
+	sql = "SELECT Job_Name , Description, count(*) as total from tkb_employee_matrix where  Shift='%s' and Rotation='%s' GROUP by Job_Name, Description" % (shift,rotation)
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	
+	position = 'CNC'
+	Asql = "SELECT * from tkb_jobs WHERE Position = '%s' ORDER BY %s %s , %s %s" % (position, 'Description', 'ASC', 'Job_Name', 'ASC')
+	cur.execute(Asql)
+	Amp = cur.fetchall()
+	
+	for a in Amp:
+		id_ctr = id_ctr + 1
+		selection = 0
+#		for x in tmp:
+#			if x[1] == '6L Output' or x[1] == '6L Input':
+			#if x[1] == a[1] and x[0] == a[5]:
+#				selection = 1
+
+		# Temporary Code to force Continental Shift as default for Schedule start
+		if a[1] == '6L Output' or a[1] == '6L Input':
+			selection = 1
+		cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a[1],a[5],a[6],shift,selection,id_ctr))
+		db.commit()
+	db.close()	
+	return schedule_set3(request)
+
+def schedule_set3(request):	
+	shift = 'Cont A Nights CSD 2'	
+	finalize = 1
+	db, cur = db_open()
+	Bsql = "SELECT Description, count(*) as total from tkb_schedule where  Shift='%s'  and Finalize != '%s' GROUP by Description ORDER BY %s %s" % (shift,finalize,'Description','ASC')
+	cur.execute(Bsql)
+	bmp = cur.fetchall()
+	
+	Csql = "SELECT Id, Description, Job_Name, Selection from tkb_schedule where  Shift='%s' and Finalize != '%s' ORDER BY %s %s , %s %s" % (shift,finalize,'Description','ASC','Job_Name','ASC')
+	cur.execute(Csql)
+	cmp = cur.fetchall()
+		
+	db.close()
+	ctr = 0
+
+	sch = []
+	cc = []
+	v = []
+	for x in cmp:
+		if (bmp[ctr][0]) != (x[1]):
+			ctr = ctr + 1
+		try:	
+			sch.append(str(bmp[ctr][0]))
+			sch.append(bmp[ctr][1])
+		except:
+			sch.append('---')
+			sch.append('---')
+		sch.append(str(x[2]))
+		cc.append(str(ctr))  # 
+
+	aa = []
+	bb = []
+	dd = []
+	ff = []
+	gg = []
+	kk = []
+	ll = []
+	prev = ''
+	cct = 0
+	ee = bmp[0][1]
+	qq = '---'
+
+	for i in cmp:
+		ll.append(i[1])
+		if prev == i[1]:
+			bb.append('---')
+
+		if i[1] != prev:
+			prev = i[1]
+			bb.append(i[1])
+
+			ee = bmp[cct][1]
+			cct = cct + 1	
+#		bb.append(i[1])
+		
+#		if i[1] != prev:
+#			prev = i[1]
+		kk.append('') #Assigned Employee
+		ff.append(ee)	 # Row Span (Number of Job Names for this Description)
+		aa.append(str(i[0]))  # Id 
+		dd.append(i[2])  #  Job Name
+		gg.append(i[3])  # Selection (1 or 0)
+	
+	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)		
+	return schedule_set4(request,list)
+	
+def schedule_set4(request,list):
+    # Set Form Variables
+    qq = '---'
+    choice = []
+    choice2 = []
+    y = 1
+    n = 0
+    if request.POST:
+        request.session["date_curr"] = request.POST.get("date_curr")
+        db, cur = db_open()
+        for x in list:
+            if request.POST.get(str(x[0])):
+                aaa = x[0]
+                bbb = y
+                choice.append(x[0])
+                choice2.append(y)
+            else:
+                aaa = x[0]
+                bbb = n
+                choice.append(x[0])
+                choice2.append(n)
+            chc = zip(choice,choice2)
+            sql = ('update tkb_schedule SET Selection="%s" WHERE Id ="%s"' % (bbb, aaa))
+            cur.execute(sql)
+            db.commit()
+        db.close()
+        return schedule_set5(request,list)
+        return render(request,'display_schedule_formRefresh.html', {'a':list})
+
+ #           return schedule_set5(request,chc)
+
+
+    else:
+        form = views_scheduler_selectionForm()
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+    ttt = 1
+    ttt = str(ttt)
+    
+    current_first = vacation_set_current2()
+    
+    
+#    return schedule_set5(request,list)
+    return render(request, "display_schedule_form.html", {'list':list,'qq':qq,'ttt':ttt,'Curr':current_first,'args':args})
+ 
+    return render(request,'display_schedule_formRefresh.html', {'a':list})		
+    
+# Set Employee names and their Jobs in two seperate arrays N[] and E[]
+def schedule_set5(request,list):
+	position = 'CNC'
+	rotation = 1
+	selection = 1
+	finalize = 1
+	db, cur = db_open()
+	try:
+		shift = request.session["matrix_shift"]
+	except:
+		shift = request.session["shift_priority"]
+	
+	# Copy Employees to schedule into tkb_employee_temp
+	
+	sql_d = "DELETE FROM tkb_employee_temp WHERE Shift='%s' and Position='%s'" % (shift,position)
+	cur.execute(sql_d)
+	db.commit()
+		
+	MNsql = "INSERT tkb_employee_temp Select * From tkb_employee where Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Employee','ASC')
+	cur.execute(MNsql)
+	db.commit()
+		
+	Jsql = "SELECT Employee from tkb_employee_temp where  Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Employee','ASC')
+	cur.execute(Jsql)
+	tmp_employees = cur.fetchall()
+	t2_employees = tmp_employees[0]
+	
+	Csql = "SELECT count(*) from tkb_employee_temp where  Shift='%s' and Position='%s'" % (shift,position)
+	cur.execute(Csql)
+	tmp = cur.fetchall()	
+	tmp2 = tmp[0]
+	tmp_count = tmp2[0]   # Count for number of employees
+	qty_employee = tmp_count
+	
+	JCsql = "SELECT count(*) from tkb_schedule where  Shift='%s' and Position='%s' and Selection='%s' and Finalize !='%s'" % (shift,position,selection,finalize)
+	cur.execute(JCsql)
+	tmp = cur.fetchall()	
+	tmp2 = tmp[0]
+	tmp_J_count = tmp2[0]   # Count for number of jobs
+	qty_jobs = tmp_J_count
+	
+	# ******* Below section to break and view Variables *******************
+#	www = [ 0 for x in range(3)]
+#	www[5]=9
+# ************************************************************	
+	
+	# Check to see if employees available doesn't equal jobs needed
+	if qty_jobs != qty_employee:
+		request.session['qty_jobs'] = qty_jobs
+		request.session['qty_employee'] = qty_employee
+		request.session['qty_diff'] = 1
+		
+		return render(request,'display_schedule_fail.html')	
+	
+	
+	E = [[] for x in range(tmp_count)]
+	N = ['' for x in range(tmp_count)]
+	ctr = [ 0 for x in range(tmp_count)]
+	co = 0
+	for y in tmp_employees:
+		N[co] = y[0]
+		p = y[0]
+		
+# Below section can be added back if module doesn't work  *******************************************		
+#		Hsql = "SELECT Description, Job_Name from tkb_employee_matrix where Rotation ='%s' and Employee ='%s'" % (rotation,p)
+#		Hsql = "SELECT Description, Job_Name from tkb_employee_matrix where Rotation ='%s' and Employee ='%s' ORDER BY %s %s" % (rotation,y[0],'Priority','ASC')
+#		cur.execute(Hsql)
+#		tmp3 = cur.fetchall()
+#  **************************************************************************************************
+		tmp3 = join_query(p,shift)
+
+		tmp_matrix = tmp3[0]
+		tmp_description = tmp_matrix[0]
+		tmp_job = tmp_matrix[1]
+#		try:
+		for z in tmp3:
+			ztest1 = str(z[0])
+			ztest2 = z[1]
+			Dsql = "SELECT Id from tkb_jobs where Description ='%s' and Job_Name = '%s'" % (z[0],z[1])
+			cur.execute(Dsql)
+			tmp4 = cur.fetchall()
+			# change back to tmp4[0]
+			tmp7 = tmp4[0]
+			tmp_job_id = tmp7[0]
+			E[co].append(tmp_job_id)
+		co = co + 1
+#		except:
+#			db.close()
+#			return render(request,'test1.html')
+			 
+	db.close()
+#	return render(request,'display_schedule_test1.html', {'list':list2,'k':k,'lista':list})	
+	#return render(request,'display_schedule_formRefresh.html',{'a':t2_employees,'b':N,'c':N[1],'d':E})
+	# Schedule Algorithm using N[i] Names of Employees and E[i] Jobs for each of the employees in an array for each
+	
+	A = []
+	bk = 0
+	ptr = 0
+	no_match = 0
+	
+	# Scheduler Engine
+	while True:
+		A.append(E[ptr][ctr[ptr]])
+		if len(A) != len (set(A)):
+			A.pop()
+			ctr[ptr] = ctr[ptr] + 1
+			while True:
+				if ctr[ptr] <= (len(E[ptr]) - 1):
+					break
+				if (ctr[ptr] > (len(E[ptr])-1)) and ptr == 0:
+					no_match = 1
+					break
+				ctr[ptr] = 0
+				ptr = ptr - 1
+				ctr[ptr] = ctr[ptr] + 1
+				A.pop()
+		else:
+			ptr = ptr + 1
+		if no_match == 1:
+			nnoo = 1
+			break
+		if ptr > (qty_employee-1):
+			break
+			
+
+
+
+	if no_match != 1:
+		TY = []
+		listT = zip(N,A)
+		
+		e_dash = '---'
+		D=[]
+		J=[]
+		db, cur = db_open()
+		for x in listT:
+			sql1 = "SELECT Description,Job_Name from tkb_jobs where Id ='%s'" % (x[1])
+			cur.execute(sql1)
+			tmpA = cur.fetchall()
+			tmpB = tmpA[0]
+			description  = tmpB[0]
+			job = tmpB[1]
+			TY.append(x[0])
+			TY.append(description)
+			TY.append(job)
+			D.append(description)
+			J.append(job)
+			sql2 = ('update tkb_schedule SET Employee="%s" WHERE Description ="%s" and Job_Name ="%s" and Shift = "%s" and Position = "%s" and Employee = "%s"' % (x[0], description,job,shift,position,e_dash))
+			cur.execute(sql2)
+			db.commit()
+		db.close()
+		k=zip(N,D,J)
+	#	return render(request,'display_nothing.html')
+		aa = []
+		bb = []
+		cc = []
+		dd = []
+		ee = []
+		ff = []
+		gg = []
+		hh = []
+		
+#		list = zip(aa,bb,dd,cc,ff,gg,kk,ll)	
+		for y in list:
+			aa.append(y[0])
+			bb.append(y[1])
+			cc.append(y[2])
+			dd.append(y[3])
+			ee.append(y[4])
+			ff.append(y[5])
+			gg.append(y[6])
+			ck = 0
+			for x in k:
+				if ck != 1:
+					if x[1] == y[7] and x[2] == y[2]:
+						hh.append(x[0])
+						ck = 1
+			if ck == 0:
+				hh.append('---')
+											
+		
+		list2 = zip(aa,bb,cc,dd,ee,ff,gg,hh)
+		qq = '---'
+		request.session['current_shift'] = shift
+		request.session['current_position'] = position
+		return render(request,'display_schedule.html',{'list':list2,'qq':qq})
+			
+				
+	else:
+		request.session['qty_fail'] = 0
+		return render(request,'display_schedule_fail.html')										
+		
+	
+	#return render(request,'display_schedule_formRefresh.html',{'a':t2_employees,'b':N,'c':N[1],'d':E})
+
+def join_query(emp,shift):
+	x = 1
+	final = 1
+	db, cur = db_open()
+	#sql = "SELECT Description,Job_Name from tkb_schedule where Selection ='%s'" % (x)
+	#sql = "SELECT tkb_schedule.Job_Name, tkb_schedule.Description from tkb_schedule LEFT JOIN tkb_employee_matrix ON tkb_schedule.Selection ='%s' AND tkb_employee_matrix.Rotation = '%s'"%(x,x)
+	sql1 = "SELECT Job_Name, Description from tkb_schedule WHERE Selection ='%s' and Finalize != '%s'"%(x,final)
+	cur.execute(sql1)
+	list1 = cur.fetchall()
+	
+#	sql2 = "SELECT Job_Name, Description from tkb_employee_matrix WHERE Rotation ='%s' AND Shift='%s' AND Employee='%s'"%(x,shift,emp)
+	
+	sql2 = "SELECT Job_Name, Description from tkb_employee_matrix WHERE Rotation ='%s' AND Shift='%s' AND Employee='%s' ORDER BY %s %s"%(x,shift,emp,'Priority','ASC')
+
+	cur.execute(sql2)
+	list2 = cur.fetchall()
+	a = []
+	b = []
+	for i in list2:
+		for ii in list1:
+			if i[0] == ii[0] and i[1] == ii[1]:
+				a.append(str(i[1]))
+				b.append(str(i[0]))
+	
+	c = zip(a,b)			
+	return c			
+#	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
+
+def schedule_finalize(request):
+	shift = request.session['current_shift']
+	position = request.session['current_position']
+	employee = '---'
+	eee='yes'
+	final = 1
+	finalize = 0
+#	i = vacation_temp()
+
+#   Use below to assign selected date from form to i
+	i = request.session['date_curr']
+
+	db, cur = db_open()
+	sql1 = ('update tkb_schedule SET Date = "%s", Finalize="%s" WHERE Shift ="%s" and Position ="%s" and Finalize != "%s" and Employee != "%s"' % (i,final,shift,position,final,employee))
+	cur.execute(sql1)
+	db.commit()
+	
+	sql2 = "DELETE FROM tkb_schedule WHERE Shift='%s' and Position='%s' and Employee = '%s'" % (shift,position,employee)
+	cur.execute(sql2)
+	db.commit()
+
+	db.close()
+	return render(request,'test99.html',{'current_date':shift,'two':employee})	
+	return render(request,'display_schedule_fail.html')	
+	
+	
+
+	
+	
+	
+	
+	
+	

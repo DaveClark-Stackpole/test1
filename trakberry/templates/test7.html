@@ -1,0 +1,29 @@
+<html>
+<body>
+<link rel='stylesheet' href='/static/style_1/table1.css'>
+
+<br><br>
+
+<table style="width:20%;margin-left:5%;">
+
+
+{% for item in list %}
+<tr><td bgcolor="#DFE9ED">{{item.1}}</td>
+<td bgcolor="#DFE9ED">{{item.0}}</td>
+
+<td bgcolor="#DFE9ED">{{item.2}}</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+</table>
+
+
+
+
+<br>
+
+</body></html>
