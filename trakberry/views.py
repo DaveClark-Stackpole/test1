@@ -161,6 +161,8 @@ def display2(request):
   boa = 0
   coa = 0
   tm = time.localtime(t)
+  
+  
   count =[0,0,0,0,0,0,0,0,0,0,0,0]
   down_time = [0,0,0,0,0,0,0,0,0,0,0,0]
   diff_time = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -202,6 +204,7 @@ def display2(request):
   # Shift Start EPOCH TIME designation  
   # Set u to the epoch time for the beginning of the shift of current day.  Either 23, 7 or 15	
   u = t - (((cur_hour-shift_start)*60*60)+(tm[4]*60)+tm[5])
+  return render(request, "test99.html", {'test': t})
   #ik = 1130000
   #u = u - 28800
   
@@ -659,7 +662,12 @@ def display_initialize(request):
 	request.session["track_end"] = en
 	request.session["details_track"] = 0
 	request.session["live"] = 1
+	
+	# uncomment below when running 
 	return display(request)
+	
+	# use below to test value of track_end on display_initialize call
+	#return render(request, "test99.html")
 
 
 	
@@ -677,6 +685,7 @@ def display(request):
 	
 	if st > en:
 		request.session["details_track"] = 1
+		
 	return display2(request)	
 	
 def tech_reset(request):
