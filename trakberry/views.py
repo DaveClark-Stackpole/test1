@@ -204,12 +204,18 @@ def display2(request):
   # Shift Start EPOCH TIME designation  
   # Set u to the epoch time for the beginning of the shift of current day.  Either 23, 7 or 15	
   u = t - (((cur_hour-shift_start)*60*60)+(tm[4]*60)+tm[5])
-  return render(request, "test99.html", {'test': t})
+  
   #ik = 1130000
   #u = u - 28800
   
   # Select prodrptdb db located in views_db
   db, cursor = db_open()
+  hql = "SELECT MIN(Id) FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
+  cursor.execute(hql)
+  tmp = cursor.fetchall()
+  tmp2 = tmp[0]
+  iik = tmp2[0]
+  
   
   # Assign Min Id value in db so we only search required data
   try:
@@ -221,8 +227,10 @@ def display2(request):
 		tmp2 = tmp[0]
 		ik = tmp2[0]
 		request.session["start_id"] = ik
+		BB=1
 	else:
 		ik = request.session["start_id"]
+		BB=2
 	
   except:
 	request.session["start_unix"] = u
@@ -232,9 +240,10 @@ def display2(request):
 	tmp2 = tmp[0]
 	ik = tmp2[0]
 	request.session["start_id"] = ik
+	BB=3
   # ***********************************************************
   			
-
+  ik = iik
   #sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d' and Id > '%d'" %(u,t,ik)
  
   #Decide if we select data for Live Tracking or for Snapshot
@@ -247,7 +256,7 @@ def display2(request):
   tmp = cursor.fetchall()
   
   db.close()
-  
+  #return render(request, "test99_1.html", {'test': ik})
   rate = 0.00790
   # find totals of each non zero part for each machine
   for y in range(0, 12):
@@ -1155,7 +1164,52 @@ def display_time(request):
   else:
 	  return render(request,"gf6input_fixed.html",{'list':nlist,'GList':gr_list,'S':temp,'BrkA':brk1,'BrkB':brk2})	  
 	  
+def fix_time(request):
+	db, cursor = db_open()
+	a = 2268996
+	b = 2287243
+	data = []
+	tb = []
+	mc = []
+	tm = []
+	pid = []
+	for x in range(a,b):
+		asql = "SELECT pi_id,machine,part_timestamp,Id FROM tkb_prodtrak where Id = '%s'" %(x)
+
+		cursor.execute(asql)
+		tmp = cursor.fetchall()
+		tmp2 = tmp[0]
+		data.append(tmp2)
 	
+	for y in data:
+		ts = y[2]
+		if y[0] == 102:
+			c = y[3]-1
+			while True:
+				bsql = "SELECT pi_id,part_timestamp FROM tkb_prodtrak where Id = '%s'" %(c)
+				cursor.execute(bsql)
+				tmp = cursor.fetchall()
+				tmp2 = tmp[0]
+				if tmp2[0] == 101:
+					ts = tmp2[1]
+					break
+				c = c - 1
+				
+		tb.append(y[0])
+		mc.append(y[1])
+		pid.append(y[3])
+		tm.append(ts)
+		
+		sql2 = ('update tkb_prodtrak SET part_timestamp ="%s" WHERE Id ="%s"' % (ts,y[3]))
+		cursor.execute(sql2)
+		db.commit()
+		
+
+
+	data2 = zip(tb,mc,tm,pid)
+	db.close()
+	test = 'Hello'
+	return render(request,"test99.html",{'test':data,'data2':data2})
   
 	
   

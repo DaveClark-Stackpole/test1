@@ -39,6 +39,7 @@ from views_mod1 import table_copy
 
 # *******************************************  Testing Views *******************************************************************************************
 from views_email import e_test
+from views import fix_time
 # ***********************************************************************************************************************************************************
 
 
@@ -215,6 +216,8 @@ urlpatterns = [
 	url(r'^schedule_init/', schedule_init),
 	url(r'^schedule_set2/', schedule_set2),
 	url(r'^table_copy/', table_copy),
+	# Test for correcting timestamp issues on tracking data
+	url(r'^fix_time/', fix_time),
 #	url(r'^hour_check/', hour_check),
 
 	
