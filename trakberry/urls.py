@@ -61,7 +61,7 @@ from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, 
 # *******************************************  Employee Section ********************************************************************************************
 from views_employee import create_matrix, emp_training_enter, emp_info_enter, emp_info_display, emp_matrix_initialize, create_jobs,emp_info_update_status
 from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload
-from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete
+from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
 
 
@@ -124,6 +124,7 @@ urlpatterns = [
 	url(r'^employee_vacation_enter/', employee_vac_enter),
 	url(r'^employee_vacation_enter_init2/', employee_vac_enter_init2),
 	url(r'^employee_vacation_enter_init/get/(?P<index>\d+)/$', employee_vac_enter_init),
+	url(r'^emp_matrix_rotation_fix/', emp_matrix_rotation_fix),
 	url(r'^vacation_display/', vacation_display),
 	url(r'^vacation_display_jump/', vacation_display_jump),
 	url(r'^vacation_display_increment/', vacation_display_increment),
@@ -182,6 +183,7 @@ urlpatterns = [
 	url(r'^emp_info_display/', emp_info_display),
 	url(r'^emp_matrix_delete/', emp_matrix_delete),
 	url(r'^emp_matrix_initialize/', emp_matrix_initialize),
+	url(r'^emp_matrix_rotation_fix/', emp_matrix_rotation_fix),
 	url(r'^job_info_delete/', job_info_delete),
 	url(r'^job_info_display/', job_info_display),
 	url(r'^job_info_update_status/get/(?P<index>\w{0,50})/$', job_info_update_status),

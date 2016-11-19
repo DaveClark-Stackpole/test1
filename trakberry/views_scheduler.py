@@ -134,6 +134,10 @@ def rotation_update(request, index):
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
+	
+	#return render(request, "test99_1.html", {'test':tmp})
+	
+	
 	level = int(tmp2[0])
 
 	new_level = 0

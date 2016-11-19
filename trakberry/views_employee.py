@@ -292,6 +292,17 @@ def emp_info_update_matrix(emp,shift,position):
 	db.close()
 	matrix_job_order()
 	return 
+
+def emp_matrix_rotation_fix(request):
+	R1 = 0
+	R2 = 1
+	db, cur = db_open()
+	mql = ('update tkb_employee_matrix SET Rotation="%s"' % (R1))
+	cur.execute(mql)
+	db.commit()
+	db.close()
+	emp = 'DONE'
+	return render(request,'done_test.html',{'tmp2':emp})
 	
 def job_info_update_matrix(description,job_name):
 	db, cur = db_open()
