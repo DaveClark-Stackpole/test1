@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
+from trakberry.views_testing import emp_list_display
 from forms import toggletest_Form
 from trakberry.forms import emp_training_form, emp_info_form, job_info_form
 import MySQLdb
@@ -113,15 +114,20 @@ def emp_info_enter(request):
 		request.session["clock"] = request.POST.get("clock")
 		request.session["shift"] = request.POST.get("shift")
 		request.session["position"] = request.POST.get("position")
-	
-		return emp_info_update(request)
+		return render(request,"test99_1.html",{'test':tmp2})
+		#return emp_info_update(request)
 		
 	else:
 		form = emp_info_form()
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
-	return render(request,'emp_info_enter_form.html',{'args':args})		
+	#return render(request,'emp_info_enter_form.html',{'args':args})
+	
+	rlist = emp_list_display()
+	#request.session["login_tech"] = "none"
+	return render(request,'emp_info_enter_form.html', {'List':rlist,'args':args})
+			
 
 def emp_info_update_status(request,index):
 	info_index = index
@@ -686,6 +692,7 @@ def job_info_delete(request):
 	matrix_job_order()
 	
 	return matrix_info_reload(request)
+	
 	
 
 

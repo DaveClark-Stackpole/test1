@@ -101,7 +101,18 @@ def machine_list_display():
 	#rlist = zip(nt,st,pt)
 	return rlist
 	#return render(request,"test6.html",{'list':rlist})
-		
+
+def emp_list_display():
+	db, cur = db_open()
+	sql = "SELECT Employee FROM tkb_employee"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	db.close()
+	
+	return tmp2
+	
+	
 def test_display(request):
 
 	t=int(time.time())
