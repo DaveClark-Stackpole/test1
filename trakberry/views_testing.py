@@ -104,13 +104,14 @@ def machine_list_display():
 
 def emp_list_display():
 	db, cur = db_open()
-	sql = "SELECT Employee FROM tkb_employee"
+	sql = "SELECT Employee FROM tkb_employee ORDER BY %s %s" %('Employee','ASC')
+	#sql = "SELECT Employee FROM tkb_employee"
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
 	db.close()
 	
-	return tmp2
+	return tmp
 	
 	
 def test_display(request):

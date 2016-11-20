@@ -114,8 +114,8 @@ def emp_info_enter(request):
 		request.session["clock"] = request.POST.get("clock")
 		request.session["shift"] = request.POST.get("shift")
 		request.session["position"] = request.POST.get("position")
-		return render(request,"test99_1.html",{'test':tmp2})
-		#return emp_info_update(request)
+		#return render(request,"test99_1.html",{'test':tmp2})
+		return emp_info_update(request)
 		
 	else:
 		form = emp_info_form()

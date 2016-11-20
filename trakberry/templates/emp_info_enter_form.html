@@ -14,7 +14,25 @@
 <!-- Style my form to [form_css]  -->
 
 <table>
+
+
 <tr><td><b><u>NAME</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:14px;width:320px;height:30px;" type="text" name="employee"></td></tr>
+
+<!--
+<tr><td><b><u>NAME</b></u>&nbsp;&nbsp;&nbsp;</td><td>
+
+<input type="text" name="other" style="font-size:14px;width:320px;height:30px;"><br>
+<select  style="font-size:14px;width:320px;height:30px;color: #000000">
+<option style='color: #cccccc' value="Existing Employee">Existing Employee</option>
+{% for item in List %}
+<option style='color: #000000' value={{item.0}}>{{item.0}}</option>
+{% endfor %}
+
+</select>
+
+-->
+
+</td></tr>
 
 
 
@@ -39,7 +57,6 @@
 
 
 </td></tr>
-<tr><td><b><u>Clock</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:14px;width:320px;height:30px;"  type="text" name="clock"></td></tr>
 
 
 <tr><td><b><u>Position</b></u>&nbsp;&nbsp;&nbsp;</td><td>
