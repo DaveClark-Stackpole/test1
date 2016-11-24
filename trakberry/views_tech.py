@@ -201,26 +201,26 @@ def tech(request):
 	db.close()
 	n = "none"
 	if request.session["login_tech"] == "Jim Barker":
-		request.session["login_image"] = "/media/tech_jim.jpg"
-		request.session["login_back"] = "/media/back_jim.jpg"
+		request.session["login_image"] = "/static/media/tech_jim.jpg"
+		request.session["login_back"] = "/static/media/back_jim.jpg"
 	elif request.session["login_tech"] == "Scott Smith":
-		request.session["login_image"] = "/media/tech_scott.jpg"
-		request.session["login_back"] = "/media/back_scott.jpg"
+		request.session["login_image"] = "/static/media/tech_scott.jpg"
+		request.session["login_back"] = "/static/media/back_scott.jpg"
 	elif request.session["login_tech"] == "Rick Wurm":
-		request.session["login_image"] = "/media/tech_rick.jpg"
-		request.session["login_back"] = "/media/back_rick.jpg"
+		request.session["login_image"] = "/static/media/tech_rick.jpg"
+		request.session["login_back"] = "/static/media/back_rick.jpg"
 	elif request.session["login_tech"] == "Woodrow Sismar":
-		request.session["login_image"] = "/media/tech_woodrow.jpg"
-		request.session["login_back"] = "/media/back_woodrow.jpg"
+		request.session["login_image"] = "/static/media/tech_woodrow.jpg"
+		request.session["login_back"] = "/static/media/back_woodrow.jpg"
 	elif request.session["login_tech"] == "Al Vilandre":
-		request.session["login_image"] = "/media/tech_training.jpg"
-		request.session["login_back"] = "/media/back_tech_training.jpg"			
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"			
 	elif request.session["login_tech"] == "Muoi Le":
-		request.session["login_image"] = "/media/tech_training.jpg"
-		request.session["login_back"] = "/media/back_tech_training.jpg"				
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"				
 	else:
-		request.session["login_image"] = "/media/tech_rick.jpg"
-		request.session["login_back"] = "/media/back_rick.jpg"
+		request.session["login_image"] = "/static/media/tech_rick.jpg"
+		request.session["login_back"] = "/static/media/back_rick.jpg"
 		
   # call up 'display.html' template and transfer appropriate variables.  
 	return render(request,"tech.html",{'L':list,'N':n})
