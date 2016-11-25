@@ -390,11 +390,11 @@ def schedule_set5(request,list):
 	sql_d = "DELETE FROM tkb_employee_temp WHERE Shift='%s' and Position='%s'" % (shift,position)
 	cur.execute(sql_d)
 	db.commit()
-		
+	
 	MNsql = "INSERT tkb_employee_temp Select * From tkb_employee where Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Employee','ASC')
 	cur.execute(MNsql)
 	db.commit()
-		
+	#return render(request,'test993.html', {'jobs':shift , 'employees':position})  # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX #
 	Jsql = "SELECT Employee from tkb_employee_temp where  Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Employee','ASC')
 	cur.execute(Jsql)
 	tmp_employees = cur.fetchall()
