@@ -206,14 +206,19 @@ def schedule_init(request):
 		db.commit()
 		ct = ct + 1
 	db.close()	 
-			
+	return render(request,'display_schedule.html',{'list':list2,'qq':qq})
 	return render(request,'test22.html',{'tmp':tmp,'ID':i_d})
 	
 
 # Set Schedule in table along with preselected jobs that could run
 def schedule_set2(request):
 	rotation = 1
-	shift = 'Cont A Nights CSD 2'
+	try:
+		shift = request.session["matrix_shift"]
+	except:
+		shift = 'Cont A Nights CSD 2'
+		request.session["matrix_shift"] = shift
+		
 	db, cur = db_open()
 	
 	employee = '---'
@@ -260,8 +265,14 @@ def schedule_set2(request):
 	return schedule_set3(request)
 
 def schedule_set3(request):	
-	shift = 'Cont A Nights CSD 2'	
+	#shift = 'Cont A Nights CSD 2'	
 	finalize = 1
+	try:
+		shift = request.session["matrix_shift"]
+	except:
+		shift = 'Cont A Nights CSD 2'
+		request.session["matrix_shift"] = shift
+		
 	db, cur = db_open()
 	Bsql = "SELECT Description, count(*) as total from tkb_schedule where  Shift='%s'  and Finalize != '%s' GROUP by Description ORDER BY %s %s" % (shift,finalize,'Description','ASC')
 	cur.execute(Bsql)
@@ -322,8 +333,11 @@ def schedule_set3(request):
 		dd.append(i[2])  #  Job Name
 		gg.append(i[3])  # Selection (1 or 0)
 	
-	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)		
-	return schedule_set4(request,list)
+	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
+	
+	return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
+	
+	return schedule_set4(request,list)          # Actual next line
 	
 def schedule_set4(request,list):
     # Set Form Variables
@@ -616,8 +630,21 @@ def schedule_finalize(request):
 	sql2 = "DELETE FROM tkb_schedule WHERE Shift='%s' and Position='%s' and Employee = '%s'" % (shift,position,employee)
 	cur.execute(sql2)
 	db.commit()
+	
+	# Select Employee and Job names from entered data
+	sql3 = "SELECT Employee,Job_Name,Description from tkb_schedule WHERE Date ='%s' and Shift = '%s' and Position = '%s'" % (i, shift, position)
+	cur.execute(sql3)
+	list3 = cur.fetchall()
+	# Assign 99 value to matrix priority for that job then init again so that it places that job at the end of priority chain
+	x = 99
+	for i in list3:
+		sql4 = ('update tkb_employee_matrix SET Priority = "%s" WHERE Employee ="%s" and Job_Name ="%s" and Description = "%s"' % (x, i[0],i[1],i[2]))
+		cur.execute(sql4)
+		db.commit()
 
 	db.close()
+	schedule_init(request)
+	
 	return render(request,'test99.html',{'current_date':shift,'two':employee})	
 	return render(request,'display_schedule_fail.html')	
 	
