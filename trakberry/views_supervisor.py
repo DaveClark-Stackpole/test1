@@ -1268,6 +1268,7 @@ def vacation_calander_init(month_st):
 	days = dte[month_st]
 	cctr = ctr[month_st]
 	mnth = mnt[month_st]
+	#return render(request,'test4323.html')
 	return days,cctr,mnth
 
 

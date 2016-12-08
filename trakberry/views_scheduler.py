@@ -206,6 +206,7 @@ def schedule_init(request):
 		db.commit()
 		ct = ct + 1
 	db.close()	 
+	return
 	return render(request,'display_schedule.html',{'list':list2,'qq':qq})
 	return render(request,'test22.html',{'tmp':tmp,'ID':i_d})
 	
@@ -264,6 +265,29 @@ def schedule_set2(request):
 	db.close()	
 	return schedule_set3(request)
 
+def schedule_set2b(request):
+	db, cur = db_open()
+	selection = 1
+	a = '6L Output'
+	b = 'Op 20 (Offline)'
+	c = 'CNC'
+	shift = 'Cont A Nights CSD 2'
+	id_ctr = 99
+	
+	sql = "SELECT max(Id) from tkb_schedule"
+	cur.execute(sql)
+	mx = cur.fetchall()
+	mxx = mx[0]
+	mxxx = mxx[0]
+	id_ctr = int(mxxx) + 1
+	
+	cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a,b,c,shift,selection,id_ctr))
+	db.commit()
+	db.close()
+	#return render(request,'test99.html')	
+	return schedule_set3(request)
+	
+	
 def schedule_set3(request):	
 	#shift = 'Cont A Nights CSD 2'	
 	finalize = 1
@@ -335,7 +359,7 @@ def schedule_set3(request):
 	
 	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
 	
-	return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
+	#return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
 	
 	return schedule_set4(request,list)          # Actual next line
 	
@@ -347,6 +371,7 @@ def schedule_set4(request,list):
     y = 1
     n = 0
     if request.POST:
+		
         request.session["date_curr"] = request.POST.get("date_curr")
         db, cur = db_open()
         for x in list:
@@ -427,7 +452,10 @@ def schedule_set5(request,list):
 	tmp2 = tmp[0]
 	tmp_J_count = tmp2[0]   # Count for number of jobs
 	qty_jobs = tmp_J_count
-	
+	request.session['qty_jobs'] = qty_jobs
+	request.session['qty_employee'] = qty_employee
+	request.session['qty_diff'] = 1
+
 	# ******* Below section to break and view Variables *******************
 #	www = [ 0 for x in range(3)]
 #	www[5]=9
@@ -435,12 +463,8 @@ def schedule_set5(request,list):
 	
 	# Check to see if employees available doesn't equal jobs needed
 	if qty_jobs != qty_employee:
-		request.session['qty_jobs'] = qty_jobs
-		request.session['qty_employee'] = qty_employee
-		request.session['qty_diff'] = 1
-		
 		return render(request,'display_schedule_fail.html')	
-	
+
 	
 	E = [[] for x in range(tmp_count)]
 	N = ['' for x in range(tmp_count)]
@@ -472,6 +496,7 @@ def schedule_set5(request,list):
 			tmp7 = tmp4[0]
 			tmp_job_id = tmp7[0]
 			E[co].append(tmp_job_id)
+		
 		co = co + 1
 #		except:
 #			db.close()
@@ -481,7 +506,7 @@ def schedule_set5(request,list):
 #	return render(request,'display_schedule_test1.html', {'list':list2,'k':k,'lista':list})	
 	#return render(request,'display_schedule_formRefresh.html',{'a':t2_employees,'b':N,'c':N[1],'d':E})
 	# Schedule Algorithm using N[i] Names of Employees and E[i] Jobs for each of the employees in an array for each
-	
+	tmp_ctr = 0
 	A = []
 	bk = 0
 	ptr = 0
@@ -489,6 +514,9 @@ def schedule_set5(request,list):
 	
 	# Scheduler Engine
 	while True:
+		tmp_ctr = tmp_ctr + 1
+		if tmp_ctr > 200:
+			break
 		A.append(E[ptr][ctr[ptr]])
 		if len(A) != len (set(A)):
 			A.pop()
@@ -512,7 +540,7 @@ def schedule_set5(request,list):
 			break
 			
 
-
+	return render(request,'test1445.html')
 
 	if no_match != 1:
 		TY = []
