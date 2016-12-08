@@ -357,7 +357,11 @@ def sup_close(request):
 def employee_vac_enter_init(request, index):	
 	tmp = index
 	month = request.session["current_month"]
-	year_st = 2016
+	try:
+		year_st = request.session["current_year"]
+	except:
+		year_st = 2016
+		
 	if int(month)<10:
 		current_first = str(year_st) + "-" + "0" + str(month) 
 	else:
@@ -565,6 +569,8 @@ def vacation_display(request):
 	year_st = t.year
 	day_st = t.day
 	
+	
+	
 
 	one = 1
 	one_end = 31
@@ -718,7 +724,7 @@ def vacation_display(request):
 		request.session["shift"] = "All"
 			
 #	return render(request,'test4.html',{'Tmp':tmp,'Mnth':mnth,'M':month_st,'List':List})	
-	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'M':mm,'Tmp':tmp,'args':args})
+	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 
 def vacation_display_jump(request):
 	return vacation_display(request)
@@ -754,35 +760,72 @@ def vacation_display_increment(request):
 
 			
 	date_st = datetime.strptime(current_first, '%Y-%m-%d')
+	
+
 
 	month_st = date_st.month
 	year_st = date_st.year
-	month_st = month_st + 1
+	
+	if month_st == 12:
+		month_st = 1
+		year_st = year_st + 1
+		
+	else:
+		month_st = month_st + 1
+	
+	
 
 	one = 1
 	one_end = 31
-	current_first = str(year_st) + "-" + str(month_st) + "-" + str(one)
-	current_last = str(year_st) + "-" + str(month_st) + "-" + str(one_end)
+	ma = str(month_st)
+	if len(ma)<2:
+		ma = '0' + ma
+	current_first = str(year_st) + "-" + str(ma) + "-" + "01"
+	current_last = str(year_st) + "-" + str(ma) + "-" + str(one_end)
 	request.session["current_first"] = current_first
+	
+	
+	
+	
 	if request.session["current_month"] == month_st:
 		request.session["current_day"] = request.session["current_day_b"]
 	else:
 		request.session["current_day"] = 99	
 
 	mm = int(month_st)
+	
+
 	# Select prodrptdb db located in views_db
 	db, cur = db_open() 
 	if shift1 == "All":
-		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
+		#sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
+		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
 	else:
-		sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		
+		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
+		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
+	
+	if month_st == 2:
+		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
+	
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
+	
+	if year_st == 2017:
+		dday, ctr, mnth = vacation_calander_init_2017(month_st)
+	else:
+		dday, ctr, mnth = vacation_calander_init(month_st)
 
-	dday, ctr, mnth = vacation_calander_init(month_st)
+	
+	# Below re route is for testing break
+	if month_st == 21:
+		x = len(monkey)
+		y = len(current_first)
+		return render(request,'test993.html',{'monkey':monkey,'len_monkey':x,'current_first':current_first,'len_first':y})
+	
+	
 	request.session["current_month"] = month_st
+	request.session["current_year"] = year_st
 	List = zip(ctr,dday)
 
 	# Set Form Variables 
@@ -880,7 +923,7 @@ def vacation_display_increment(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
-	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'M':mm,'Tmp':tmp,'args':args})
+	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 #	return render(request,'vacation_display.html',{'Tmp':tmp})	
 
 def vacation_display_decrement(request):	
@@ -940,7 +983,8 @@ def vacation_display_decrement(request):
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
-
+	
+	
 	dday, ctr, mnth = vacation_calander_init(month_st)
 	request.session["current_month"] = month_st
 	List = zip(ctr,dday)
@@ -1271,7 +1315,59 @@ def vacation_calander_init(month_st):
 	#return render(request,'test4323.html')
 	return days,cctr,mnth
 
+def vacation_calander_init_2017(month_st):
+	dte = []
+	ctr = []
+	mnt = []
+		
+	dte.append([0])
+	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28])
+	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	
+	ctr.append([0])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])	
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
 
+	
+	mnt.append( '')
+	mnt.append( 'January')
+	mnt.append( 'February')
+	mnt.append('March')
+	mnt.append('April')
+	mnt.append('May')
+	mnt.append('June')
+	mnt.append('July')
+	mnt.append('August')
+	mnt.append('September')
+	mnt.append('October')
+	mnt.append('November')
+	mnt.append('December')
+	
+	days = dte[month_st]
+	cctr = ctr[month_st]
+	mnth = mnt[month_st]
+	#return render(request,'test4323.html')
+	return days,cctr,mnth
 
 
 
