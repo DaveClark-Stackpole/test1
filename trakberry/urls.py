@@ -54,7 +54,7 @@ from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, di
 from views_supervisor import supervisor_display, supervisor_tech_call,supervisor_elec_call,supervisor_main_call
 from views_supervisor import vacation_display_jump, supervisor_edit, sup_close, employee_vac_enter, vacation_display
 from views_supervisor import vacation_display_increment, vacation_display_decrement, vacation_edit, vacation_delete
-from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix
+from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix, vacation_display_initial
 # ***********************************************************************************************************************************************************
 
 
@@ -132,6 +132,7 @@ urlpatterns = [
 	url(r'^vacation_display_decrement/', vacation_display_decrement),
 	url(r'^vacation_edit/get/(?P<index>\d+)/$', vacation_edit),
 	url(r'^vacation_delete/', vacation_delete),
+	url(r'^vacation_display_initial/', vacation_display_initial),
 	url(r'^vacation_backup/', vacation_backup),
 	url(r'^vacation_month_fix/', vacation_month_fix),
 	# ********************************************************	

@@ -186,8 +186,11 @@ data-width="100" name="shift10">
 <input style="background-color: #2A93BD;border-radius: 10px;width:205px;height:25px;font-weight: 600;" type="submit" value="FILTER">
 
 </center>	
-</form>
 
+
+<!--  
+</form>
+-->
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -211,24 +214,66 @@ data-width="100" name="shift10">
 </div>
 
 <table style="width:80%;margin-left:10%;">
-<tr><th bgcolor="#CCDDE3" style="font-size: 200%;" colspan="7">
+<tr><th bgcolor="#CCDDE3" style="font-size: 130%;" colspan="7">
 <center>
-	{% if Mnth = 'January' %}
+	{% if Mnth = 'January' and Year = 2016 %}
 	<font style="font-size:55%;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font>
 	{% else %}
 	<div class="noPrint">
-		<a href="/trakberry/vacation_display_decrement" ><font style="font-size:55%;"> << PREV  </font></a>
+		<a href="/trakberry/vacation_display_decrement" style="color: black">
+		<img src="/static/media/left.png"  height="30" width="30"></a>
 	</div>	
 	{% endif %}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<t>{{Mnth}}&nbsp;&nbsp; {{Year}}</t>
+	<t>
+		
+<select onchange="this.form.submit()"  name="month">
+<option value=1>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=2>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=3>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=4>April&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=5>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=6>June&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=7>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=8>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=9>September&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=10>October&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2016</option>
+<option value=11>November &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
+<option value=12>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2016</option>
+<option value=13>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=14>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=15>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=16>April &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=17>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  2017</option>
+<option value=18>June &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=19>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  2017</option>
+<option value=20>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=21>September &nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=22>October &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=23>November&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=24>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=12 selected="selected">
+{{Mnth}}&nbsp;&nbsp; {{Year}}	
+</option>
+</select>
+
+
+</form>
+	
+		
+		
+		
+<!--		{{Mnth}}&nbsp;&nbsp; {{Year}}</t>               -->
+
+
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
-	{% if Mnth = 'Decemberr' %}
+	{% if Mnth = 'December' and Year = 2017 %}
 	<font style="font-size:55%;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font>
 	{% else %}
 	<div class="noPrint">
-	  <a href="/trakberry/vacation_display_increment"> <font style="font-size:55%;"> NEXT >> </font></a>
+		<a href="/trakberry/vacation_display_increment" style="color: black">
+		<img src="/static/media/right.png"  height="30" width="30"></a>
 	</div> 
 	{% endif %}
 	</center>

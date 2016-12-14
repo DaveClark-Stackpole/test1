@@ -361,7 +361,8 @@ def employee_vac_enter_init(request, index):
 		year_st = request.session["current_year"]
 	except:
 		year_st = 2016
-		
+
+	
 	if int(month)<10:
 		current_first = str(year_st) + "-" + "0" + str(month) 
 	else:
@@ -451,6 +452,12 @@ def vacation_entry(request):
 	one_end = 31
 	current_first = str(year_st) + "-" + str(month_st) + "-" + str(one)
 	current_last = str(year_st) + "-" + str(month_st) + "-" + str(one_end)
+	
+	# Set variables so Calander will start on this month and year after the edit.
+	request.session["month"] = month_st
+	request.session["year"] = year_st
+	request.session["month_pick"] = 1
+	
 	#if int(day_st)<10:
 	
 	#	day_st = '0'+ day_st
@@ -487,8 +494,11 @@ def vacation_entry(request):
 #		x[3] = x_day
 
 	# return to vacation_display once update is complete
-	login_name = request.session["login_name"]
-	login_initial(request,login_name)
+	
+	# Below code to reset Filter to Login Name's default every time
+	#login_name = request.session["login_name"]
+	#login_initial(request,login_name)
+	
 	
 	#return vacation_display(request)
 	return render(request,'testtest.html')
@@ -560,6 +570,11 @@ def reset_sfilter(request):
 	request.session["sfilter14"] = ''
 	return
 	
+def vacation_display_initial(request):
+	request.session["month_pick"] = 0
+	return vacation_display(request)
+	
+	
 def vacation_display(request):	
 	
 	# Call current datetime using external function because it would conflict with from datetime import datetime
@@ -568,6 +583,20 @@ def vacation_display(request):
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day
+	
+
+	
+	
+	
+	try:
+		if request.session["month_pick"] == 1:
+			month_st = int(request.session["month"])
+			year_st = int(request.session["year"])
+			#request.session["month_pick"] = 0
+			
+	except:
+		request.session["month_pick"] = 0		
+	
 	
 	
 	
@@ -611,13 +640,22 @@ def vacation_display(request):
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' or shift = '%s' or shift = '%s' or shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, current_first, current_last)
-		sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
+		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
+		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 		
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
-
-	dday, ctr, mnth = vacation_calander_init(month_st)
+	
+	
+	#return render(request,'test993.html',{'monkey':month_st,'len_monkey':year_st})
+	
+	
+	if year_st == 2017:
+		dday, ctr, mnth = vacation_calander_init_2017(month_st)
+	else:
+		dday, ctr, mnth = vacation_calander_init(month_st)
+		
 	request.session["current_month"] = month_st
 	List = zip(ctr,dday)
 	
@@ -706,11 +744,24 @@ def vacation_display(request):
 		if request.POST.get("shift14"):
 			request.session["shift14"] = 'ToolRoom'
 			request.session["sfilter14"] = 'checked'
+
 		else:
 			request.session["shift14"] = '--'
-									
-			
-		#return render(request,'test.html')
+
+		xy = request.POST.get("month")
+		xy = int(xy)
+		jj = xy
+		if xy > 12:
+			request.session["year"] = 2017
+			request.session["month"] = xy - 12
+		else:
+			request.session["year"] = 2016
+			request.session["month"] = xy
+		
+		#return render(request,'test998.html',{'t':year_st,'month':month_st})
+		request.session["month_pick"] = 1
+		
+
 		return render(request,'vacation_shift.html')
 	else:
 		form = sup_vac_filterForm()
@@ -762,17 +813,14 @@ def vacation_display_increment(request):
 	date_st = datetime.strptime(current_first, '%Y-%m-%d')
 	
 
-
+	# Increment the Month by one.  Increment Year by 1 if Month is 12
 	month_st = date_st.month
 	year_st = date_st.year
-	
 	if month_st == 12:
 		month_st = 1
 		year_st = year_st + 1
-		
 	else:
 		month_st = month_st + 1
-	
 	
 
 	one = 1
@@ -804,9 +852,7 @@ def vacation_display_increment(request):
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
 		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 	
-	if month_st == 2:
-		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
-	
+
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
@@ -826,6 +872,8 @@ def vacation_display_increment(request):
 	
 	request.session["current_month"] = month_st
 	request.session["current_year"] = year_st
+	request.session["month"] = month_st
+	request.session["year"] = year_st
 	List = zip(ctr,dday)
 
 	# Set Form Variables 
@@ -957,16 +1005,26 @@ def vacation_display_decrement(request):
 
 			
 	date_st = datetime.strptime(current_first, '%Y-%m-%d')
-
+	
+	# Decrement the Month by one.  Decrement Year by 1 if Month is 1
 	month_st = date_st.month
 	year_st = date_st.year
-	month_st = month_st - 1
-
+	if month_st == 1:
+		month_st = 12
+		year_st = year_st - 1
+	else:
+		month_st = month_st - 1
+		
 	one = 1
 	one_end = 31
-	current_first = str(year_st) + "-" + str(month_st) + "-" + str(one)
-	current_last = str(year_st) + "-" + str(month_st) + "-" + str(one_end)
+	ma = str(month_st)
+	if len(ma) < 2:
+		ma = '0'+ ma
+		
+	current_first = str(year_st) + "-" + str(ma) + "-" + "01"
+	current_last = str(year_st) + "-" + str(ma) + "-" + str(one_end)
 	request.session["current_first"] = current_first
+	
 	if request.session["current_month"] == month_st:
 		request.session["current_day"] = request.session["current_day_b"]
 	else:
@@ -977,16 +1035,19 @@ def vacation_display_decrement(request):
 	db, cur = db_open() 
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
-	else:
-		sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		
+	else:		
+		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
 	
-	
-	dday, ctr, mnth = vacation_calander_init(month_st)
+	if year_st == 2017:
+		dday, ctr, mnth = vacation_calander_init_2017(month_st)
+	else:
+		dday, ctr, mnth = vacation_calander_init(month_st)
+		
 	request.session["current_month"] = month_st
+	request.session["current_year"] = year_st
 	List = zip(ctr,dday)
 
 	# Set Form Variables 
@@ -1084,7 +1145,9 @@ def vacation_display_decrement(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
-	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'M':mm,'Tmp':tmp,'args':args})
+	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
+	
+	
 def BB_vacation_display_decrement(request):	
 
 	try:

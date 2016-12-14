@@ -27,7 +27,7 @@
 
 <tr><td>
 	<b><u>Department</b></u>&nbsp;&nbsp;&nbsp;</td><td>
-	<select style="font-size:14px;width:320px;height:30px;" name="shift">
+	<select style="font-size:14px;width:320px;height:30px;" name="shift" required="required">
 
 <option value="CSD1 Day">CSD1 Day</option>
 <option value="CSD1 Aft">CSD1 Aft</option>
@@ -46,13 +46,20 @@
 
 
 <option selected="selected">
+
 {{request.session.shift_primary}}
+
+
 </option>
+
+
 </select></td></tr>
 	
 		
+
 <tr><td><b><u>START DATE</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:12px;width:320px;height:30px;" type="date" name="date_st" value={{Curr}}></td></tr>
 <tr><td><b><u>END DATE</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:12px;width:320px;height:30px;" type="date" name="date_en" value={{Curr}}></td></tr>
+
 <tr><td>
 
 <input type="radio" name="typee" value="vacation" checked> Vacation    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
