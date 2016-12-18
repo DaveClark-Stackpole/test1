@@ -63,7 +63,7 @@ from views_employee import create_matrix, emp_training_enter, emp_info_enter, em
 from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload
 from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
-from views_scheduler import schedule_set2b
+from views_scheduler import schedule_set2b, schedule_add_job
 
 
 
@@ -189,6 +189,7 @@ urlpatterns = [
 	url(r'^emp_matrix_rotation_fix/', emp_matrix_rotation_fix),
 	url(r'^job_info_delete/', job_info_delete),
 	url(r'^job_info_display/', job_info_display),
+	url(r'^job_info_enter/', job_info_enter),
 	url(r'^job_info_update_status/get/(?P<index>\w{0,50})/$', job_info_update_status),
 	url(r'^matrix_info_init/', matrix_info_init),
 	url(r'^matrix_info_display/', matrix_info_display),
@@ -200,11 +201,12 @@ urlpatterns = [
 	url(r'^set_rotation/', set_rotation),
 	url(r'^rotation_info_display/', rotation_info_display),
 	url(r'^rotation_matrix/get/(?P<index>\d+)/$', rotation_update),
+	                # *******  Scheduling Section   **********
 	url(r'^schedule_set/', schedule_set),
 	url(r'^schedule_finalize/', schedule_finalize),
 	url(r'^schedule_set2b/', schedule_set2b),
+	url(r'^schedule_add_job/get/(?P<index>\w{0,50})/$', schedule_add_job),
 	
-	url(r'^job_info_enter/', job_info_enter),
 	#url(r'^tech/get/complete/(?P<index>\d+)/$', complete),
 	
 	

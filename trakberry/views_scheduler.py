@@ -365,7 +365,7 @@ def schedule_set3(request):
 		
 	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
 	
-	return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
+	#return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
 	
 	return schedule_set4(request,list)          # Actual next line
 	
@@ -546,7 +546,7 @@ def schedule_set5(request,list):
 			break
 			
 
-	return render(request,'test1445.html')
+
 
 	if no_match != 1:
 		TY = []
@@ -644,6 +644,17 @@ def join_query(emp,shift):
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
 
+def schedule_add_job(request,index):
+	db, cur = db_open()
+	sql = "SELECT Job_Name from tkb_schedule where  Id='%s'" % (index)
+	cur.execute(sql)
+	tmp2 = cur.fetchall()
+	tmp1 = tmp2[0]
+	tmp = tmp1[0]
+	db.close()
+	return render(request,'test993.html',{'tmp':tmp})
+	
+	
 def schedule_finalize(request):
 	shift = request.session['current_shift']
 	position = request.session['current_position']

@@ -56,20 +56,7 @@ Schedule
 </t></th>
 
 -->
-
-
-
-
-
-
-
-
-
-
-
 <!--  ***************************************************************************************** -->
-
-
 <!-- **************************  Loop to display all Jobs on 1st Row  *****************************************-->
 
 {% for jndex in list %}
@@ -87,8 +74,11 @@ Schedule
 			
 	<td  bgcolor="#FAFAF5" style="width:20%"><center>
 		
-		<font style="font-size:75%">{{jndex.1}}</font>&nbsp;&nbsp;
-		<a href="/trakberry/schedule_set2b"> <font style="font-size:75%"> <b>(+)</b>  </a></font>
+		<font style="font-size:75%">{{jndex.2}}</font>&nbsp;&nbsp;
+		
+		<!-- ***** + to add another job of same name to potential schedule ****  -->
+		<a href="/trakberry/schedule_add_job/get/{{jndex.0}}"> <font style="font-size:75%"> <b>(+)</b>  </a></font>
+		
 		</td>
 	
 	{% if jndex.5 == 1 %}
