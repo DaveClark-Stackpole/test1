@@ -356,10 +356,16 @@ def schedule_set3(request):
 		aa.append(str(i[0]))  # Id 
 		dd.append(i[2])  #  Job Name
 		gg.append(i[3])  # Selection (1 or 0)
-	
+		
+		# aa 	ID
+		# bb	Job Category
+		# dd	Job Name
+		# cc	 # of different jobs
+		# ff 	Row span for that Job
+		
 	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
 	
-	#return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
+	return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
 	
 	return schedule_set4(request,list)          # Actual next line
 	

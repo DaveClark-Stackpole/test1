@@ -19,6 +19,13 @@ from views_db import db_open
 
 from django.core.context_processors import csrf
 
+def resetcheck(request):
+	request.session["test99"] = 0
+	return render(request,"test8.html")
+	
+	
+	
+	
 def hour_check():
 	# obtain current date from different module to avoid datetime style conflict
 
@@ -583,11 +590,9 @@ def vacation_display(request):
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day
-	
-
-	
-	
-	
+	month_pick = request.session["month_pick"]
+	A = int(request.session["month"])
+	B =  int(request.session["year"])
 	try:
 		if request.session["month_pick"] == 1:
 			month_st = int(request.session["month"])
@@ -597,7 +602,10 @@ def vacation_display(request):
 	except:
 		request.session["month_pick"] = 0		
 	
-	
+	#if request.session["test99"] == 1:
+	#	request.session["test99"] = 0
+	#	return render(request,'breakhh99.html')
+
 	
 	
 
@@ -760,9 +768,11 @@ def vacation_display(request):
 		
 		#return render(request,'test998.html',{'t':year_st,'month':month_st})
 		request.session["month_pick"] = 1
-		
 
+		# testing Variable
+		request.session["test99"] = 1
 		return render(request,'vacation_shift.html')
+		
 	else:
 		form = sup_vac_filterForm()
 	args = {}
@@ -816,6 +826,9 @@ def vacation_display_increment(request):
 	# Increment the Month by one.  Increment Year by 1 if Month is 12
 	month_st = date_st.month
 	year_st = date_st.year
+	a_month_st = month_st
+	a_year_st = year_st
+	
 	if month_st == 12:
 		month_st = 1
 		year_st = year_st + 1
@@ -963,6 +976,11 @@ def vacation_display_increment(request):
 		else:
 			request.session["shift14"] = '--'			
 		
+		# testing Variable
+		request.session["test99"] = 1
+		request.session["month_pick"] = 1
+		request.session["month"] = a_month_st
+		request.session["year"] = a_year_st
 		return render(request,'vacation_shift.html')
 			
 	else:
@@ -1009,6 +1027,9 @@ def vacation_display_decrement(request):
 	# Decrement the Month by one.  Decrement Year by 1 if Month is 1
 	month_st = date_st.month
 	year_st = date_st.year
+	a_month_st = month_st
+	a_year_st = year_st
+	
 	if month_st == 1:
 		month_st = 12
 		year_st = year_st - 1
@@ -1136,8 +1157,13 @@ def vacation_display_decrement(request):
 			request.session["sfilter14"] = 'checked'
 		else:
 			request.session["shift14"] = '--'	
-			
+		
+		request.session["test99"] = 1
+		request.session["month_pick"] = 1
+		request.session["month"] = a_month_st
+		request.session["year"] = a_year_st
 		return render(request,'vacation_shift.html')
+
 			
 	else:
 		form = sup_vac_filterForm()

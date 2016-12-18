@@ -7,7 +7,27 @@ from django.http import HttpResponseRedirect
 import datetime 
 from views_db import db_open
 
-
+  
+  
+def back_db(request):
+	#db = MySQLdb.connect(host="10.4.1.245",user="dg417",passwd="dg",db='prodrptdb')
+	db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
+	cursor = db.cursor()	
+	sql = "SELECT * FROM pr_parts"
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	db.close()
+	
+	# Uncomment below line to switch to new server PMDS3 and comment above line out
+	db2 = MySQLdb.connect(host="10.4.10.160",user="localhost",passwd="dg",db='prodrptdb')
+	cur = db2.cursor()
+	
+	
+	#cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_employee(Id INT PRIMARY KEY AUTO_INCREMENT,Part CHAR(30), OP CHAR(30), Machine INT(10))""")
+	#cur.execute('''INSERT INTO pr_downtime1(machinenum,problem,priority,whoisonit,called4helptime) VALUES(%s,%s,%s,%s,%s)''', (machinenum,problem,priority,whoisonit,t)
+	
+	
+	
 # Methods for opening database for all and returning db and cur
 def vacation_temp():
 	

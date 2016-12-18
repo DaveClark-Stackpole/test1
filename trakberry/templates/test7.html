@@ -4,15 +4,18 @@
 <br><br>
 
 
-
+<table>
 {% for item in list %}
-
-{{item}}
-<br>
+<tr>
+{% for x in item %}
+<td bgcolor="#B7CCB6">
+{{x}}</td>
+{% endfor %}
+</tr>
 
 
 {% endfor %}
-
+</table>
 
 <br>
 
