@@ -3,14 +3,25 @@
 	
 	
 
-	
+<table>
+{% for item in list %}
+<tr>
 
-{{tmp}}
+<td bgcolor="#B7CCB6">
+{{item}}</td>
+
+</tr>
 
 
+{% endfor %}
+</table>
+{% for x in list2 %}
+{{x}}
+<br>
+{% endfor %}
 
-
-
+<br><br>
+{{request.session.route}}
 <br>
 
 </body></html>

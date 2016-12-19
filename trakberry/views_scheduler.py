@@ -213,6 +213,8 @@ def schedule_init(request):
 
 # Set Schedule in table along with preselected jobs that could run
 def schedule_set2(request):
+	# Testing rerout variable
+	request.session["route"] = 1
 	rotation = 1
 	try:
 		shift = request.session["matrix_shift"]
@@ -365,65 +367,91 @@ def schedule_set3(request):
 		
 	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
 	
-	#return render(request,'test7.html',{'list':list})         # TESTING RENDER to see results of list  (DElete when done)
 	
+	#if request.session["route"] == 2:
+	#	return render(request,'test993.html',{'list':list})
 	return schedule_set4(request,list)          # Actual next line
 	
 def schedule_set4(request,list):
-    # Set Form Variables
-    qq = '---'
-    choice = []
-    choice2 = []
-    y = 1
-    n = 0
-    if request.POST:
+
+	#Set Form Variables
+	qq = '---'
+	choice = []
+	choice2 = []
+	choice3 = []
+	ac = []
+	bc = []
+	y = 1
+	n = 0
+	tn = []
+    
+	if request.POST:
 		
-        request.session["date_curr"] = request.POST.get("date_curr")
-        db, cur = db_open()
-        for x in list:
-            if request.POST.get(str(x[0])):
-                aaa = x[0]
-                bbb = y
-                choice.append(x[0])
-                choice2.append(y)
-            else:
-                aaa = x[0]
-                bbb = n
-                choice.append(x[0])
-                choice2.append(n)
-            chc = zip(choice,choice2)
-            sql = ('update tkb_schedule SET Selection="%s" WHERE Id ="%s"' % (bbb, aaa))
-            cur.execute(sql)
-            db.commit()
-        db.close()
-        return schedule_set5(request,list)
-        return render(request,'display_schedule_formRefresh.html', {'a':list})
+		request.session["date_curr"] = request.POST.get("date_curr")
+		db, cur = db_open()
+#		if request.session["route"] == 2:
+#			return render(request,'test993.html',{'list':list})
+		for x in list:
+			tn.append(x[0])
+			if request.POST.get(str(x[0])):
+				aaa = x[0]
+				bbb = y
+				choice.append(x[0])
+				choice2.append(y)
+				choice3.append(x[2])
+			else:
+				aaa = x[0]
+				bbb = n
+				choice.append(x[0])
+				choice2.append(n)
+				choice3.append(x[2])
+			chc = zip(choice,choice2,choice3)
+			ac.append(aaa)
+			bc.append(bbb)
+			sql = ('update tkb_schedule SET Selection="%s" WHERE Id ="%s"' % (bbb, aaa))
+			cur.execute(sql)
+			db.commit()
+		db.close()
+		abc = zip(ac,bc)
+		#   ******************************************************************************
+#		if request.session["route"] == 2:
+#			return render(request,'test993.html',{'list':abc})
+			
+		return schedule_set5(request,list)
+		return render(request,'display_schedule_formRefresh.html', {'a':list})
 
  #           return schedule_set5(request,chc)
 
 
-    else:
-        form = views_scheduler_selectionForm()
-    args = {}
-    args.update(csrf(request))
-    args['form'] = form
-    ttt = 1
-    ttt = str(ttt)
+	else:
+		form = views_scheduler_selectionForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	ttt = 1
+	ttt = str(ttt)
     
-    current_first = vacation_set_current2()
-    
-    
+	current_first = vacation_set_current2()
+
+
+
+			
 #    return schedule_set5(request,list)
-    return render(request, "display_schedule_form.html", {'list':list,'qq':qq,'ttt':ttt,'Curr':current_first,'args':args})
+	return render(request, "display_schedule_form.html", {'list':list,'qq':qq,'ttt':ttt,'Curr':current_first,'args':args})
  
-    return render(request,'display_schedule_formRefresh.html', {'a':list})		
+	return render(request,'display_schedule_formRefresh.html', {'a':list})
     
 # Set Employee names and their Jobs in two seperate arrays N[] and E[]
 def schedule_set5(request,list):
+
+
 	position = 'CNC'
 	rotation = 1
 	selection = 1
 	finalize = 1
+	
+	
+		
 	db, cur = db_open()
 	try:
 		shift = request.session["matrix_shift"]
@@ -445,6 +473,10 @@ def schedule_set5(request,list):
 	tmp_employees = cur.fetchall()
 	t2_employees = tmp_employees[0]
 	
+	
+	
+		
+		
 	Csql = "SELECT count(*) from tkb_employee_temp where  Shift='%s' and Position='%s'" % (shift,position)
 	cur.execute(Csql)
 	tmp = cur.fetchall()	
@@ -466,7 +498,11 @@ def schedule_set5(request,list):
 #	www = [ 0 for x in range(3)]
 #	www[5]=9
 # ************************************************************	
-	
+#   ******************************************************************************
+#   
+
+		
+		
 	# Check to see if employees available doesn't equal jobs needed
 	if qty_jobs != qty_employee:
 		return render(request,'display_schedule_fail.html')	
@@ -509,6 +545,12 @@ def schedule_set5(request,list):
 #			return render(request,'test1.html')
 			 
 	db.close()
+	
+	
+	
+		
+		
+		
 #	return render(request,'display_schedule_test1.html', {'list':list2,'k':k,'lista':list})	
 	#return render(request,'display_schedule_formRefresh.html',{'a':t2_employees,'b':N,'c':N[1],'d':E})
 	# Schedule Algorithm using N[i] Names of Employees and E[i] Jobs for each of the employees in an array for each
@@ -517,6 +559,12 @@ def schedule_set5(request,list):
 	bk = 0
 	ptr = 0
 	no_match = 0
+	
+	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
+	return render(request, "test994.html", {'N':N,'E':E})
+	# ***************************************************
+	
+	
 	
 	# Scheduler Engine
 	while True:
@@ -606,6 +654,10 @@ def schedule_set5(request,list):
 		qq = '---'
 		request.session['current_shift'] = shift
 		request.session['current_position'] = position
+		
+		#return render(request,'test993.html',{'list':list})
+		
+		
 		return render(request,'display_schedule.html',{'list':list2,'qq':qq})
 			
 				
@@ -643,16 +695,50 @@ def join_query(emp,shift):
 	c = zip(a,b)			
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
-
 def schedule_add_job(request,index):
-	db, cur = db_open()
-	sql = "SELECT Job_Name from tkb_schedule where  Id='%s'" % (index)
-	cur.execute(sql)
-	tmp2 = cur.fetchall()
-	tmp1 = tmp2[0]
-	tmp = tmp1[0]
-	db.close()
-	return render(request,'test993.html',{'tmp':tmp})
+	try:
+		v = request.session["add_job"]
+		v = v + 1
+		request.session["add_job"] = v
+	except:
+		request.session["add_job"] = 1
+	return schedule_add(request,index)
+	
+def schedule_add(request,index):
+	v = request.session["add_job"]
+	if v == 1:
+		zh = request.session["route"]
+		zh = int(zh)
+		zh = zh + 1
+		request.session["route"] = zh
+		db, cur = db_open()
+		sql = "SELECT * from tkb_schedule where  Id='%s'" % (index)
+		cur.execute(sql)
+		tmp2 = cur.fetchall()
+		tmp1 = tmp2[0]
+		sql3 = "SELECT MAX(Id) FROM tkb_schedule" 
+		cur.execute(sql3)
+		x1 = cur.fetchall()
+		x2 = x1[0]
+		x3 = x2[0]
+		x3 = x3 + 1
+	
+		tmp = tmp1[3]
+		description = tmp1[2]
+		job_name = tmp1[3]
+		shift = tmp1[4]
+		position = tmp1[5]
+		employee = '---'
+		selection = 1
+		finalize = 0
+	
+		cur.execute('''INSERT INTO tkb_schedule(Id,Description,Job_Name,Shift,Position,Employee,Selection,Finalize) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)''', (x3,description,job_name,shift,position,employee,selection,finalize))
+		db.commit()
+		db.close()
+	else:
+		request.session["add_job"] = 0
+	return schedule_set3(request)
+	#return render(request,'test993.html',{'tmp':tmp})
 	
 	
 def schedule_finalize(request):
