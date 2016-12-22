@@ -590,9 +590,15 @@ def vacation_display(request):
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day
-	month_pick = request.session["month_pick"]
-	A = int(request.session["month"])
-	B =  int(request.session["year"])
+	try:
+		month_pick = request.session["month_pick"]
+		A = int(request.session["month"])
+		B =  int(request.session["year"])
+	except:
+		month_pick = 1
+		A = 1
+		B = 2017
+		
 	try:
 		if request.session["month_pick"] == 1:
 			month_st = int(request.session["month"])

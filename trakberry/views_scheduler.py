@@ -527,6 +527,9 @@ def schedule_set5(request,list):
 		tmp_matrix = tmp3[0]
 		tmp_description = tmp_matrix[0]
 		tmp_job = tmp_matrix[1]
+		
+		prev_tmp_job_id = 0
+		job_mult = .1
 #		try:
 		for z in tmp3:
 			ztest1 = str(z[0])
@@ -537,8 +540,20 @@ def schedule_set5(request,list):
 			# change back to tmp4[0]
 			tmp7 = tmp4[0]
 			tmp_job_id = tmp7[0]
+			
+			if tmp_job_id == prev_tmp_job_id:
+				prev_tmp_job_id = tmp_job_id
+				tmp_job_id = tmp_job_id + job_mult
+				job_mult = job_mult + .1
+			else:
+				prev_tmp_job_id = tmp_job_id
+				job_mult = .1
+				
+			
+			
 			E[co].append(tmp_job_id)
-		
+			
+		#return render(request, "test8.html", {'N':E[co]})
 		co = co + 1
 #		except:
 #			db.close()
@@ -561,7 +576,7 @@ def schedule_set5(request,list):
 	no_match = 0
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
-	return render(request, "test994.html", {'N':N,'E':E})
+	#return render(request, "test994.html", {'N':N,'E':E})
 	# ***************************************************
 	
 	
@@ -592,9 +607,10 @@ def schedule_set5(request,list):
 			break
 		if ptr > (qty_employee-1):
 			break
-			
-
-
+	listX = zip(N,A)
+	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
+	#return render(request, "test994.html", {'N':N,'E':E,'L':listX})
+	# ***************************************************
 
 	if no_match != 1:
 		TY = []
@@ -605,7 +621,8 @@ def schedule_set5(request,list):
 		J=[]
 		db, cur = db_open()
 		for x in listT:
-			sql1 = "SELECT Description,Job_Name from tkb_jobs where Id ='%s'" % (x[1])
+			jx = int(x[1])
+			sql1 = "SELECT Description,Job_Name from tkb_jobs where Id ='%s'" % (jx)
 			cur.execute(sql1)
 			tmpA = cur.fetchall()
 			tmpB = tmpA[0]
@@ -621,7 +638,10 @@ def schedule_set5(request,list):
 			db.commit()
 		db.close()
 		k=zip(N,D,J)
-	#	return render(request,'display_nothing.html')
+		
+		#return render(request, "test994.html", {'N':N,'E':E,'L':listX})
+		
+		#return render(request,"test67.html",{'list':list})
 		aa = []
 		bb = []
 		cc = []
@@ -631,6 +651,8 @@ def schedule_set5(request,list):
 		gg = []
 		hh = []
 		
+		
+		#  
 #		list = zip(aa,bb,dd,cc,ff,gg,kk,ll)	
 		for y in list:
 			aa.append(y[0])
@@ -645,11 +667,14 @@ def schedule_set5(request,list):
 				if ck != 1:
 					if x[1] == y[7] and x[2] == y[2]:
 						hh.append(x[0])
-						ck = 1
+						if len(hh) != len (set(hh)):
+							hh.pop()
+						else:
+							ck = 1
 			if ck == 0:
 				hh.append('---')
 											
-		
+		#return render(request,"test67.html",{'list':hh})
 		list2 = zip(aa,bb,cc,dd,ee,ff,gg,hh)
 		qq = '---'
 		request.session['current_shift'] = shift
