@@ -430,10 +430,18 @@ def schedule_set4(request,list):
 	args['form'] = form
 	ttt = 1
 	ttt = str(ttt)
-    
-	current_first = vacation_set_current2()
 
 
+	try:
+		add_job = request.session["add_job2"]
+	except:
+		add_job = 0
+		
+	if add_job == 0:
+		current_first = vacation_set_current2()
+	else:
+		current_first = request.session["date_curr"]
+	request.session["add_job2"] = 0
 
 			
 #    return schedule_set5(request,list)
@@ -615,12 +623,13 @@ def schedule_set5(request,list):
 	if no_match != 1:
 		TY = []
 		listT = zip(N,A)
-		
+		ctr = 0
 		e_dash = '---'
 		D=[]
 		J=[]
 		db, cur = db_open()
 		for x in listT:
+			ctr = ctr + 1
 			jx = int(x[1])
 			sql1 = "SELECT Description,Job_Name from tkb_jobs where Id ='%s'" % (jx)
 			cur.execute(sql1)
@@ -633,12 +642,25 @@ def schedule_set5(request,list):
 			TY.append(job)
 			D.append(description)
 			J.append(job)
-			sql2 = ('update tkb_schedule SET Employee="%s" WHERE Description ="%s" and Job_Name ="%s" and Shift = "%s" and Position = "%s" and Employee = "%s"' % (x[0], description,job,shift,position,e_dash))
+			
+			# Choose Minimum Row entry Id of the potential entry so it isn't entered in multiple rows by mistake
+			sql3 = "SELECT Min(Id) from tkb_schedule WHERE Description ='%s' and Job_Name ='%s' and Shift = '%s' and Position = '%s' and Employee = '%s'" % (description,job,shift,position,e_dash)
+			cur.execute(sql3)
+			tmp = cur.fetchall()
+			tmp2 = tmp[0]
+			min_id = tmp2[0]
+			
+			# Update only one row not every row that has this criteria.  BUG BELOW
+			sql2 = ('update tkb_schedule SET Employee="%s" WHERE Description ="%s" and Job_Name ="%s" and Shift = "%s" and Position = "%s" and Employee = "%s" and Id = "%s"' % (x[0], description,job,shift,position,e_dash,min_id))
+			#sql2 = ('update tkb_schedule SET Employee="%s" WHERE Description ="%s" and Job_Name ="%s" and Shift = "%s" and Position = "%s" and Employee = "%s"' % (x[0], description,job,shift,position,e_dash))
+			
 			cur.execute(sql2)
 			db.commit()
 		db.close()
 		k=zip(N,D,J)
-		
+		# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
+		#return render(request, "test994.html", {'L':k})
+		# ***************************************************
 		#return render(request, "test994.html", {'N':N,'E':E,'L':listX})
 		
 		#return render(request,"test67.html",{'list':list})
@@ -650,8 +672,8 @@ def schedule_set5(request,list):
 		ff = []
 		gg = []
 		hh = []
-		
-		
+		pops = 0
+		xctr = 0
 		#  
 #		list = zip(aa,bb,dd,cc,ff,gg,kk,ll)	
 		for y in list:
@@ -663,34 +685,37 @@ def schedule_set5(request,list):
 			ff.append(y[5])
 			gg.append(y[6])
 			ck = 0
+			ctr = 1
 			for x in k:
-				if ck != 1:
+				if ctr > xctr:
+					#if ck != 1:
 					if x[1] == y[7] and x[2] == y[2]:
 						hh.append(x[0])
-						if len(hh) != len (set(hh)):
-							hh.pop()
-						else:
-							ck = 1
+						hh.append(xctr)
+						hh.append(ctr)
+						xctr = xctr + 1
+						ck = 1
+				ctr = ctr + 1
+				
+				
 			if ck == 0:
 				hh.append('---')
 											
-		#return render(request,"test67.html",{'list':hh})
+		return render(request,"test67.html",{'list':hh,'list2':k})
 		list2 = zip(aa,bb,cc,dd,ee,ff,gg,hh)
 		qq = '---'
 		request.session['current_shift'] = shift
 		request.session['current_position'] = position
 		
-		#return render(request,'test993.html',{'list':list})
-		
+		return render(request,'test994.html',{'N':list,'E':list2,'L':k, 'pops':pops})
 		
 		return render(request,'display_schedule.html',{'list':list2,'qq':qq})
-			
-				
+
 	else:
 		request.session['qty_fail'] = 0
 		return render(request,'display_schedule_fail.html')										
-		
-	
+
+
 	#return render(request,'display_schedule_formRefresh.html',{'a':t2_employees,'b':N,'c':N[1],'d':E})
 
 def join_query(emp,shift):
@@ -721,6 +746,7 @@ def join_query(emp,shift):
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
 def schedule_add_job(request,index):
+	request.session["add_job2"] = 1
 	try:
 		v = request.session["add_job"]
 		v = v + 1
@@ -777,7 +803,9 @@ def schedule_finalize(request):
 
 #   Use below to assign selected date from form to i
 	i = request.session['date_curr']
+	
 
+	
 	db, cur = db_open()
 	sql1 = ('update tkb_schedule SET Date = "%s", Finalize="%s" WHERE Shift ="%s" and Position ="%s" and Finalize != "%s" and Employee != "%s"' % (i,final,shift,position,final,employee))
 	cur.execute(sql1)
