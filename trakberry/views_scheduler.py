@@ -388,6 +388,7 @@ def schedule_set4(request,list):
 	if request.POST:
 		
 		request.session["date_curr"] = request.POST.get("date_curr")
+		
 		db, cur = db_open()
 #		if request.session["route"] == 2:
 #			return render(request,'test993.html',{'list':list})
@@ -588,11 +589,11 @@ def schedule_set5(request,list):
 	# ***************************************************
 	
 	
-	
+	nnoo = 0
 	# Scheduler Engine
 	while True:
 		tmp_ctr = tmp_ctr + 1
-		if tmp_ctr > 200:
+		if tmp_ctr > 600:
 			break
 		A.append(E[ptr][ctr[ptr]])
 		if len(A) != len (set(A)):
@@ -617,7 +618,7 @@ def schedule_set5(request,list):
 			break
 	listX = zip(N,A)
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
-	#return render(request, "test994.html", {'N':N,'E':E,'L':listX})
+	#return render(request, "test994.html", {'N':N,'E':A,'L':E,'noo':nnoo})
 	# ***************************************************
 
 	if no_match != 1:
@@ -672,11 +673,29 @@ def schedule_set5(request,list):
 		ff = []
 		gg = []
 		hh = []
+		mm = []
 		pops = 0
 		xctr = 0
+		
+		j_qty = 1
+		j_job = ''
+		j_des = ''
 		#  
 #		list = zip(aa,bb,dd,cc,ff,gg,kk,ll)	
+
+
+# ************************************************************************
+# **             Bug Below.  Won't allocate for multiple jobs   **********
+# ************************************************************************
 		for y in list:
+			
+			if y[2] == j_job and y[7] == j_des:
+				j_qty = j_qty + 1
+			else:
+				j_qty = 1
+				j_job = y[2]
+				j_des = y[7]
+				
 			aa.append(y[0])
 			bb.append(y[1])
 			cc.append(y[2])
@@ -684,30 +703,32 @@ def schedule_set5(request,list):
 			ee.append(y[4])
 			ff.append(y[5])
 			gg.append(y[6])
+			#mm.append(j_qty)
 			ck = 0
 			ctr = 1
 			for x in k:
-				if ctr > xctr:
-					#if ck != 1:
-					if x[1] == y[7] and x[2] == y[2]:
+				if x[1] == y[7] and x[2] == y[2]:
+					if j_qty > ctr:
+						ctr = ctr + 1
+					else:	
 						hh.append(x[0])
-						hh.append(xctr)
-						hh.append(ctr)
-						xctr = xctr + 1
+						#hh.append(y[7])
+						#hh.append(y[2])
+						#hh.append(j_qty)
 						ck = 1
-				ctr = ctr + 1
-				
+						break
 				
 			if ck == 0:
 				hh.append('---')
 											
-		return render(request,"test67.html",{'list':hh,'list2':k})
+		#return render(request,"test67.html",{'list':hh,'list2':k})
 		list2 = zip(aa,bb,cc,dd,ee,ff,gg,hh)
+		#return render(request,"test67.html",{'A':hh,'B':k,'C':listX,'D':list2})
 		qq = '---'
 		request.session['current_shift'] = shift
 		request.session['current_position'] = position
 		
-		return render(request,'test994.html',{'N':list,'E':list2,'L':k, 'pops':pops})
+		#return render(request,'test994.html',{'N':list,'E':list2,'L':k, 'pops':pops})
 		
 		return render(request,'display_schedule.html',{'list':list2,'qq':qq})
 
@@ -803,7 +824,7 @@ def schedule_finalize(request):
 
 #   Use below to assign selected date from form to i
 	i = request.session['date_curr']
-	
+
 
 	
 	db, cur = db_open()
