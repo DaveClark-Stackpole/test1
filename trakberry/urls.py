@@ -63,7 +63,7 @@ from views_employee import create_matrix, emp_training_enter, emp_info_enter, em
 from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload
 from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
-from views_scheduler import schedule_set2b, schedule_add_job
+from views_scheduler import schedule_set2b, schedule_add_job,schedule_set3
 
 
 
@@ -223,6 +223,7 @@ urlpatterns = [
 	url(r'^place_test/', place_test),
 	url(r'^schedule_init/', schedule_init),
 	url(r'^schedule_set2/', schedule_set2),
+	url(r'^schedule_set3/', schedule_set3),
 	url(r'^table_copy/', table_copy),
 	# Test for correcting timestamp issues on tracking data
 	url(r'^fix_time/', fix_time),

@@ -214,7 +214,13 @@ def schedule_init(request):
 # Set Schedule in table along with preselected jobs that could run
 def schedule_set2(request):
 	# Testing rerout variable
+	request.session["loop_count"] = 0
+	request.session["loop_name"] = ''
+	request.session["button1"] = 'yes'
+	request.session["job_n"] = 0
 	request.session["route"] = 1
+	request.session["add_route"] = 0
+	request.session["stop_1"] = 0
 	rotation = 1
 	try:
 		shift = request.session["matrix_shift"]
@@ -286,8 +292,8 @@ def schedule_set2b(request):
 	cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a,b,c,shift,selection,id_ctr))
 	db.commit()
 	db.close()
-	#return render(request,'test99.html')	
-	return schedule_set3(request)
+	return render(request,'done_add_test.html')	
+	#return schedule_set3(request)
 	
 	
 def schedule_set3(request):	
@@ -368,7 +374,7 @@ def schedule_set3(request):
 	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
 	
 	
-	#if request.session["route"] == 2:
+	#if request.session["add_route"] == 1:
 	#	return render(request,'test993.html',{'list':list})
 	return schedule_set4(request,list)          # Actual next line
 	
@@ -384,14 +390,17 @@ def schedule_set4(request,list):
 	y = 1
 	n = 0
 	tn = []
+	
     
 	if request.POST:
-		
+		#joe = 'happy time'
+		#return render(request,'test996.html',{'list':joe})	
 		request.session["date_curr"] = request.POST.get("date_curr")
-		
+		if 'name_button' in request.POST:
+			request.session["button1"] = 'no'
+		#return render(request,'test995.html')	
 		db, cur = db_open()
-#		if request.session["route"] == 2:
-#			return render(request,'test993.html',{'list':list})
+
 		for x in list:
 			tn.append(x[0])
 			if request.POST.get(str(x[0])):
@@ -414,10 +423,15 @@ def schedule_set4(request,list):
 			db.commit()
 		db.close()
 		abc = zip(ac,bc)
+		
 		#   ******************************************************************************
-#		if request.session["route"] == 2:
-#			return render(request,'test993.html',{'list':abc})
-			
+		#   **  Below lines are for rerouting and testing.  Delete when running main   ***
+		#   ******************************************************************************
+		#if request.session["add_route"] == 2:
+		#	return render(request,'test993.html',{'list':abc,'list2':list})
+		#   ******************************************************************************
+		
+		#return render(request,'test996.html',{'list':list})	
 		return schedule_set5(request,list)
 		return render(request,'display_schedule_formRefresh.html', {'a':list})
 
@@ -433,6 +447,7 @@ def schedule_set4(request,list):
 	ttt = str(ttt)
 
 
+		
 	try:
 		add_job = request.session["add_job2"]
 	except:
@@ -443,8 +458,15 @@ def schedule_set4(request,list):
 	else:
 		current_first = request.session["date_curr"]
 	request.session["add_job2"] = 0
-
+	
+	# Break loop to test data section
+	#if request.session["add_route"] == 2:
+	#	return render(request,'test993.html',{'list':list})	
+	#if request.session["add_route"] == 1:
+	#	request.session["add_route"] = 2
 			
+		
+		
 #    return schedule_set5(request,list)
 	return render(request, "display_schedule_form.html", {'list':list,'qq':qq,'ttt':ttt,'Curr':current_first,'args':args})
  
@@ -453,7 +475,7 @@ def schedule_set4(request,list):
 # Set Employee names and their Jobs in two seperate arrays N[] and E[]
 def schedule_set5(request,list):
 
-
+	
 	position = 'CNC'
 	rotation = 1
 	selection = 1
@@ -767,6 +789,14 @@ def join_query(emp,shift):
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
 def schedule_add_job(request,index):
+	lp = request.session["loop_count"]
+	lp = lp + 1
+	request.session["loop_count"] = lp
+	ln = request.session["loop_name"]
+	ln = ln + '(' + str(lp) +')' + request.session["button1"]
+	request.session["loop_name"] = ln
+	
+	request.session["add_a_job"] = 1
 	request.session["add_job2"] = 1
 	try:
 		v = request.session["add_job"]
@@ -777,8 +807,16 @@ def schedule_add_job(request,index):
 	return schedule_add(request,index)
 	
 def schedule_add(request,index):
+	aj = request.session["job_n"]
+	aj = aj + 1
+	request.session["job_n"] = aj
+
 	v = request.session["add_job"]
-	if v == 1:
+	w = request.session["add_a_job"]
+
+	if aj < 3:
+		#if aj == 2:
+		#	return render(request,'test997.html')
 		zh = request.session["route"]
 		zh = int(zh)
 		zh = zh + 1
@@ -787,7 +825,7 @@ def schedule_add(request,index):
 		sql = "SELECT * from tkb_schedule where  Id='%s'" % (index)
 		cur.execute(sql)
 		tmp2 = cur.fetchall()
-		tmp1 = tmp2[0]
+		tmp1 = tmp2[0]		
 		sql3 = "SELECT MAX(Id) FROM tkb_schedule" 
 		cur.execute(sql3)
 		x1 = cur.fetchall()
@@ -803,12 +841,23 @@ def schedule_add(request,index):
 		employee = '---'
 		selection = 1
 		finalize = 0
-	
+		
+		#if request.session["stop_1"] == 1:
+		#	return render(request,'test995.html',{'tmp':index})
+			
 		cur.execute('''INSERT INTO tkb_schedule(Id,Description,Job_Name,Shift,Position,Employee,Selection,Finalize) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)''', (x3,description,job_name,shift,position,employee,selection,finalize))
 		db.commit()
 		db.close()
+		
+		if request.session["stop_1"] == 0:
+			request.session["stop_1"] = 1
+			
+			
+		request.session["add_a_job"] = 0
+		request.session["add_route"] = 1
 	else:
 		request.session["add_job"] = 0
+		request.session["add_a_job"] = 0
 	return schedule_set3(request)
 	#return render(request,'test993.html',{'tmp':tmp})
 	

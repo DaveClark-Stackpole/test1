@@ -244,7 +244,7 @@ def main(request):
 	except:
 		password = 'no'
 	
-	# how to delecte a session variable
+	# how to delete a session variable
 	#del request.session['mykey']
 	
 	
