@@ -214,6 +214,9 @@ def schedule_init(request):
 # Set Schedule in table along with preselected jobs that could run
 def schedule_set2(request):
 	# Testing rerout variable
+	current_first = vacation_set_current2()
+	request.session["date_curr"] = current_first
+	
 	request.session["loop_count"] = 0
 	request.session["loop_name"] = ''
 	request.session["button1"] = 'yes'
@@ -297,6 +300,9 @@ def schedule_set2b(request):
 	
 	
 def schedule_set3(request):	
+	
+	
+		
 	#shift = 'Cont A Nights CSD 2'	
 	finalize = 1
 	try:
@@ -304,7 +310,7 @@ def schedule_set3(request):
 	except:
 		shift = 'Cont A Nights CSD 2'
 		request.session["matrix_shift"] = shift
-		
+	
 	db, cur = db_open()
 	Bsql = "SELECT Description, count(*) as total from tkb_schedule where  Shift='%s'  and Finalize != '%s' GROUP by Description ORDER BY %s %s" % (shift,finalize,'Description','ASC')
 	cur.execute(Bsql)
@@ -343,7 +349,11 @@ def schedule_set3(request):
 	cct = 0
 	ee = bmp[0][1]
 	qq = '---'
-
+	
+	
+	
+		
+		
 	for i in cmp:
 		ll.append(i[1])
 		if prev == i[1]:
@@ -374,11 +384,15 @@ def schedule_set3(request):
 	list = zip(aa,bb,dd,cc,ff,gg,kk,ll)
 	
 	
+		
+	
 	#if request.session["add_route"] == 1:
 	#	return render(request,'test993.html',{'list':list})
 	return schedule_set4(request,list)          # Actual next line
 	
 def schedule_set4(request,list):
+
+	shift = request.session["matrix_shift"]
 
 	#Set Form Variables
 	qq = '---'
@@ -391,13 +405,17 @@ def schedule_set4(request,list):
 	n = 0
 	tn = []
 	
-    
+	index = 0
 	if request.POST:
 		#joe = 'happy time'
 		#return render(request,'test996.html',{'list':joe})	
 		request.session["date_curr"] = request.POST.get("date_curr")
-		if 'name_button' in request.POST:
-			request.session["button1"] = 'no'
+		if 'index' in request.POST:
+			index = request.POST.get("index")
+			return schedule_add_job(request,index)
+			
+			return render(request,'test996.html',{'list':index})	
+
 		#return render(request,'test995.html')	
 		db, cur = db_open()
 
@@ -421,6 +439,10 @@ def schedule_set4(request,list):
 			sql = ('update tkb_schedule SET Selection="%s" WHERE Id ="%s"' % (bbb, aaa))
 			cur.execute(sql)
 			db.commit()
+			
+			
+			
+			
 		db.close()
 		abc = zip(ac,bc)
 		
@@ -431,7 +453,21 @@ def schedule_set4(request,list):
 		#	return render(request,'test993.html',{'list':abc,'list2':list})
 		#   ******************************************************************************
 		
-		#return render(request,'test996.html',{'list':list})	
+		
+		
+		db, cur = db_open()
+		dt = request.session["date_curr"]
+		csql = "SELECT count(*) as total from tkb_schedule where  Shift='%s'  and Date = '%s'" % (shift,dt)
+		cur.execute(csql)
+		t1 = cur.fetchall()
+		t2 = t1[0]
+		count_check = t2[0]
+		
+		# Fail if schedule already made for date selected
+		if count_check > 0:
+			request.session['qty_fail'] = 0
+			return render(request,'display_schedule_fail2.html')
+
 		return schedule_set5(request,list)
 		return render(request,'display_schedule_formRefresh.html', {'a':list})
 
@@ -448,16 +484,16 @@ def schedule_set4(request,list):
 
 
 		
-	try:
-		add_job = request.session["add_job2"]
-	except:
-		add_job = 0
+#	try:
+#		add_job = request.session["add_job2"]
+#	except:
+#		add_job = 0
 		
-	if add_job == 0:
-		current_first = vacation_set_current2()
-	else:
-		current_first = request.session["date_curr"]
-	request.session["add_job2"] = 0
+#	if add_job == 0:
+#		current_first = vacation_set_current2()
+#	else:
+#		current_first = request.session["date_curr"]
+#	request.session["add_job2"] = 0
 	
 	# Break loop to test data section
 	#if request.session["add_route"] == 2:
@@ -466,7 +502,8 @@ def schedule_set4(request,list):
 	#	request.session["add_route"] = 2
 			
 		
-		
+	current_first = request.session["date_curr"]
+	
 #    return schedule_set5(request,list)
 	return render(request, "display_schedule_form.html", {'list':list,'qq':qq,'ttt':ttt,'Curr':current_first,'args':args})
  
@@ -789,6 +826,9 @@ def join_query(emp,shift):
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
 def schedule_add_job(request,index):
+
+	
+	
 	lp = request.session["loop_count"]
 	lp = lp + 1
 	request.session["loop_count"] = lp
@@ -807,6 +847,8 @@ def schedule_add_job(request,index):
 	return schedule_add(request,index)
 	
 def schedule_add(request,index):
+
+
 	aj = request.session["job_n"]
 	aj = aj + 1
 	request.session["job_n"] = aj
@@ -858,8 +900,11 @@ def schedule_add(request,index):
 	else:
 		request.session["add_job"] = 0
 		request.session["add_a_job"] = 0
-	return schedule_set3(request)
-	#return render(request,'test993.html',{'tmp':tmp})
+		
+	
+	
+	#return schedule_set3(request)
+	return render(request,'done_schedule_set3.html')
 	
 	
 def schedule_finalize(request):
@@ -899,13 +944,13 @@ def schedule_finalize(request):
 	db.close()
 	schedule_init(request)
 	
-	return render(request,'test99.html',{'current_date':shift,'two':employee})	
+	
 	return render(request,'display_schedule_fail.html')	
 	
 	
 
 	
-	
+	return schedule_set4(request,list) 
 	
 	
 	
