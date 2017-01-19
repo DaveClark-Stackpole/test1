@@ -580,7 +580,9 @@ def schedule_set5(request,list):
 	N = ['' for x in range(tmp_count)]
 	ctr = [ 0 for x in range(tmp_count)]
 	co = 0
+	counter = 0
 	for y in tmp_employees:
+		counter = counter + 1
 		N[co] = y[0]
 		p = y[0]
 		
@@ -591,17 +593,28 @@ def schedule_set5(request,list):
 #		tmp3 = cur.fetchall()
 #  **************************************************************************************************
 		tmp3 = join_query(p,shift)
-
+		
+		# testing below
+		if counter > 4:
+			dummy = 4
+			return render(request, "test994.html", {'N':tmp3,'P':p})
+		# end testing
+		
+		
 		tmp_matrix = tmp3[0]
 		tmp_description = tmp_matrix[0]
 		tmp_job = tmp_matrix[1]
 		
+		
+		
 		prev_tmp_job_id = 0
 		job_mult = .1
 #		try:
+		#return render(request, "test994.html", {'N':tmp3,'E':E,'P':p})
 		for z in tmp3:
 			ztest1 = str(z[0])
 			ztest2 = z[1]
+			
 			Dsql = "SELECT Id from tkb_jobs where Description ='%s' and Job_Name = '%s'" % (z[0],z[1])
 			cur.execute(Dsql)
 			tmp4 = cur.fetchall()
@@ -628,7 +641,7 @@ def schedule_set5(request,list):
 #			return render(request,'test1.html')
 			 
 	db.close()
-	
+	return render(request, "test994.html", {'N':N,'E':E,'P':p})
 	
 	
 		
@@ -644,7 +657,7 @@ def schedule_set5(request,list):
 	no_match = 0
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
-	#return render(request, "test994.html", {'N':N,'E':E})
+	return render(request, "test994.html", {'N':N,'E':E})
 	# ***************************************************
 	
 	
@@ -823,6 +836,7 @@ def join_query(emp,shift):
 				b.append(str(i[0]))
 	
 	c = zip(a,b)			
+	
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
 def schedule_add_job(request,index):
@@ -952,6 +966,17 @@ def schedule_finalize(request):
 	
 	return schedule_set4(request,list) 
 	
+# Clears tkb_employee_temp table and tkb_schedule table
+def schedule_reset_data(request):
+	db, cur = db_open()
+	sql1 = "DELETE FROM tkb_schedule"
+	cur.execute(sql1)
+	db.commit()
+	sql2 = "DELETE FROM tkb_employee_temp"
+	cur.execute(sql2)
+	db.commit()
+	db.close()
+	return render(request,'done_delete_schedule.html')
 	
 	
 	
