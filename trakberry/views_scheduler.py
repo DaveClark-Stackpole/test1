@@ -410,15 +410,16 @@ def schedule_set4(request,list):
 		#joe = 'happy time'
 		#return render(request,'test996.html',{'list':joe})	
 		request.session["date_curr"] = request.POST.get("date_curr")
+		
+		# Add Job (index) or Del Job(dindex) button action
 		if 'index' in request.POST:
 			index = request.POST.get("index")
 			return schedule_add_job(request,index)
+		if 'dindex' in request.POST:
+			dindex = request.POST.get("dindex")
+			return schedule_del_job(request,dindex)
 			
-			return render(request,'test996.html',{'list':index})	
-
-		#return render(request,'test995.html')	
 		db, cur = db_open()
-
 		for x in list:
 			tn.append(x[0])
 			if request.POST.get(str(x[0])):

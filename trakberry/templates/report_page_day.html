@@ -5,10 +5,7 @@
 
 
 @media screen {
-    body {
-        background-color: green;
-        
-    }
+    body {background-color: green;}
     v{font-size: 100%;}
     t{font-size: 100%;}
     o{font-size: 100%;}
@@ -17,44 +14,24 @@
     border: 1px solid black;
     border-collapse: collapse;
 	}
-
-	th, td {
-    padding: 0px;
-	}
+	th, td {padding: 0px;}
 	.noPrint { display:initial; }
-}
+	}
 
 @media print {
 	@page {size: landscape}
-body {
-	font-family: Georgia, serif;
-	background: none;
-	color: black;
-}
-#page {
-	width: 100%;
-	margin: 0; padding: 0;
-	background: none;
-}
-#container, #container2, #content
-{
-width: 100%; margin: 0; float: none;
-}
+	body {font-family: Georgia, serif;background: none;color: black;}
+	#page {width: 100%;margin: 0; padding: 0;background: none;}
+	#container, #container2, #content
+	{width: 100%; margin: 0; float: none;}
 
-    table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-	}
-	th, td {
-    padding: .25px;
-	}
+    table, th, td {border: 1px solid black;border-collapse: collapse;}
+    th, td {padding: .25px;}
 	v{font-size:100%;}
     t{font-size: 60%;}
     o{font-size: 50%;}
     #header, #nav, .noPrint {display: none;}
-
-
-}
+	}
 
 a.blue:link {color: black;}
 a.blue:active {color: black;}

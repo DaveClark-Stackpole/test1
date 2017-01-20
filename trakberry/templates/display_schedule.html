@@ -2,6 +2,40 @@
 {% extends "main_extends1.html" %}
 
 {% block content %}
+<style type="text/css">
+
+@media screen {
+    body {background-color: green;}
+    v{font-size: 100%;}
+    t{font-size: 100%;}
+    o{font-size: 100%;}
+    
+    table, th, td {
+	width: 25%;
+    border: 1px solid black;
+    border-collapse: collapse;
+		
+	}
+	th, td {padding: 0px;}
+	.noPrint { display:initial; }
+	}
+
+@media print {
+	@page {size: portrait}
+	body {font-family: Georgia, serif;background: none;color: black;}
+	#page {width: 100%;margin: 0; padding: 0;background: none;}
+	#container2
+	{width: 100%; margin: 0; float: none;}
+
+    table, th, td {border: 1px solid black;width: 65%;border-collapse: collapse;}
+    th, td {padding: .25px;width:20%;}
+	v{font-size:100%;}
+    t{font-size: 60%;}
+    o{font-size: 50%;}
+    #header, #nav, .noPrint {display: none;}
+	}
+
+</style>
 <!--
 <br><br><center>
 -->
@@ -15,7 +49,7 @@
 
 
 <br><br><center>
-<table style="width:25%;"> 
+<table> 
 <tr><td bgcolor="#CCDDE3" style="font-size:20px;width:45%;">
 <b><center>
 Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
@@ -25,7 +59,7 @@ Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
 </center></b>
 
 
-
+<div class="noPrint"><button style="margin-left:10%;" onclick="myFunction()"><b>Print</b></button></div></v>
 
 <table style="width:94%;margin-left:3%;"> 
 <tr>
@@ -68,14 +102,14 @@ Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
 	<tr>
 		{% if jndex.1 != qq %}
 		
-		<th bgcolor="#B1BFC4" style="width:20%" rowspan="{{jndex.4}}" ><center><font style="font-size:75%">{{jndex.1}} </font></th>
+		<th bgcolor="#B1BFC4" rowspan="{{jndex.4}}" ><center><font style="font-size:75%"><t>{{jndex.1}} </t></font></th>
 		{% endif %}
 		
 
 			
-	<td  bgcolor="#FAFAF5" style="width:20%"><center><font style="font-size:75%">{{jndex.2}}</font></td>   <!-- Name of Job  -->
+	<td  bgcolor="#FAFAF5"><center><font style="font-size:75%"><t>{{jndex.2}}</font></t></td>   <!-- Name of Job  -->
 	
-	<td  bgcolor="#FAFAF5" style="width:20%"><center><font style="font-size:75%">{{jndex.7}}</font></td>   <!-- Name of Employee -->
+	<td  bgcolor="#FAFAF5"><center><font style="font-size:75%"><t>{{jndex.7}}</font></t></td>   <!-- Name of Employee -->
 
 	</tr>
 {% endfor %}
@@ -86,13 +120,14 @@ Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
 <br>
 
 <b><center>
-      
+      <div class="noPrint">
 	   <form action="/trakberry/schedule_finalize/">
     <input style="background-color: #ffffff;border-radius: 10px;width:100px;height:25px;font-weight: 600;text-align: center;" type="submit" value="Print" />
 	</form>
 	 <form action="/trakberry/tech_logout">
     <input style="background-color: #ffffff;border-radius: 10px;width:100px;height:25px;font-weight: 600;text-align: center;" type="submit" value="Cancel" />
 	</form>
+	</div>
 </center></b>
 
 </table>
