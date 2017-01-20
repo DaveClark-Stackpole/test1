@@ -592,20 +592,20 @@ def schedule_set5(request,list):
 #		cur.execute(Hsql)
 #		tmp3 = cur.fetchall()
 #  **************************************************************************************************
+
+
 		tmp3 = join_query(p,shift)
 		
-		# testing below
-		if counter > 4:
-			dummy = 4
-			return render(request, "test994.html", {'N':tmp3,'P':p})
+		# testing below to stop on a certain employee
+		#if counter > 4:
+		#	dummy = 4
+		#	return render(request, "test994.html", {'N':tmp3,'P':p,'C':counter})
 		# end testing
 		
 		
 		tmp_matrix = tmp3[0]
 		tmp_description = tmp_matrix[0]
 		tmp_job = tmp_matrix[1]
-		
-		
 		
 		prev_tmp_job_id = 0
 		job_mult = .1
@@ -641,8 +641,10 @@ def schedule_set5(request,list):
 #			return render(request,'test1.html')
 			 
 	db.close()
-	return render(request, "test994.html", {'N':N,'E':E,'P':p})
 	
+	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
+	#return render(request, "test994.html", {'N':N,'E':E,'P':p})
+	# ***************************************************
 	
 		
 		
@@ -657,7 +659,7 @@ def schedule_set5(request,list):
 	no_match = 0
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
-	return render(request, "test994.html", {'N':N,'E':E})
+	#return render(request, "test994.html", {'N':N,'E':E})
 	# ***************************************************
 	
 	
@@ -814,6 +816,7 @@ def schedule_set5(request,list):
 def join_query(emp,shift):
 	x = 1
 	final = 1
+	
 	db, cur = db_open()
 	#sql = "SELECT Description,Job_Name from tkb_schedule where Selection ='%s'" % (x)
 	#sql = "SELECT tkb_schedule.Job_Name, tkb_schedule.Description from tkb_schedule LEFT JOIN tkb_employee_matrix ON tkb_schedule.Selection ='%s' AND tkb_employee_matrix.Rotation = '%s'"%(x,x)
@@ -822,7 +825,6 @@ def join_query(emp,shift):
 	list1 = cur.fetchall()
 	
 #	sql2 = "SELECT Job_Name, Description from tkb_employee_matrix WHERE Rotation ='%s' AND Shift='%s' AND Employee='%s'"%(x,shift,emp)
-	
 	sql2 = "SELECT Job_Name, Description from tkb_employee_matrix WHERE Rotation ='%s' AND Shift='%s' AND Employee='%s' ORDER BY %s %s"%(x,shift,emp,'Priority','ASC')
 
 	cur.execute(sql2)
@@ -839,10 +841,9 @@ def join_query(emp,shift):
 	
 	return c			
 #	return render(request,'test21.html',{'list1':list1,'list2':list2,'list3':c})
+
 def schedule_add_job(request,index):
 
-	
-	
 	lp = request.session["loop_count"]
 	lp = lp + 1
 	request.session["loop_count"] = lp

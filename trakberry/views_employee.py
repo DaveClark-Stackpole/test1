@@ -533,11 +533,12 @@ def matrix_update(request, index):
 	db, cur =db_open()
 	
 	
-	sql = "SELECT Level FROM tkb_employee_matrix where Id='%s'" %(index)
+	sql = "SELECT Level,Rotation FROM tkb_employee_matrix where Id='%s'" %(index)
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
 	level = int(tmp2[0])
+	rotation = int(tmp2[1])
 
 	
 	#return render(request, "test22.html",{'level':level})
@@ -551,11 +552,13 @@ def matrix_update(request, index):
 		new_level = 2
 	if level == 2:
 		new_level = 0
+		rotation = 0
 	if level == 3:
 		new_level = 0
 	
-	level = new_level				
-	mql = ('update tkb_employee_matrix SET Level="%s" WHERE Id="%s"' % (level,index))
+	level = new_level
+
+	mql = ('update tkb_employee_matrix SET Level="%s", Rotation="%s" WHERE Id="%s"' % (level,rotation,index))
 	cur.execute(mql)
 	db.commit()
 	
