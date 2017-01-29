@@ -58,8 +58,9 @@ Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
 <!-- Loop Counter for Troubleshooting -->   
 </center></b>
 
-
+<!--
 <div class="noPrint"><button style="margin-left:10%;" onclick="myFunction()"><b>Print</b></button></div></v>
+-->
 
 <table style="width:94%;margin-left:3%;"> 
 <tr>
@@ -122,9 +123,9 @@ Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
 <b><center>
       <div class="noPrint">
 	   <form action="/trakberry/schedule_finalize/">
-    <input style="background-color: #ffffff;border-radius: 10px;width:100px;height:25px;font-weight: 600;text-align: center;" type="submit" value="Print" />
+    <input style="background-color: #ffffff;border-radius: 10px;width:100px;height:25px;font-weight: 600;text-align: center;"  onclick="myFunction()" type="submit" value="Print" />
 	</form>
-	 <form action="/trakberry/tech_logout">
+	 <form action="/trakberry/schedule_set2">
     <input style="background-color: #ffffff;border-radius: 10px;width:100px;height:25px;font-weight: 600;text-align: center;" type="submit" value="Cancel" />
 	</form>
 	</div>
@@ -134,7 +135,10 @@ Schedule  &nbsp;&nbsp;&nbsp;&nbsp; {{request.session.date_curr}}
 
 
 
+
+
 <br><br>
 
+TIME 1 : {{T}} <br>
 
 {% endblock %}	

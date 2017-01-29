@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_vacation import vacation_set_current2, vacation_temp
+from views_mod1 import time_output
 from views_db import db_open
 from forms import toggletest_Form, views_scheduler_selectionForm
 from trakberry.forms import emp_training_form, emp_info_form, job_info_form
@@ -269,8 +270,22 @@ def schedule_set2(request):
 #				selection = 1
 
 		# Temporary Code to force Continental Shift as default for Schedule start
+		
+		
+		cvar = 0
+		rvar = 1
+		if shift == 'Cont B Days CSD 2' or shift == 'Cont B Nights CSD 2' or shift == 'Cont A Days CSD 2' or shift == 'Cont A Nights CSD 2':
+			cvar = 1
+			rvar = 0
+		elif shift == 'Aft CSD 2' or shift == 'Day CSD 2' or shift =='Mid CSD 2':
+			cvar = 0
+			rvar = 1
+			
 		if a[1] == '6L Output' or a[1] == '6L Input':
-			selection = 1
+			selection = cvar
+		elif a[1] == 'GF6 Input' or a[1] == 'GF6 Reaction' or a[1] == 'ZF':
+			selection = rvar
+				
 		cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a[1],a[5],a[6],shift,selection,id_ctr))
 		db.commit()
 	db.close()	
@@ -387,7 +402,7 @@ def schedule_set3(request):
 		
 	
 	#if request.session["add_route"] == 1:
-	#	return render(request,'test993.html',{'list':list})
+	#return render(request,'test993.html',{'list':list})
 	return schedule_set4(request,list)          # Actual next line
 	
 def schedule_set4(request,list):
@@ -410,6 +425,11 @@ def schedule_set4(request,list):
 		#joe = 'happy time'
 		#return render(request,'test996.html',{'list':joe})	
 		request.session["date_curr"] = request.POST.get("date_curr")
+		shft = request.POST.get("shift")
+		if shft != shift:
+			request.session["matrix_shift"] = shft
+			return render(request,'redirect_schedule1.html')
+		
 		
 		# Add Job (index) or Del Job(dindex) button action
 		if 'index' in request.POST:
@@ -513,7 +533,7 @@ def schedule_set4(request,list):
 # Set Employee names and their Jobs in two seperate arrays N[] and E[]
 def schedule_set5(request,list):
 
-	
+	r1= time_output()
 	position = 'CNC'
 	rotation = 1
 	selection = 1
@@ -533,16 +553,17 @@ def schedule_set5(request,list):
 	cur.execute(sql_d)
 	db.commit()
 	
-	MNsql = "INSERT tkb_employee_temp Select * From tkb_employee where Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Employee','ASC')
+	MNsql = "INSERT tkb_employee_temp Select * From tkb_employee where Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Rank','ASC')
 	cur.execute(MNsql)
 	db.commit()
 	#return render(request,'test993.html', {'jobs':shift , 'employees':position})  # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX #
-	Jsql = "SELECT Employee from tkb_employee_temp where  Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Employee','ASC')
+	Jsql = "SELECT Employee, Rank from tkb_employee_temp where  Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Rank','ASC')
 	cur.execute(Jsql)
+	#ttmp = cur.fetchall()
 	tmp_employees = cur.fetchall()
-	t2_employees = tmp_employees[0]
+
 	
-	
+	#return render(request, "test994.html", {'N':tmp_employees})
 	
 		
 		
@@ -635,7 +656,7 @@ def schedule_set5(request,list):
 			
 			E[co].append(tmp_job_id)
 			
-		#return render(request, "test8.html", {'N':E[co]})
+		#return render(request, "test8.html", {'N':E})
 		co = co + 1
 #		except:
 #			db.close()
@@ -658,18 +679,41 @@ def schedule_set5(request,list):
 	bk = 0
 	ptr = 0
 	no_match = 0
+	r3 = 0
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
-	#return render(request, "test994.html", {'N':N,'E':E})
+	#x = zip(N,E)
+	#return render(request, "test992.html", {'X':x,'T':r3})
 	# ***************************************************
 	
 	
 	nnoo = 0
-	# Scheduler Engine
+	
+	#Sort E and N ****************************
+	#for i in range (0,qty_employee-1):
+	#	for ii in range (i+1,qty_employee):
+	#		if len(E[ii]) < len(E[i]):
+	#			tmp = E[ii]
+	#			E[ii] = E[i]
+	#			E[i] = tmp
+	#			tmp = N[ii]
+	#			N[ii] = N[i]
+	#			N[i] = tmp
+	# ****************************************
+	
+	
+	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
+	#x = zip(N,E)
+	#return render(request, "test992.html", {'X':x,'T':r3})
+	# ***************************************************
+	
+			
+	# ***********************
+	#    Scheduler Engine
+	# ***********************
 	while True:
 		tmp_ctr = tmp_ctr + 1
-		if tmp_ctr > 600:
-			break
+
 		A.append(E[ptr][ctr[ptr]])
 		if len(A) != len (set(A)):
 			A.pop()
@@ -692,8 +736,13 @@ def schedule_set5(request,list):
 		if ptr > (qty_employee-1):
 			break
 	listX = zip(N,A)
+	r2 = time_output()
+	r3 = r2-r1
+	# ***********************
+	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
-	#return render(request, "test994.html", {'N':N,'E':A,'L':E,'noo':nnoo})
+	#return render(request, "test992.html", {'X':listX,'N':N})
+	#return render(request, "test994.html", {'N':N,'E':A,'L':E,'noo':tmp_ctr,'Ptr':ptr,'Qty':qty_employee})
 	# ***************************************************
 
 	if no_match != 1:
@@ -805,7 +854,7 @@ def schedule_set5(request,list):
 		
 		#return render(request,'test994.html',{'N':list,'E':list2,'L':k, 'pops':pops})
 		
-		return render(request,'display_schedule.html',{'list':list2,'qq':qq})
+		return render(request,'display_schedule.html',{'list':list2,'qq':qq,'T':r3})
 
 	else:
 		request.session['qty_fail'] = 0
@@ -957,12 +1006,43 @@ def schedule_finalize(request):
 		cur.execute(sql4)
 		db.commit()
 
-	db.close()
-	schedule_init(request)
+
+
+
+	for h in range(0,3):
+		# Increment Rank of Employee order in tkb_employee
+		aql = "SELECT * FROM tkb_employee WHERE Shift = '%s' and Position = '%s' ORDER BY %s %s , %s %s" %(shift,position,'Rank', 'ASC','Employee','ASC')	
+		cur.execute(aql)
+		tmp = cur.fetchall()
+		
+		ct = 2
+		for x in tmp:
+			i_d = x[0]
+			sql = ('update tkb_employee SET Rank = "%s" WHERE Id ="%s"' % (ct, i_d))
+			cur.execute(sql)
+			db.commit()
+			ct = ct + 1
 	
+		sql5 = "SELECT Max(Rank) from tkb_employee WHERE Shift = '%s' and Position = '%s'" %(shift,position)
+		cur.execute(sql5)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		tmp3 = tmp2[0]
 	
+		ct = 1
+		sql6 = ('update tkb_employee SET Rank = "%s" WHERE Rank ="%s" and Shift ="%s" and Position = "%s"' % (ct,tmp3,shift,position))
+		cur.execute(sql6)
+		db.commit()
+
+
+
+
+
 	return render(request,'display_schedule_fail.html')	
 	
+	
+	db.close()
+	schedule_init(request)
 	
 
 	

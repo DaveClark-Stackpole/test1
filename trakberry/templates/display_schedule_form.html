@@ -122,9 +122,33 @@ Schedule
 
 
 
+
+<tr>
+<td>
+	<br>
+<input style="background-color: #ffffff;border-radius: 10px;width:205px;height:35px;font-weight: 600;text-align: center;" type="submit" name ="name_button" value="Enter">
+
+</td><td><br>&nbsp;&nbsp;&nbsp;&nbsp;
+
+<select  onchange="this.form.submit()" style="font-weight: 600;;width:80%;height:35px;" name="shift" >
+
+<option value="Aft CSD 2">Aft CSD 2</option>
+<option value="Day CSD 2">Day CSD 2</option>
+<option value="Mid CSD 2">Mid CSD 2</option>
+<option value="Cont A Nights CSD 2">Cont A Nights CSD 2</option>
+<option value="Cont A Days CSD 2">Cont A Days CSD 2</option>
+<option value="Cont B Nights CSD 2">Cont B Nights CSD 2</option>
+<option value="Cont B Days CSD 2">Cont B Days CSD 2</option>
+
+
+<option selected="selected">
+{{request.session.matrix_shift}}
+</option>
+</select>
+
+</td></tr>
+
 </table>
-<br>
-<input style="background-color: #ffffff;border-radius: 10px;width:205px;height:25px;font-weight: 600;text-align: center;" type="submit" name ="name_button" value="Enter">
 </form>
 <b><center>
        &nbsp;

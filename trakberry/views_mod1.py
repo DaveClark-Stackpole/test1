@@ -25,3 +25,8 @@ def table_copy(request):
 	return render(request,'done_test.html')
 						  
 
+def time_output():
+	tm = int(time.time())
+	time.sleep(1.4)
+	return tm
+	
