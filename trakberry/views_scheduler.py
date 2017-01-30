@@ -437,7 +437,7 @@ def schedule_set4(request,list):
 			return schedule_add_job(request,index)
 		if 'dindex' in request.POST:
 			dindex = request.POST.get("dindex")
-			return schedule_del_job(request,dindex)
+			return schedule_delete(request,dindex)
 			
 		db, cur = db_open()
 		for x in list:
@@ -853,6 +853,9 @@ def schedule_set5(request,list):
 		request.session['current_position'] = position
 		
 		#return render(request,'test994.html',{'N':list,'E':list2,'L':k, 'pops':pops})
+		request.session['list_test'] = list2
+		request.session['qq'] = qq
+		request.session['r3'] = r3
 		
 		return render(request,'display_schedule.html',{'list':list2,'qq':qq,'T':r3})
 
@@ -921,7 +924,7 @@ def schedule_add(request,index):
 	v = request.session["add_job"]
 	w = request.session["add_a_job"]
 
-	if aj < 3:
+	if aj < 25:
 		#if aj == 2:
 		#	return render(request,'test997.html')
 		zh = request.session["route"]
@@ -970,6 +973,21 @@ def schedule_add(request,index):
 	
 	#return schedule_set3(request)
 	return render(request,'done_schedule_set3.html')
+	
+def schedule_delete(request,index):
+	aj = request.session["job_n"]
+	aj = aj - 1 
+	request.session["job_n"] = aj
+	db, cur = db_open()
+
+	dql = ('DELETE FROM tkb_schedule WHERE Id="%s"' % (index))
+	cur.execute(dql)
+	db.commit()
+	db.close()
+	
+	
+	return render(request,'done_schedule_set3.html')
+	
 	
 	
 def schedule_finalize(request):
@@ -1038,7 +1056,7 @@ def schedule_finalize(request):
 
 
 
-	return render(request,'display_schedule_fail.html')	
+	return render(request,'redirect_schedule2.html')	
 	
 	
 	db.close()
@@ -1060,5 +1078,10 @@ def schedule_reset_data(request):
 	db.close()
 	return render(request,'done_delete_schedule.html')
 	
+def schedule_redisplay1(request):
+	list2 = request.session['list_test']
+	qq = request.session['qq']
+	r3 = request.session['r3']
 	
+	return render(request,'display_schedule_redo.html',{'list':list2,'qq':qq,'T':r3})
 	

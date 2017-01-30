@@ -40,6 +40,7 @@ from views_mod1 import table_copy
 # *******************************************  Testing Views *******************************************************************************************
 from views_email import e_test
 from views import fix_time
+from views_test import test_list
 # ***********************************************************************************************************************************************************
 
 
@@ -63,7 +64,7 @@ from views_employee import create_matrix, emp_training_enter, emp_info_enter, em
 from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload
 from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
-from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data
+from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,schedule_redisplay1
 
 
 
@@ -205,6 +206,7 @@ urlpatterns = [
 	url(r'^schedule_set/', schedule_set),
 	url(r'^schedule_finalize/', schedule_finalize),
 	url(r'^schedule_set2b/', schedule_set2b),
+	url(r'^schedule_redisplay1/', schedule_redisplay1),
 	#url(r'^schedule_add_job/get/(?P<index>\w{0,50})/$', schedule_add_job),
 	
 	#url(r'^tech/get/complete/(?P<index>\d+)/$', complete),
@@ -228,6 +230,7 @@ urlpatterns = [
 	url(r'^table_copy/', table_copy),
 	# Test for correcting timestamp issues on tracking data
 	url(r'^fix_time/', fix_time),
+	url(r'^test_list/', test_list),
 #	url(r'^hour_check/', hour_check),
 
 	

@@ -49,6 +49,13 @@ def vacation_set_current():
 	current_shift = 'All'
 	
 	return current_first, current_shift
+
+def test_list(request):
+	list2 = request.session['list_test']
+	qq = request.session['qq']
+	r3 = request.session['r3']
+	
+	return render(request,'display_schedule.html',{'list':list2,'qq':qq,'T':r3})
 	
 	 
 def sendAppointment(self, subj, description):
