@@ -22,7 +22,7 @@ from django.contrib import admin
 
 from views2 import main_login, main_login_form, main, main_logout
 from views_machinery import machinery
-from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1
+from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
 from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test
 #from views_tech import hour_check
 from views_transfer import transfer
@@ -231,6 +231,7 @@ urlpatterns = [
 	# Test for correcting timestamp issues on tracking data
 	url(r'^fix_time/', fix_time),
 	url(r'^test_list/', test_list),
+	url(r'^test_datalist/', test_datalist),
 #	url(r'^hour_check/', hour_check),
 
 	

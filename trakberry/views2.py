@@ -190,7 +190,7 @@ def login_initial(request,login_name):
 			request.session["shift11"] = 'CSD1 Day'
 			request.session["shift8"] = 'Forklift'
 			request.session["shift9"] = 'Maintenance'				
-		elif login_name == 'Randy Doucette':
+		elif login_name == 'Mike Clarke':
 			request.session["shift_primary"] = 'CSD1 Aft'
 			request.session["sfilter12"] = 'checked'
 			request.session["sfilter8"] = 'checked'
@@ -241,15 +241,22 @@ def main(request):
 
 	try:
 		password = request.session["login_password"]
+		name = request.session["login_name"]
 	except:
 		password = 'no'
+		name = ""
 	
 	# how to delete a session variable
 	#del request.session['mykey']
+	log_pass = 0
 	
-	
-	if password == 'stackberry':
-		
+	if name == 'Dave Clark':
+		if password == 'Jaden2008':
+			log_pass = 1
+	elif password == 'stackberry':
+		log_pass = 1
+
+	if log_pass == 1:
 		#request.session.set_expiry(1800)
 		return render(request, "main.html")
 	else:

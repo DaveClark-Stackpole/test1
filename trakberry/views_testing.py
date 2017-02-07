@@ -261,3 +261,7 @@ def test668(request):
 	#request.session["test"] = 78
 	return render(request, "test.html")
 	
+def test_datalist(request):
+	return render(request, "safari/simple_datalist4.html")	
+	
+	

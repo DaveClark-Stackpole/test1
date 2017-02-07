@@ -762,17 +762,19 @@ def vacation_display(request):
 		else:
 			request.session["shift14"] = '--'
 
-		xy = request.POST.get("month")
-		xy = int(xy)
-		jj = xy
-		if xy > 12:
-			request.session["year"] = 2017
-			request.session["month"] = xy - 12
-		else:
-			request.session["year"] = 2016
-			request.session["month"] = xy
 		
-		#return render(request,'test998.html',{'t':year_st,'month':month_st})
+		if request.POST.get("month"):	
+			xy = request.POST.get("month")
+			xy = int(xy)
+			jj = xy
+			if xy > 12:
+				request.session["year"] = 2017
+				request.session["month"] = xy - 12
+			else:
+				request.session["year"] = 2016
+				request.session["month"] = xy
+		
+			#return render(request,'test997.html',{'A':xy})
 		request.session["month_pick"] = 1
 
 		# testing Variable
