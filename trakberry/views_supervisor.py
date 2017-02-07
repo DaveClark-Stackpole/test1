@@ -590,10 +590,20 @@ def vacation_display(request):
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day
+	
+	MM = int(request.session["month"])
+	YY = int(request.session["year"])
+	if YY == 2017:
+		request.session["Month_Current"] = MM + 12
+	else:
+		request.session["Month_Current"] = MM
+	
+	
+	
 	try:
 		month_pick = request.session["month_pick"]
-		A = int(request.session["month"])
-		B =  int(request.session["year"])
+		A = MM
+		B =  YY
 	except:
 		month_pick = 1
 		A = 1
@@ -601,8 +611,8 @@ def vacation_display(request):
 		
 	try:
 		if request.session["month_pick"] == 1:
-			month_st = int(request.session["month"])
-			year_st = int(request.session["year"])
+			month_st = MM
+			year_st = YY
 			#request.session["month_pick"] = 0
 			
 	except:
@@ -762,8 +772,9 @@ def vacation_display(request):
 		else:
 			request.session["shift14"] = '--'
 
+
 		
-		if request.POST.get("month"):	
+		if request.POST.get("month"):
 			xy = request.POST.get("month")
 			xy = int(xy)
 			jj = xy
