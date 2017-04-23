@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import tech_closeForm, tech_loginForm, tech_searchForm
+from trakberry.forms import tech_closeForm, tech_loginForm, tech_searchForm, tech_message_Form
 from views_db import db_open
 from views_mod1 import find_current_date
 from views_email import e_test
@@ -203,6 +203,9 @@ def tech(request):
 	if request.session["login_tech"] == "Jim Barker":
 		request.session["login_image"] = "/static/media/tech_jim.jpg"
 		request.session["login_back"] = "/static/media/back_jim.jpg"
+	elif request.session["login_tech"] == "Dave Clark":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/tech_training.jpg"
 	elif request.session["login_tech"] == "Scott Smith":
 		request.session["login_image"] = "/static/media/tech_scott.jpg"
 		request.session["login_back"] = "/static/media/back_scott.jpg"
@@ -223,7 +226,51 @@ def tech(request):
 		request.session["login_back"] = "/static/media/back_rick.jpg"
 		
   # call up 'display.html' template and transfer appropriate variables.  
-	return render(request,"tech.html",{'L':list,'N':n})
+  
+  # *********************************************************************************************************
+  # ******     Messaging portion of the Tech App  ***********************************************************
+  # *********************************************************************************************************
+	N = request.session["login_tech"]
+	R = 0
+	db, cur = db_open() 
+	try:
+		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
+		cur.execute(sql)
+		tmp44 = cur.fetchall()
+		tmp4 = tmp44[0]
+
+		request.session["sender_name"] = tmp4[2]
+		request.session["message_id"] = tmp4[0]
+
+		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
+		cur.execute(aql)
+		tmp2 = cur.fetchall()
+		tmp3 = tmp2[0]
+		cnt = tmp3[0]
+	except:
+		cnt = 0
+		tmp4 = ''
+		request.session["sender_name"] = ''
+		request.session["message_id"] = 0
+	db.close()
+	Z = 1
+	if cnt > 0 :
+		cnt = 1
+		request.session["refresh_tech"] = 3
+	# ********************************************************************************************************
+	
+	
+	return render(request,"tech.html",{'L':list,'cnt':cnt,'M':tmp4,'N':n,'Z':Z})
+
+def tech_message_close(request):
+	request.session["refresh_tech"] = 0
+	I = request.session["message_id"]
+	C = 1
+	db, cur = db_open()
+	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
+	cur.execute(sql)
+	db.commit()
+	return tech(request)
 	
 def job_call(request, index):	
     
@@ -413,3 +460,45 @@ def tech_tech_call(request):
 	return supervisor_tech_call(request)
 						  
 
+def tech_message(request):	
+	A = 'Chris Strutton'
+	db, cur = db_open()
+	sql = "SELECT * FROM tkb_tech_list"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+
+	db.close()
+
+	if request.POST:
+        			
+		a = request.session["login_tech"]
+		b = request.POST.get("name")
+		c = request.POST.get("message")
+		
+		
+
+		
+		# Select prodrptdb db located in views_db
+		db, cur = db_open()
+		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
+
+		db.commit()
+		db.close()
+		
+		return tech(request)
+		#return done(request)
+		
+	else:
+		form = tech_message_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	
+	return render(request,'tech_message_form.html', {'List':tmp,'A':A,'args':args})	
+
+
+def modal_test(request):	
+	a = 1
+	b = 1
+	request.session["modal_1"] = a
+	return render(request,'modal_test.html',{'b':b})

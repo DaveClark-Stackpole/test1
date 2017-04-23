@@ -155,6 +155,10 @@ function goBack() {
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 	<!-- ***********************************************************************************-->
+	<!-- <link rel='stylesheet' href='/static/style_1/toggle1.css'> -->
+	<!-- <link rel='stylesheet' href='/static/style_1/toggle2.css'> -->
+	{% block styleB %}
+	{% endblock %}
 	</head>
 	
 
@@ -266,14 +270,14 @@ function goBack() {
                             <ul class="dropdown-menu">
                                 
                                 <li class="dropdown-submenu">
-									<!--<li><a href="#">Matrix</a></li> -->
+									<!-- <li><a href="#">Matrix</a></li> -->
 									<li><a href="/trakberry/matrix_info_init">Matrix</a></li> 
 										 <!-- <li><a href="#">Matrix</a></li> -->
                                 </li>
                                 
                                 <li class="dropdown-submenu">
-                                    <li><a href="/trakberry/job_info_display">
-										Jobs</a>
+                                     <li><a href="/trakberry/job_info_display">Jobs</a> 
+                                    <!-- <li><a href="#">Jobs</a> -->
 										 <!--</a>--></li> 
                                 </li>
 
@@ -290,9 +294,11 @@ function goBack() {
                             <ul class="dropdown-menu">
                                 
                                 <li class="dropdown-submenu">
-									<li><a href="/trakberry/rotation_info_display">Rotation</a></li>  
+									<!-- <li><a href="#">Rotation</a></li>   -->
+									<li><a href="/trakberry/rotation_info_display">Rotation</a></li> 
 									<li class="dropdown-submenu"> 
-									<li><a href="/trakberry/schedule_set2">Generate Schedule</a></li> 
+									<!-- <li><a href="#">Generate Schedule</a></li>  -->
+								   <li><a href="/trakberry/schedule_set2">Generate Schedule</a></li> 
                                 </li>
 
 							</ul>

@@ -95,7 +95,8 @@ def emp_training_enter(request):
 	return render(request,'emp_training_enter_form.html',{'args':args})		
 
 def emp_info_enter(request):
-
+	
+	request.session["batch"] = 0
 	try:
 		request.session["employee"]
 		request.session["clock"]
@@ -239,6 +240,11 @@ def emp_info_update(request):
 	
 	emp_info_update_matrix(employee,shift,position)
 	
+	
+	batch_check = request.session["batch"]
+	if batch_check == 1:
+		return(request)
+		
 	return matrix_info_reload(request)
 
 
@@ -282,7 +288,7 @@ def emp_matrix_initialize(request):
 def emp_info_update_matrix(emp,shift,position):
 	
 	db, cur = db_open()
-	tql = "SELECT * FROM tkb_jobs"
+	tql = "SELECT * FROM tkb_jobs WHERE Position = '%s'" %(position)
 	cur.execute(tql)
 	smp = cur.fetchall()
 
@@ -296,7 +302,7 @@ def emp_info_update_matrix(emp,shift,position):
 		cur.execute('''INSERT INTO tkb_employee_matrix(Employee,Description,Job_Name,Level,Shift,Position) VALUES(%s,%s,%s,%s,%s,%s)''', [emp,description,machine,level,shift,position])
 	db.commit()
 	db.close()
-	matrix_job_order()
+	matrix_job_order(position)
 	return 
 
 def emp_matrix_rotation_fix(request):
@@ -310,9 +316,9 @@ def emp_matrix_rotation_fix(request):
 	emp = 'DONE'
 	return render(request,'done_test.html',{'tmp2':emp})
 	
-def job_info_update_matrix(description,job_name):
+def job_info_update_matrix(description,job_name,position):
 	db, cur = db_open()
-	sql = "SELECT * FROM tkb_employee"
+	sql = "SELECT * FROM tkb_employee WHERE Position = '%s'"%(position)
 	cur.execute(sql)
 	tmp = cur.fetchall()
 
@@ -323,25 +329,24 @@ def job_info_update_matrix(description,job_name):
 		emp = tmp2
 		pos = i[3]
 		shift = i[4]
-		cur.execute('''INSERT INTO tkb_employee_matrix(Employee,Description,Job_Name,Level,Shift,Position) VALUES(%s,%s,%s,%s,%s,%s)''', [emp,description,job_name,level,shift,pos])
+		cur.execute('''INSERT INTO tkb_employee_matrix(Employee,Description,Job_Name,Level,Shift,Position) VALUES(%s,%s,%s,%s,%s,%s)''', [emp,description,job_name,level,shift,position])
 		db.commit()
 	
 	db.close()
-	matrix_job_order()
+	matrix_job_order(position)
 	return 
 
 
 # Reorder the Job Number for Matrix based on Order Criteria
-def matrix_job_order():
+def matrix_job_order(position):
 	db, cur = db_open()
-	
-	cql = "SELECT COUNT(*) from tkb_jobs"
+	cql = "SELECT COUNT(*) FROM tkb_jobs WHERE Position = '%s'"%(position)
 	cur.execute(cql)
 	tmp2 = cur.fetchall()
 	tmp3 = tmp2[0]
 	job_ctr = tmp3[0]
 	
-	sql = "SELECT * FROM tkb_employee_matrix ORDER BY %s %s , %s %s, %s %s" %('Employee', 'ASC','Description','ASC','Job_Name','ASC')
+	sql = "SELECT * FROM tkb_employee_matrix WHERE Position = '%s' ORDER BY %s %s , %s %s, %s %s" %(position,'Employee', 'ASC','Description','ASC','Job_Name','ASC')
 	cur.execute(sql)
 	xmp = cur.fetchall()
 	ctr = 1
@@ -429,26 +434,27 @@ def matrix_info_reload(request):
 	return render(request, "done_matrix.html")	
 	
 def matrix_info_display(request):
+	try:
+		request.session["position"]
+	except:
+		request.session["position"] = 'CNC'
+	position = request.session["position"]
+
+	
 	db, cur = db_open()
 	curr_shift = request.session["matrix_shift"]
-	
-	sql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' ORDER BY %s %s , %s %s" %(curr_shift,'Employee', 'ASC','Job','ASC')
-
+	sql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' and Position = '%s' ORDER BY %s %s , %s %s" %(curr_shift,position,'Employee', 'ASC','Job','ASC')
 	cur.execute(sql)
 	tmp = cur.fetchall()
 
-	
-	
-	cql = "SELECT COUNT(*) from tkb_jobs"
+	cql = "SELECT COUNT(*) from tkb_jobs WHERE Position = '%s'" %(position)
 	cur.execute(cql)
 	tmp2 = cur.fetchall()
 	tmp3 = tmp2[0]
 	job_ctr = tmp3[0]
-	
-	
-	
-	
-	jql = "SELECT * FROM tkb_jobs ORDER BY  %s %s, %s %s" %('Description','ASC','Job_Name','ASC')
+
+
+	jql = "SELECT * FROM tkb_jobs WHERE Position = '%s' ORDER BY  %s %s, %s %s" %(position,'Description','ASC','Job_Name','ASC')
 	cur.execute(jql)
 	jmp = cur.fetchall()
 
@@ -485,18 +491,34 @@ def matrix_info_display(request):
 	tjobs = zip(j,jc)
 	
 	ctr1 = 0
+	ctr2 = 1
 	k = []
+	kk = []
+	clr = []
+	clr_var = 1
 	sw = -1
 	c1 = '#DCDDDE'
 	c2 = '#ffffff'
+	c3='#c6cad1'
+	ddd = '#ffffff'
 	jb = ""
+	nb = ""
 	for i in tmp:
+		if i[1] != nb:
+			if ddd == c3:
+				ddd = c2
+			else:
+				ddd = c3
+			nb = i[1]
+		
 		if i[2] != jb:
 			sw = sw * -1
 			if sw == 1:
 				ccc = c1
+
 			else:
 				ccc = c2
+
 			jb = i[2]
 		ctr1 = ctr1 + 1	
 		if ctr1 == (job_ctr+1):
@@ -505,16 +527,46 @@ def matrix_info_display(request):
 		if ctr1 == 1:
 			ccc = c1
 			
-				
+
 		k.append(str(ccc))	
+		clr.append(str(ddd))
+		kk.append(ctr2)
+			
+		ctr2 = ctr2 + 1
 				
 	#return render(request, "test67.html", {'tjobs':tjobs})
-	col_jobs = float(94 / job_ctr)
-	
-	# Form for shift selection
+	try:
+		col_jobs = float(94 / job_ctr)
+	except:
+		col_jobs = 0
+		
+	# Form for shift selection and Save Function
 	if request.POST:
+		# Variable '1' if Save button pressed
+		save_b = request.POST.get('save')
+		if save_b == '1':
+			ctr4 = 1
+			h = []
+			for j in tmp:
+				ctrr = str(ctr4)
+				hhh = request.POST.get(ctrr)
+				h.append(str(hhh))
+				#hhh=str(hhh)
+
+				#vr1=int(hhh[:-1])
+				#vr2=int(hhh[-1:])
+				#h.append(vr1)
+				#h.append(vr2)
+				ctr4 = ctr4 + 1
+
+			update_matrix_save(h)
+			return matrix_info_reload(request)
+			#return render(request, "test5.html", {'A':h})
+
 		shift = request.POST.get("shift")
 		request.session["matrix_shift"] = shift
+		position = request.POST.get("position")
+		request.session["position"] = position
 		return matrix_info_reload(request)
 	else:
 		form = toggletest_Form
@@ -522,12 +574,25 @@ def matrix_info_display(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
-	tmp4 = map(None,tmp,k)
+	tmp4 = map(None,tmp,k,kk,clr)
 	#tmp4 = zip(tmp,jc)	
 	#return render(request, "test22.html", {'tjobs':a})
 	#return render(request, "test67.html", {'List':tmp,'List2':tmp4,'List3':jc})	
 	return render(request, "matrix_info_display.html", {'List':tmp4,'B':job_ctr,'A':a,'C':c,'Jobs':jmp,'tjobs':tjobs,'D':col_jobs,'args':args})
 
+
+def update_matrix_save(tmp):
+	db, cur =db_open()
+	for i in tmp:
+		i_var = int(i[:-1])
+		i_val = int(i[-1:])
+		sql = ('update tkb_employee_matrix SET Level = "%s" WHERE Id="%s"' % (i_val,i_var))
+		cur.execute(sql)
+		db.commit()
+	db.close()	
+	return
+	
+	
 # Read in index value and change the Matrix variable accordingly for that indexed row
 def matrix_update(request, index):
 	db, cur =db_open()
@@ -582,17 +647,19 @@ def job_info_enter(request):
 	try:
 		request.session["description"]
 		request.session["job_name"]
-
+		request.session["position"]
 		
 	except:
 		request.session["description"] = ""
 		request.session["job_name"] = ""
+		request.session["position"] = ""
 
 
 	if request.POST:
 
 		request.session["description"] = request.POST.get("description")
 		request.session["job_name"] = request.POST.get("job_name")
+		request.session["position"] = request.POST.get("position")
 	
 		return job_info_update(request)
 		
@@ -607,14 +674,14 @@ def job_info_update(request):
     
 	description = request.session["description"]
 	job_name = request.session["job_name"]
-
+	position = request.session["position"]
 
 	db, cur = db_open() 	
-	cur.execute('''INSERT INTO tkb_jobs(Description,Job_Name) VALUES(%s,%s)''', (description,job_name))
+	cur.execute('''INSERT INTO tkb_jobs(Description,Job_Name,Position) VALUES(%s,%s,%s)''', (description,job_name,position))
 	db.commit()
 	db.close()
 	
-	job_info_update_matrix(description,job_name)
+	job_info_update_matrix(description,job_name,position)
 
 	return job_info_display(request)
 	#return render(request,'done_test.html')
@@ -666,6 +733,7 @@ def job_info_update_change(request):
 	job_old = request.session["job_old"]
 	description = request.session["description"]
 	description_old = request.session["description_old"]
+	position = request.session["position"]
 
 	db, cur = db_open() 	
 	cur.execute("UPDATE tkb_jobs SET Job_Name = '%s', Description = '%s' WHERE Job_Name = '%s' and Description = '%s'"% (job, description, job_old, description_old))
@@ -674,12 +742,13 @@ def job_info_update_change(request):
 	db.commit()	
 	db.close()
 		
-	matrix_job_order()
+	matrix_job_order(position)
 	return matrix_info_reload(request)
 
 def job_info_delete(request):	
 	
 	job = request.session["job_old"]
+	position = request.session["position"]
 	
 	db, cur = db_open()
 	
@@ -692,13 +761,130 @@ def job_info_delete(request):
 	
 	db.close()
 	
-	matrix_job_order()
+	matrix_job_order(position)
 	
 	return matrix_info_reload(request)
 	
+def employee_manual_enter(request):
+
+	# backup Vacation Table
+	db, cursor = db_open()  
 	
+	cursor.execute("""DROP TABLE IF EXISTS tkb_employee_batch""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_employee_batch LIKE tkb_employee""")
+	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
 
+	db.commit()
+	db.close()
+	return render(request,'done_test.html')
 
+def emp_info_group_update(request):
 
+	request.session["clock"] = 0
+	request.session["batch"] = 1
+	db, cur = db_open()
+	sql = "SELECT * FROM tkb_employee_batch" 
+	cur.execute(sql)
+	tmp = cur.fetchall()
+
+	for i in tmp:
+
+		employee = i[1]
+		clock = request.session["clock"]
+		shift = i[4]
+		position = i[3]
+
+		cur.execute('''INSERT INTO tkb_employee(Employee, clock, position, shift) VALUES(%s,%s,%s,%s)''', (employee,clock,position,shift))
+		db.commit()
+		
+		db.close()
+		db, cur = db_open()
+		
+		tql = "SELECT * FROM tkb_jobs WHERE Position = '%s'" %(position)
+		cur.execute(tql)
+		smp = cur.fetchall()
+		
+		
+		A = 'tkb_jobs'
+		a = smp
+		B = 'position'
+		b = position
+		#return render(request,'testA.html',{'A':A,'a':a,'B':B,'b':b})
+
+		level = 0
+		
+		for j in smp:
+			machine = j[5]
+			description = j[1]
+			cur.execute('''INSERT INTO tkb_employee_matrix(Employee,Description,Job_Name,Level,Shift,Position) VALUES(%s,%s,%s,%s,%s,%s)''', [employee,description,machine,level,shift,position])
+			db.commit()
+			A = 'Employee'
+			a = employee  
+			B = 'Description'
+			b = description
+			C = 'Job'
+			c = machine 
+			D = 'Shift'
+			d = shift
+			E = 'Position'
+			e = position 
+			
+			#return render(request,'testA.html',{'A':A,'B':B,'C':C,'D':D,'E':E,'a':a,'b':b,'c':c,'d':d,'e':e})
+			
+
+		# matrix_job_order
+		cql = "SELECT COUNT(*) FROM tkb_jobs WHERE Position = '%s'"%(position)
+		cur.execute(cql)
+		tmp2 = cur.fetchall()
+		tmp3 = tmp2[0]
+		job_ctr = tmp3[0]
+	
+		sql = "SELECT * FROM tkb_employee_matrix WHERE Position = '%s' ORDER BY %s %s , %s %s, %s %s" %(position,'Employee', 'ASC','Description','ASC','Job_Name','ASC')
+		cur.execute(sql)
+		xmp = cur.fetchall()
+		ctr = 1
+	
+		for i in xmp:
+		
+			p_id = i[0]
+			mql = ('update tkb_employee_matrix SET Job="%s" WHERE Id="%s"' % (ctr,p_id))
+			cur.execute(mql)
+			db.commit()
+			ctr = ctr + 1
+			if ctr > job_ctr:
+				ctr = 1
+
+	db.close()
+	return render(request,'testtest.html',{'list':list})
+
+def matrix_backup(request):
+
+	# backup Vacation Table
+	db, cursor = db_open()  
+	
+	cursor.execute("""DROP TABLE IF EXISTS tkb_employee_backup""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_employee_backup LIKE tkb_employee""")
+	cursor.execute('''INSERT tkb_employee_backup Select * From tkb_employee''')
+	db.commit()
+	
+	cursor.execute("""DROP TABLE IF EXISTS tkb_employee_matrix_backup""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_employee_matrix_backup LIKE tkb_employee_matrix""")
+	cursor.execute('''INSERT tkb_employee_matrix_backup Select * From tkb_employee_matrix''')
+	db.commit()
+	db.close()
+	return render(request,'done_test.html')
+	
+def rot_fix(request):
+
+	a = 1
+	b = 'Production'
+	c = 'Aft CSD 2'
+	#db, cur = db_open()  
+	
+	#cur.execute("UPDATE tkb_employee_matrix SET Rotation = '%s' WHERE Position = '%s' and Shift = '%s'"% (a,b,c))
+
+	#db.commit()
+	#db.close()
+	return render(request,'done_test.html')
 	
 	

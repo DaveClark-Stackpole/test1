@@ -23,7 +23,8 @@ from django.contrib import admin
 from views2 import main_login, main_login_form, main, main_logout
 from views_machinery import machinery
 from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
-from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test
+from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
+from views_tech import tech_message_close
 #from views_tech import hour_check
 from views_transfer import transfer
 
@@ -31,7 +32,7 @@ from mod_simulate import sim
 from mod_tracking import edit_part, select_date, select_day, select_datetime, graph_gf6, graph_gf6_report
 from mod_test import test_mode
 from views_global_mods import test_machine_rate
-from views_vacation import vacation_temp, vacation_backup
+from views_vacation import vacation_temp, vacation_backup, vacation_purge, vacation_purge_delete, vacation_rebuild,vacation_restore, message_create
 from views_admin import retrieve
 from views_db import db_select
 from views_test import place_test, email_test_1
@@ -40,7 +41,7 @@ from views_mod1 import table_copy
 # *******************************************  Testing Views *******************************************************************************************
 from views_email import e_test
 from views import fix_time
-from views_test import test_list
+from views_test import test_list, toggle_1, layer_test
 # ***********************************************************************************************************************************************************
 
 
@@ -52,7 +53,7 @@ from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, di
 
 
 # *******************************************  Supervisor Section ********************************************************************************************
-from views_supervisor import supervisor_display, supervisor_tech_call,supervisor_elec_call,supervisor_main_call
+from views_supervisor import supervisor_display, supervisor_tech_call,supervisor_elec_call,supervisor_main_call,sup_message_close
 from views_supervisor import vacation_display_jump, supervisor_edit, sup_close, employee_vac_enter, vacation_display
 from views_supervisor import vacation_display_increment, vacation_display_decrement, vacation_edit, vacation_delete
 from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix, vacation_display_initial, resetcheck
@@ -61,8 +62,8 @@ from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, 
 
 # *******************************************  Employee Section ********************************************************************************************
 from views_employee import create_matrix, emp_training_enter, emp_info_enter, emp_info_display, emp_matrix_initialize, create_jobs,emp_info_update_status
-from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload
-from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix
+from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload,matrix_backup,rot_fix
+from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix, employee_manual_enter, emp_info_group_update
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
 from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,schedule_redisplay1
 
@@ -93,7 +94,7 @@ urlpatterns = [
 	
 	url(r'^tmr/', test_machine_rate),
 	url(r'^fix_shift/', fix_shift),
-	
+	url(r'^sup_message_close/', sup_message_close),
 	
 	url(r'^fade/', fade_in),
 	url(r'^fade2/', fade2),
@@ -114,7 +115,8 @@ urlpatterns = [
 	url(r'^main/', main),
 	url(r'^tech_reset/', tech_reset),
 	url(r'^tech_email_test/', tech_email_test),
-	url(r'^main_logout/', main_logout),	
+	url(r'^tech_message_close/', tech_message_close),
+	url(r'^modal_test/', modal_test),	
 	
 	# Reports URL Patterns ***********************************
 	url(r'^reports/', select_date),
@@ -127,6 +129,9 @@ urlpatterns = [
 	url(r'^employee_vacation_enter_init2/', employee_vac_enter_init2),
 	url(r'^employee_vacation_enter_init/get/(?P<index>\d+)/$', employee_vac_enter_init),
 	url(r'^emp_matrix_rotation_fix/', emp_matrix_rotation_fix),
+	url(r'^employee_manual_enter/', employee_manual_enter),
+	url(r'^emp_info_group_update/', emp_info_group_update),
+	url(r'^matrix_backup/', matrix_backup),
 	url(r'^vacation_display/', vacation_display),
 	url(r'^vacation_display_jump/', vacation_display_jump),
 	url(r'^vacation_display_increment/', vacation_display_increment),
@@ -135,6 +140,11 @@ urlpatterns = [
 	url(r'^vacation_delete/', vacation_delete),
 	url(r'^vacation_display_initial/', vacation_display_initial),
 	url(r'^vacation_backup/', vacation_backup),
+	url(r'^message_create/', message_create),
+	url(r'^vacation_rebuild/', vacation_rebuild),
+	url(r'^vacation_restore/', vacation_restore),
+	url(r'^vacation_purge/', vacation_purge),
+	url(r'^vacation_purge_delete/', vacation_purge_delete),
 	url(r'^vacation_month_fix/', vacation_month_fix),
 	url(r'^resetcheck/', resetcheck),
 	# ********************************************************	
@@ -177,13 +187,15 @@ urlpatterns = [
 	url(r'^tech_history/', tech_history),	
 	url(r'^tech_recent/', tech_recent),
 	url(r'^tech_tech_call/', tech_tech_call),
-    url(r'^tech_map/', tech_map),	
+    url(r'^tech_map/', tech_map),
+    url(r'^tech_message/', tech_message),	
 	
 	# **************  Employee Section ***************************************
 	url(r'^create_matrix/', create_matrix),
 	url(r'^create_jobs/', create_jobs),
 	url(r'^emp_training_enter/', emp_training_enter),
 	url(r'^emp_info_enter/', emp_info_enter),
+	url(r'^rot_fix/', rot_fix),
 	url(r'^emp_info_display/', emp_info_display),
 	url(r'^emp_matrix_delete/', emp_matrix_delete),
 	url(r'^emp_matrix_initialize/', emp_matrix_initialize),
@@ -232,6 +244,8 @@ urlpatterns = [
 	url(r'^fix_time/', fix_time),
 	url(r'^test_list/', test_list),
 	url(r'^test_datalist/', test_datalist),
+	url(r'^toggle_1/', toggle_1),
+	url(r'^layer_test/', layer_test),
 #	url(r'^hour_check/', hour_check),
 
 	
@@ -239,6 +253,7 @@ urlpatterns = [
 	# Retrieve Data from ADMIN views for testing
 	url(r'^retrieve/', retrieve),
 	url(r'^create_table/', create_table),
+	
 	
 ]
  

@@ -10,6 +10,9 @@ import time
 import smtplib
 import datetime as dt
 
+
+
+    
 def email_test_1(request):
 #	sender = 'dclark@stackpole.com'
 #	receivers = ['dclark@stackpole.com']
@@ -31,13 +34,16 @@ def email_test_1(request):
 	return render(request, "email_downtime_test.html")
  
 def place_test(request):
-	i = ''
-	E=[0 for i in range(5)] 
-	E[1] = ['X','Y','Z']
-	E[2] = ['W','Z']
-	E[3] = ['W','X']
-	E[4] = ['Y','X']
-	
+	for key in request.session.keys():
+		del request.session[key]
+	E = 'DONE'
+#	i = ''
+#	E=[0 for i in range(5)] 
+#	E[1] = ['X','Y','Z']
+#	E[2] = ['W','Z']
+#	E[3] = ['W','X']
+#	E[4] = ['Y','X']
+#	
 	return render(request, "test_a.html", {'List':E})
 	 
 def vacation_set_current():
@@ -46,6 +52,7 @@ def vacation_set_current():
 	year_st = t.year
 	one = 1
 	current_first = str(year_st) + "-" + str(month_st) + "-" + str(one)
+	
 	current_shift = 'All'
 	
 	return current_first, current_shift
@@ -116,4 +123,19 @@ def sendAppointment(self, subj, description):
   s.sendmail(msg["dclark@stackpole.com"], [msg["dclark@stackpole.com"]], msg.as_string())
   s.quit()
 
+def toggle_1(request):
 
+	return render(request, "toggle_1.html")
+
+def layer_test(request):
+	x = 7
+	label_name = "layered_"
+	for i in range (1,10):
+		label_str = label_name + str(i)
+		request.session[label_str]='nbsp'
+		
+	label_str = label_name + str(x)	
+		
+	request.session[label_str]='#9899'
+
+	return render(request, "layered_audits/50-2407.html")

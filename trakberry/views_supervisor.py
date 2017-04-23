@@ -140,15 +140,15 @@ def supervisor_display(request):
 		d_diff = dtemp_t - dt_t
 		
 		if d_diff < 1801:
-			clr = "green"
+			clr = "#00B4E0"
 		elif d_diff < 3601:
-			clr = "yellow"
+			clr = "#0096BA"
 		elif d_diff < 10801:
-			clr = "red"
+			clr = "#006680"
 		elif d_diff < 86400:
-			clr = "black"
+			clr = "#012933"
 		else:
-			clr = "#DB2602"
+			clr = "#DE0707"
 			
 		temp1_job = tmp2[0]
 		temp2_job = temp1_job[:15]
@@ -191,7 +191,10 @@ def supervisor_display(request):
 	if request.POST:
 		request.session["test"] = 999
 		a = request.POST
-		b=int(a.get("one"))
+		try:
+			b=int(a.get("one"))
+		except:
+			return render(request,'display_sup_refresh.html')	
 		if b == -1:
 			return done(request)
 		if b == -2:
@@ -209,10 +212,53 @@ def supervisor_display(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
-		
+	# *********************************************************************************************************
+	# ******     Messaging portion of the Tech App  ***********************************************************
+	# *********************************************************************************************************
+	N = request.session["login_name"]
+	R = 0
+	db, cur = db_open() 
+	try:
+		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
+		cur.execute(sql)
+		tmp44 = cur.fetchall()
+		tmp4 = tmp44[0]
+
+		request.session["sender_name"] = tmp4[2]
+		request.session["message_id"] = tmp4[0]
+
+		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
+		cur.execute(aql)
+		tmp2 = cur.fetchall()
+		tmp3 = tmp2[0]
+		cnt = tmp3[0]
+	except:
+		cnt = 0
+		tmp4 = ''
+		request.session["sender_name"] = ''
+		request.session["message_id"] = 0
+	db.close()
+	Z_Value = 1
+	if cnt > 0 :
+		cnt = 1
+		request.session["refresh_sup"] = 3
+	# ********************************************************************************************************
 		
   # call up 'display.html' template and transfer appropriate variables.  
-	return render(request,"supervisor.html",{'L':list,'N':n,'args':args})
+	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})
+	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'args':args})
+	
+def sup_message_close(request):
+	request.session["refresh_sup"] = 0
+	I = request.session["message_id"]
+	C = 1
+	db, cur = db_open()
+	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
+	cur.execute(sql)
+	db.commit()
+	db.close()
+	return done(request)
+	
 def sup_d(request):
 	return supervisor_display(request)
 	
@@ -361,14 +407,19 @@ def sup_close(request):
 	args['form'] = form
 	return render(request,'sup_close.html', args)			
 	
-def employee_vac_enter_init(request, index):	
+def employee_vac_enter_init(request, index):
 	tmp = index
 	month = request.session["current_month"]
 	try:
 		year_st = request.session["current_year"]
 	except:
-		year_st = 2016
+		year_st = 2017
 
+	A = 'month'
+	a = month
+
+	
+	
 	
 	if int(month)<10:
 		current_first = str(year_st) + "-" + "0" + str(month) 
@@ -381,6 +432,13 @@ def employee_vac_enter_init(request, index):
 		current_first = current_first + "-" + str(tmp)
 		
 	request.session["current_first"] = current_first
+	
+	B = 'current first'
+	b = current_first
+	
+	#return render(request, "testA.html", {'A':A,'a':a,'B':B,'b':b})
+	
+	
 	return employee_vac_enter(request)
 
 def employee_vac_enter_init2(request):	
@@ -436,6 +494,14 @@ def vacation_entry(request):
 	employee = request.session["employee"]
 	shift = request.session["shift"]
 	typee = request.session["typee"]
+	
+	A = 'st'
+	B = 'en'
+	a = st
+	b = fi
+	
+	#return render(request, "testA.html", {'A':A,'a':a,'B':B,'b':b})
+	
 #	idn = request.session["Id"]
 	if typee == 'cover':
 		ty = 1
@@ -590,9 +656,18 @@ def vacation_display(request):
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day
-	
-	MM = int(request.session["month"])
-	YY = int(request.session["year"])
+
+	# Asssign session variable to today's month
+	dumb1, dumb2, month_tmp = vacation_calander_init_2017(month_st)
+	request.session["month_now"] = month_tmp
+
+	try:
+		MM = int(request.session["month"])
+		YY = int(request.session["year"])
+	except:
+		MM = int(month_st)
+		YY = int(year_st)
+		
 	if YY == 2017:
 		request.session["Month_Current"] = MM + 12
 	else:
@@ -665,14 +740,14 @@ def vacation_display(request):
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' or shift = '%s' or shift = '%s' or shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, current_first, current_last)
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
-		
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
+
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
 	
 	
-	#return render(request,'test993.html',{'monkey':month_st,'len_monkey':year_st})
+	#return render(request,'test993.html',{'list':tmp})
 	
 	
 	if year_st == 2017:
@@ -802,14 +877,21 @@ def vacation_display(request):
 		request.session["shift"]
 	except:
 		request.session["shift"] = "All"
-			
-#	return render(request,'test4.html',{'Tmp':tmp,'Mnth':mnth,'M':month_st,'List':List})	
+	
+	
+	
+	A = 'List'
+	a = List
+	B = 'TMP'
+	b = tmp
+	#return render(request, "testAa.html", {'A':A,'a':a,'B':B,'b':b})
+	#return render(request,'vacation_display_test.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 
 def vacation_display_jump(request):
 	return vacation_display(request)
 	
-def vacation_display_increment(request):	
+def vacation_display_increment(request):
 	try:
 		current_first = request.session["current_first"]
 	except:
@@ -848,6 +930,10 @@ def vacation_display_increment(request):
 	a_month_st = month_st
 	a_year_st = year_st
 	
+	# Asssign session variable to today's month
+	dumb1, dumb2, month_tmp = vacation_calander_init_2017(month_st)
+	request.session["month_now"] = month_tmp
+	
 	if month_st == 12:
 		month_st = 1
 		year_st = year_st + 1
@@ -882,8 +968,8 @@ def vacation_display_increment(request):
 		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
-	
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
+
 
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -1000,6 +1086,9 @@ def vacation_display_increment(request):
 		request.session["month_pick"] = 1
 		request.session["month"] = a_month_st
 		request.session["year"] = a_year_st
+
+
+	
 		return render(request,'vacation_shift.html')
 			
 	else:
@@ -1008,6 +1097,12 @@ def vacation_display_increment(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
+	B = 'TMP'
+	b = tmp
+	A = 'M'
+	a = mm
+	
+	#return render(request, "testAa.html", {'A':A,'a':a,'B':B,'b':b})
 	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 #	return render(request,'vacation_display.html',{'Tmp':tmp})	
 
@@ -1049,6 +1144,10 @@ def vacation_display_decrement(request):
 	a_month_st = month_st
 	a_year_st = year_st
 	
+	# Asssign session variable to today's month
+	dumb1, dumb2, month_tmp = vacation_calander_init_2017(month_st)
+	request.session["month_now"] = month_tmp
+	
 	if month_st == 1:
 		month_st = 12
 		year_st = year_st - 1
@@ -1076,7 +1175,7 @@ def vacation_display_decrement(request):
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 	else:		
-		sql = "SELECT * FROM vacation where (start between '%s' and '%s') and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
@@ -1345,7 +1444,7 @@ def vacation_delete(request):
 	db.close()
 	request.session["shift"] = 'All'
 	return vacation_display(request)
-	#return render(request,'test4.html',{'Tmp':tmp2})	
+	#return render(request,'test4.html',{'Tmp':tmp2})
 
 	
 	

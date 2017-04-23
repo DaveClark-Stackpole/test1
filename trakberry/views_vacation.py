@@ -73,13 +73,75 @@ def vacation_backup(request):
 	# backup Vacation Table
 	db, cursor = db_open()  
 	
-	cursor.execute("""DROP TABLE IF EXISTS vacation_backup""")
-	cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_backup LIKE vacation""")
-	cursor.execute('''INSERT vacation_backup Select * From vacation''')
+	#cursor.execute("""DROP TABLE IF EXISTS vacation_backup""")
+	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_backup LIKE vacation""")
+	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
+
+	#db.commit()
+	db.close()
+	return render(request,'done_test.html')
+
+def vacation_rebuild(request):
+
+	# backup Vacation Table
+	db, cursor = db_open()  
+	
+	#cursor.execute("""DROP TABLE IF EXISTS vacation_backup2""")
+	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_backup2 LIKE vacation_backup""")
+	#cursor.execute('''INSERT vacation_backup2 Select * From vacation_backup''')
+
+	#db.commit()
+	db.close()
+	return render(request,'done_test.html')
+	
+def vacation_restore(request):
+
+	# backup Vacation Table
+	db, cursor = db_open()  
+	
+	#cursor.execute("""DROP TABLE IF EXISTS vacation""")
+	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation LIKE vacation_backup""")
+	#cursor.execute('''INSERT vacation Select * From vacation_backup''')
+
+	#db.commit()
+	db.close()
+	return render(request,'done_test.html')
+	
+def vacation_purge(request):
+
+	# distinquish vacation entries that have different months
+	db, cursor = db_open()  
+	
+	#cursor.execute("""DROP TABLE IF EXISTS vacation_purge""")
+	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_purge LIKE vacation_backup2""")
+	
+	
+	#cursor.execute('''INSERT vacation_purge Select * From vacation_backup2 where month_start != month_end ''')
+
+	#db.commit()
+	#db.close()
+	return render(request,'done_test.html')
+	
+def vacation_purge_delete(request):
+
+	# delete all entries with wrap dates
+	db, cursor = db_open()  
+	#dql = ('DELETE FROM vacation WHERE month_start != month_end ' )
+	#cursor.execute(dql)
+	#db.commit()
+	db.close()
+
+	return render(request,'done_test.html')
+
+def message_create(request):
+
+	# create Message Table
+	db, cursor = db_open()  
+	
+	cursor.execute("""DROP TABLE IF EXISTS tkb_tech_list""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_tech_list LIKE tkb_message""")
+	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
 
 	db.commit()
 	db.close()
 	return render(request,'done_test.html')
-	
-	
-	

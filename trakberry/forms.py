@@ -81,7 +81,13 @@ class robot_machine_form(forms.Form):
 	machine3 = forms.CharField()
 	machine4 = forms.CharField()
 	part = forms.CharField()
-		
+
+class tech_message_Form(forms.Form):
+	name = forms.CharField()	
+	message = forms.CharField()	
+
+	
+	
 class toggletest_Form(forms.Form):
 	shift = forms.CharField()	
 

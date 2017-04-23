@@ -1,26 +1,15 @@
 <html>
-<body>
+<body><table>
+{% for x in list %}
+	<tr>
+	{% for y in x %}
+		<td>
+		** {{y}} **
+		</td>
+	{% endfor %}
+	</tr>
+{% endfor %}	
 
-Weird <br><br>
 
-{% for index in A %}
-{{index}}
-<br>
-{% endfor %}
-<br>
-{% for x in B %}
-{{x}}
-<br>
-{% endfor %}
-<br>
-{% for y in C %}
-{{y}}
-<br>
-{% endfor %}
 
-<br>
-{% for z in D %}
-{{z}}
-<br>
-{% endfor %}
 </body></html>

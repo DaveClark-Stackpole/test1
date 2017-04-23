@@ -457,15 +457,15 @@ def display2(request):
 				Cctr = Cctr + 1
   
   try:
-	  aoa = float(aoa/Actr)
+	  aoa = int((float(aoa/Actr))*10)/10
   except:
 	  aoa = 0 	  
   try:
-	  boa = float(boa/Bctr)
+	  boa = int((float(boa/Bctr))*10)/10
   except:
 	  boa = 0 		
   try:
-	  coa = float(coa/Cctr)
+	  coa = int((float(coa/Cctr))*10)/10
   except:
 	  coa = 0	
   				
@@ -700,6 +700,7 @@ def display(request):
 def tech_reset(request):
 	request.session["call_route"] = ''
 	request.session["url_route"] = ''
+	return render(request,'done_test.html')
 	return main(request)
 	
 def main(request):

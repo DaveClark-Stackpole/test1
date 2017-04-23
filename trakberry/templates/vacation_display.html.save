@@ -305,8 +305,8 @@ data-width="100" name="shift10">
 
 {% if i.1 = 0 %}
 	<td  style="margin-left:9%;font-size:80%;" bgcolor="#FAFAF5">	<t>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</t>
-{% elif i.1 = request.session.current_day and Mnth = request.session.month_now %}
-	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFA00">	<o><a href="/trakberry/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
+{% elif i.1 = request.session.current_day %}
+	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFA00">	<o><a href="/trakberry/employee_vacation_enter_init/get/{{ i.1 }}" class="date"></a>&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
 {% else %}
 	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFAF5">	<o><a href="/trakberry/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
 {% endif %}
@@ -331,41 +331,25 @@ Enter Coder to output all vacations for date {i.1}
 					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
 					<br>
 					<!-- </div>  -->
-				{% endif %}
+			                                {% if ii.7 = 0 %}
+                                        <o>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
+                                        <br>
+
+                                {% else %}
+                                        <!-- <div class="noPrint">  -->
+                                        <o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
+                                        <br>
+                                        <!-- </div>  -->
+                                {% endif %}
+	{% endif %}
 
 			{% endif %}
-			
-			{% if i.1 <= ii.5 and ii.9 == M and ii.8 < ii.9 %}
+			{% if i.1 >= ii.4 and ii.5<ii.4 and ii.8 == M %}
 				{% if ii.7 = 0 %}
-					<o>
-					&nbsp;&nbsp;&nbsp;
-					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
-					<br>
 			
-				{% else %}
-					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
-					<br>
-					<!-- </div>  -->
-				{% endif %}
-
-			{% endif %}
 			
-			{% if i.1 >= ii.4 and ii.8 == M and ii.8 < ii.9 %}
-				{% if ii.7 = 0 %}
-					<o>
-					&nbsp;&nbsp;&nbsp;
-					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
-					<br>
-			
-				{% else %}
-					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
-					<br>
-					<!-- </div>  -->
-				{% endif %}
-
-			{% endif %}
 
 				
 

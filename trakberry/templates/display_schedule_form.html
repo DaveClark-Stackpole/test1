@@ -32,10 +32,13 @@
 <tr><td bgcolor="#CCDDE3" style="font-size:20px;width:45%;">
 <b><center>
 Schedule 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-<!-- Loop Counter for Troubleshooting -->   {{request.session.loop_name}}
-</center></b>
+<font style="font-size:12px;width:45%;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- Count of Jobs --> Jobs : {{request.session.qty_jobs}}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- Count of Employees -->  Employees: {{request.session.qty_employee}}
+</font></b>
 
 
 
@@ -79,11 +82,11 @@ Schedule
 <!-- **************************  Loop to display all Jobs on 1st Row  *****************************************-->
 
 {% for jndex in list %}
-
+{% if jndex.5 == 1 %}
 	<tr>
 		{% if jndex.1 != qq %}
 		
-		<th bgcolor="#B1BFC4" style="width:20%" rowspan="{{jndex.4}}" ><center><font style="font-size:75%">{{jndex.1}} </font>
+		<th bgcolor="#B1BFC4" style="width:20%" rowspan="{{jndex.4}}" ><center><font style="font-size:75%">{{jndex.1}}</font>
 			
 			
 		</th>
@@ -106,18 +109,22 @@ Schedule
 
 		</td>
 	
-	{% if jndex.5 == 1 %}
+
 	<td  bgcolor="#FAFAF5" style="width:20%"><center>
-		
+		<!-- 
 		<font style="font-size:75%"><input checked data-toggle="toggle" data-on=" " data-off=" " data-onstyle="primary"  
 		type="checkbox" data-size="mini" data-width="100" name ='{{jndex.0}}'></font>
+		-->
 	</td>
-	{% endif %}
+	
+	<!-- 
 	{% if jndex.5 == 0 %}
 	<td  bgcolor="#FAFAF5" style="width:20%"><center><font style="font-size:75%"><input data-toggle="toggle" data-on=" " data-off=" " data-onstyle="primary"  
 	type="checkbox" data-size="mini" data-width="100" name ='{{jndex.0}}'></font></td>
 	{% endif %}	
+	-->
 	</tr>
+	{% endif %}
 {% endfor %}
 
 
@@ -125,12 +132,14 @@ Schedule
 
 <tr>
 <td>
-	<br>
+
 <input style="background-color: #ffffff;border-radius: 10px;width:205px;height:35px;font-weight: 600;text-align: center;" type="submit" name ="name_button" value="Enter">
 
-</td><td><br>&nbsp;&nbsp;&nbsp;&nbsp;
+</td>
 
-<select  onchange="this.form.submit()" style="font-weight: 600;;width:80%;height:35px;" name="shift" >
+<td>
+
+<select  onchange="this.form.submit()" style="font-size:15px;width:80%;height:20px;" name="shift" >
 
 <option value="Aft CSD 2">Aft CSD 2</option>
 <option value="Day CSD 2">Day CSD 2</option>
@@ -140,13 +149,25 @@ Schedule
 <option value="Cont B Nights CSD 2">Cont B Nights CSD 2</option>
 <option value="Cont B Days CSD 2">Cont B Days CSD 2</option>
 
-
 <option selected="selected">
 {{request.session.matrix_shift}}
 </option>
 </select>
 
-</td></tr>
+
+
+<select  onchange="this.form.submit()" style="font-size:15px;width:80%;height:20px;" name="position" >
+
+<option value="CNC">CNC</option>
+<option value="Production">Production</option>
+<option selected="selected">
+{{request.session.position}}
+</option>
+</select>
+
+</td>
+
+</tr>
 
 </table>
 </form>

@@ -10,32 +10,25 @@
 				
 {% block content %}
 
-<!--  Validation Message Script  -->
-<script src="/static/form_validate.js"></script>
-
-
+				
 				
 <div class="container"><br><br><br>
     <div class="row">
 		<div class="col-sm-8">
-		<center><font color="black" style="z-index: 9999;"><h2><b><u>Vacation Entry {{Curr}}</u></b></h2> </font></center><br>
-		
-		
+		<center><font color="black" style="z-index: 9999;"><h2><b><u>Vacation Entry{{Curr}}</u></b></h2> </font></center><br>
 <form action="" method="post">{% csrf_token %}
-
-<ul class="errorMessages"></ul>
-<div>
-	<label for="employee">Name (Full Name):</label>
-	<input id="employee" type="text" name="employee" required>
-	
-</div>
 <!-- Style my form to [form_css]  -->
 
+<table>
+<tr><td><b><u>NAME (Full Name)</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:14px;width:320px;height:30px;" type="text" name="employee"></td></tr>
 
-<div>
-	<label for="shift">Shift:</label>
-	<select id="shift" name="shift" required>
-<option value=""></option>
+
+
+
+<tr><td>
+	<b><u>Department</b></u>&nbsp;&nbsp;&nbsp;</td><td>
+	<select style="font-size:14px;width:320px;height:30px;" name="shift" required="required">
+
 <option value="CSD1 Day">CSD1 Day</option>
 <option value="CSD1 Aft">CSD1 Aft</option>
 <option value="CSD1 Mid">CSD1 Mid</option>
@@ -51,27 +44,34 @@
 <option value="Press Setter">Press Setter</option>
 
 
-<!--
+
 <option selected="selected">
 
 {{request.session.shift_primary}}
 
 
 </option>
--->
-</select>
--->
-</div>
 
 
-<input style="font-size:12px;width:320px;height:30px;" type="date" name="date_st" value={{Curr}}>
-<input style="font-size:12px;width:320px;height:30px;" type="date" name="date_en" value={{Curr}}>
+</select></td></tr>
+	
+		
+
+<tr><td><b><u>START DATE</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:12px;width:320px;height:30px;" type="date" name="date_st" value={{Curr}}></td></tr>
+<tr><td><b><u>END DATE</b></u>&nbsp;&nbsp;&nbsp;</td><td><input style="font-size:12px;width:320px;height:30px;" type="date" name="date_en" value={{Curr}}></td></tr>
+
+<tr><td>
 
 <input type="radio" name="typee" value="vacation" checked> Vacation    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
  <input type="radio" name="typee" value="cover"> In to Cover
 
-<div class="buttons"><button>Submit</button></div>
+</td></tr>
 
+<tr><td>
+  <input style="background-color: #999999;border-radius: 10px;width:90px;height:30px;" type="submit"></td></tr>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+</table>
 
 
 

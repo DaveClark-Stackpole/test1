@@ -39,19 +39,25 @@ def set_rotation(request):
 
 # Display the Job Rotation for the shift 
 def rotation_info_display(request):
+	try:
+		request.session["position"]
+	except:
+		request.session["position"] = 'CNC'
+	position = request.session["position"]
+	
 	db, cur = db_open()
 	curr_shift = request.session["matrix_shift"]
-	sql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' ORDER BY %s %s , %s %s" %(curr_shift,'Employee', 'ASC','Job','ASC')
+	sql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' and Position = '%s' ORDER BY %s %s , %s %s" %(curr_shift,position,'Employee', 'ASC','Job','ASC')
 	cur.execute(sql)
 	tmp = cur.fetchall()
 
-	cql = "SELECT COUNT(*) from tkb_jobs"
+	cql = "SELECT COUNT(*) from tkb_jobs WHERE Position = '%s'" % (position)
 	cur.execute(cql)
 	tmp2 = cur.fetchall()
 	tmp3 = tmp2[0]
 	job_ctr = tmp3[0]
 		
-	jql = "SELECT * FROM tkb_jobs ORDER BY  %s %s, %s %s" %('Description','ASC','Job_Name','ASC')
+	jql = "SELECT * FROM tkb_jobs WHERE Position = '%s' ORDER BY  %s %s, %s %s" %(position,'Description','ASC','Job_Name','ASC')
 	cur.execute(jql)
 	jmp = cur.fetchall()
 
@@ -117,6 +123,8 @@ def rotation_info_display(request):
 	if request.POST:
 		shift = request.POST.get("shift")
 		request.session["matrix_shift"] = shift
+		position = request.POST.get("position")
+		request.session["position"] = position
 		return rotation_info_reload(request)
 	else:
 		form = toggletest_Form
@@ -256,7 +264,7 @@ def schedule_set2(request):
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	
-	position = 'CNC'
+	position = request.session['position']
 	Asql = "SELECT * from tkb_jobs WHERE Position = '%s' ORDER BY %s %s , %s %s" % (position, 'Description', 'ASC', 'Job_Name', 'ASC')
 	cur.execute(Asql)
 	Amp = cur.fetchall()
@@ -277,15 +285,24 @@ def schedule_set2(request):
 		if shift == 'Cont B Days CSD 2' or shift == 'Cont B Nights CSD 2' or shift == 'Cont A Days CSD 2' or shift == 'Cont A Nights CSD 2':
 			cvar = 1
 			rvar = 0
+			qvar = 0
 		elif shift == 'Aft CSD 2' or shift == 'Day CSD 2' or shift =='Mid CSD 2':
-			cvar = 0
+			cvar = 1
 			rvar = 1
+			qvar = 0
+		if position == 'Production':
+			qvar = 1
+			cvar = 0
+			rvar = 0
 			
 		if a[1] == '6L Output' or a[1] == '6L Input':
+			
 			selection = cvar
 		elif a[1] == 'GF6 Input' or a[1] == 'GF6 Reaction' or a[1] == 'ZF':
 			selection = rvar
-				
+		else:
+			selection = qvar
+			
 		cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a[1],a[5],a[6],shift,selection,id_ctr))
 		db.commit()
 	db.close()	
@@ -408,7 +425,18 @@ def schedule_set3(request):
 def schedule_set4(request,list):
 
 	shift = request.session["matrix_shift"]
-
+	try:
+		position = request.session["position"]
+	except:
+		position = 'CNC'
+	qty_jobs, qty_employee, tmp_count = schedule_qty(shift,position)
+	A='Jobs'
+	B='Employee'
+	#return render(request, "testA.html", {'A':A,'a':qty_jobs,'B':B,'b':qty_employee})
+	
+	request.session['qty_jobs'] = qty_jobs
+	request.session['qty_employee'] = qty_employee
+	
 	#Set Form Variables
 	qq = '---'
 	choice = []
@@ -422,6 +450,16 @@ def schedule_set4(request,list):
 	
 	index = 0
 	if request.POST:
+		n_position = request.POST.get("position")
+		try:
+			position = request.session["position"]
+		except:
+			request.session["position"] = 'CNC'
+			position = request.session['position']
+		if n_position != position:
+			request.session['position'] = n_position
+			return render(request,'redirect_schedule1.html')
+
 		#joe = 'happy time'
 		#return render(request,'test996.html',{'list':joe})	
 		request.session["date_curr"] = request.POST.get("date_curr")
@@ -438,34 +476,34 @@ def schedule_set4(request,list):
 		if 'dindex' in request.POST:
 			dindex = request.POST.get("dindex")
 			return schedule_delete(request,dindex)
-			
-		db, cur = db_open()
-		for x in list:
+	
+#		db, cur = db_open()
+#		for x in list:
 			tn.append(x[0])
-			if request.POST.get(str(x[0])):
-				aaa = x[0]
-				bbb = y
-				choice.append(x[0])
-				choice2.append(y)
-				choice3.append(x[2])
-			else:
-				aaa = x[0]
-				bbb = n
-				choice.append(x[0])
-				choice2.append(n)
-				choice3.append(x[2])
-			chc = zip(choice,choice2,choice3)
-			ac.append(aaa)
-			bc.append(bbb)
-			sql = ('update tkb_schedule SET Selection="%s" WHERE Id ="%s"' % (bbb, aaa))
-			cur.execute(sql)
-			db.commit()
+#			if request.POST.get(str(x[0])):
+#				aaa = x[0]
+#				bbb = y
+#				choice.append(x[0])
+#				choice2.append(y)
+#				choice3.append(x[2])
+#			else:
+#				aaa = x[0]
+#				bbb = n
+#				choice.append(x[0])
+#				choice2.append(n)
+#				choice3.append(x[2])
+#			chc = zip(choice,choice2,choice3)
+#			ac.append(aaa)
+#			bc.append(bbb)
+#			sql = ('update tkb_schedule SET Selection="%s" WHERE Id ="%s"' % (bbb, aaa))
+#			cur.execute(sql)
+#			db.commit()
 			
 			
 			
 			
-		db.close()
-		abc = zip(ac,bc)
+#		db.close()
+#		abc = zip(ac,bc)
 		
 		#   ******************************************************************************
 		#   **  Below lines are for rerouting and testing.  Delete when running main   ***
@@ -531,10 +569,32 @@ def schedule_set4(request,list):
 	return render(request,'display_schedule_formRefresh.html', {'a':list})
     
 # Set Employee names and their Jobs in two seperate arrays N[] and E[]
+
+# Returns Number of Jobs Selected and Number of Employees to choose from
+def schedule_qty(shift,position):
+	selection = 1
+	finalize = 1
+	db, cur = db_open()
+	JCsql = "SELECT count(*) from tkb_schedule where  Shift='%s' and Position='%s' and Selection='%s' and Finalize !='%s'" % (shift,position,selection,finalize)
+	cur.execute(JCsql)
+	tmp = cur.fetchall()	
+	tmp2 = tmp[0]
+	tmp_J_count = tmp2[0]   # Count for number of jobs
+	qty_jobs = tmp_J_count
+	
+	#Csql = "SELECT count(*) from tkb_employee_temp where  Shift='%s' and Position='%s'" % (shift,position)
+	Csql = "SELECT count(*) from tkb_employee where  Shift='%s' and Position='%s'" % (shift,position)
+	cur.execute(Csql)
+	tmp = cur.fetchall()	
+	tmp2 = tmp[0]
+	tmp_count = tmp2[0]   # Count for number of employees
+	qty_employee = tmp_count
+	return (qty_jobs,qty_employee,tmp_count)
+	
 def schedule_set5(request,list):
 
 	r1= time_output()
-	position = 'CNC'
+	position = request.session['position']
 	rotation = 1
 	selection = 1
 	finalize = 1
@@ -561,25 +621,11 @@ def schedule_set5(request,list):
 	cur.execute(Jsql)
 	#ttmp = cur.fetchall()
 	tmp_employees = cur.fetchall()
-
 	
 	#return render(request, "test994.html", {'N':tmp_employees})
 	
-		
-		
-	Csql = "SELECT count(*) from tkb_employee_temp where  Shift='%s' and Position='%s'" % (shift,position)
-	cur.execute(Csql)
-	tmp = cur.fetchall()	
-	tmp2 = tmp[0]
-	tmp_count = tmp2[0]   # Count for number of employees
-	qty_employee = tmp_count
+	qty_jobs, qty_employee, tmp_count = schedule_qty(shift,position)
 	
-	JCsql = "SELECT count(*) from tkb_schedule where  Shift='%s' and Position='%s' and Selection='%s' and Finalize !='%s'" % (shift,position,selection,finalize)
-	cur.execute(JCsql)
-	tmp = cur.fetchall()	
-	tmp2 = tmp[0]
-	tmp_J_count = tmp2[0]   # Count for number of jobs
-	qty_jobs = tmp_J_count
 	request.session['qty_jobs'] = qty_jobs
 	request.session['qty_employee'] = qty_employee
 	request.session['qty_diff'] = 1
@@ -591,8 +637,11 @@ def schedule_set5(request,list):
 #   ******************************************************************************
 #   
 
-		
-		
+	A='Qty_Jobs'
+	B='Qty_Employee'
+	C='Shift'
+	D='position'
+	#return render(request, "testA.html", {'A':A,'a':qty_jobs,'B':B,'b':qty_employee,'C':C,'c':shift,'D':D,'d':position})
 	# Check to see if employees available doesn't equal jobs needed
 	if qty_jobs != qty_employee:
 		return render(request,'display_schedule_fail.html')	
@@ -689,31 +738,34 @@ def schedule_set5(request,list):
 	
 	nnoo = 0
 	
-	#Sort E and N ****************************
-	#for i in range (0,qty_employee-1):
-	#	for ii in range (i+1,qty_employee):
-	#		if len(E[ii]) < len(E[i]):
-	#			tmp = E[ii]
-	#			E[ii] = E[i]
-	#			E[i] = tmp
-	#			tmp = N[ii]
-	#			N[ii] = N[i]
-	#			N[i] = tmp
+	#Sort E and N  for optimal speed  ****************************
+	for i in range (0,qty_employee-1):
+		for ii in range (i+1,qty_employee):
+			if len(E[ii]) < len(E[i]):
+				tmp = E[ii]
+				E[ii] = E[i]
+				E[i] = tmp
+				tmp = N[ii]
+				N[ii] = N[i]
+				N[i] = tmp
 	# ****************************************
 	
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
 	#x = zip(N,E)
-	#return render(request, "test992.html", {'X':x,'T':r3})
+	#return render(request, "test992.html", {'N':x})
 	# ***************************************************
 	
-			
-	# ***********************
-	#    Scheduler Engine
-	# ***********************
+	
+	# *********************** 
+	#    Scheduler Engine     
+	# *********************** 
+
+	
 	while True:
 		tmp_ctr = tmp_ctr + 1
-
+		
+			
 		A.append(E[ptr][ctr[ptr]])
 		if len(A) != len (set(A)):
 			A.pop()
@@ -735,6 +787,8 @@ def schedule_set5(request,list):
 			break
 		if ptr > (qty_employee-1):
 			break
+			
+	
 	listX = zip(N,A)
 	r2 = time_output()
 	r3 = r2-r1
@@ -811,39 +865,41 @@ def schedule_set5(request,list):
 # ************************************************************************
 # **             Bug Below.  Won't allocate for multiple jobs   **********
 # ************************************************************************
+		#return render(request,"test67.html",{'list':list})
 		for y in list:
 			
-			if y[2] == j_job and y[7] == j_des:
-				j_qty = j_qty + 1
-			else:
-				j_qty = 1
-				j_job = y[2]
-				j_des = y[7]
+			if y[5] == 1:
+				if y[2] == j_job and y[7] == j_des:
+					j_qty = j_qty + 1
+				else:
+					j_qty = 1
+					j_job = y[2]
+					j_des = y[7]
 				
-			aa.append(y[0])
-			bb.append(y[1])
-			cc.append(y[2])
-			dd.append(y[3])
-			ee.append(y[4])
-			ff.append(y[5])
-			gg.append(y[6])
+				aa.append(y[0])
+				bb.append(y[1])
+				cc.append(y[2])
+				dd.append(y[3])
+				ee.append(y[4])
+				ff.append(y[5])
+				gg.append(y[6])
 			#mm.append(j_qty)
-			ck = 0
-			ctr = 1
-			for x in k:
-				if x[1] == y[7] and x[2] == y[2]:
-					if j_qty > ctr:
-						ctr = ctr + 1
-					else:	
-						hh.append(x[0])
-						#hh.append(y[7])
-						#hh.append(y[2])
-						#hh.append(j_qty)
-						ck = 1
-						break
+				ck = 0
+				ctr = 1
+				for x in k:
+					if x[1] == y[7] and x[2] == y[2]:
+						if j_qty > ctr:
+							ctr = ctr + 1
+						else:	
+							hh.append(x[0])
+							#hh.append(y[7])
+							#hh.append(y[2])
+							#hh.append(j_qty)
+							ck = 1
+							break
 				
-			if ck == 0:
-				hh.append('---')
+				if ck == 0:
+					hh.append('---')
 											
 		#return render(request,"test67.html",{'list':hh,'list2':k})
 		list2 = zip(aa,bb,cc,dd,ee,ff,gg,hh)
