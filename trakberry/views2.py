@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
 
+from views_test import layer_choice_init
 from trakberry.forms import login_Form
 from datetime import datetime
 import MySQLdb
@@ -253,7 +254,9 @@ def main_login_form(request):
 	return render(request,'main_login_form.html', args)	
 	
 	
-
+def main_A(request):
+	return main(request)
+	
 def main(request):
 
 	try:
@@ -267,6 +270,7 @@ def main(request):
 	#del request.session['mykey']
 	log_pass = 0
 	
+	# Administrator Password
 	if name == 'Dave Clark':
 		if password == 'Jaden2008':
 			log_pass = 1
@@ -275,6 +279,17 @@ def main(request):
 
 	if log_pass == 1:
 		#request.session.set_expiry(1800)
+		
+		# Check for Layered Audit done or not.
+		layer_check = 0
+		try:
+			layer_check = int(request.session["layer_audit_check"])
+		except:
+			request.session["layer_audit_check"] = 0
+		
+		if layer_check == 0:
+			return layer_choice_init(request)
+		
 		return render(request, "main.html")
 	else:
 		return main_login(request)	

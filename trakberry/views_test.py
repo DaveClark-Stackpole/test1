@@ -2,15 +2,69 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
-from trakberry.forms import login_Form
+#from views2 import main_A
+from trakberry.forms import login_Form,layered_entry_Form
 from datetime import datetime
 import MySQLdb
 import time
-
+from django.core.context_processors import csrf
 import smtplib
 import datetime as dt
+from smtplib import SMTP
+from django.template.loader import render_to_string  #To render html content to string
+
+	
+def email_test_2 (request):
+
+	message_text = ' Hello There'
+	message_subject = 'TestEmail'
+	
+	
+	x = 7
+	label_name = "layered_"
+	
+	# Assign space to all request.session.layered_# 
+	for i in range (1,10):
+		label_str = label_name + str(i)
+		request.session[label_str]='nbsp'
+	
+	# ASCII Code 9899 for Dot assigned to request.session.layered_x
+	label_str = label_name + str(x)	
+	request.session[label_str]='#9899'
 
 
+	html_content = render_to_string('layered_audits/LA_0786.html')
+	
+	toaddrs = 'dclark@stackpole.com'
+	fromaddr = 'stackpole@stackpole.com'
+	frname = 'Dave'
+	server = SMTP('smtp.gmail.com', 587)
+	server.ehlo()
+	server.starttls()
+	server.ehlo()
+	server.login('dave7995@gmail.com', 'benny6868')
+	message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" + html_content
+	
+
+	server.sendmail(fromaddr, toaddrs, message)
+	server.quit()
+	return render(request, "done_test.html")
+
+
+
+#from django.core.mail import EmailMultiAlternatives
+#from django.template.loader import render_to_string
+#from django.utils.html import strip_tags
+
+#subject, from_email, to = 'Hi', 'from@x.com', 'to@x.com'
+
+#html_content = render_to_string('the_template.html', {'varname':'value'}) # ...
+#text_content = strip_tags(html_content) # this strips the html, so people will have the text as well.
+
+# create the email, and attach the HTML version as well.
+#msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+#msg.attach_alternative(html_content, "text/html")
+#msg.send()
 
     
 def email_test_1(request):
@@ -130,12 +184,121 @@ def toggle_1(request):
 def layer_test(request):
 	x = 7
 	label_name = "layered_"
+	
+	# Assign space to all request.session.layered_# 
 	for i in range (1,10):
 		label_str = label_name + str(i)
 		request.session[label_str]='nbsp'
-		
+	
+	# ASCII Code 9899 for Dot assigned to request.session.layered_x
 	label_str = label_name + str(x)	
-		
 	request.session[label_str]='#9899'
 
-	return render(request, "layered_audits/50-2407.html")
+	return render(request, "layered_audits/LA_0786.html")
+
+def layer_transfer_temp(request):
+
+	# backup layered audit temp Table
+	db, cursor = db_open()  
+	
+	cursor.execute("""DROP TABLE IF EXISTS tkb_audits_temp""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_audits_temp LIKE tkb_audits""")
+	cursor.execute('''INSERT tkb_audits_temp Select * From tkb_audits''')
+
+	db.commit()
+	db.close()
+	return render(request,'done.html')
+	
+def layer_entry(request):	
+
+	if request.POST:
+        			
+		dept = request.POST.get("layered_type")
+		part = request.POST.get("layered_part")
+		op = request.POST.get("layered_op")
+		pl = request.POST.get("layered_dep")
+		desc = request.POST.get("layered_des")
+		
+		request.session['layered_type'] = dept
+		request.session['layered_part'] = part
+		request.session['layered_op'] = op
+		request.session['layered_dep'] = pl
+		
+		# Select prodrptdb db located in views_db
+		db, cur = db_open()
+		cur.execute('''INSERT INTO tkb_audits(Type,Part,Op,Department,Description) VALUES(%s,%s,%s,%s,%s)''', (dept,part,op,pl,desc))
+		db.commit()
+		db.close()
+		
+		return render(request,'done.html')
+		
+	else:
+		form = layered_entry_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+
+	return render(request,'layered_audits/entry.html', {'args':args})
+
+	
+def layer_choice_init(request):
+	request.session['layer_choice'] = 0
+	request.session['layer_audit_check'] = 0
+	return layer_choice(request)
+	
+def layer_choice(request):
+
+	# variable to determine if choosing for first time.
+	layer_choice = int(request.session['layer_choice'])
+
+	type_use = 'CNC'
+	if request.session['login_name'] == 'Dave Clark' or request.session['login_name'] == 'Grant Packham' or request.session['login_name'] == 'Rick Wurm' or request.session['login_name'] == 'Tim Sanzosti':
+		type_use = 'CNC'
+	elif request.session['login_name'] == 'Karl Edwards' or request.session['login_name'] == 'Frank Ponte' or request.session['login_name'] == 'Scott McMahon':
+		type_use = 'Production'
+		
+	db, cur = db_open()
+	
+	if layer_choice == 0:
+		sql1 = "SELECT MIN(Id) FROM tkb_audits_temp WHERE Type = '%s'" % (type_use) 
+		cur.execute(sql1)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		id_use = tmp2[0]
+		request.session['layer_id_start'] = id_use
+		request.session['layer_choice'] = 1
+	
+	else:
+
+		id_start = int(request.session['layer_id_start'])
+		sql1 = "SELECT MIN(Id) FROM tkb_audits_temp WHERE Id > '%s' and Type = '%s'" % (id_start,type_use)
+		cur.execute(sql1)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		id_use = tmp2[0]
+		request.session['layer_id_start'] = id_use
+
+	
+
+	try:
+		sql2 = "SELECT * from tkb_audits_temp WHERE Id = '%s'" % (id_use)
+		cur.execute(sql2)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+	except:
+		return layer_choice_init(request)
+	
+	db.close()
+	
+	return render(request,'layered_audits/audit_current.html', {'tmp2':tmp2})
+	
+def layer_select(request):
+	request.session['layer_audit_check'] = 1
+	
+	return render(request,'main_redirect.html')
+
+def layer_audit_check_reset(request):
+	request.session['layer_audit_check'] = 0
+	return render(request,'main_redirect.html')
+	
+	

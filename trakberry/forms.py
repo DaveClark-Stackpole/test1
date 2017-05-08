@@ -92,4 +92,9 @@ class toggletest_Form(forms.Form):
 	shift = forms.CharField()	
 
 class views_scheduler_selectionForm(forms.Form):
-	selection = forms.CharField()		
+	selection = forms.CharField()
+
+class layered_entry_Form(forms.Form):
+	Type = forms.CharField()	
+	Part = forms.CharField()	
+	Op = forms.CharField()	

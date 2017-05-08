@@ -35,13 +35,14 @@ from views_global_mods import test_machine_rate
 from views_vacation import vacation_temp, vacation_backup, vacation_purge, vacation_purge_delete, vacation_rebuild,vacation_restore, message_create
 from views_admin import retrieve
 from views_db import db_select
-from views_test import place_test, email_test_1
+from views_test import place_test, email_test_1, email_test_2
 from views_mod1 import table_copy
 
 # *******************************************  Testing Views *******************************************************************************************
 from views_email import e_test
 from views import fix_time
-from views_test import test_list, toggle_1, layer_test
+from views_test import test_list, toggle_1, layer_test, layer_entry, layer_transfer_temp, layer_choice_init, layer_choice, layer_select, layer_audit_check_reset
+from views_test_email import email1, done_email_1
 # ***********************************************************************************************************************************************************
 
 
@@ -82,6 +83,7 @@ urlpatterns = [
     
 	url(r'^display/', main), 
 	url(r'^main_login/', main_login),
+	url(r'^main_logout/', main_logout),
 	url(r'^main_login_form/', main_login_form),
 	url(r'^display1/', display),
 	url(r'^display_initialize/', display_initialize),
@@ -115,6 +117,7 @@ urlpatterns = [
 	url(r'^main/', main),
 	url(r'^tech_reset/', tech_reset),
 	url(r'^tech_email_test/', tech_email_test),
+	url(r'^done_email_1/', done_email_1),
 	url(r'^tech_message_close/', tech_message_close),
 	url(r'^modal_test/', modal_test),	
 	
@@ -229,6 +232,9 @@ urlpatterns = [
 	# **************  Testing Section ***************************************
 	
 	url(r'^email_test_1/', email_test_1),
+	url(r'^email_test_2/', email_test_2),
+	url(r'^email1/', email1),
+	
 	url(r'^form_robot_machine_enter/', form_robot_machine_enter),
 	url(r'^display_robot_machine/', display_robot_machine),
 	url(r'^machine_list_display/', machine_list_display),
@@ -246,6 +252,12 @@ urlpatterns = [
 	url(r'^test_datalist/', test_datalist),
 	url(r'^toggle_1/', toggle_1),
 	url(r'^layer_test/', layer_test),
+	url(r'^layer_entry/', layer_entry),
+	url(r'^layer_transfer_temp/', layer_transfer_temp),
+	
+	url(r'^layer_choice/', layer_choice),
+	url(r'^layer_select/', layer_select),
+	url(r'^layer_audit_check_reset/', layer_audit_check_reset),
 #	url(r'^hour_check/', hour_check),
 
 	
