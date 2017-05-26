@@ -182,7 +182,7 @@ def toggle_1(request):
 	return render(request, "toggle_1.html")
 
 def layer_test(request):
-	x = 7
+	x = 8
 	label_name = "layered_"
 	
 	# Assign space to all request.session.layered_# 
@@ -192,9 +192,9 @@ def layer_test(request):
 	
 	# ASCII Code 9899 for Dot assigned to request.session.layered_x
 	label_str = label_name + str(x)	
-	request.session[label_str]='#9899'
+	request.session[label_str]="#9899"
 
-	return render(request, "layered_audits/LA_0786.html")
+	return render(request, "layered_audits/50-2407.htm")
 
 def layer_transfer_temp(request):
 
@@ -251,12 +251,14 @@ def layer_choice(request):
 	# variable to determine if choosing for first time.
 	layer_choice = int(request.session['layer_choice'])
 
+	# Hard coding Supervisors in.   In future make it variable using DB table
 	type_use = 'CNC'
 	if request.session['login_name'] == 'Dave Clark' or request.session['login_name'] == 'Grant Packham' or request.session['login_name'] == 'Rick Wurm' or request.session['login_name'] == 'Tim Sanzosti':
 		type_use = 'CNC'
 	elif request.session['login_name'] == 'Karl Edwards' or request.session['login_name'] == 'Frank Ponte' or request.session['login_name'] == 'Scott McMahon':
 		type_use = 'Production'
-		
+	# ***********************************************************************
+	
 	db, cur = db_open()
 	
 	if layer_choice == 0:
@@ -289,16 +291,149 @@ def layer_choice(request):
 		return layer_choice_init(request)
 	
 	db.close()
+	request.session['layered_audit_id'] = id_use
 	
 	return render(request,'layered_audits/audit_current.html', {'tmp2':tmp2})
-	
+
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# This mod will choose the current layered audit and email link to the current supervisor
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 def layer_select(request):
+	# Current supervisor will be request.session.login_name
+	# Audit to use will be request.session.layered_audit_id
+	
+	name = request.session['login_name']
+	audit = request.session['layered_audit_id']
+	
+	# retrieve left first character of login_name only
+	name_temp1 = name[:1]
+	# retrieve last name of login name only 
+	name_temp2 = name.split(" ",1)[1]
+	
+	# set request.session.email_name as the full email address for link
+	email_name = name_temp1 + name_temp2 + '@stackpole.com'
+	request.session['email_name'] = email_name
+	
+	# write selected layered audit info to table tkb_layered
+	
+	tm = int(time.time())
+	db, cur = db_open()
+	sql_1 = "Select * from tkb_audits_temp WHERE Id = '%s'" % (audit)
+	cur.execute(sql_1)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	tmp3 = tmp2[2]
+	
+	cur.execute ('''INSERT INTO tkb_layered(Part,Op,Name,Description,Time_Stamp) VALUES(%s,%s,%s,%s,%s)''',(tmp2[2],tmp2[3],name,tmp2[5],tm))
+	db.commit()
+	db.close()
+	
 	request.session['layer_audit_check'] = 1
 	
+	
+	# In link string must use  %20 to signify a space to be recognized in Microsoft Outlook
+	if  tmp3 == '50-2407' or tmp3 == '50-2421' or tmp3 == '50-4916':
+		# Use below link format if it's the original one otherwise use our test folder
+		#label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\50-3627M%20&%2050-1713M%20LPA_Apr%2025%202017_New%20Format.xls'''
+		label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\test\\50-2407_'''
+		label_link = label_link + tmp2[3] + '''.xls'''
+	if tmp3 == '50-3627' or tmp3 == '50-1713':
+		label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\test\\50-3627_'''
+		label_link = label_link + tmp2[3] + '''.xls'''
+	if tmp3 == '50-3632' or tmp3 == '50-0786' or tmp3 == '50-1731':
+		label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\test\\50-3632_'''
+		label_link = label_link + tmp2[3] + '''.xls'''
+	if tmp3 == '50-4900' or tmp3 == '50-6686' or tmp3 == '50-6729':
+		label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\test\\50-4900_'''
+		label_link = label_link + tmp2[3] + '''.xls'''
+	if tmp3 == '50-4748':
+		label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\test\\50-4748_'''
+		label_link = label_link + tmp2[3] + '''.xls'''
+	if tmp3 == '50-1448':
+		label_link = '''\\\csd-server\Strat%20Common\Quality\Info\Layered%20Audit%20Forms\CSDII\\test\\50-1448_'''
+		label_link = label_link + tmp2[3] + '''.xls'''		
+		
+	extra_line = "Lets see if this line works with a couple of spaces"	
+	subject_line_1 = "Layered Audit"
+	subject_line_2 = "Click link below for your daily layered audit sheet."
+		
+	# The link that gets emailed
+	email_link = 'http://pmdsdata.stackpole.ca:8986/trakberry/layer_retrieve/get/'+str(tm)
+	
+	message_subject = 'Daily Layered Audit'
+	
+
+
+	
+	toaddrs = email_name
+	fromaddr = 'stackpole@stackpole.com'
+	frname = 'Dave'
+	server = SMTP('smtp.gmail.com', 587)
+	server.ehlo()
+	server.starttls()
+	server.ehlo()
+	server.login('StackpolePMDS@gmail.com', 'stacktest6060')
+	message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" + subject_line_1 + "\r\n\r\n" + subject_line_2 + "\r\n\r\n"+ label_link
+	
+
+	server.sendmail(fromaddr, toaddrs, message)
+	server.quit()
+	
+	
 	return render(request,'main_redirect.html')
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 def layer_audit_check_reset(request):
 	request.session['layer_audit_check'] = 0
 	return render(request,'main_redirect.html')
 	
 	
+# This Mod will activate when Layered Audit link is clicked
+# It will update tkb_layered table so it's notified that it was clicked then 
+# it will open a webpage with the data ready to print for the daily layered audit	
+def layer_retrieve(request,index):
+
+	# Retrieve the information for the layered audit required as per the link clicked
+	request.session['layer_test'] = index
+	db, cur = db_open()
+	sql = "Select * from tkb_layered WHERE Time_Stamp = '%s'" % (index)
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	db.close()
+	tmp3 = tmp2[1] # part number
+	name = tmp2[4] # Auditor Name
+	chk = tmp2[2]  # Check number
+
+
+	x = chk
+	label_name = "layered_"
+	
+	if tmp3 == '50-2407' or tmp3 == '50-2421' or tmp3 == '50-4916':
+		label_link = "file:///\\csd-server\Strat Common\Quality\Info\Layered Audit Forms\CSDII\50-2407 & 50-2421 & 50-4916 LPA_Apr 25 2017_New Format.xls"
+	if tmp3 == '50-3627' or tmp3 == '50-1713':
+		label_link = "\\csd-server\Strat Common\Quality\Info\Layered Audit Forms\CSDII\50-3627M & 50-1713M LPA_Apr 25 2017_New Format.xls"
+	if tmp3 == '50-3632' or tmp3 == '50-0786' or tmp3 == '50-1731':
+		label_link = "\\csd-server\Strat Common\Quality\Info\Layered Audit Forms\CSDII\50-3632M & 50-0786M & 50-1731M LPA_Apr 25 2017_New Format.xls"
+	if tmp3 == '50-4900' or tmp3 == '50-6686' or tmp3 == '50-6729':
+		label_link = "\\csd-server\Strat Common\Quality\Info\Layered Audit Forms\CSDII\50-4900 & 50-6686 & 50-6729 LPA_Apr 25 2017_New Format.xls"
+	#label_link = "\\csd-server\Strat Common\Quality\Info\Layered Audit Forms\CSDII\50-4748 LPA_Apr 25 2017_New Format.xls"	
+	#label_link = "\\csd-server\Strat Common\Quality\Info\Layered Audit Forms\CSDII\50-1448 & 50-9641 LPA_Apr 28 2017_New Format.xls"	
+	
+	request.session['label_link'] = label_link
+	
+	# Assign space to all request.session.layered_# 
+	#for i in range (1,10):
+	#	label_str = label_name + str(i)
+	#	request.session[label_str]='nbsp'
+	
+	# ASCII Code 9899 for Dot assigned to request.session.layered_x
+	#label_str = label_name + str(chk)	
+	#request.session[label_str]='#9899'
+	#request.session[label_name] = name
+
+	#template = "layered_audits/"+tmp3 +".htm"
+	
+	#return render(request,'layered_audits/test.html')
+	return render(request,'reroute.html')

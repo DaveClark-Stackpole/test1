@@ -124,7 +124,7 @@ def tech(request):
 	c = ["tech","Jim Barker"]
 	j = "tech"
 	jj = "Tech"
-	a1 = "Rick Wurm"
+	a1 = "Kevin Bisch"
 	a2 = "Muoi Le"
 	a3 = "Jim Barker"
 	a4 = "Scott Smith"
@@ -209,9 +209,9 @@ def tech(request):
 	elif request.session["login_tech"] == "Scott Smith":
 		request.session["login_image"] = "/static/media/tech_scott.jpg"
 		request.session["login_back"] = "/static/media/back_scott.jpg"
-	elif request.session["login_tech"] == "Rick Wurm":
-		request.session["login_image"] = "/static/media/tech_rick.jpg"
-		request.session["login_back"] = "/static/media/back_rick.jpg"
+	elif request.session["login_tech"] == "Kevin Bisch":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"
 	elif request.session["login_tech"] == "Woodrow Sismar":
 		request.session["login_image"] = "/static/media/tech_woodrow.jpg"
 		request.session["login_back"] = "/static/media/back_woodrow.jpg"
@@ -271,6 +271,17 @@ def tech_message_close(request):
 	cur.execute(sql)
 	db.commit()
 	return tech(request)
+
+def tech_message_reply1(request):
+	request.session["refresh_tech"]=0
+	I = request.session["message_id"]
+	C = 1
+	db, cur = db_open()
+	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
+	cur.execute(sql)
+	db.commit()
+	return tech_message_reply2(request)
+	
 	
 def job_call(request, index):	
     
@@ -496,7 +507,41 @@ def tech_message(request):
 	
 	return render(request,'tech_message_form.html', {'List':tmp,'A':A,'args':args})	
 
+def tech_message_reply2(request):	
+	db, cur = db_open()
+	sql = "SELECT * FROM tkb_tech_list"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	db.close()
 
+	if request.POST:
+        			
+		a = request.session["login_tech"]
+		b = request.POST.get("name")
+		b = request.session["sender_name"]
+		c = request.POST.get("message")
+		
+		
+
+		
+		# Select prodrptdb db located in views_db
+		db, cur = db_open()
+		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
+
+		db.commit()
+		db.close()
+		
+		return tech(request)
+		#return done(request)
+		
+	else:
+		form = tech_message_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	
+	return render(request,'tech_message_reply_form.html', {'List':tmp,'args':args})	
+	
 def modal_test(request):	
 	a = 1
 	b = 1

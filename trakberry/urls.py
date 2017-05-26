@@ -24,7 +24,7 @@ from views2 import main_login, main_login_form, main, main_logout
 from views_machinery import machinery
 from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
 from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
-from views_tech import tech_message_close
+from views_tech import tech_message_close,tech_message_reply1
 #from views_tech import hour_check
 from views_transfer import transfer
 
@@ -42,6 +42,7 @@ from views_mod1 import table_copy
 from views_email import e_test
 from views import fix_time
 from views_test import test_list, toggle_1, layer_test, layer_entry, layer_transfer_temp, layer_choice_init, layer_choice, layer_select, layer_audit_check_reset
+from views_test import layer_retrieve
 from views_test_email import email1, done_email_1
 # ***********************************************************************************************************************************************************
 
@@ -119,6 +120,7 @@ urlpatterns = [
 	url(r'^tech_email_test/', tech_email_test),
 	url(r'^done_email_1/', done_email_1),
 	url(r'^tech_message_close/', tech_message_close),
+	url(r'^tech_message_reply1/', tech_message_reply1),
 	url(r'^modal_test/', modal_test),	
 	
 	# Reports URL Patterns ***********************************
@@ -258,6 +260,7 @@ urlpatterns = [
 	url(r'^layer_choice/', layer_choice),
 	url(r'^layer_select/', layer_select),
 	url(r'^layer_audit_check_reset/', layer_audit_check_reset),
+	url(r'^layer_retrieve/get/(?P<index>\d+)/$', layer_retrieve),
 #	url(r'^hour_check/', hour_check),
 
 	

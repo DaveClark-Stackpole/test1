@@ -287,7 +287,9 @@ def main(request):
 		except:
 			request.session["layer_audit_check"] = 0
 		
-		if layer_check == 0:
+		# Below statement determines if a layered audit message needs to occur using layer_check variable
+		# Use 6 as dummy number until ready to run then use 0
+		if layer_check == 0 and name == 'Dave Clark':
 			return layer_choice_init(request)
 		
 		return render(request, "main.html")
