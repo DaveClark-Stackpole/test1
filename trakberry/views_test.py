@@ -200,10 +200,21 @@ def layer_transfer_temp(request):
 
 	# backup layered audit temp Table
 	db, cursor = db_open()  
+	type_use = request.session["layer_type_use"]
 	
-	cursor.execute("""DROP TABLE IF EXISTS tkb_audits_temp""")
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_audits_temp LIKE tkb_audits""")
-	cursor.execute('''INSERT tkb_audits_temp Select * From tkb_audits''')
+	dql = ('DELETE FROM tkb_audits_temp WHERE Type="%s"' % (type_use))
+	cursor.execute(dql)
+	db.commit()
+	
+	
+	#cursor.execute("""DROP TABLE IF EXISTS tkb_audits_temp""")
+	#cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_audits_temp LIKE tkb_audits""")
+	#cursor.execute('''INSERT tkb_audits_temp Select * From tkb_audits''')
+
+	
+	sql = "INSERT tkb_audits_temp Select * From tkb_audits where Type='%s'" % (type_use)
+	cursor.execute(sql)
+
 
 	db.commit()
 	db.close()
@@ -258,7 +269,7 @@ def layer_choice(request):
 	elif request.session['login_name'] == 'Karl Edwards' or request.session['login_name'] == 'Frank Ponte' or request.session['login_name'] == 'Scott McMahon':
 		type_use = 'Production'
 	# ***********************************************************************
-	
+	request.session["layer_type_use"] = type_use
 	db, cur = db_open()
 	
 	if layer_choice == 0:
@@ -326,6 +337,12 @@ def layer_select(request):
 	
 	cur.execute ('''INSERT INTO tkb_layered(Part,Op,Name,Description,Time_Stamp) VALUES(%s,%s,%s,%s,%s)''',(tmp2[2],tmp2[3],name,tmp2[5],tm))
 	db.commit()
+	
+
+	dql = ('DELETE FROM tkb_audits_temp WHERE Id="%s"' % (audit))
+	cur.execute(dql)
+	db.commit()
+
 	db.close()
 	
 	request.session['layer_audit_check'] = 1
