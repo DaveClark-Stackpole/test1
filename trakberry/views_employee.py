@@ -163,7 +163,30 @@ def emp_info_update_status(request,index):
 	args['form'] = form
 	return render(request,'emp_info_update_form.html',{'ump2':ump2,'args':args})
 	
+def emp_info_absent(request,index):
+	info_index = index
+	request.session["index"] = index
+	db, cur = db_open()
+	sql = "SELECT Employee, Off FROM tkb_employee_matrix WHERE Id ='%s'" %(info_index)
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	emp = tmp2[0]
+	v = tmp2[1]
 	
+	if v ==0:
+		v=1
+	else:
+		v=0
+
+	sql = ('update tkb_employee_matrix SET Off = "%s" WHERE Employee ="%s"' % (v,emp))
+	cur.execute(sql)
+	db.commit()
+	
+	db.close()
+	
+	return render(request, "done_rotation.html")
+
 	
 	
 	

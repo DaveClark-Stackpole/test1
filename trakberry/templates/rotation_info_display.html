@@ -156,6 +156,8 @@ Rotation
 </a>
 </t></th>
 
+<th bgcolor="#B1BFC4" rowspan="2"><center>Off<br>
+</th>
 
 
 <!-- **************************  Loop to display all Jobs on 1st Row  *****************************************-->
@@ -182,6 +184,16 @@ Rotation
         <tr><td  bgcolor="#FAFAF5" style="width:10%";>	
 		<center><font style="font-size:75%";><a href="/trakberry/emp_info_delete/get/{{ index.0.0 }}" class="black">
 		&nbsp;&nbsp;&nbsp;&nbsp;{{index.0.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></font></td>
+		<td  bgcolor="#FAFAF5" style="width:2%";>	
+		{% if index.0.10 == 1 %}
+		<center><font style="font-size:75%";><a href="/trakberry/emp_info_absent/get/{{ index.0.0 }}" class="black">
+		&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</a></font>
+		{% else %}
+		<center><font style="font-size:75%";><a href="/trakberry/emp_info_absent/get/{{ index.0.0 }}" class="black">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></font>
+		{% endif %}
+		
+		</td>
 	{% endif %}
 	
 	<!-- <a href="/trakberry/training_matrix/get/{{ index.0.0 }}" style="color: black">

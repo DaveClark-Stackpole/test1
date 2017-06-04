@@ -1141,3 +1141,25 @@ def schedule_redisplay1(request):
 	
 	return render(request,'display_schedule_redo.html',{'list':list2,'qq':qq,'T':r3})
 	
+# Use this module to Automaticlly force all trained to be clicked for rotation
+def schedule_rotation_start(request):
+	db, cur = db_open()
+	shift = 'Mid CSD 2'
+	position = 'Production'
+	ct = 1
+	v = 2
+	sql = ('update tkb_employee_matrix SET Rotation = "%s" WHERE Level ="%s" and Shift ="%s" and Position = "%s"' % (ct,v,shift,position))
+	cur.execute(sql)
+	db.commit()
+	db.close()
+	return render(request, "done_test.html")
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
