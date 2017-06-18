@@ -185,6 +185,7 @@ def schedule_set(request):
 #	+++++ Module for ensuring priority is numbered sequentially again after changes  +++++++++++++++++++++++
 def schedule_init(request):
 	r = 1
+	rv = 0
 	try:
 		shift = request.session["matrix_shift"]
 	except:
@@ -222,6 +223,7 @@ def schedule_init(request):
 
 # Set Schedule in table along with preselected jobs that could run
 def schedule_set2(request):
+	rv = 0
 	# Testing rerout variable
 	current_first = vacation_set_current2()
 	request.session["date_curr"] = current_first
@@ -270,7 +272,7 @@ def schedule_set2(request):
 	Amp = cur.fetchall()
 	
 	for a in Amp:
-		id_ctr = id_ctr + 1
+		#id_ctr = id_ctr + 1
 		selection = 0
 #		for x in tmp:
 #			if x[1] == '6L Output' or x[1] == '6L Input':
@@ -302,9 +304,14 @@ def schedule_set2(request):
 			selection = rvar
 		else:
 			selection = qvar
-			
-		cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a[1],a[5],a[6],shift,selection,id_ctr))
-		db.commit()
+		
+		# Add the number of jobs that Template a[7] requires.    0 if it is 0
+		if a[7] > 0:
+			for x in range (0,a[7]):
+				id_ctr = id_ctr + 1
+				cur.execute ('''INSERT INTO tkb_schedule(Description,Job_Name,Position,Shift,Selection,Id) VALUES(%s,%s,%s,%s,%s,%s)''',(a[1],a[5],a[6],shift,selection,id_ctr))
+				db.commit()
+				
 	db.close()	
 	return schedule_set3(request)
 
@@ -574,6 +581,7 @@ def schedule_set4(request,list):
 def schedule_qty(shift,position):
 	selection = 1
 	finalize = 1
+	v = 0
 	db, cur = db_open()
 	JCsql = "SELECT count(*) from tkb_schedule where  Shift='%s' and Position='%s' and Selection='%s' and Finalize !='%s'" % (shift,position,selection,finalize)
 	cur.execute(JCsql)
@@ -583,12 +591,14 @@ def schedule_qty(shift,position):
 	qty_jobs = tmp_J_count
 	
 	#Csql = "SELECT count(*) from tkb_employee_temp where  Shift='%s' and Position='%s'" % (shift,position)
-	Csql = "SELECT count(*) from tkb_employee where  Shift='%s' and Position='%s'" % (shift,position)
+	#Csql = "SELECT DISTINCT from tkb_employee_matrix where Shift='%s' and Position='%s' and Off='%s'" % (shift,position,v)
+	Csql = "SELECT count(*) from tkb_employee where  Shift='%s' and Position='%s' and Off='%s'" % (shift,position,v)
 	cur.execute(Csql)
 	tmp = cur.fetchall()	
 	tmp2 = tmp[0]
 	tmp_count = tmp2[0]   # Count for number of employees
 	qty_employee = tmp_count
+	#return render(request,'nothing.html')
 	return (qty_jobs,qty_employee,tmp_count)
 	
 def schedule_set5(request,list):
@@ -598,7 +608,7 @@ def schedule_set5(request,list):
 	rotation = 1
 	selection = 1
 	finalize = 1
-	
+	rv = 0
 	
 		
 	db, cur = db_open()
@@ -613,7 +623,7 @@ def schedule_set5(request,list):
 	cur.execute(sql_d)
 	db.commit()
 	
-	MNsql = "INSERT tkb_employee_temp Select * From tkb_employee where Shift='%s' and Position='%s' ORDER BY %s %s" % (shift,position,'Rank','ASC')
+	MNsql = "INSERT tkb_employee_temp Select * From tkb_employee where Shift='%s' and Position='%s' and Off='%s' ORDER BY %s %s" % (shift,position,rv,'Rank','ASC')
 	cur.execute(MNsql)
 	db.commit()
 	#return render(request,'test993.html', {'jobs':shift , 'employees':position})  # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX #
@@ -753,7 +763,7 @@ def schedule_set5(request,list):
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
 	#x = zip(N,E)
-	#return render(request, "test992.html", {'N':x})
+	#return render(request, "test992.html", {'X':x})
 	# ***************************************************
 	
 	
@@ -787,11 +797,15 @@ def schedule_set5(request,list):
 			break
 		if ptr > (qty_employee-1):
 			break
-			
+		
+		if tmp_ctr > 5000000:
+			break
 	
 	listX = zip(N,A)
 	r2 = time_output()
 	r3 = r2-r1
+	
+	#return render(request, "test992.html", {'X':listX})
 	# ***********************
 	
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********

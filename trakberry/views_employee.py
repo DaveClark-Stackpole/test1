@@ -183,6 +183,10 @@ def emp_info_absent(request,index):
 	cur.execute(sql)
 	db.commit()
 	
+	tql = ('update tkb_employee SET Off = "%s" WHERE Employee ="%s"' % (v,emp))
+	cur.execute(tql)
+	db.commit()
+	
 	db.close()
 	
 	return render(request, "done_rotation.html")

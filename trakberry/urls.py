@@ -55,7 +55,7 @@ from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, di
 
 
 # *******************************************  Supervisor Section ********************************************************************************************
-from views_supervisor import supervisor_display, supervisor_tech_call,supervisor_elec_call,supervisor_main_call,sup_message_close
+from views_supervisor import supervisor_display, supervisor_tech_call,supervisor_elec_call,supervisor_maint_call,sup_message_close
 from views_supervisor import vacation_display_jump, supervisor_edit, sup_close, employee_vac_enter, vacation_display
 from views_supervisor import vacation_display_increment, vacation_display_decrement, vacation_edit, vacation_delete
 from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix, vacation_display_initial, resetcheck
@@ -70,9 +70,12 @@ from views_employee import emp_info_absent
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
 from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,schedule_redisplay1
 
-
-
 # ***********************************************************************************************************************************************************
+
+# *******************************************  Maintenance App Section ********************************************************************************************
+from views_maintenance import maint, maint_call, maint_pass, maint_close, maint_logout
+# ***********************************************************************************************************************************************************
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -182,7 +185,8 @@ urlpatterns = [
 	url(r'^transfer/', transfer),
 	url(r'^reset_call_route/', reset_call_route),
 	url(r'^sup_down_elec/', supervisor_elec_call),
-	url(r'^sup_down_main/', supervisor_main_call),
+	url(r'^sup_down_maint/', supervisor_maint_call),
+	#url(r'^sup_down_main/', supervisor_main_call),
 	#url(r'^sedit/get/(?P<index>\d+)/$', supervisor_edit),
 	url(r'^sedit/', supervisor_edit),
 	url(r'^alter/', alter_table_name),
@@ -195,6 +199,16 @@ urlpatterns = [
 	url(r'^tech_tech_call/', tech_tech_call),
     url(r'^tech_map/', tech_map),
     url(r'^tech_message/', tech_message),	
+	
+	
+	# **************  Maintenance Section ***************************************
+	url(r'^maint/', maint),
+	url(r'^mcall/get/(?P<index>\d+)/$', maint_call),
+	url(r'^mclose/get/(?P<index>\d+)/$', maint_close),
+	url(r'^mpass/get/(?P<index>\d+)/$', maint_pass),
+	url(r'^maint_logout/', maint_logout),
+	url(r'^maintenance/', maint_logout),
+	
 	
 	# **************  Employee Section ***************************************
 	url(r'^create_matrix/', create_matrix),

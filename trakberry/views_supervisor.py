@@ -203,6 +203,8 @@ def supervisor_display(request):
 			return done_tech(request)
 		if b == -3:
 			return done_elec(request)	
+		if b == -4:
+			return done_maint(request)		
 		request.session["index"] = b
 		#request.session["test"] = request.POST
 		return done_edit(request)
@@ -254,10 +256,11 @@ def sup_message_close(request):
 	C = 1
 	db, cur = db_open()
 	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
-	cur.execute(sql)
+	cursor.execute(sql)
 	db.commit()
 	db.close()
-	return done(request)
+	return render(request,"done22223313.html")
+	#return done_test1234(request)
 	
 def sup_d(request):
 	return supervisor_display(request)
@@ -268,11 +271,11 @@ def supervisor_tech_call(request):
 	return supervisor_down(request)
 
 def supervisor_elec_call(request):
-	request.session["whoisonit"] = 'maintenance'
+	request.session["whoisonit"] = 'Electrician'
 	return supervisor_down(request)
 
-def supervisor_main_call(request):
-	request.session["whoisonit"] = 'maintenance'
+def supervisor_maint_call(request):
+	request.session["whoisonit"] = 'Millwright'
 	return supervisor_down(request)	
 	
 def supervisor_down(request):	
@@ -377,6 +380,9 @@ def done_tech(request):
 def done_elec(request):
 	#request.session["test"] = 78
 	return render(request, "done_elec.html")	
+def done_maint(request):
+	#request.session["test"] = 78
+	return render(request, "done_maint.html")	
 def done_edit(request):
 	return render(request, "done_edit.html")	
 	

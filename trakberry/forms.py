@@ -98,3 +98,17 @@ class layered_entry_Form(forms.Form):
 	Type = forms.CharField()	
 	Part = forms.CharField()	
 	Op = forms.CharField()	
+	
+class maint_closeForm(forms.Form):
+	comment = forms.CharField()	
+
+class maint_passForm(forms.Form):
+	comment = forms.CharField()	
+	whos = forms.CharField()	
+	
+class maint_loginForm(forms.Form):
+	user = forms.CharField()
+	pwd = forms.CharField()		
+	
+class maint_searchForm(forms.Form):
+	machine = forms.CharField()	

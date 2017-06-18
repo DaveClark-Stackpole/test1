@@ -338,7 +338,7 @@ def layer_select(request):
 	cur.execute ('''INSERT INTO tkb_layered(Part,Op,Name,Description,Time_Stamp) VALUES(%s,%s,%s,%s,%s)''',(tmp2[2],tmp2[3],name,tmp2[5],tm))
 	db.commit()
 	
-
+	# Delete the used Audit from the Temp list
 	dql = ('DELETE FROM tkb_audits_temp WHERE Id="%s"' % (audit))
 	cur.execute(dql)
 	db.commit()
