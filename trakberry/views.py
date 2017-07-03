@@ -497,7 +497,7 @@ def create_table(request):
 #  cursor.execute("""DROP TABLE IF EXISTS tkb_prodtrak""")
 #  cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_prodtrak(Id INT PRIMARY KEY AUTO_INCREMENT,pi_id INT(10), machine CHAR(30), part_timestamp INT(20), qty INT(2), pcount INT(20), downtime INT(20), cycletime INT(10), status VARCHAR(25))""")
 #  cursor.execute("""DROP TABLE IF EXISTS tkb_employee""")
-  cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_employee(Id INT PRIMARY KEY AUTO_INCREMENT,Part CHAR(30), OP CHAR(30), Machine INT(10))""")
+  cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_techs(Id INT PRIMARY KEY AUTO_INCREMENT,tech CHAR(50))""")
   
   db.commit()
 #  t = int(time.time())
@@ -518,7 +518,7 @@ def create_table(request):
 #  cursor.execute(sqD)
 #  db.commit()
   db.close()
-  return render(request,'done.html')
+  return render(request,'done_test3.html')
  
 def create_test_table(request):
   # Construct tkb_test format

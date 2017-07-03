@@ -11,6 +11,8 @@ from django.http import QueryDict
 import MySQLdb
 import json
 import time 
+import smtplib
+from smtplib import SMTP
 
 from time import mktime
 from datetime import datetime, date
@@ -26,11 +28,11 @@ def resetcheck(request):
 	
 	
 	
-def hour_check():
+def hour_check(request):
 	# obtain current date from different module to avoid datetime style conflict
-
-	h = 7
-	m = 0
+	t_name = request.session['login_tech']
+	h = 6
+	m = 15
 	ch = 0
 	send_email = 0
 	t=int(time.time())
@@ -44,7 +46,7 @@ def hour_check():
 
 	db, cursor = db_open()  
 	try:
-		sql = "SELECT checking FROM tkb_email_conf where date='%s'" %(current_date)
+		sql = "SELECT checking FROM tkb_email_conf where date='%s' and employee='%s'" %(current_date,t_name)
 		cursor.execute(sql)
 		tmp = cursor.fetchall()
 		tmp2 = tmp[0]
@@ -76,11 +78,9 @@ def hour_check():
 	
 def supervisor_display(request):
 
-#   Below is a check to send an email for downtime once a day.  
-#   It is disabled now as a crontab has been put in place on the server side
-#	send_email = hour_check()
-#	if send_email == 1:
-#		return render(request, "email_downtime.html")
+#   Below is a check to send an email for techs once a day.  
+	email_hour_check()
+
 	try:
 		request.session["login_supervisor"] 	
 	except:
@@ -217,35 +217,38 @@ def supervisor_display(request):
 	# *********************************************************************************************************
 	# ******     Messaging portion of the Tech App  ***********************************************************
 	# *********************************************************************************************************
-	N = request.session["login_name"]
-	R = 0
-	db, cur = db_open() 
-	try:
-		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
-		cur.execute(sql)
-		tmp44 = cur.fetchall()
-		tmp4 = tmp44[0]
-
-		request.session["sender_name"] = tmp4[2]
-		request.session["message_id"] = tmp4[0]
-
-		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
-		cur.execute(aql)
-		tmp2 = cur.fetchall()
-		tmp3 = tmp2[0]
-		cnt = tmp3[0]
-	except:
-		cnt = 0
-		tmp4 = ''
-		request.session["sender_name"] = ''
-		request.session["message_id"] = 0
-	db.close()
-	Z_Value = 1
-	if cnt > 0 :
-		cnt = 1
-		request.session["refresh_sup"] = 3
+#	N = request.session["login_name"]
+#	R = 0
+#	db, cur = db_open() 
+#	try:
+#		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
+#		cur.execute(sql)
+#		tmp44 = cur.fetchall()
+#		tmp4 = tmp44[0]
+#
+#		request.session["sender_name"] = tmp4[2]
+#		request.session["message_id"] = tmp4[0]
+#
+#		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
+#		cur.execute(aql)
+#		tmp2 = cur.fetchall()
+#		tmp3 = tmp2[0]
+#		cnt = tmp3[0]
+#	except:
+#		cnt = 0
+#		tmp4 = ''
+#		request.session["sender_name"] = ''
+#		request.session["message_id"] = 0
+#	db.close()
+#	Z_Value = 1
+#	if cnt > 0 :
+#		cnt = 1
+#		request.session["refresh_sup"] = 3
 	# ********************************************************************************************************
-		
+	cnt = 0
+	request.session["refresh_sup"] = 0
+	tmp4 =''
+	Z_Value = 1
   # call up 'display.html' template and transfer appropriate variables.  
 	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})
 	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'args':args})
@@ -1583,4 +1586,119 @@ def vacation_calander_init_2017(month_st):
 	return days,cctr,mnth
 
 
+# Below is Code to Email Tech Reports Based on the Supervisor Refreshing at a certain Time
+def email_hour_check():
+	# obtain current date from different module to avoid datetime style conflict
 
+	h = 6
+	m = 40
+	ch = 0
+	send_email = 0
+	t=int(time.time())
+	tm = time.localtime(t)
+	mn = tm[4]
+	hour = tm[3]
+	current_date = find_current_date()
+	#hour = 9
+	if hour >= h:
+		ch = 1
+
+		db, cursor = db_open()  
+		try:
+			sql = "SELECT sent FROM tkb_email_conf where date='%s'" %(current_date)
+			cursor.execute(sql)
+			tmp = cursor.fetchall()
+			tmp2 = tmp[0]
+
+			try:
+				sent = tmp2[0]
+			except:
+				sent = 0
+		except:
+			sent = 0
+			
+		if sent == 0:
+			checking = 1
+			cursor.execute('''INSERT INTO tkb_email_conf(date,checking,sent) VALUES(%s,%s,%s)''', (current_date,checking,checking))
+			db.commit()
+			
+		
+			
+#			Email Reports from techs
+			tech_report_email()
+			
+		else:
+			return 
+			
+		db.close()
+			
+	return 
+	
+# Send tech emails to T Tobey for all those that have information in
+def tech_report_email():
+	# Current tech will be request.session.login_tech
+	# Initialize counter for message length
+	m_ctr = 0
+	subjectA = []
+	
+	db, cursor = db_open()  
+	tql = "SELECT * FROM tkb_techs"
+	cursor.execute(tql)
+	tmpA = cursor.fetchall()
+	
+	for x in tmpA:
+		m_ctr = 0
+		name = x[1]
+		#return render(request,'done_test3.html',{'name':name})
+		sql = "SELECT * FROM pr_downtime1 WHERE whoisonit = '%s' ORDER BY completedtime DESC limit 60" %(name)
+		cursor.execute(sql)
+		tmp = cursor.fetchall()
+		job_assn = []
+		job_date = []
+		job_solution = []
+		a = []
+		b = []
+		c = []
+		d = []
+	
+		message_subject = 'Tech Report from :' + name
+		# set request.session.email_name as the full email address for link
+		email_name = 'ttobey@stackpole.com'
+
+		toaddrs = email_name
+		fromaddr = 'stackpole@stackpole.com'
+		frname = 'Dave'
+		server = SMTP('smtp.gmail.com', 587)
+		server.ehlo()
+		server.starttls()
+		server.ehlo()
+		server.login('StackpolePMDS@gmail.com', 'stacktest6060')
+	
+	
+	
+		message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+		message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
+		for x in tmp:
+			# assign job date and time to dt
+			dt = x[7]
+			dtt = str(x[7])
+			dt_t = time.mktime(dt.timetuple())
+			# assign current date and time to dtemp
+			dtemp = vacation_temp()
+			dtemp_t = time.mktime(dtemp.timetuple())
+			# assign d_diff to difference in unix
+			d_dif = dtemp_t - dt_t
+			if d_dif < 86400:
+				message = message + '[' + dtt[:16]+'] ' + x[0] + ' - ' + x[1] + ' --- ' + x[8] + "\r\n\r\n"
+				m_ctr = m_ctr + 1
+			# retrieve left first character of login_name only
+			name_temp1 = name[:1]
+			# retrieve last name of login name only 
+			name_temp2 = name.split(" ",1)[1]
+
+		if m_ctr > 0:
+			server.sendmail(fromaddr, toaddrs, message)
+		server.quit()
+	
+	db.close()
+	return

@@ -10,6 +10,12 @@ import MySQLdb
 import time
 import datetime
 
+import smtplib
+from smtplib import SMTP
+from django.template.loader import render_to_string  #To render html content to string
+from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
+
+
 #import datetime as dt 
 from django.core.context_processors import csrf
 
@@ -80,14 +86,22 @@ def tech_email_test(request):
 	return render(request, "email_downtime_cycle.html")
 		
 def tech(request):
+	#Do the Hour Check to see if email needs sending
 
+	#return email_hour_check(request)
 #	send_email = hour_check()
 #	if send_email == 1:
 #		return e_test(request)	
-		#return render(request, "email_downtime.html")
+#		return render(request, "email_downtime.html")
 
 	try:
 		request.session["login_tech"] 
+
+#		Below is Dead Code
+
+#		t_name = request.session["login_tech"] 
+#		jj = email_hour_check(t_name)
+		#return render(request,'done_test5.html',{'jj':jj})
 	except:
 		request.session["login_tech"] = "none"
 	try:
@@ -547,3 +561,163 @@ def modal_test(request):
 	b = 1
 	request.session["modal_1"] = a
 	return render(request,'modal_test.html',{'b':b})
+	
+# Dead Code
+def email_hour_check(t_name):
+	# obtain current date from different module to avoid datetime style conflict
+	
+	jj = 88
+	h = 5
+	m = 6
+	ch = 0
+	send_email = 0
+	t=int(time.time())
+	tm = time.localtime(t)
+	min = tm[4]
+	hour = tm[3]
+	current_date = find_current_date()
+	#hour = 9
+	if hour >= h:
+		ch = 1
+
+		db, cursor = db_open()  
+		try:
+			sql = "SELECT sent FROM tkb_email_conf where date='%s' and employee='%s'" %(current_date,t_name)
+			cursor.execute(sql)
+			tmp = cursor.fetchall()
+			tmp2 = tmp[0]
+
+			
+			db.close()
+			#return render(request,'done_test3.html',{'D':current_date,'N':t_name,'tmp':tmp})
+			
+			try:
+				sent = tmp2[0]
+			except:
+				sent = 0
+		except:
+			sent = 0
+		if sent == 0:
+			checking = 1
+			cursor.execute('''INSERT INTO tkb_email_conf(date,employee,checking,sent) VALUES(%s,%s,%s,%s)''', (current_date,t_name,checking,checking))
+			db.commit()
+			db.close()
+			jj = tech_report_email(t_name)
+			
+		else:
+			return jj
+			
+
+	return jj
+	
+
+# Dead Code
+def tech_report_email(name):
+	# Current tech will be request.session.login_tech
+	# Initialize counter for message length
+	m_ctr = 0
+	subjectA = []
+	
+	db, cursor = db_open()  		
+	sql = "SELECT * FROM pr_downtime1 WHERE whoisonit = '%s' ORDER BY called4helptime DESC limit 60" %(name)
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	db.close
+	
+	
+	jj = len(tmp)
+	#if tmp=='':
+	#return render(request,'done_test5.html',{'jj':jj})
+	job_assn = []
+	job_date = []
+	job_solution = []
+	a = []
+	b = []
+	c = []
+	d = []
+	
+	message_subject = 'Tech Report from :' + name
+	# set request.session.email_name as the full email address for link
+	email_name = 'dclark@stackpole.com'
+
+	toaddrs = email_name
+	fromaddr = 'stackpole@stackpole.com'
+	frname = 'Dave'
+	server = SMTP('smtp.gmail.com', 587)
+	server.ehlo()
+	server.starttls()
+	server.ehlo()
+	server.login('StackpolePMDS@gmail.com', 'stacktest6060')
+	
+	
+	
+	message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+	message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
+	for x in tmp:
+		# assign job date and time to dt
+		dt = x[2]
+		dtt = str(x[2])
+		
+		dt_t = time.mktime(dt.timetuple())
+		# assign current date and time to dtemp
+		dtemp = vacation_temp()
+		dtemp_t = time.mktime(dtemp.timetuple())
+		# assign d_diff to difference in unix
+		d_dif = dtemp_t - dt_t
+		if d_dif < 86400:
+			message = message + '[' + dtt[:16]+'] ' + x[0] + ' - ' + x[1] + ' --- ' + x[8] + "\r\n\r\n"
+			m_ctr = m_ctr + 1
+
+
+	
+	# retrieve left first character of login_name only
+	name_temp1 = name[:1]
+	# retrieve last name of login name only 
+	name_temp2 = name.split(" ",1)[1]
+	
+
+	
+
+
+	
+	#if m_ctr > 0:
+	server.sendmail(fromaddr, toaddrs, message)
+	server.quit()
+	
+	mm = m_ctr
+	return mm
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ 
+def tech_name_update(request):
+	
+	
+	tech = []
+	#Assigned Employee
+	tech.append('Jim Barker')
+	tech.append('Al Vilandre')
+	tech.append('Woodrow Sismar')
+	tech.append('Kevin Bisch')
+	tech.append('Muoi Le')
+	tech.append('Scott Smith')
+	tech.append('Toby Kuepfer')
+	tech.append('Paul Wilson')
+	tech.append('Chris Strutton')
+
+
+	db, cur = db_open()
+	for x in tech:
+		cur.execute('''INSERT INTO tkb_techs(tech) VALUES(%s)''', (x))
+		db.commit()
+
+	db.close()
+	
+	return render(request,'done_test.html')	
+
+
+
+
+
+
+
+

@@ -24,7 +24,7 @@ from views2 import main_login, main_login_form, main, main_logout
 from views_machinery import machinery
 from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
 from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
-from views_tech import tech_message_close,tech_message_reply1
+from views_tech import tech_message_close,tech_message_reply1, tech_report_email, email_hour_check,tech_name_update
 #from views_tech import hour_check
 from views_transfer import transfer
 
@@ -73,7 +73,7 @@ from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,sch
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Maintenance App Section ********************************************************************************************
-from views_maintenance import maint, maint_call, maint_pass, maint_close, maint_logout
+from views_maintenance import maint, maint_call, maint_pass, maint_close, maint_logout, maint_job_history, maint_map, maint_call_call
 # ***********************************************************************************************************************************************************
 
 
@@ -125,6 +125,7 @@ urlpatterns = [
 	url(r'^done_email_1/', done_email_1),
 	url(r'^tech_message_close/', tech_message_close),
 	url(r'^tech_message_reply1/', tech_message_reply1),
+	url(r'^email_hour_check/', email_hour_check),
 	url(r'^modal_test/', modal_test),	
 	
 	# Reports URL Patterns ***********************************
@@ -199,15 +200,20 @@ urlpatterns = [
 	url(r'^tech_tech_call/', tech_tech_call),
     url(r'^tech_map/', tech_map),
     url(r'^tech_message/', tech_message),	
+	url(r'^tech_report_email/', tech_report_email),
+	url(r'^tech_name_update/', tech_name_update),
 	
 	
 	# **************  Maintenance Section ***************************************
 	url(r'^maint/', maint),
+	url(r'^maint_map/', maint_map),
 	url(r'^mcall/get/(?P<index>\d+)/$', maint_call),
 	url(r'^mclose/get/(?P<index>\d+)/$', maint_close),
 	url(r'^mpass/get/(?P<index>\d+)/$', maint_pass),
 	url(r'^maint_logout/', maint_logout),
 	url(r'^maintenance/', maint_logout),
+	url(r'^maint_job_history/', maint_job_history),
+	url(r'^maint_call_call/', maint_call_call),
 	
 	
 	# **************  Employee Section ***************************************

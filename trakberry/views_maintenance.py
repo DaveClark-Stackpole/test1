@@ -1,15 +1,18 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import maint_closeForm, maint_loginForm, maint_searchForm, tech_loginForm
+from trakberry.forms import maint_closeForm, maint_loginForm, maint_searchForm, tech_loginForm, sup_downForm
 from views_db import db_open
 from views_mod1 import find_current_date
 from views_email import e_test
 from views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
 from views_supervisor import supervisor_tech_call
+from trakberry.views_testing import machine_list_display
 import MySQLdb
-import time
-import datetime
+
+from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
+import time 
+
 
 #import datetime as dt 
 from django.core.context_processors import csrf
@@ -76,7 +79,7 @@ def tech_email_test(request):
 	return render(request, "email_downtime_cycle.html")
 		
 def maint(request):
-
+	request.session["refresh_maint"] = 0
 	try:
 		request.session["login_maint"] 
 	except:
@@ -381,22 +384,57 @@ def maint_pass(request, index):
 	return render(request,'tech_pass.html', args)		
 
 							  
-def tech_recent(request):
+def maint_job_history(request):
 
-	
+	name = request.session["login_maint"]
 	db, cursor = db_open()  		
-	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 60" 
+	sql = "SELECT * FROM pr_downtime1 WHERE whoisonit = '%s' ORDER BY called4helptime DESC limit 60" %(name)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
 	db.close
+
+	job_assn = []
+	job_date = []
+	job_diff = []
+	a = []
+	b = []
+	c = []
+	d = []
+	
+	
+	
+	for x in tmp:
+		# assign job date and time to dt
+		dt = x[2]
+		dt_t = time.mktime(dt.timetuple())
+		# assign current date and time to dtemp
+		dtemp = vacation_temp()
+		dtemp_t = time.mktime(dtemp.timetuple())
+		# assign d_diff to difference in unix
+		d_dif = dtemp_t - dt_t
+		if d_dif < 86400:
+			job_assn.append(x[0])
+			job_date.append(x[2])
+			a.append(x[1])
+			b.append(x[4])
+			c.append(x[7])
+			d.append(x[9])
+			
+			
+			job_diff.append(str(d_dif))
+		
+	job_history = zip(job_assn,a,job_date,b,c,d)
+
+
+	
 	machine="Recent Machine Breakdowns"
 	request.session["machine_search"] = machine
-	request.session["tech_display"] = 1
-	return render(request,"tech_search_display.html",{'machine':tmp})
+	request.session["maint_display"] = 1
+	return render(request,"maint_job_history_display.html",{'machine':job_history})
 
-def tech_map(request):
+def maint_map(request):
 
-	return render(request,"tech_map.html")	
+	return render(request,"maint_map.html")	
 
 def tech_history(request):	
 
@@ -420,10 +458,35 @@ def tech_history(request):
 	args['form'] = form
 	return render(request,'tech_search.html', args)		
 
-def tech_tech_call(request):
-	request.session["call_route"] = 'tech'
-	request.session["url_route"] = 'tech.html'
-	return supervisor_tech_call(request)
+def maint_call_call(request):
+	if request.POST:	
+		machinenum = request.POST.get("machine")
+		problem = request.POST.get("reason")
+		priority = request.POST.get("priority")
+		name_who = request.POST.get["whoisonit"]
+		
+		# call external function to produce datetime.datetime.now()
+		t = vacation_temp()
+		
+		# Select prodrptdb db located in views_db
+		db, cur = db_open()
+		cur.execute('''INSERT INTO pr_downtime1(machinenum,problem,priority,whoisonit,called4helptime) VALUES(%s,%s,%s,%s,%s)''', (machinenum,problem,priority,name_who,t))
+		db.commit()
+		db.close()
+		
+		return done_maint_app(request)
+		
+	else:
+		request.session["machinenum"] = "692"
+		form = sup_downForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	rlist = machine_list_display()
+	request.session["refresh_maint"] = 3
+	return render(request,'maint_call.html', {'List':rlist,'args':args})	
+	
+	return render(request,'maint_call.html')	
 						  
 
 def tech_message(request):	

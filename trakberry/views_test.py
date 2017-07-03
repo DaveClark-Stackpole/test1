@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
+from views_mod1 import find_current_date
 #from views2 import main_A
 from trakberry.forms import login_Form,layered_entry_Form
 from datetime import datetime
@@ -334,8 +335,8 @@ def layer_select(request):
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
 	tmp3 = tmp2[2]
-	
-	cur.execute ('''INSERT INTO tkb_layered(Part,Op,Name,Description,Time_Stamp) VALUES(%s,%s,%s,%s,%s)''',(tmp2[2],tmp2[3],name,tmp2[5],tm))
+	current_date = find_current_date()
+	cur.execute ('''INSERT INTO tkb_layered(Part,Op,Name,Description,date,Time_Stamp) VALUES(%s,%s,%s,%s,%s,%s)''',(tmp2[2],tmp2[3],name,tmp2[5],current_date,tm))
 	db.commit()
 	
 	# Delete the used Audit from the Temp list
