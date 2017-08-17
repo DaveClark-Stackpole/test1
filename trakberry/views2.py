@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
-
+from views_mod1 import find_current_date
 from views_test import layer_choice_init
 from trakberry.forms import login_Form
 from datetime import datetime
@@ -258,14 +258,19 @@ def main_A(request):
 	return main(request)
 	
 def main(request):
+	
+#	Check if login_name and login_password have been entered.
 
 	try:
 		password = request.session["login_password"]
 		name = request.session["login_name"]
+
 	except:
 		password = 'no'
 		name = ""
-	
+		
+
+		
 	# how to delete a session variable
 	#del request.session['mykey']
 	log_pass = 0
@@ -277,15 +282,31 @@ def main(request):
 	elif password == 'stackberry':
 		log_pass = 1
 
-	if log_pass == 1:
-		#request.session.set_expiry(1800)
 		
+		
+	# Code for checking if layered audit needs to be sent.  Make 
+	if log_pass == 1:
+	
+		# use below line to bypass for testing
+		return render(request, "main.html")
+		
+		
+		
+		
+		#request.session.set_expiry(1800)
+		#Check if layered audit required
+
+		ID_1 = layered_audit_check(name)
+
+		if ID_1 == 4:
+			#return render(request,'done_test1.html')
+			return layer_choice_init(request)
 		# Check for Layered Audit done or not.
-		layer_check = 0
+		layer_check = 1
 		try:
 			layer_check = int(request.session["layer_audit_check"])
 		except:
-			request.session["layer_audit_check"] = 0
+			request.session["layer_audit_check"] = 1
 		
 		# Below statement determines if a layered audit message needs to occur using layer_check variable
 		# Use 6 as dummy number until ready to run then use 0
@@ -305,6 +326,26 @@ def main_logout(request):
 		request.session['login_password'] = ' '
 	return main(request)		
 
+# Check if Layered Audit has been entered for this name and todays date
+def layered_audit_check(name):
 
+	current_date = find_current_date()
+	t = int(time.time())
 
+	db, cursor = db_open()  
+	try:
+		sql = "SELECT * FROM tkb_layered where Name = '%s'" %(name)
+		cursor.execute(sql)
+		tmp = cursor.fetchall()
+		tmp2 = tmp[0]
+		ts = tmp2[6]
+		
+		ID_1 = tmp2[0]
+
+	except:
+		ID_1 = 4
+
+	db.close()
+		
+	return ID_1
   

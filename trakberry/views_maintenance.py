@@ -124,7 +124,7 @@ def maint(request):
 	a4 = "Gike Maspar"
 	a5 = "Jeff Jacobs"
 	a6 = "Shawn Gilbert"
-	a7 = "-------"
+	a7 = "Steven Niu"
 	a8 = "-------"
 	a9 =  "-------"
 	a10 = "-------"
@@ -210,6 +210,9 @@ def maint(request):
 		request.session["login_image"] = "/static/media/tech_woodrow.jpg"
 		request.session["login_back"] = "/static/media/back_woodrow.jpg"
 	elif request.session["login_maint"] == "Jeff Jacobs":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"			
+	elif request.session["login_maint"] == "Steven Niu":
 		request.session["login_image"] = "/static/media/tech_training.jpg"
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"			
 	elif request.session["login_maint"] == "-----":

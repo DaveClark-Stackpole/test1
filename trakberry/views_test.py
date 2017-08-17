@@ -393,8 +393,8 @@ def layer_select(request):
 	server.login('StackpolePMDS@gmail.com', 'stacktest6060')
 	message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" + subject_line_1 + "\r\n\r\n" + subject_line_2 + "\r\n\r\n"+ label_link
 	
-
-	server.sendmail(fromaddr, toaddrs, message)
+	# Leave below line commented when testing this module
+	#server.sendmail(fromaddr, toaddrs, message)
 	server.quit()
 	
 	
@@ -403,6 +403,11 @@ def layer_select(request):
 
 
 def layer_audit_check_reset(request):
+	
+	
+	
+	
+	
 	request.session['layer_audit_check'] = 0
 	return render(request,'main_redirect.html')
 	
@@ -455,3 +460,7 @@ def layer_retrieve(request,index):
 	
 	#return render(request,'layered_audits/test.html')
 	return render(request,'reroute.html')
+
+def sup_mess(request):
+	return render(request,'sup_mess.html')
+	

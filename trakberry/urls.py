@@ -42,7 +42,7 @@ from views_mod1 import table_copy
 from views_email import e_test
 from views import fix_time
 from views_test import test_list, toggle_1, layer_test, layer_entry, layer_transfer_temp, layer_choice_init, layer_choice, layer_select, layer_audit_check_reset
-from views_test import layer_retrieve
+from views_test import layer_retrieve,sup_mess
 from views_test_email import email1, done_email_1
 # ***********************************************************************************************************************************************************
 
@@ -57,8 +57,8 @@ from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, di
 # *******************************************  Supervisor Section ********************************************************************************************
 from views_supervisor import supervisor_display, supervisor_tech_call,supervisor_elec_call,supervisor_maint_call,sup_message_close
 from views_supervisor import vacation_display_jump, supervisor_edit, sup_close, employee_vac_enter, vacation_display
-from views_supervisor import vacation_display_increment, vacation_display_decrement, vacation_edit, vacation_delete
-from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix, vacation_display_initial, resetcheck
+from views_supervisor import vacation_display_increment, vacation_display_decrement, vacation_edit, vacation_delete, sup_message_reply1,sup_message_reply0
+from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix, vacation_display_initial, resetcheck,sup_message
 # ***********************************************************************************************************************************************************
 
 
@@ -76,6 +76,10 @@ from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,sch
 from views_maintenance import maint, maint_call, maint_pass, maint_close, maint_logout, maint_job_history, maint_map, maint_call_call
 # ***********************************************************************************************************************************************************
 
+# *******************************************  Inventory Section ********************************************************************************************
+from views_inventory import push_button, inventory_type_entry
+
+# ***********************************************************************************************************************************************************
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -115,7 +119,8 @@ urlpatterns = [
 	url(r'^graph3/', graph3),
     url(r'^db_write/', db_write),  
 	url(r'^sim/', sim),	
-	url(r'^test/', test),	
+	url(r'^test/', test),
+	url(r'^sup_mess/', sup_mess),	
 	url(r'^done/', done),
 	url(r'^details_session/', details_session),
 	url(r'^details_track/', details_track),
@@ -187,6 +192,9 @@ urlpatterns = [
 	url(r'^reset_call_route/', reset_call_route),
 	url(r'^sup_down_elec/', supervisor_elec_call),
 	url(r'^sup_down_maint/', supervisor_maint_call),
+	url(r'^sup_message_reply1/', sup_message_reply1),
+	url(r'^sup_message_reply0/', sup_message_reply0),
+	url(r'^sup_message/', sup_message), 
 	#url(r'^sup_down_main/', supervisor_main_call),
 	#url(r'^sedit/get/(?P<index>\d+)/$', supervisor_edit),
 	url(r'^sedit/', supervisor_edit),
@@ -291,6 +299,10 @@ urlpatterns = [
 	# Retrieve Data from ADMIN views for testing
 	url(r'^retrieve/', retrieve),
 	url(r'^create_table/', create_table),
+	
+	
+	url(r'^push_button/', push_button),
+	url(r'^inventory_type_entry/', inventory_type_entry),
 	
 	
 ]

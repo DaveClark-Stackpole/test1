@@ -87,6 +87,10 @@ html, body {height: 100%;width: 100%;padding: 0;margin: 0;}
 }	
 
 
+.headcol {
+  position: absolute;
+
+}
 
 	
 }
@@ -165,6 +169,14 @@ function goBack() {
 	
 
   
+   <!-- Use below query to determine if message should appear -->
+  {% if cnt = Z %} 
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $("#myModal").modal('show');
+    });
+  </script>
+  {% endif %}
   
 	</head>
 	
@@ -200,6 +212,7 @@ function goBack() {
 				<li><a href="/trakberry/display_initialize"><span class="glyphicon glyphicon-eye-open"></span> Live Track</a></li>
 				{%endblock%}
 				{%block active_3%}
+				<li><a href="/trakberry/sup_message">Message</a></li>
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span>Reports <b class="caret"></b></a>
 				{%endblock%}	
@@ -343,6 +356,8 @@ function goBack() {
 						<li><a href="/trakberry/layer_choice_init">Select Layered Audit</a></li>
 						<li><a href="/trakberry/layer_choice">Increment Layered Audit</a></li>
 						<li><a href="/trakberry/layer_audit_check_reset">Reset Audit</a></li>
+						<li><a href="/trakberry/sup_message">Message</a></li>
+						<li><a href="/trakberry/inventory_type_entry">Inventory Fixed</a></li>
 					</ul>	
 				</li>
 				{% endif %}
@@ -376,8 +391,12 @@ function goBack() {
 	<br><br>
 </div>
 
+
+  
+
 {% block content %}
 <div class="container">
+
 
 
   

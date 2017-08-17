@@ -86,7 +86,9 @@ class tech_message_Form(forms.Form):
 	name = forms.CharField()	
 	message = forms.CharField()	
 
-	
+class sup_message_Form(forms.Form):
+	name = forms.CharField()	
+	message = forms.CharField()	
 	
 class toggletest_Form(forms.Form):
 	shift = forms.CharField()	
@@ -112,3 +114,10 @@ class maint_loginForm(forms.Form):
 	
 class maint_searchForm(forms.Form):
 	machine = forms.CharField()	
+
+class inventory_entry_Form(forms.Form):
+	Quantity = forms.CharField()	
+	Part = forms.CharField()	
+	Op = forms.CharField()	
+	Storage = forms.CharField()
+	Update = forms.CharField()

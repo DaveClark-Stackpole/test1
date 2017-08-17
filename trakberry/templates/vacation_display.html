@@ -54,12 +54,22 @@
 a.blue:link {color: black;}
 a.blue:active {color: black;}
 a.blue:visited {color: black;}
-a.blue:hover {color: black;}
+a.blue:hover {color: black;background-color: #D6D6D6;border-radius: 25px;}
 
 a.green:link {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
 a.green:active {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
 a.green:visited {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
-a.green:hover {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
+a.green:hover {color: #FFFFFF;background-color: #99D284;border-radius: 25px;}
+
+a.pink:link {color: #FFFFFF;background-color: #DF4FD6;border-radius: 25px;}
+a.pink:active {color: #FFFFFF;background-color: #DF4FD6;border-radius: 25px;}
+a.pink:visited {color: #FFFFFF;background-color: #DF4FD6;border-radius: 25px;}
+a.pink:hover {color: #FFFFFF;background-color: #E789E1;border-radius: 25px;}
+
+a.orange:link {color: #FFFFFF;background-color: #FF5733;border-radius: 25px;}
+a.orange:active {color: #FFFFFF;background-color: #FF5733;border-radius: 25px;}
+a.orange:visited {color: #FFFFFF;background-color: #FF5733;border-radius: 25px;}
+a.orange:hover {color: #FFFFFF;background-color: #FFA18D;border-radius: 25px;}
 
 a.red:link {color: #ffffff; background-color: #145671;border-radius: 25px; font-style: normal;}
 a.red:active {color: #ffffff;background-color: #145671;border-radius: 25px; font-style: normal;}
@@ -70,6 +80,11 @@ a.date:link {color: #ffffff; background-color: #368732; font-style: normal;}
 a.date:active {color: #ffffff;background-color: #368732; font-style: normal;}
 a.date:visited {color: #ffffff; background-color: #368732; font-style: normal;}
 a.date:hover {color: #ffffff; background-color: #9AEB96; font-style: normal;}
+
+a.name1:link {color: #000000; background-color: #ffffff; font-style: normal;}
+a.name1:active {color: #000000;background-color: #ffffff; font-style: normal;}
+a.name1:visited {color: #000000; background-color: #ffffff; font-style: normal;}
+a.name1:hover {color: #000000; background-color: #CADEF4; font-style: normal;}
 
 
 
@@ -182,6 +197,8 @@ data-width="100" name="shift12">
 data-width="100" name="shift13">
 <input {{request.session.sfilter14}} data-toggle="toggle" data-on="ToolRoom" data-off="ToolRoom" data-onstyle="primary" type="checkbox" data-size="mini" 
 data-width="100" name="shift14">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <!--   Sample for backup  
 <input {{request.session.sfilter10}} data-toggle="toggle" data-on="Press Setter" data-off="Press Setter" data-onstyle="success" data-offstyle="danger" type="checkbox" data-size="mini" 
 data-width="100" name="shift10">
@@ -209,8 +226,31 @@ data-width="100" name="shift10">
 <button onclick="myFunction()"><b>&nbsp;&nbsp;&nbsp;Print&nbsp;&nbsp;&nbsp;</b></button>
 
 </font>
-<br>
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+{% if request.session.vacation_special = 0 and request.session.vacation_note = 0 %}
+<br>
+{% endif %}
+
+{% if request.session.vacation_special = 1%}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<font style="font-size:90%; background-color: #DF4FD6;color:#ffffff;"> **Continental people that need coverage from straight shift.**</font>
+{% endif %}	
+
+{% if request.session.vacation_note = 1%}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<font style="font-size:90%; background-color: #FF5733;color:#ffffff;"> **  Special Note.  **</font>
+{% endif %}	
 
 <t><font style="margin-left:37%;"><b>{{S}}</b></font></t>
 
@@ -311,6 +351,8 @@ data-width="100" name="shift10">
 	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFAF5">	<o><a href="/trakberry/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
 {% endif %}
 <br>
+
+
 <!--
 ****************************************************
 Enter Coder to output all vacations for date {i.1}
@@ -326,9 +368,21 @@ Enter Coder to output all vacations for date {i.1}
 					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
 					<br>
 			
-				{% else %}
+				{% elif ii.7 = 1 %}
 					<!-- <div class="noPrint">  -->
 					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
+					<br>
+					<!-- </div>  -->
+					
+				{% elif ii.7 = 3 %}
+					<!-- <div class="noPrint">  -->
+					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<br>
+					<!-- </div>  -->
+					
+				{% else %}
+					<!-- <div class="noPrint">  -->
+					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->
 				{% endif %}
@@ -342,9 +396,21 @@ Enter Coder to output all vacations for date {i.1}
 					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
 					<br>
 			
-				{% else %}
+				{% elif ii.7 = 1 %}
 					<!-- <div class="noPrint">  -->
 					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
+					<br>
+					<!-- </div>  -->
+					
+				{% elif ii.7 = 3 %}
+					<!-- <div class="noPrint">  -->
+					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<br>
+					<!-- </div>  -->			
+				
+				{% else %}
+					<!-- <div class="noPrint">  -->
+					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->
 				{% endif %}
@@ -358,11 +424,23 @@ Enter Coder to output all vacations for date {i.1}
 					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
 					<br>
 			
-				{% else %}
+				{% elif ii.7 = 1 %}
 					<!-- <div class="noPrint">  -->
 					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
 					<br>
 					<!-- </div>  -->
+					
+				{% elif ii.7 = 3 %}
+					<!-- <div class="noPrint">  -->
+					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<br>
+					<!-- </div>  -->				
+				{% else%}
+					<!-- <div class="noPrint">  -->
+					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp</a></o>
+					<br>
+					<!-- </div>  -->
+					
 				{% endif %}
 
 			{% endif %}
@@ -376,7 +454,7 @@ Enter Coder to output all vacations for date {i.1}
 	{% endif %}
 	
 {% endfor %}
-		
+
 
 
 <br>

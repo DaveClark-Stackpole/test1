@@ -798,7 +798,7 @@ def schedule_set5(request,list):
 		if ptr > (qty_employee-1):
 			break
 		
-		if tmp_ctr > 5000000:
+		if tmp_ctr > 40000000:
 			break
 	
 	listX = zip(N,A)

@@ -138,8 +138,8 @@ def message_create(request):
 	# create Message Table
 	db, cursor = db_open()  
 	
-	cursor.execute("""DROP TABLE IF EXISTS tkb_audits""")
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_audits LIKE tkb_audits_temp""")
+	cursor.execute("""DROP TABLE IF EXISTS tkb_inventory_fixed""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_inventory_fixed LIKE tkb_jobs_test""")
 	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
 
 	db.commit()

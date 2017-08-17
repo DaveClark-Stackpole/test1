@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import sup_downForm, sup_dispForm, sup_closeForm, report_employee_Form, sup_vac_filterForm
+from trakberry.forms import sup_downForm, sup_dispForm, sup_closeForm, report_employee_Form, sup_vac_filterForm, sup_message_Form
 from trakberry.views import done
 from views_mod1 import find_current_date
 from trakberry.views2 import login_initial
@@ -78,11 +78,13 @@ def hour_check(request):
 	
 def supervisor_display(request):
 
-#   Below is a check to send an email for techs once a day.  
+#	Below is a check to send an email for techs once a day. If yes then it reroutes from email_hour_check() 
 	email_hour_check()
-
+#	******************************************************************************************
 	try:
-		request.session["login_supervisor"] 	
+		request.session["login_supervisor"] 
+		name_supervisor = request.session["login_supervisor"]
+		
 	except:
 		request.session["login_supervisor"] = "none"
 		
@@ -215,43 +217,80 @@ def supervisor_display(request):
 	args['form'] = form
 	
 	# *********************************************************************************************************
-	# ******     Messaging portion of the Tech App  ***********************************************************
+	# ******     Messaging portion of the Tech App  ************Not Working**********************************
 	# *********************************************************************************************************
-#	N = request.session["login_name"]
-#	R = 0
-#	db, cur = db_open() 
-#	try:
-#		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
-#		cur.execute(sql)
-#		tmp44 = cur.fetchall()
-#		tmp4 = tmp44[0]
-#
-#		request.session["sender_name"] = tmp4[2]
-#		request.session["message_id"] = tmp4[0]
-#
-#		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
-#		cur.execute(aql)
-#		tmp2 = cur.fetchall()
-#		tmp3 = tmp2[0]
-#		cnt = tmp3[0]
-#	except:
-#		cnt = 0
-#		tmp4 = ''
-#		request.session["sender_name"] = ''
-#		request.session["message_id"] = 0
-#	db.close()
-#	Z_Value = 1
-#	if cnt > 0 :
-#		cnt = 1
-#		request.session["refresh_sup"] = 3
-	# ********************************************************************************************************
-	cnt = 0
-	request.session["refresh_sup"] = 0
-	tmp4 =''
+	N = request.session["login_name"]
+	R = 0
+	db, cur = db_open() 
+	try:
+		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
+		cur.execute(sql)
+		tmp44 = cur.fetchall()
+		tmp4 = tmp44[0]
+
+		request.session["sender_name"] = tmp4[2]
+		request.session["sender_name_last"] = tmp4[2]
+		request.session["message_id"] = tmp4[0]
+
+		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
+		cur.execute(aql)
+		tmp2 = cur.fetchall()
+		tmp3 = tmp2[0]
+		cnt = tmp3[0]
+	except:
+		cnt = 0
+		tmp4 = ''
+		request.session["sender_name"] = ''
+		request.session["message_id"] = 0
+	db.close()
 	Z_Value = 1
+	if cnt > 0 :
+		cnt = 1
+		request.session["refresh_sup"] = 3
+#	 ********************************************************************************************************
+
+#	cnt = 0
+#	request.session["refresh_sup"] = 0
+#	tmp4 =''
+	Z_Value = 1
+
   # call up 'display.html' template and transfer appropriate variables.  
 	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})
 	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'args':args})
+
+def sup_message(request):	
+	A = 'Chris Strutton'
+	db, cur = db_open()
+	sql = "SELECT * FROM tkb_tech_list"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+
+	db.close()
+
+	if request.POST:
+        			
+		a = request.session["login_name"]
+		b = request.POST.get("name")
+		c = request.POST.get("message")
+
+		
+		# Select prodrptdb db located in views_db
+		db, cur = db_open()
+		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
+
+		db.commit()
+		db.close()
+		
+		return done(request)
+		#return done(request)
+		
+	else:
+		form = sup_message_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	
+	return render(request,'sup_message_form.html', {'List':tmp,'A':A,'args':args})	
 	
 def sup_message_close(request):
 	request.session["refresh_sup"] = 0
@@ -259,12 +298,61 @@ def sup_message_close(request):
 	C = 1
 	db, cur = db_open()
 	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
-	cursor.execute(sql)
+	cur.execute(sql)
 	db.commit()
 	db.close()
-	return render(request,"done22223313.html")
+	return done(request)
 	#return done_test1234(request)
+
+def sup_message_reply0(request):
+	return render(request, "done_sup_message_reply.html")
 	
+def sup_message_reply1(request):
+	request.session["refresh_sup"]=0
+	I = request.session["message_id"]
+	C = 1
+	db, cur = db_open()
+	
+
+	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
+	cur.execute(sql)
+	db.commit()
+	return sup_message_reply2(request)
+	
+def sup_message_reply2(request):	
+	db, cur = db_open()
+	sql = "SELECT * FROM tkb_tech_list"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	db.close()
+
+	if request.POST:
+        			
+		a = request.session["login_name"]
+		#b = request.POST.get("name")
+		b = request.session["sender_name_last"]
+		c = request.POST.get("message")
+		
+		
+
+		
+		# Select prodrptdb db located in views_db
+		db, cur = db_open()
+		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
+
+		db.commit()
+		db.close()
+		
+		return done(request)
+		#return done(request)
+		
+	else:
+		form = sup_message_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	
+	return render(request,'sup_message_reply_form.html', {'List':tmp,'args':args})	
 def sup_d(request):
 	return supervisor_display(request)
 	
@@ -514,7 +602,11 @@ def vacation_entry(request):
 #	idn = request.session["Id"]
 	if typee == 'cover':
 		ty = 1
-	else:
+	elif typee == 'special':
+		ty = 2
+	elif typee == 'note':
+		ty = 3
+	else:	
 		ty = 0	
 		
 	date_st = datetime.strptime(st, '%Y-%m-%d')
@@ -895,6 +987,16 @@ def vacation_display(request):
 	b = tmp
 	#return render(request, "testAa.html", {'A':A,'a':a,'B':B,'b':b})
 	#return render(request,'vacation_display_test.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
+	
+	
+	request.session["vacation_special"] = 0
+	request.session["vacation_note"] = 0
+	for xy in tmp:
+		if xy[7] == 2:
+			request.session["vacation_special"] = 1
+		if xy[7] == 3:
+			request.session["vacation_note"] = 1
+			
 	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 
 def vacation_display_jump(request):
@@ -1111,6 +1213,15 @@ def vacation_display_increment(request):
 	A = 'M'
 	a = mm
 	
+	request.session["vacation_special"] = 0
+	request.session["vacation_note"] = 0
+	for xy in tmp:
+		if xy[7] == 2:
+			request.session["vacation_special"] = 1
+		if xy[7] == 3:
+			request.session["vacation_note"] = 1
+			
+			
 	#return render(request, "testAa.html", {'A':A,'a':a,'B':B,'b':b})
 	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 #	return render(request,'vacation_display.html',{'Tmp':tmp})	
@@ -1298,6 +1409,16 @@ def vacation_display_decrement(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
+	
+	request.session["vacation_special"] = 0
+	request.session["vacation_note"] = 0
+	for xy in tmp:
+		if xy[7] == 2:
+			request.session["vacation_special"] = 1
+		if xy[7] == 3:
+			request.session["vacation_note"] = 1
+			
+			
 	return render(request,'vacation_display.html',{'List':List,'Mnth':mnth,'Year':year_st,'M':mm,'Tmp':tmp,'args':args})
 	
 	

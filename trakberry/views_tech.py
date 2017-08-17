@@ -254,6 +254,7 @@ def tech(request):
 		tmp4 = tmp44[0]
 
 		request.session["sender_name"] = tmp4[2]
+		request.session["sender_name_last"] = tmp4[2]
 		request.session["message_id"] = tmp4[0]
 
 		aql = "SELECT COUNT(*) FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)
@@ -532,7 +533,7 @@ def tech_message_reply2(request):
         			
 		a = request.session["login_tech"]
 		b = request.POST.get("name")
-		b = request.session["sender_name"]
+		b = request.session["sender_name_last"]
 		c = request.POST.get("message")
 		
 		
