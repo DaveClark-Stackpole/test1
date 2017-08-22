@@ -50,7 +50,7 @@ from views_test_email import email1, done_email_1
 # *******************************************  Main Views *******************************************************************************************
 from views import display, db_write, create_table, test, details_session, details_track, reports, test_time, scheduler, inventory, display2, fade_in, fade2
 from views import create_test_table, alter_table_name, done, new, graph, graph2, graph3, graph749, graph748, graph750, graph677, ttip,graph_close, display_time, graph_close_snap
-from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, display_initialize, test44, tech_reset
+from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, display_initialize, test44, tech_reset,testB
 # ***********************************************************************************************************************************************************
 
 
@@ -90,7 +90,8 @@ urlpatterns = [
 	url(r'^$',main),
 
     
-	url(r'^display/', main), 
+	url(r'^display/', main),
+	url(r'^testB/', testB),
 	url(r'^main_login/', main_login),
 	url(r'^main_logout/', main_logout),
 	url(r'^main_login_form/', main_login_form),
@@ -101,6 +102,7 @@ urlpatterns = [
 	url(r'^test668/', test668),
 	url(r'^create/', test),
 	url(r'^new/', new),
+	
 	url(r'^display_time/', display_time),
 	
 	url(r'^tmr/', test_machine_rate),

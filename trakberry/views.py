@@ -9,6 +9,12 @@ from datetime import datetime
 import MySQLdb
 import time
 
+
+def testB(request):
+
+	return render(request, "testB.html")	
+	
+	
 def fup(x):
 	return x[2]
 
