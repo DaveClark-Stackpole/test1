@@ -803,8 +803,55 @@ def employee_manual_enter(request):
 
 	db.commit()
 	db.close()
-	return render(request,'done_test.html')
+	return render(request,'done_test_A.html')
 
+def emp_info_enter_manual(request):
+
+	try:
+		request.session["employee"]
+		request.session["clock"]
+		request.session["shift"]
+		request.session["position"]
+		
+	except:
+		request.session["employee"] = ""
+		request.session["clock"] = 0
+		request.session["shift"]= ""
+		request.session["position"]= ""
+
+	if request.POST:
+
+		request.session["employee"] = request.POST.get("employee")
+		request.session["clock"] = request.POST.get("clock")
+		request.session["shift"] = request.POST.get("shift")
+		request.session["position"] = request.POST.get("position")
+		#return render(request,"test99_1.html",{'test':tmp2})
+		return emp_info_update_batch(request)
+		
+	else:
+		form = emp_info_form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	#return render(request,'emp_info_enter_form.html',{'args':args})
+	
+	#rlist = emp_list_display()
+	#request.session["login_tech"] = "none"
+	return render(request,'emp_info_enter_form.html', {'args':args})
+
+
+def emp_info_update_batch(request):
+	employee = request.session["employee"]
+	clock = request.session["clock"]
+	position = request.session["position"]
+	shift = request.session["shift"]
+	
+	db, cur = db_open()
+	cur.execute('''INSERT INTO tkb_employee_batch(Employee, clock, position, shift) VALUES(%s,%s,%s,%s)''', (employee,clock,position,shift))
+	db.commit()
+	return render(request,'done_test_B.html')
+	
+	
 def emp_info_group_update(request):
 
 	request.session["clock"] = 0

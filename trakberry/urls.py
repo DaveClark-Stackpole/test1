@@ -66,7 +66,7 @@ from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, 
 from views_employee import create_matrix, emp_training_enter, emp_info_enter, emp_info_display, emp_matrix_initialize, create_jobs,emp_info_update_status
 from views_employee import job_info_display, job_info_enter,matrix_info_init, matrix_update, fix_shift,matrix_info_display,matrix_info_reload,matrix_backup,rot_fix
 from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix, employee_manual_enter, emp_info_group_update
-from views_employee import emp_info_absent
+from views_employee import emp_info_absent, emp_info_enter_manual
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
 from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,schedule_redisplay1
 
@@ -147,6 +147,7 @@ urlpatterns = [
 	url(r'^employee_vacation_enter_init/get/(?P<index>\d+)/$', employee_vac_enter_init),
 	url(r'^emp_matrix_rotation_fix/', emp_matrix_rotation_fix),
 	url(r'^employee_manual_enter/', employee_manual_enter),
+	url(r'^emp_info_enter_manual/', emp_info_enter_manual),
 	url(r'^emp_info_group_update/', emp_info_group_update),
 	url(r'^matrix_backup/', matrix_backup),
 	url(r'^vacation_display/', vacation_display),
