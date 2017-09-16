@@ -11,7 +11,7 @@ import MySQLdb
 # import datetime
 from time import mktime
 from datetime import datetime, date
-
+from collections import Counter
 
 from django.core.context_processors import csrf
 from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
@@ -658,7 +658,12 @@ def schedule_set5(request,list):
 
 	
 	E = [[] for x in range(tmp_count)]
+	XE = [[] for x in range(tmp_count)]
 	N = ['' for x in range(tmp_count)]
+	NE = ['' for x in range(tmp_count)]
+	XN = ['' for x in range(tmp_count)]
+	XEE = ['' for x in range(tmp_count)]
+	JE = ['' for x in range(tmp_count)]
 	ctr = [ 0 for x in range(tmp_count)]
 	co = 0
 	counter = 0
@@ -712,7 +717,7 @@ def schedule_set5(request,list):
 				job_mult = .1
 				
 			
-			
+			JE.append(tmp7[0])
 			E[co].append(tmp_job_id)
 			
 		#return render(request, "test8.html", {'N':E})
@@ -747,7 +752,9 @@ def schedule_set5(request,list):
 	
 	
 	nnoo = 0
-	
+
+
+
 	#Sort E and N  for optimal speed  ****************************
 	for i in range (0,qty_employee-1):
 		for ii in range (i+1,qty_employee):
@@ -761,10 +768,102 @@ def schedule_set5(request,list):
 	# ****************************************
 	
 	
+	
+	# Determine how many Jobs are in each persons matrix
+	EJ = Counter(JE).values()
+	EEJ = Counter(JE).keys()
+	
+	
+	for j in range (0,len(EJ)-1):
+		for jj in range (j+1, len(EJ)):
+			if EJ[jj] < EJ[j]:
+				tmp = EJ[j]
+				EJ[j] = EJ[jj]
+				EJ[jj] = tmp
+				tmp = EEJ[j]
+				EEJ[j] = EEJ[jj]
+				EEJ[jj] = tmp
+	cty = 0
+
 	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
 	#x = zip(N,E)
-	#return render(request, "test992.html", {'X':x})
+	#return render(request, "test992.html", {'X':x,'T':r3})
 	# ***************************************************
+	#XN = N
+	#XE = E
+	for j in range (0,len(EEJ)):
+
+		for jj in range (0,len(E)):
+			if EEJ[j] in E[jj]:
+				cty = cty + 1
+				XE[cty-1] = E[jj]
+				XN[cty-1] = N[jj]
+				XEE[cty-1] = EEJ[j]
+				#if cty ==2:
+				#	return render(request, "test997.html", {'A':N})
+				E.pop(jj)
+				N.pop(jj)
+				#if cty ==10:
+				#	return render(request, "test997.html", {'A':XN})
+				break
+
+	
+	for jjj in range(0,len(E)):
+		XE[cty] = E[jjj]
+		XN[cty] = N[jjj]
+		cty = cty + 1
+		
+	
+	
+#	newE = XE + E
+#	newN = XN + N
+	NE = EEJ
+	E = XE
+	N = XN
+	YE = E
+	YN = N 
+
+	
+	#Sort E and N  for optimal speed  ****************************
+	#for i in range (0,qty_employee-1):
+	#	for ii in range (i+1,qty_employee):
+	#		if len(E[ii]) < len(E[i]):
+	#			tmp = E[ii]
+	#			E[ii] = E[i]
+	#			E[i] = tmp
+	#			tmp = N[ii]
+	#			N[ii] = N[i]
+	#			N[i] = tmp
+	# ****************************************
+	
+
+	
+	
+	# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
+	x = zip(N,E)
+	#return render(request, "test992.html", {'X':x,'JE':JE,'EJ':EJ,'EEJ':EEJ,})
+	# ***************************************************
+	
+	# Test Algorithm
+	for i in range(0,len(XE)):
+		try:
+			job1 = XE[i][0]
+			name1 = XN[i]
+		except:
+			job1 = -1
+		YE = job1
+		YN = name1
+		
+		for a in range(i+1,len(XE)):
+			if job1 in XE[a]:
+				YN = XE[a]
+				YE = YE + job1
+		
+		
+			
+		return render(request, "test992.html", {'X':x,'Y':YN,'EJ':job1,})
+	
+	
 	
 	
 	# *********************** 
@@ -798,13 +897,15 @@ def schedule_set5(request,list):
 		if ptr > (qty_employee-1):
 			break
 		
-		if tmp_ctr > 40000000:
+		# Cut off counter
+		if tmp_ctr > 500000:
 			break
 	
 	listX = zip(N,A)
 	r2 = time_output()
 	r3 = r2-r1
 	
+	ctr_global = tmp_ctr
 	#return render(request, "test992.html", {'X':listX})
 	# ***********************
 	
@@ -927,7 +1028,7 @@ def schedule_set5(request,list):
 		request.session['qq'] = qq
 		request.session['r3'] = r3
 		
-		return render(request,'display_schedule.html',{'list':list2,'qq':qq,'T':r3})
+		return render(request,'display_schedule.html',{'list':list2,'qq':qq,'T':r3,'ctr_global':ctr_global})
 
 	else:
 		request.session['qty_fail'] = 0
@@ -1158,7 +1259,7 @@ def schedule_redisplay1(request):
 # Use this module to Automaticlly force all trained to be clicked for rotation
 def schedule_rotation_start(request):
 	db, cur = db_open()
-	shift = 'Mid CSD 2'
+	shift = 'Day CSD 2'
 	position = 'Production'
 	ct = 1
 	v = 2

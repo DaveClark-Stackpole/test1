@@ -152,7 +152,7 @@ def tech(request):
 	
 	d1 = '2015-05-01'
 	d2 = '2015-07-01'
-	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11)
+	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 
 	cursor.execute(sqlT)
 	tmp = cursor.fetchall()
@@ -236,9 +236,8 @@ def tech(request):
 	elif request.session["login_tech"] == "Muoi Le":
 		request.session["login_image"] = "/static/media/tech_training.jpg"
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"
-	elif request.session["login_tech"] == "Mayank Gehlot":
-		request.session["login_image"] = "/static/media/tech_training.jpg"
-		request.session["login_back"] = "/static/media/back_tech_training.jpg"
+			
+			
 	else:
 		request.session["login_image"] = "/static/media/tech_rick.jpg"
 		request.session["login_back"] = "/static/media/back_rick.jpg"

@@ -68,7 +68,7 @@ from views_employee import job_info_display, job_info_enter,matrix_info_init, ma
 from views_employee import job_info_update_status, job_info_delete, matrix_job_test, emp_matrix_delete, emp_matrix_rotation_fix, employee_manual_enter, emp_info_group_update
 from views_employee import emp_info_absent, emp_info_enter_manual
 from views_scheduler import current_schedule, set_rotation, rotation_info_display, rotation_update, schedule_set, schedule_set2, schedule_init,schedule_finalize
-from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,schedule_redisplay1
+from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,schedule_redisplay1, schedule_rotation_start
 
 # ***********************************************************************************************************************************************************
 
@@ -255,6 +255,7 @@ urlpatterns = [
 	url(r'^rotation_matrix/get/(?P<index>\d+)/$', rotation_update),
 	                # *******  Scheduling Section   **********
 	url(r'^schedule_set/', schedule_set),
+	url(r'^schedule_rotation_start/', schedule_rotation_start),
 	url(r'^schedule_finalize/', schedule_finalize),
 	url(r'^schedule_set2b/', schedule_set2b),
 	url(r'^schedule_redisplay1/', schedule_redisplay1),
