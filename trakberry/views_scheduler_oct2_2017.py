@@ -16,106 +16,7 @@ from collections import Counter
 from django.core.context_processors import csrf
 from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
 
-# ====================================================================================================
-# ----------------------   Everything below are Modules for NEW Algorithm ----------------------------
-# ====================================================================================================
-def Job_Total(E_Working):
-	JE = ['' for x in range(0)]
-	for i in range(0,len(E_Working)):
-		for ii in range(0,len(E_Working[i])):
-			JE.append(E_Working[i][ii])
-	EJ = Counter(JE).values()
-	EEJ = Counter(JE).keys()
-	for i in range(0,len(EEJ)):
-		for ii in range(i+1,(len(EEJ))-1):
-			if EJ[ii] < EJ[i]:
-				temp_EJ = EJ[ii]
-				EJ[ii] = EJ[i]
-				EJ[i] = temp_EJ
-				temp_EEJ = EEJ[ii]
-				EEJ[ii] = EEJ[i]
-				EEJ[i] = temp_EEJ
-	CE = zip(EEJ,EJ)
-	return CE
 
-def Job_One_Search1(CE,E_Working,N_Working):
-	Job = 0
-	Name = ""
-	search_break = 0
-	if CE[0][1] == 1:
-		Job = CE[0][0]
-		for i in range(0,len(E_Working)):
-			for ii in range(0,len(E_Working[i])):
-				if Job == E_Working[i][ii]:
-					Name = N_Working[i]
-					search_break = 1
-				if search_break == 1:
-					break
-			if search_break == 1:
-				break			
-	return Job, Name
-	
-# Find and return the group of Names,Job Lists for all those containing job 'y'
-def Job_Search(y,A,B):
-	Temp_E = ['' for x in range(0)]
-	Temp_N = ['' for x in range(0)]
-	for i in range(0,len(A)):
-		if y in A[i]:
-			Temp_E.append(A[i])
-			Temp_N.append(B[i])
-	return Temp_E,Temp_N
-
-def JobLength_Sort(E_Temp2,N_Temp2):
-	qty = len(E_Temp2)
-	for i in range(0,qty):
-		for ii in range(i+1,qty-1):
-			if len(E_Temp2[ii]) < len(E_Temp2[i]):
-				temp_E = E_Temp2[ii]
-				E_Temp2[ii] = E_Temp2[i]
-				E_Temp2[i] = temp_E
-				temp_N = N_Temp2[ii]
-				N_Temp2[ii] = N_Temp2[i]
-				N_Temp2[i] = temp_N
-	return E_Temp2,N_Temp2
-	
-	
-# Remove the 'name' and all the assigned jobs from the list
-def Assign_Name(E_Working,N_Working,name):
-	ctr = -1  # Start counter -1 because we increment at the beginning of the loop
-	qty = len(E_Working)
-	E_Working_Temp = ['' for x in range(qty-1)]  # Assign E_Working_Temp to full values minus 1 for person deleted
-	N_Working_Temp = ['' for x in range(0)]	
-	for i in range(0,qty):
-		if N_Working[i] != name:
-			ctr = ctr + 1
-			N_Working_Temp.append(N_Working[i])
-			E_Working_Temp[ctr] = E_Working[i]
-			
-	return E_Working_Temp,N_Working_Temp	
-
-# Deletes the job from all people's list
-def Assign_Job(E_Working,job):
-	qty = len(E_Working)
-	E_Working_Temp = ['' for x in range(qty)]
-	for x in range(0,qty):
-		E_Working_Temp[x] = ['' for y in range(0)]
-
-	for i in range(0,qty):
-		for ii in range(0,len(E_Working[i])):
-			if (E_Working[i][ii]) != (job):
-				E_Working_Temp[i].append(E_Working[i][ii])						
-	return E_Working_Temp
-	
-def Assign(E_Working,N_Working, A_Name, A_Job, Name, Job):	
-	A_Name.append(Name)
-	A_Job.append(Job)
-	E_Working = Assign_Job(E_Working, Job)
-	E_Working, N_Working = Assign_Name(E_Working, N_Working, Name)
-	return E_Working, N_Working, A_Name, A_Job	
-
-# ====================================================================================================
-# ===================  End of Modules for New Algorithm     ==========================================
-# ====================================================================================================
 	
 def current_schedule(request):
 	db, cur = db_open() 
@@ -316,8 +217,8 @@ def schedule_init(request):
 		ct = ct + 1
 	db.close()	 
 	return
-	#return render(request,'display_schedule.html',{'list':list2,'qq':qq})
-	return render(request,'test22.html',{'tmp':tmp,'ID':shift})
+	return render(request,'display_schedule.html',{'list':list2,'qq':qq})
+	return render(request,'test22.html',{'tmp':tmp,'ID':i_d})
 	
 
 # Set Schedule in table along with preselected jobs that could run
@@ -912,7 +813,10 @@ def schedule_set5(request,list):
 		XN[cty] = N[jjj]
 		cty = cty + 1
 		
-
+	
+	
+#	newE = XE + E
+#	newN = XN + N
 	NE = EEJ
 	E = XE
 	N = XN
@@ -956,7 +860,7 @@ def schedule_set5(request,list):
 				YE = YE + job1
 		
 		
-		#return render(request, "test999.html", {'X':x})	
+		return render(request, "test999.html")	
 		#return render(request, "test992.html", {'X':x,'Y':YN,'EJ':job1,})
 	
 	
@@ -966,303 +870,38 @@ def schedule_set5(request,list):
 	#    Scheduler Engine     
 	# *********************** 
 
-# ---------------------------------------------------------------------------------------------------
-# -------------   Everything below to * is OLD Algorithm ----------------------------------------------
-# ---------------------------------------------------------------------------------------------------	
-#	while True:
-#		tmp_ctr = tmp_ctr + 1
-#		
-#			
-#		A.append(E[ptr][ctr[ptr]])
-#		if len(A) != len (set(A)):
-#			A.pop()
-#			ctr[ptr] = ctr[ptr] + 1
-#			while True:
-#				if ctr[ptr] <= (len(E[ptr]) - 1):
-#					break
-#				if (ctr[ptr] > (len(E[ptr])-1)) and ptr == 0:
-#					no_match = 1
-#					break
-#				ctr[ptr] = 0
-#				ptr = ptr - 1
-#				ctr[ptr] = ctr[ptr] + 1
-#				A.pop()
-#		else:
-#			ptr = ptr + 1
-#		if no_match == 1:
-#			nnoo = 1
-#			break
-#		if ptr > (qty_employee-1):
-#			break
-#		
-#		# Cut off counter
-#		if tmp_ctr > 500000:
-#			break
-# ---------------------------------------------------------------------------------------------------
-# ---------------------   End of OLD Algorithm     --------------------------------------------------
-# ---------------------------------------------------------------------------------------------------	
-
-
-
-# ====================================================================================================
-# ====================   Everything below to * is NEW Algorithm ======================================
-# ====================================================================================================
 	
-
-	qty_employee = len(N)
-	fail_code = 0
-	code1=0
-	code2=0
-	code3=0
-	code4=0
-	code5=0
-
-	Temp_E = ['' for x in range(0)]
-	Temp_N = ['' for x in range(0)]
-	a1 = ['' for x in range(0)]
-	a2 = ['' for x in range(0)]
-	a3 = ['' for x in range(0)]
-
-	w1 = ['' for x in range(0)]
-
-	E_Working = ['' for x in range(0)]
-	N_Working = ['' for x in range(0)]
-	A_Job = ['' for x in range(0)]
-	A_Name = ['' for x in range(0)]
-	
-	bk = 0	
-	ptr = 0
-	max_ptr = 0
-	no_match = 0
-	
-	incomplete = 0
-	route = 1
-	E_Working = E
-	N_Working = N
-	
-	# Algorithm Start
 	while True:
-
-		# Route 1 is used as main route and always checks if there is Job Qty with only 1 possible solution first
-		if route == 1:	
-			# obtain qty of E's containing each specific E value
-			# (1) Sort (JobQty,Job)
-			CE = Job_Total(E_Working) 
+		tmp_ctr = tmp_ctr + 1
 		
-			# Failsafe if Won't Work
-			if len(CE) != len(N_Working):
-				dummy = 1
-				# Need something better here
 			
-				#quit()
-
-			# Check failure or completion
-			try:
-				if CE[0][0]<1:
-					code1=1
-					break  #quit loop because no solution from here on 
-			except:
-				incomplete = 1
-				break	
-			#break # Stops loop here for testing
-		
-			Job, Name = Job_One_Search1(CE,E_Working,N_Working)
-			E_Working, N_Working = JobLength_Sort(E_Working, N_Working)
-		
-			# If there is only 1 solution for a job assign it and loop back to this Route
-			if Job != 0 :
-				E_Working, N_Working, A_Name, A_Job = Assign(E_Working, N_Working, A_Name, A_Job, Name, Job)
-				route = 1
-			else:
-				route = 2
-	
-
-		E_Working, N_Working = JobLength_Sort(E_Working, N_Working)	
-	
-		# Check if the length of the first sorted E Value is 1.  If so assign it to the job.
-		if route == 2:
-			if len(E_Working[0]) == 1:
-				Job = E_Working[0][0]
-				Name = N_Working[0]
-				E_Working, N_Working, A_Name, A_Job = Assign(E_Working,N_Working,A_Name,A_Job,Name,Job)
-
-				route = 1
-			else:
-				route = 3	
-		
-		# Select the 1st priority job of the sorted by job qtys person and assign
-		if route == 3:
-		
-			# ************  The below 2 lines are used if we select using least job qty and based on priority ******
-			try:
-				Job = E_Working[0][0]
-				Name = N_Working[0]
-			except:
-				break
-
-		
-			# ******* The below 4 lines are used if we select using Jobs quantity selection *****
-			#Temp_E, Temp_N = Job_Search(y,E_Working,N_Working)
-			#CE = Job_Total(E_Working)
-			#Job = CE[0][0]
-			#Name = Temp_N[0]
-		
-
-			E_Working, N_Working, A_Name, A_Job = Assign(E_Working,N_Working,A_Name,A_Job,Name,Job)
-			route = 1
-# Algorithm End 
-
-
-	
-
-	
-# **********************************************************************************
-# ***********  CLEAN UP AND FINISH UP **********************************************
-# **********************************************************************************
-
-	# A is the finished first pass 
-	A = zip(A_Name,A_Job)   		# A is the Finished first pass complete A_Name,A_Job
-	NE = zip(N_Working,E_Working)   # NE is the Remaining of the Finished first pass
-	NEE = zip(N,E)					# NEE is the Full original list for comparisons
-	
-	
-	#return render(request, "test999.html", {'A':A,'NE':NE,'NEE':NEE})
-	
-
-	# This code will determine if List was completed.
-	if (len(NE)) == 0:
-		dummy = 1
-		code2=1
-		#quit()   # Use return in the main program
-	
-	else:  # List Incomplete so do the loop to fill it
-
-		# ************************************************
-
-		# At this point down we should LOOP through NE and assign variable name_switch1
-
-		name_switch1 = NE[0][0]  # Assign name_switch1 as the name in this cycle to switch for some other one name_switch2
-							# It would be NE[v][0] where v is the loop of all len(NE)
-	
-		# End Program here to test
-		#quit()
-		# ************************
-		
-	
-		# find the jobs not staffed
-		CE = Job_Total(E)  # List with all Original required jobs
-		for i in range(len(CE)):
-			a1.append(CE[i][0])  # Generate a1 as list of all jobs needed
-	
-		for i in range(len(A_Job)):
-			a2.append(A_Job[i])  # Generate a2 as list of all jobs assigned
-		
-		
-		
-		
-		for i in range(len(a1)):
-			test1 = 0
-			for ii in range(len(a2)):
-				if int(a2[ii]) == int(a1[i]):
-					test1 = 1
-			if test1 == 0:
-				a3.append(a1[i]) # Generate a3 as list of all jobs not assigned
-
-
-		xne = NE[0][0]
-		name_switch1 = xne
-
-		#return render(request, "test999.html", {'A':a1,'NE':a3,'NEE':NE})
-		
-		try:
-			job_switch1 = a3[0]
-		except:
-			fail_code = 3
-			code3 = 1
-			
-		if fail_code == 0:	
-			name_switch2 = ''
-			job_switch2 = ''
-			name_switch_p = ''
-			job_switch_p = ''
-			for x in range(0,len(N)):  # N Being the complete list of original names
-				if xne == N[x]:        # xne is the person not staffed
-					w1 = E[x]          # E[x] is all original jobs for xne person
-					#print"THIS ONE:",N[x],w1
-					break
-			#for x in range(0,len(NE)):
-			#	print NE[x],	
-			#print xne,			
-			#print w1
-			
-			
-			
-	
-	
-			# Code to find first person backwards through list that does job a3[0]
-			U=0
+		A.append(E[ptr][ctr[ptr]])
+		if len(A) != len (set(A)):
+			A.pop()
+			ctr[ptr] = ctr[ptr] + 1
 			while True:
-				U = U + 1
-				br = 0
-				for i in reversed (range(len(E))):
-					check_1 = 0
-					for ii in range(len(E[i])):
-						if E[i][ii] == job_switch1:				# a3[0] is the job not staffed
-					
-							br == 1
-							# Check if job assigned in A where N[i] is name is in E list for a3
-							name_switch_p = N[i]
-				
-							# Assign job_switch1 as the job assigned to potential switcher
-							for k in range(len(A)):
-								if A[k][0] == N[i]:
-									job_switch2 = A[k][1]
-									job_switch_p = A[k][1]
-						
-							for m in range(len(w1)):
-								if job_switch2 in w1:
-									check_1 = 1
-								if check_1 == 1:
-									break
-
-							if check_1 == 1:
-								name_switch2 = N[i]
-
-
-						if check_1 == 1:
-							break	
-			
-					if check_1 == 1:
-						break
-				
-				if check_1 == 0:
-					new_items = [x if x!=job_switch_p else job_switch1 for x in A_Job]
-					A_Job = new_items
-					job_switch1 = job_switch_p
-					A=zip(A_Name,A_Job)
-					code4 = 1
-			
-				else:
-					# Switch non assigned into A and assign A
-					new_items = [x if x!=name_switch2 else name_switch1 for x in A_Name]
-					A_Name = new_items
-					A_Name.append(name_switch2)
-					A_Job.append(job_switch1)
-					A=zip(A_Name,A_Job)
-					code5 = 1
+				if ctr[ptr] <= (len(E[ptr]) - 1):
 					break
-
-					
+				if (ctr[ptr] > (len(E[ptr])-1)) and ptr == 0:
+					no_match = 1
+					break
+				ctr[ptr] = 0
+				ptr = ptr - 1
+				ctr[ptr] = ctr[ptr] + 1
+				A.pop()
+		else:
+			ptr = ptr + 1
+		if no_match == 1:
+			nnoo = 1
+			break
+		if ptr > (qty_employee-1):
+			break
+		
+		# Cut off counter
+		if tmp_ctr > 500000:
+			break
 	
-	
-	#return render(request, "test5.html", {'A1':code1,'A2':code2,'A3':code3,'A4':code4,'A5':code5,'U':U})
-# ====================================================================================================
-# ====================  End of NEW Algorithm      ====================================================
-# ====================================================================================================
-	#A = zip(A_Name,A_Job)
-	#return render(request, "test999.html", {'A':A})	
-	listX = zip(A_Name,A_Job)
-	#listX = zip(N,A)
+	listX = zip(N,A)
 	r2 = time_output()
 	r3 = r2-r1
 	
@@ -1274,11 +913,10 @@ def schedule_set5(request,list):
 	#return render(request, "test992.html", {'X':listX,'N':N})
 	#return render(request, "test994.html", {'N':N,'E':A,'L':E,'noo':tmp_ctr,'Ptr':ptr,'Qty':qty_employee})
 	# ***************************************************
-	#return render(request, "test999.html", {'A':listX,'NE':NE,'NEE':NEE})
+
 	if no_match != 1:
 		TY = []
-		#listT = zip(N,A)
-		listT = zip(A_Name,A_Job)
+		listT = zip(N,A)
 		ctr = 0
 		e_dash = '---'
 		D=[]
@@ -1286,7 +924,7 @@ def schedule_set5(request,list):
 		db, cur = db_open()
 		for x in listT:
 			ctr = ctr + 1
-			jx = int(x[1]) # ID for the Job assigned
+			jx = int(x[1])
 			sql1 = "SELECT Description,Job_Name from tkb_jobs where Id ='%s'" % (jx)
 			cur.execute(sql1)
 			tmpA = cur.fetchall()
@@ -1313,11 +951,7 @@ def schedule_set5(request,list):
 			cur.execute(sql2)
 			db.commit()
 		db.close()
-		k=zip(A_Name,D,J)
-		
-		#return render(request, "test999.html", {'A':listX,'NE':list,'NEE':k})
-		
-		
+		k=zip(N,D,J)
 		# TEST FOR VALUES....REMOVE WHEN DONE !!!!!  ********
 		#return render(request, "test994.html", {'L':k})
 		# ***************************************************
@@ -1381,8 +1015,7 @@ def schedule_set5(request,list):
 				
 				if ck == 0:
 					hh.append('---')
-		
-		
+											
 		#return render(request,"test67.html",{'list':hh,'list2':k})
 		list2 = zip(aa,bb,cc,dd,ee,ff,gg,hh)
 		#return render(request,"test67.html",{'A':hh,'B':k,'C':listX,'D':list2})
@@ -1593,8 +1226,8 @@ def schedule_finalize(request):
 
 
 
-	#return render(request, "test994.html", {'N':tmp_employees})
-	#return render(request,'redirect_schedule2.html')	
+
+	return render(request,'redirect_schedule2.html')	
 	
 	
 	db.close()

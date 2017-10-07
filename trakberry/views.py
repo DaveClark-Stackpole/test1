@@ -105,8 +105,11 @@ def Graph_Data(t,u,machine,tmp):
 # *******************************************************
 	
 def display2(request):
-  
-  live_bit = int(request.session["live"])	
+  try:
+	live_bit = int(request.session["live"])	
+  except:
+	live_bit = 1
+   
   if live_bit == 1:
 	  t=int(time.time())
   else:

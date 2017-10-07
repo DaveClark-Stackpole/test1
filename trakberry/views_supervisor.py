@@ -219,7 +219,10 @@ def supervisor_display(request):
 	# *********************************************************************************************************
 	# ******     Messaging portion of the Tech App  ************Not Working**********************************
 	# *********************************************************************************************************
-	N = request.session["login_name"]
+	try:
+		N = request.session["login_name"]
+	except:
+		N = ''
 	R = 0
 	db, cur = db_open() 
 	try:
