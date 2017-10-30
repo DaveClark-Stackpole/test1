@@ -1172,7 +1172,7 @@ def schedule_set5(request,list):
 		xne = NE[0][0]
 		name_switch1 = xne
 
-		#return render(request, "test999.html", {'A':a1,'NE':a3,'NEE':NE})
+		return render(request, "test999.html", {'A':a1,'NE':a3,'NEE':NE})
 		
 		try:
 			job_switch1 = a3[0]
@@ -1254,8 +1254,11 @@ def schedule_set5(request,list):
 
 					
 	
-	
-	#return render(request, "test5.html", {'A1':code1,'A2':code2,'A3':code3,'A4':code4,'A5':code5,'U':U})
+	try:
+		U
+	except:
+		U = 99
+	return render(request, "test5.html", {'A1':code1,'A2':code2,'A3':code3,'A4':code4,'A5':code5,'U':U})
 # ====================================================================================================
 # ====================  End of NEW Algorithm      ====================================================
 # ====================================================================================================
