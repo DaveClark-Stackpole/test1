@@ -745,8 +745,6 @@ def reset_sfilter(request):
 	request.session["sfilter12"] = ''
 	request.session["sfilter13"] = ''
 	request.session["sfilter14"] = ''
-	request.session["sfilter15"] = ''
-	request.session["sfilter16"] = ''
 	return
 	
 def vacation_display_initial(request):
@@ -764,8 +762,7 @@ def vacation_display(request):
 	day_st = t.day
 
 	# Asssign session variable to today's month
-	# dumb1, dumb2, month_tmp = vacation_calander_init_2017(month_st)
-	dumb1, dumb2, month_tmp = vacation_calander_init(month_st)
+	dumb1, dumb2, month_tmp = vacation_calander_init_2017(month_st)
 	request.session["month_now"] = month_tmp
 
 	try:
@@ -775,7 +772,7 @@ def vacation_display(request):
 		MM = int(month_st)
 		YY = int(year_st)
 		
-	if YY == 2018:
+	if YY == 2017:
 		request.session["Month_Current"] = MM + 12
 	else:
 		request.session["Month_Current"] = MM
@@ -789,7 +786,7 @@ def vacation_display(request):
 	except:
 		month_pick = 1
 		A = 1
-		B = 2018
+		B = 2017
 		
 	try:
 		if request.session["month_pick"] == 1:
@@ -833,8 +830,6 @@ def vacation_display(request):
 		shift12 = request.session["shift12"]
 		shift13 = request.session["shift13"]
 		shift14 = request.session["shift14"]
-		shift15 = request.session["shift15"]
-		shift16 = request.session["shift16"]
 		
 	except:
 		shift_filter = "All"
@@ -849,7 +844,7 @@ def vacation_display(request):
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' or shift = '%s' or shift = '%s' or shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, current_first, current_last)
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -859,7 +854,7 @@ def vacation_display(request):
 	#return render(request,'test993.html',{'list':tmp})
 	
 	
-	if year_st == 2018:
+	if year_st == 2017:
 		dday, ctr, mnth = vacation_calander_init_2017(month_st)
 	else:
 		dday, ctr, mnth = vacation_calander_init(month_st)
@@ -956,29 +951,17 @@ def vacation_display(request):
 		else:
 			request.session["shift14"] = '--'
 
-		if request.POST.get("shift15"):
-			request.session["shift15"] = 'Q.A'
-			request.session["sfilter15"] = 'checked'
 
-		else:
-			request.session["shift15"] = '--'
-			
-		if request.POST.get("shift16"):
-			request.session["shift16"] = 'Supervisor'
-			request.session["sfilter16"] = 'checked'
-
-		else:
-			request.session["shift16"] = '--'			
 		
 		if request.POST.get("month"):
 			xy = request.POST.get("month")
 			xy = int(xy)
 			jj = xy
 			if xy > 12:
-				request.session["year"] = 2018
+				request.session["year"] = 2017
 				request.session["month"] = xy - 12
 			else:
-				request.session["year"] = 2017
+				request.session["year"] = 2016
 				request.session["month"] = xy
 		
 			#return render(request,'test997.html',{'A':xy})
@@ -1045,8 +1028,6 @@ def vacation_display_increment(request):
 		shift12 = request.session["shift12"]
 		shift13 = request.session["shift13"]
 		shift14 = request.session["shift14"]
-		shift14 = request.session["shift15"]
-		shift14 = request.session["shift16"]
 		
 	except:
 		shift_filter = "All"
@@ -1085,7 +1066,7 @@ def vacation_display_increment(request):
 	
 	
 	
-	request.session["current_test"] = month_st
+	
 	if request.session["current_month"] == month_st:
 		request.session["current_day"] = request.session["current_day_b"]
 	else:
@@ -1101,14 +1082,14 @@ def vacation_display_increment(request):
 		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 
 
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
 	
-	if year_st == 2018:
+	if year_st == 2017:
 		dday, ctr, mnth = vacation_calander_init_2017(month_st)
 	else:
 		dday, ctr, mnth = vacation_calander_init(month_st)
@@ -1212,21 +1193,8 @@ def vacation_display_increment(request):
 			request.session["shift14"] = 'ToolRoom'
 			request.session["sfilter14"] = 'checked'
 		else:
-			request.session["shift14"] = '--'
-			
-		if request.POST.get("shift15"):
-			request.session["shift15"] = 'Q.A'
-			request.session["sfilter15"] = 'checked'
-
-		else:
-			request.session["shift15"] = '--'
-			
-		if request.POST.get("shift16"):
-			request.session["shift16"] = 'Supervisor'
-			request.session["sfilter16"] = 'checked'
-
-		else:
-			request.session["shift16"] = '--'
+			request.session["shift14"] = '--'			
+		
 		# testing Variable
 		request.session["test99"] = 1
 		request.session["month_pick"] = 1
@@ -1284,8 +1252,6 @@ def vacation_display_decrement(request):
 		shift12 = request.session["shift12"]
 		shift13 = request.session["shift13"]
 		shift14 = request.session["shift14"]
-		shift15 = request.session["shift15"]
-		shift16 = request.session["shift16"]
 		
 	except:
 		shift_filter = "All"
@@ -1321,9 +1287,7 @@ def vacation_display_decrement(request):
 	current_last = str(year_st) + "-" + str(ma) + "-" + str(one_end)
 	request.session["current_first"] = current_first
 	
-	request.session["current_test"] = month_st
-	request.session["current_month"] = int(request.session["current_month"]-1)
-	if  request.session["current_month"]== int(month_st):
+	if request.session["current_month"] == month_st:
 		request.session["current_day"] = request.session["current_day_b"]
 	else:
 		request.session["current_day"] = 99	
@@ -1334,12 +1298,12 @@ def vacation_display_decrement(request):
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 	else:		
-		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14)
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
 	
-	if year_st == 2018:
+	if year_st == 2017:
 		dday, ctr, mnth = vacation_calander_init_2017(month_st)
 	else:
 		dday, ctr, mnth = vacation_calander_init(month_st)
@@ -1433,21 +1397,7 @@ def vacation_display_decrement(request):
 			request.session["shift14"] = 'ToolRoom'
 			request.session["sfilter14"] = 'checked'
 		else:
-			request.session["shift14"] = '--'
-
-		if request.POST.get("shift15"):
-			request.session["shift15"] = 'Q.A'
-			request.session["sfilter15"] = 'checked'
-
-		else:
-			request.session["shift15"] = '--'
-			
-		if request.POST.get("shift16"):
-			request.session["shift16"] = 'Supervisor'
-			request.session["sfilter16"] = 'checked'
-
-		else:
-			request.session["shift16"] = '--'
+			request.session["shift14"] = '--'	
 		
 		request.session["test99"] = 1
 		request.session["month_pick"] = 1
@@ -1636,34 +1586,53 @@ def vacation_calander_init(month_st):
 	dte = []
 	ctr = []
 	mnt = []
+#	for x in range(0,12):
+		#dte[x] = []
+		#ctr[x] = []
+#		dte[x] = ['' for i in range(40)]
+#		ctr[x] = [0 for ii in range(40)]
+		
+#	dte.append([''])
+#	dte.append(['-','-','-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
+#	dte.append(['-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29'])
+#	dte.append(['-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
+#	dte.append(['-','-','-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'])
+#	dte.append(['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
+#	dte.append(['-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'])
+#	dte.append(['-','-','-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
+#	dte.append(['-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
+#	dte.append(['-','-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'])
+#	dte.append(['-','-','-','-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
+#	dte.append(['-','-''1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'])
+#	dte.append(['-','-','-','-','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'])
 		
 	dte.append([0])
-	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
-	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28])
-	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
-	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
-	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
-	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
-	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29])
 	dte.append([0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
 	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
 	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
 	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
 	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
 	
 	ctr.append([0])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])
 	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,33])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])	
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,32])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,34])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])
 	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])	
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
 	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
 
 	
 	mnt.append( '')
@@ -1692,32 +1661,32 @@ def vacation_calander_init_2017(month_st):
 	mnt = []
 		
 	dte.append([0])
-	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#Jan
-	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28])#Feb
-	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#Mar
-	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])#Apr
-	dte.append([0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#May
-	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])#Jun
-	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#Jul
-	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#Aug
-	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])#Sep
-	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#Oct
-	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])#Nov
-	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])#Dec
+	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28])
+	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	dte.append([0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+	dte.append([0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
 	
 	ctr.append([0])
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]) #Jan
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]) #Feb
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]) #Mar
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]) #Apr
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]) #May
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]) #Jun
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]) #Jul	
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])#Aug
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])#Sep
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32])#Oct
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])#Nov
-	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])#Dec
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])	
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])
+	ctr.append([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])
 
 	
 	mnt.append( '')

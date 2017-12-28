@@ -77,7 +77,7 @@ from views_maintenance import maint, maint_call, maint_pass, maint_close, maint_
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Inventory Section ********************************************************************************************
-from views_inventory import push_button, inventory_type_entry
+from views_inventory import push_button, inventory_type_entry, inventory_entry, inventory_fix
 
 # ***********************************************************************************************************************************************************
 
@@ -307,7 +307,8 @@ urlpatterns = [
 	
 	url(r'^push_button/', push_button),
 	url(r'^inventory_type_entry/', inventory_type_entry),
-	
+	url(r'^inventory_entry/', inventory_entry),
+	url(r'^inventory_fix/', inventory_fix),
 	
 ]
  

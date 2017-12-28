@@ -155,7 +155,7 @@ def display2(request):
   gx[0], gx[1], gx[2], gx[3], gx[4], gx[5], gx[6], gx[7], gx[8], gx[9], gx[10]= "0%", "15%", "18%", "23%", "30%", "40%", "43%", "47%", "50%", "60%", "100%"   
   
   rate = float(7)
-  machine_list = ['677','748','749','750','615','614','629','620','574','755','756','686']
+  machine_list = ['1504','1506','1519','1520','1502','1507','1515','1501','995','996','997','998']
   graph_link = ['/trakberry/graph677/','/trakberry/graph748/','/trakberry/graph749/','/trakberry/graph750/','/trakberry/graph615/','/trakberry/graph614/','/trakberry/graph629/','/trakberry/graph620/','/trakberry/graph574/','/trakberry/graph755/','/trakberry/graph756/','/trakberry/graph686/']
   mc2 = ['756','686','574','755']
   mc3 = ['629','620','615','614']
@@ -273,8 +273,15 @@ def display2(request):
 	nt = []
 	pt = []
 	dt = []
-	[eup(x) for x in tmp if fup(x) == machine_list[y] and gup(x) == 1]
+	# Make gup look for > 0 so we can force a number in there to alter that count
+	[eup(x) for x in tmp if fup(x) == machine_list[y] and gup(x) > 0]
 	count[y] = sum(int(i) for i in st)
+	
+	# TEST
+	#if machine_list[y] == '1506':
+	#	return render(request, "test8.html", {'A': count[y],'B': y, 'C': machine_list[y],'D':st})
+	
+	
 	
 	# ****** Graph Variables Code ---place in gr_list   ***************************************************************
 	kk=int((t-u)/60)
@@ -435,7 +442,7 @@ def display2(request):
 				Actr = Actr + 1
 			#aoa = aoa + OEE[y]
 			
-		if y >3 and y<8:
+		if y >3 and y<6:
 			b1[y-4] = machine_list[y]
 			b2[y-4] = info[y]
 			b3[y-4] = red[y]
@@ -450,16 +457,16 @@ def display2(request):
 			if OA [ y ] > 5:
 				Bctr = Bctr + 1
 			
-		if y >7:
-			c1[y-8] = machine_list[y]
-			c2[y-8] = info[y]
-			c3[y-8] = red[y]
-			c4[y-8] = yellow[y]
-			c5[y-8] = green[y]
-			c6[y-8] = gry[y]
-			c7[y-8] = graph_link[y]
-			c8[y-8] = count[y]
-			c9[y-8] = OEE[y]	
+		if y >5 and y <8:
+			c1[y-6] = machine_list[y]
+			c2[y-6] = info[y]
+			c3[y-6] = red[y]
+			c4[y-6] = yellow[y]
+			c5[y-6] = green[y]
+			c6[y-6] = gry[y]
+			c7[y-6] = graph_link[y]
+			c8[y-6] = count[y]
+			c9[y-6] = OEE[y]	
 			ccc = ccc + count[y]
 			coa = coa + OA [ y ]
 			if OA [ y ] > 5:

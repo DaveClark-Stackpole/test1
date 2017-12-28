@@ -78,7 +78,7 @@ function drawCurveTypes() {
 	<meta http-equiv="refresh" content="15; url=/trakberry/display1" />
 {% endif %}	
 <br>
-<font style="margin-left:37%;font-size:225%;"><b>Live Tracking</b></font>
+<font style="margin-left:37%;font-size:225%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>
 
 {% if request.session.details_track = 0 %}
 	<a href="/trakberry/details_track/">
@@ -100,13 +100,18 @@ function drawCurveTypes() {
 
 
 
-
+<center>
 <table style="width:20%;margin-left:10%;">
 <tr><th bgcolor="#B6D2DB" style="font-size: 200%;">
-<center>GF6 Input</center>
+<center>10R Tracking</center>
 </th></tr></table>
-<table style="width:20%;margin-left:10%;">
-<tr><th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 30<font style="font-size:80%;"> ({{totalA}}pcs )<br> OA:{{AOA}}%</center></font></th></tr>
+<table style="width:40%;margin-left:10%;">
+	
+<tr><th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 10/20<font style="font-size:80%;"> ({{totalA}}pcs )<br> OA:{{AOA}}%</center></font></th>
+<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 30<font style="font-size:80%;"> ({{totalB}}pcs) <br> OA:{{BOA}}%</th>
+<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 40<font style="font-size:80%;"> ({{totalA}}pcs )<br> OA:{{AOA}}%</center></font></th>
+</tr>
+
 {% for index in list %}
 	<tr>
 
@@ -122,11 +127,54 @@ function drawCurveTypes() {
 		{{index.0}} <br><font style="font-size:80%;"><b> {{index.7}}pcs<br> OA: {{index.24}}</font></center> 
 	</th>	
 	
-	</tr>			
+	<th bgcolor="#ffffff">
+	{% if index.8 > 0 %}
+		
+		<a href="/trakberry/graph_gf6/get/{{index.8}}" onclick="window.open('/trakberry/graph_gf6/get/{{index.8}}', 'newwindow', 'width=1400, height=600'); return false;">	
+		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
+			background-image: linear-gradient(0deg, {{index.12}},{{index.10}},{{index.11}});
+			"/><center><b>
+		{{index.8}}<br> <font style="font-size:80%;"><b>{{index.15}}pcs<br>OA: {{index.25}}</font></center> 
+	{% else %}
+		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:grey;
+			
+			"/><center><b>
+		&nbsp;<br> <font style="font-size:80%;"><b>&nbsp;<br>&nbsp;</font></center> 
+	{% endif %}
+	
+	</th>
+
+	<th bgcolor="#ffffff">
+	{% if index.16 > 0 %}
+
+	
+			<a href="/trakberry/graph_gf6/get/{{index.0}}" onclick="window.open('/trakberry/graph_gf6/get/{{index.0}}', 'newwindow', 'width=1400, height=600'); return false;">
+		
+		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
+			background-image: linear-gradient(0deg, {{index.20}},{{index.18}},{{index.19}});
+			"/><b><center>
+		{{index.16}} <br><font style="font-size:80%;"><b> {{index.23}}pcs<br> OA: {{index.26}}</font></center> 
+
+		
+		{% else %}
+			<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:grey;
+			
+			"/><center><b>
+		&nbsp;<br> <font style="font-size:80%;"><b>&nbsp;<br>&nbsp;</font></center> 
+	{% endif %}
+	
+	
+	</th>
+	
+	</tr>
 {% endfor %}
 				
 </table>
-
+</center>
 	<br><br>
 		{% if request.session.machine_chart == "nope" %}
     <div class="row">

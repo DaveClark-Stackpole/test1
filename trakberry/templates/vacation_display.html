@@ -197,6 +197,13 @@ data-width="100" name="shift12">
 data-width="100" name="shift13">
 <input {{request.session.sfilter14}} data-toggle="toggle" data-on="ToolRoom" data-off="ToolRoom" data-onstyle="primary" type="checkbox" data-size="mini" 
 data-width="100" name="shift14">
+<input {{request.session.sfilter15}} data-toggle="toggle" data-on="Q.A." data-off="Q.A." data-onstyle="primary" type="checkbox" data-size="mini" 
+data-width="100" name="shift15">
+<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input {{request.session.sfilter16}} data-toggle="toggle" data-on="Supervisor" data-off="Supervisor" data-onstyle="primary" type="checkbox" data-width="515" 
+data-width="100" name="shift16">
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <!--   Sample for backup  
@@ -262,7 +269,7 @@ data-width="100" name="shift10">
 <table style="width:80%;margin-left:10%;">
 <tr><th bgcolor="#CCDDE3" style="font-size: 130%;" colspan="7">
 <center>
-	{% if Mnth = 'January' and Year = 2016 %}
+	{% if Mnth = 'January' and Year = 2017 %}
 	<font style="font-size:55%;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font>
 	{% else %}
 	<div class="noPrint">
@@ -274,30 +281,30 @@ data-width="100" name="shift10">
 	<t>
 		
 <select onchange="this.form.submit()"  name="month">
-<option value=1>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=2>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=3>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=4>April&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=5>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=6>June&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=7>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=8>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=9>September&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=10>October&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2016</option>
-<option value=11>November &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016</option>
-<option value=12>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2016</option>
-<option value=13>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
-<option value=14>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=15>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
-<option value=16>April &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
-<option value=17>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  2017</option>
-<option value=18>June &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
-<option value=19>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  2017</option>
-<option value=20>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=21>September &nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=22>October &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=23>November&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
-<option value=24>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=1>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=2>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=3>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=4>April&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=5>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=6>June&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=7>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=8>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=9>September&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=10>October&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=11>November &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
+<option value=12>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+<option value=13>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
+<option value=14>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018</option>
+<option value=15>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
+<option value=16>April &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
+<option value=17>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  2018</option>
+<option value=18>June &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
+<option value=19>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  2018</option>
+<option value=20>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018</option>
+<option value=21>September &nbsp;&nbsp;&nbsp;&nbsp;2018</option>
+<option value=22>October &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018</option>
+<option value=23>November&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
+<option value=24>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
 <option value={{request.session.Month_Current}} selected="selected">
 {{Mnth}}&nbsp;&nbsp; {{Year}}	
 </option>
@@ -314,7 +321,7 @@ data-width="100" name="shift10">
 
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
-	{% if Mnth = 'December' and Year = 2017 %}
+	{% if Mnth = 'December' and Year = 2018 %}
 	<font style="font-size:55%;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font>
 	{% else %}
 	<div class="noPrint">

@@ -121,3 +121,12 @@ class inventory_entry_Form(forms.Form):
 	Op = forms.CharField()	
 	Storage = forms.CharField()
 	Update = forms.CharField()
+	
+class inventory_count_Form(forms.Form):
+	Quantity = forms.CharField()	
+	Part = forms.CharField()	
+	Op = forms.CharField()
+	Final = forms.CharField()	
+	Blue = forms.CharField()
+	Green = forms.CharField()
+	Cart = forms.CharField()

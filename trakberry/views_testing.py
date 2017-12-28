@@ -102,6 +102,16 @@ def machine_list_display():
 	return rlist
 	#return render(request,"test6.html",{'list':rlist})
 
+def part_list_display():
+
+	db, cur = db_open()
+	sql = "SELECT DISTINCT Part FROM tkb_inventory_fixed"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+
+	return tmp
+	
+
 def emp_list_display():
 	db, cur = db_open()
 	sql = "SELECT Employee FROM tkb_employee ORDER BY %s %s" %('Employee','ASC')

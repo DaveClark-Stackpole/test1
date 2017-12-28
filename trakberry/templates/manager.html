@@ -351,16 +351,16 @@ function goBack() {
 				{% if request.session.login_name = "Dave Clark" %}
 				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Administrator<b class="caret"></b></a>
 					<ul class="dropdown-menu multi-level">
-
+						<li><a href="/trakberry/layer_entry">Add Layered Audit</a></li>
+						<li><a href="/trakberry/layer_transfer_temp">Refresh Temp Layered Audit</a></li>
+						<li><a href="/trakberry/layer_choice_init">Select Layered Audit</a></li>
+						<li><a href="/trakberry/layer_choice">Increment Layered Audit</a></li>
+						<li><a href="/trakberry/layer_audit_check_reset">Reset Audit</a></li>
 						<li><a href="/trakberry/sup_message">Message</a></li>
 						<li><a href="/trakberry/inventory_type_entry">Inventory Fixed</a></li>
-						<li><a href="/trakberry/inventory_entry">Inventory Count</a></li>
-						<!--
 						<li><a href="/trakberry/employee_manual_enter">Employee Matrix Batch Clear</a></li>
 						<li><a href="/trakberry/emp_info_enter_manual">Employee Matrix Manual Entry</a></li>
 						<li><a href="/trakberry/emp_info_group_update">Employee Matrix Batch Update</a></li>
-						-->
-						
 					</ul>	
 				</li>
 				{% endif %}
