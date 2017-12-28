@@ -160,19 +160,19 @@ function myFunction() {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;"><img src="/media/stack.jpg"  height="40" width="170"></a>
+            <a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;"><img src="/static/media/stack.jpg"  height="40" width="170"></a>
         </div>
         <div class="collapse navbar-collapse">
             
             <ul class="nav navbar-nav navbar-center">
 
-                <li><a href="/trakberry/main_login">
+                <li><a href="{{request.session.local_toggle}}/main_login">
                 <font style="font-size:154%;"><b></b></b></font></a></li>
 
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				{%block active_6%}
-				<li><a href="/trakberry/main_login_form"><span class="glyphicon glyphicon-th"></span> Log In</a></li>
+				<li><a href="{{request.session.local_toggle}}/main_login_form"><span class="glyphicon glyphicon-th"></span> Log In</a></li>
 				{%endblock%}				
             </ul>
         </div><!--/.nav-collapse -->
@@ -180,11 +180,11 @@ function myFunction() {
 </div>
 
 
-<img src="/media/bar.gif" height="4px" width="100%" style="position : relative; top: -31px;"/>
+<img src="/static/media/bar.gif" height="4px" width="100%" style="position : relative; top: -31px;"/>
 
 <font color=#000000 >
 {% block background %}
-<img alt="full screen background image" src="/media/b1.jpg" id="full-screen-background-image"/>
+<img alt="full screen background image" src="/static/media/b1.jpg" id="full-screen-background-image"/>
 {% endblock %}
 
 <br><br>
@@ -192,7 +192,7 @@ function myFunction() {
 <div class="container"><br><br><br>
     <div class="row">
 		<div class="col-sm-2"></div>
-		<div class="col-sm-6"><div class="multiple-borders" style="border-radius: 25px;"><img class="img-responsive" src="/media/stackpole.jpg" style="border-radius: 25px;" height="700" width="1000"></div>
+		<div class="col-sm-6"><div class="multiple-borders" style="border-radius: 25px;"><img class="img-responsive" src="/static/media/stackpole.jpg" style="border-radius: 25px;" height="700" width="1000"></div>
 		</div>
 		<div class="col-sm-2"></div>
 	</div>	

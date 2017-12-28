@@ -209,10 +209,10 @@ function goBack() {
                 
 				{% endblock%}
 				{%block active_2%}
-				<li><a href="{{request.session.local_toggle}}/display_initialize"><span class="glyphicon glyphicon-eye-open"></span> Live Track</a></li>
+				<li><a href="/trakberry/display_initialize"><span class="glyphicon glyphicon-eye-open"></span> Live Track</a></li>
 				{%endblock%}
 				{%block active_3%}
-				<li><a href="{{request.session.local_toggle}}/sup_message">Message</a></li>
+				<li><a href="/trakberry/sup_message">Message</a></li>
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span>Reports <b class="caret"></b></a>
 				{%endblock%}	
@@ -224,11 +224,11 @@ function goBack() {
                                 
                                 <li class="dropdown-submenu">
 									<!--<li><a href="#">Production Snapshot</a></li>-->
-                                    <li><a href="{{request.session.local_toggle}}/reports_snapshot">Production Snapshot</a></li> 
+                                    <li><a href="/trakberry/reports_snapshot">Production Snapshot</a></li> 
                                 </li>
                                 
                                 <li class="dropdown-submenu">
-                                    <li><a href="{{request.session.local_toggle}}/reports_day">Daily Report</a></li> 
+                                    <li><a href="/trakberry/reports_day">Daily Report</a></li> 
                                 </li>
 								<li class="dropdown-submenu">
 									<li><a href="#">Custom Report</a></li>
@@ -253,7 +253,7 @@ function goBack() {
                         
                             
                             
-							<li><a href="{{request.session.local_toggle}}/sup">Machine Downtime</a></li>
+							<li><a href="/trakberry/sup">Machine Downtime</a></li>
 						<!--	
                         <li class="dropdown-submenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Vacation</a>
@@ -270,7 +270,7 @@ function goBack() {
 							</ul>
                         </li>
 						-->
-						<li><a href="{{request.session.local_toggle}}/vacation_display_initial">Vacations</a></li>
+						<li><a href="/trakberry/vacation_display_initial">Vacations</a></li>
 						
 							
                         
@@ -291,12 +291,12 @@ function goBack() {
                                 
                                 <li class="dropdown-submenu">
 									<!-- <li><a href="#">Matrix</a></li> -->
-									<li><a href="{{request.session.local_toggle}}/matrix_info_init">Matrix</a></li> 
+									<li><a href="/trakberry/matrix_info_init">Matrix</a></li> 
 										 <!-- <li><a href="#">Matrix</a></li> -->
                                 </li>
                                 
                                 <li class="dropdown-submenu">
-                                     <li><a href="{{request.session.local_toggle}}/job_info_display">Jobs</a> 
+                                     <li><a href="/trakberry/job_info_display">Jobs</a> 
                                     <!-- <li><a href="#">Jobs</a> -->
 										 <!--</a>--></li> 
                                 </li>
@@ -315,10 +315,10 @@ function goBack() {
                                 
                                 <li class="dropdown-submenu">
 									<!-- <li><a href="#">Rotation</a></li>   -->
-									<li><a href="{{request.session.local_toggle}}/rotation_info_display">Rotation</a></li> 
+									<li><a href="/trakberry/rotation_info_display">Rotation</a></li> 
 									<li class="dropdown-submenu"> 
 									<!-- <li><a href="#">Generate Schedule</a></li>  -->
-								   <li><a href="{{request.session.local_toggle}}/schedule_set2">Generate Schedule</a></li> 
+								   <li><a href="/trakberry/schedule_set2">Generate Schedule</a></li> 
                                 </li>
 
 							</ul>
@@ -333,8 +333,8 @@ function goBack() {
 				{%block active_5%}
 				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Machinery<b class="caret"></b></a>
 					<ul class="dropdown-menu multi-level">
-						<li><a href="{{request.session.local_toggle}}/display_robot_machine">Robot List</a></li>
-						<li><a href="{{request.session.local_toggle}}/form_robot_machine_enter">Enter Robot Machine Relation</a></li>
+						<li><a href="/trakberry/display_robot_machine">Robot List</a></li>
+						<li><a href="/trakberry/form_robot_machine_enter">Enter Robot Machine Relation</a></li>
 					</ul>	
 				</li>
 				
@@ -342,7 +342,7 @@ function goBack() {
 				
 				{%endblock%}
 				{%block active_6%}
-				<li><a href="{{request.session.local_toggle}}/inventory"><span class="glyphicon glyphicon-th"></span> Inventory</a></li>
+				<li><a href="/trakberry/inventory"><span class="glyphicon glyphicon-th"></span> Inventory</a></li>
 				
 				
 				{%endblock%}
@@ -352,9 +352,9 @@ function goBack() {
 				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Administrator<b class="caret"></b></a>
 					<ul class="dropdown-menu multi-level">
 
-						<li><a href="{{request.session.local_toggle}}/sup_message">Message</a></li>
-						<li><a href="{{request.session.local_toggle}}/inventory_type_entry">Inventory Fixed</a></li>
-						<li><a href="{{request.session.local_toggle}}/inventory_entry">Inventory Count</a></li>
+						<li><a href="/trakberry/sup_message">Message</a></li>
+						<li><a href="/trakberry/inventory_type_entry">Inventory Fixed</a></li>
+						<li><a href="/trakberry/inventory_entry">Inventory Count</a></li>
 						<!--
 						<li><a href="/trakberry/employee_manual_enter">Employee Matrix Batch Clear</a></li>
 						<li><a href="/trakberry/emp_info_enter_manual">Employee Matrix Manual Entry</a></li>
@@ -369,7 +369,7 @@ function goBack() {
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><p><a href="#" style="color:white;"></span> Welcome: {{request.session.login_name}}</a></p>
-					<p><a href="{{request.session.local_toggle}}/main_logout" style="color:white;"></span> Logout</a></p>
+					<p><a href="/trakberry/main_logout" style="color:white;"></span> Logout</a></p>
 					</li>
 				</ul>
 				
@@ -386,7 +386,7 @@ function goBack() {
 
 <font color=#000000 >
 {% block background %}
-<img alt="full screen background image" src="/static/media/b1.jpg" id="full-screen-background-image"/>
+<img alt="full screen background image" src="/trakberry/static/media/b1.jpg" id="full-screen-background-image"/>
 {% endblock %}
 
 

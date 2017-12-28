@@ -10,12 +10,11 @@ import MySQLdb
 
 # Methods for opening database for all and returning db and cur
 def db_open():
-#	Change host , username , password and db to suit 
-	#db = MySQLdb.connect(host="10.4.1.245",user="dg417",passwd="dg",db='prodrptdb')
-	db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
-	# Uncomment below line to switch to new server PMDS3 and comment above line out
-	#db = MySQLdb.connect(host="10.4.1.224",user="dg417",passwd="dg",db='prodrptdb')
+
+	#db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
 	
+	db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="benny6868",db='prodrptdb')
+
 	cursor = db.cursor()
 	return db, cursor
 	

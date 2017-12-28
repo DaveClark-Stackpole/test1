@@ -111,7 +111,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
-SESSION_COOKIE_PATH = "/trakberry"
+#SESSION_COOKIE_PATH = "/trakberry"
 
 
 
