@@ -21,6 +21,8 @@ from views_db import db_open
 
 from django.core.context_processors import csrf
 
+# update
+
 def resetcheck(request):
 	request.session["test99"] = 0
 	return render(request,"test8.html")
