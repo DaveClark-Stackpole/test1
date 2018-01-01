@@ -227,7 +227,7 @@ data-width="100" name="shift10">
 
 <font style="margin-left:7%;font-size:100%;">
 
-<a href="/trakberry/employee_vacation_enter_init2" class="red"> &nbsp;&nbsp;&nbsp; <b>New Entry</b> &nbsp;&nbsp;&nbsp;</a>
+<a href="{{request.session.local_toggle}}/employee_vacation_enter_init2" class="red"> &nbsp;&nbsp;&nbsp; <b>New Entry</b> &nbsp;&nbsp;&nbsp;</a>
 </font>
 <font style="margin-left:55%;font-size:100%;">
 <button onclick="myFunction()"><b>&nbsp;&nbsp;&nbsp;Print&nbsp;&nbsp;&nbsp;</b></button>
@@ -273,7 +273,7 @@ data-width="100" name="shift10">
 	<font style="font-size:55%;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font>
 	{% else %}
 	<div class="noPrint">
-		<a href="/trakberry/vacation_display_decrement" style="color: black">
+		<a href="{{request.session.local_toggle}}/vacation_display_decrement" style="color: black">
 		<img src="/static/media/left.png"  height="30" width="30"></a>
 	</div>	
 	{% endif %}
@@ -281,18 +281,7 @@ data-width="100" name="shift10">
 	<t>
 		
 <select onchange="this.form.submit()"  name="month">
-<option value=1>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=2>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=3>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=4>April&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=5>May&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=6>June&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=7>July&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=8>August &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=9>September&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=10>October&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
-<option value=11>November &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017</option>
-<option value=12>December&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2017</option>
+
 <option value=13>January&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
 <option value=14>February&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018</option>
 <option value=15>March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2018</option>
@@ -325,7 +314,7 @@ data-width="100" name="shift10">
 	<font style="font-size:55%;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font>
 	{% else %}
 	<div class="noPrint">
-		<a href="/trakberry/vacation_display_increment" style="color: black">
+		<a href="{{request.session.local_toggle}}/vacation_display_increment" style="color: black">
 		<img src="/static/media/right.png"  height="30" width="30"></a>
 	</div> 
 	{% endif %}
@@ -353,9 +342,9 @@ data-width="100" name="shift10">
 {% if i.1 = 0 %}
 	<td  style="margin-left:9%;font-size:80%;" bgcolor="#FAFAF5">	<t>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</t>
 {% elif i.1 = request.session.current_day and Mnth = request.session.month_now %}
-	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFA00">	<o><a href="/trakberry/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
+	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFA00">	<o><a href="{{request.session.local_toggle}}/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
 {% else %}
-	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFAF5">	<o><a href="/trakberry/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
+	<td  style="margin-left:9%;font-size:80%;vertical-align: top;" bgcolor="#FAFAF5">	<o><a href="{{request.session.local_toggle}}/employee_vacation_enter_init/get/{{ i.1 }}" class="date">&nbsp;&nbsp;&nbsp;&nbsp;{{i.1}}&nbsp;&nbsp;&nbsp;&nbsp;</a></o>
 {% endif %}
 <br>
 
@@ -372,24 +361,24 @@ Enter Coder to output all vacations for date {i.1}
 				{% if ii.7 = 0 %}
 					<o>
 					&nbsp;&nbsp;&nbsp;
-					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
+					<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
 					<br>
 			
 				{% elif ii.7 = 1 %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
 					<br>
 					<!-- </div>  -->
 					
 				{% elif ii.7 = 3 %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->
 					
 				{% else %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->
 				{% endif %}
@@ -400,24 +389,24 @@ Enter Coder to output all vacations for date {i.1}
 				{% if ii.7 = 0 %}
 					<o>
 					&nbsp;&nbsp;&nbsp;
-					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
+					<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
 					<br>
 			
 				{% elif ii.7 = 1 %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
 					<br>
 					<!-- </div>  -->
 					
 				{% elif ii.7 = 3 %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->			
 				
 				{% else %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->
 				{% endif %}
@@ -428,23 +417,23 @@ Enter Coder to output all vacations for date {i.1}
 				{% if ii.7 = 0 %}
 					<o>
 					&nbsp;&nbsp;&nbsp;
-					<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
+					<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="blue">{{ ii.0 }} </a></o>
 					<br>
 			
 				{% elif ii.7 = 1 %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="green">;#&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;#</a></o>
 					<br>
 					<!-- </div>  -->
 					
 				{% elif ii.7 = 3 %}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="orange">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp;</a></o>
 					<br>
 					<!-- </div>  -->				
 				{% else%}
 					<!-- <div class="noPrint">  -->
-					<o>&nbsp;&nbsp;&nbsp;<a href="/trakberry/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp</a></o>
+					<o>&nbsp;&nbsp;&nbsp;<a href="{{request.session.local_toggle}}/vacation_edit/get/{{ ii.6 }}" class="pink">;&nbsp;&nbsp{{ ii.0 }}&nbsp;&nbsp</a></o>
 					<br>
 					<!-- </div>  -->
 					

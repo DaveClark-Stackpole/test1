@@ -959,7 +959,7 @@ def vacation_display(request):
 			request.session["shift14"] = '--'
 
 		if request.POST.get("shift15"):
-			request.session["shift15"] = 'Q.A'
+			request.session["shift15"] = 'Q.A.'
 			request.session["sfilter15"] = 'checked'
 
 		else:
@@ -1047,8 +1047,8 @@ def vacation_display_increment(request):
 		shift12 = request.session["shift12"]
 		shift13 = request.session["shift13"]
 		shift14 = request.session["shift14"]
-		shift14 = request.session["shift15"]
-		shift14 = request.session["shift16"]
+		shift15 = request.session["shift15"]
+		shift16 = request.session["shift16"]
 		
 	except:
 		shift_filter = "All"
@@ -1217,7 +1217,7 @@ def vacation_display_increment(request):
 			request.session["shift14"] = '--'
 			
 		if request.POST.get("shift15"):
-			request.session["shift15"] = 'Q.A'
+			request.session["shift15"] = 'Q.A.'
 			request.session["sfilter15"] = 'checked'
 
 		else:
@@ -1438,7 +1438,7 @@ def vacation_display_decrement(request):
 			request.session["shift14"] = '--'
 
 		if request.POST.get("shift15"):
-			request.session["shift15"] = 'Q.A'
+			request.session["shift15"] = 'Q.A.'
 			request.session["sfilter15"] = 'checked'
 
 		else:
