@@ -179,6 +179,15 @@ def login_initial(request,login_name):
 			request.session["shift_primary"] = 'Maintenance'
 			request.session["sfilter9"] = 'checked'
 			request.session["shift9"] = 'Maintenance'	
+		elif login_name == 'Rob Zylstra':
+			request.session["shift_primary"] = 'Q.A.'
+			request.session["sfilter15"] = 'checked'
+			request.session["shift15"] = 'Q.A.'	
+		elif login_name == 'Kevin Faubert':
+			request.session["shift_primary"] = 'Furnace Setter'
+			request.session["sfilter17"] = 'checked'
+			request.session["shift17"] = 'Furnace Setter'	
+			
 			
 		elif login_name == 'Norm Buuck':
 			request.session["shift_primary"] = 'ToolRoom'
