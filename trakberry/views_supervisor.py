@@ -749,6 +749,7 @@ def reset_sfilter(request):
 	request.session["sfilter14"] = ''
 	request.session["sfilter15"] = ''
 	request.session["sfilter16"] = ''
+	request.session["sfilter17"] = ''
 	return
 	
 def vacation_display_initial(request):
@@ -837,6 +838,7 @@ def vacation_display(request):
 		shift14 = request.session["shift14"]
 		shift15 = request.session["shift15"]
 		shift16 = request.session["shift16"]
+		shift17 = request.session["shift17"]
 		
 	except:
 		shift_filter = "All"
@@ -970,7 +972,14 @@ def vacation_display(request):
 			request.session["sfilter16"] = 'checked'
 
 		else:
-			request.session["shift16"] = '--'			
+			request.session["shift16"] = '--'
+
+		if request.POST.get("shift17"):
+			request.session["shift17"] = 'Furnace Setter'
+			request.session["sfilter17"] = 'checked'
+
+		else:
+			request.session["shift17"] = '--'
 		
 		if request.POST.get("month"):
 			xy = request.POST.get("month")
@@ -1049,6 +1058,7 @@ def vacation_display_increment(request):
 		shift14 = request.session["shift14"]
 		shift15 = request.session["shift15"]
 		shift16 = request.session["shift16"]
+		shift17 = request.session["shift17"]
 		
 	except:
 		shift_filter = "All"
@@ -1229,6 +1239,14 @@ def vacation_display_increment(request):
 
 		else:
 			request.session["shift16"] = '--'
+			
+		if request.POST.get("shift17"):
+			request.session["shift17"] = 'Furnace Setter'
+			request.session["sfilter17"] = 'checked'
+
+		else:
+			request.session["shift17"] = '--'
+			
 		# testing Variable
 		request.session["test99"] = 1
 		request.session["month_pick"] = 1
@@ -1288,6 +1306,7 @@ def vacation_display_decrement(request):
 		shift14 = request.session["shift14"]
 		shift15 = request.session["shift15"]
 		shift16 = request.session["shift16"]
+		shift17 = request.session["shift17"]
 		
 	except:
 		shift_filter = "All"
@@ -1450,6 +1469,13 @@ def vacation_display_decrement(request):
 
 		else:
 			request.session["shift16"] = '--'
+			
+		if request.POST.get("shift17"):
+			request.session["shift17"] = 'Furnace Setter'
+			request.session["sfilter17"] = 'checked'
+
+		else:
+			request.session["shift17"] = '--'
 		
 		request.session["test99"] = 1
 		request.session["month_pick"] = 1
