@@ -1901,9 +1901,14 @@ def tech_report_email():
 	
 		message_subject = 'Tech Report from :' + name
 		# set request.session.email_name as the full email address for link
-		email_name = 'ttobey@stackpole.com'
-
-		toaddrs = email_name
+		
+		
+		
+		#email_name = ["stackpolepmds@gmail.com","dave7995@gmail.com"]
+		#toaddrs = "; ".join(email_name)
+		
+		toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","dclark@stackpole.com"]
+		
 		fromaddr = 'stackpole@stackpole.com'
 		frname = 'Dave'
 		server = SMTP('smtp.gmail.com', 587)
@@ -1914,7 +1919,9 @@ def tech_report_email():
 	
 	
 	
-		message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+		#message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+		message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
+		
 		message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
 		for x in tmp:
 			# assign job date and time to dt

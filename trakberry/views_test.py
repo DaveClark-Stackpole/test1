@@ -36,7 +36,13 @@ def email_test_2 (request):
 
 	html_content = render_to_string('layered_audits/LA_0786.html')
 	
-	toaddrs = 'dclark@stackpole.com'
+	# Below is a test to join addresses for multi send.  If doesn't work uncomment below toaddrs line
+	toaddrs = ["dclark@stackpole.com","dave7995@gmail.com"]
+	#toaddrs = ", ".join(toaddjoin)
+	
+	#toaddrs = 'dclark@stackpole.com'
+	
+	
 	fromaddr = 'stackpole@stackpole.com'
 	frname = 'Dave'
 	server = SMTP('smtp.gmail.com', 587)
