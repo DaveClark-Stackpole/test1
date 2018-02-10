@@ -78,7 +78,7 @@ def login_initial(request,login_name):
 		request.session["sfilter14"] = ''
 		request.session["shift_primary"] = 'Cont A Days'
 		
-		if login_name == 'Grant Packham':
+		if login_name == 'Ken Frey':
 			request.session["shift_primary"] = 'Cont A Days'
 			request.session["matrix_shift"] = 'Cont A Days CSD 2'
 			request.session["sfilter1"] = 'checked'
@@ -95,7 +95,7 @@ def login_initial(request,login_name):
 			request.session["shift4"] = 'Cont A Nights'
 			
 						
-		elif login_name == 'Tim Sanzosti':
+		elif login_name == 'Brian MacCurtain':
 			request.session["matrix_shift"] = 'Cont B Nights CSD 2'
 			request.session["shift_primary"] = 'Cont B Nights'
 			request.session["sfilter3"] = 'checked'
@@ -194,14 +194,14 @@ def login_initial(request,login_name):
 			request.session["sfilter14"] = 'checked'
 			request.session["shift14"] = 'ToolRoom'			
 			
-		elif login_name == 'Ken Frey':
+		elif login_name == 'Matt Ohm':
 			request.session["shift_primary"] = 'CSD1 Mid'
 			request.session["sfilter13"] = 'checked'
 			request.session["sfilter8"] = 'checked'
 			request.session["sfilter9"] = 'checked'
 			request.session["shift13"] = 'CSD1 Mid'
 			request.session["shift8"] = 'Forklift'
-			request.session["shift9"] = 'Maintenance'		
+			request.session["shift9"] = 'Maintenance'
 		elif login_name == 'Scott Brownlee':
 			request.session["shift_primary"] = 'CSD1 Day'
 			request.session["sfilter11"] = 'checked'
