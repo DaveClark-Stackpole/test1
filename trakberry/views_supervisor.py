@@ -515,7 +515,7 @@ def employee_vac_enter_init(request, index):
 	try:
 		year_st = request.session["current_year"]
 	except:
-		year_st = 2017
+		year_st = 2018
 
 	A = 'month'
 	a = month
