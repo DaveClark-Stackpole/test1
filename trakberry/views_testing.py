@@ -273,5 +273,9 @@ def test668(request):
 	
 def test_datalist(request):
 	return render(request, "safari/simple_datalist4.html")	
+
+def clear_login(request):
+	del request.session["login_name"]
+	return render(request, "clear_login.html")	
 	
 	

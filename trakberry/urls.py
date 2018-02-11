@@ -44,6 +44,7 @@ from views import fix_time
 from views_test import test_list, toggle_1, layer_test, layer_entry, layer_transfer_temp, layer_choice_init, layer_choice, layer_select, layer_audit_check_reset
 from views_test import layer_retrieve,sup_mess
 from views_test_email import email1, done_email_1
+from views_testing import clear_login
 # ***********************************************************************************************************************************************************
 
 
@@ -298,6 +299,7 @@ urlpatterns = [
 	url(r'^layer_select/', layer_select),
 	url(r'^layer_audit_check_reset/', layer_audit_check_reset),
 	url(r'^layer_retrieve/get/(?P<index>\d+)/$', layer_retrieve),
+	url(r'^clear_login/', clear_login),
 #	url(r'^hour_check/', hour_check),
 
 	

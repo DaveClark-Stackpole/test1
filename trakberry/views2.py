@@ -341,6 +341,7 @@ def main_logout(request):
 	
 	try:
 		del request.session['login_password']
+		del request.session['login_name']
 	except:
 		request.session['login_password'] = ' '
 	return main(request)		
