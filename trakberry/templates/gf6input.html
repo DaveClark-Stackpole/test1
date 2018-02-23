@@ -75,13 +75,18 @@ function drawCurveTypes() {
 	<link rel='stylesheet' href='/static/style_1/table1.css'>
 <!-- **************************************** -->
 {% if request.session.details_track = 0 %}
-	<meta http-equiv="refresh" content="15; url=/trakberry/display1" />
+
+
+
+
+	<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/display1" />
 {% endif %}	
 <br>
 <font style="margin-left:37%;font-size:225%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>
 
 {% if request.session.details_track = 0 %}
-	<a href="/trakberry/details_track/">
+
+	<a href="{{request.session.local_toggle}}/details_track/">
 	
 	<button style="text-align: left;width:75px;margin-left:3%;font-size: 70%;
 		background-color:#BD554D;
@@ -89,7 +94,7 @@ function drawCurveTypes() {
 	
 	</a></font><img src="/static/media/running.gif"  height="40" width="50">
 {% else %}
-	<a href="/trakberry/details_track/">
+	<a href="{{request.session.local_toggle}}/details_track/">
 		<button style="text-align: left;width:75px;margin-left:10%;font-size: 70%;
 		background-color:#2AA823;
 		color: #ffffff;" /><center>Resume</center></button>
@@ -118,7 +123,7 @@ function drawCurveTypes() {
 	<th bgcolor="#ffffff">
 	
 	
-		<a href="/trakberry/graph_gf6/get/{{index.0}}" onclick="window.open('/trakberry/graph_gf6/get/{{index.0}}', 'newwindow', 'width=1400, height=600'); return false;">
+		<a href="{{request.session.local_toggle}}/graph_gf6/get/{{index.0}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/{{index.0}}', 'newwindow', 'width=1400, height=600'); return false;">
 		
 		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
 			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
@@ -130,7 +135,7 @@ function drawCurveTypes() {
 	<th bgcolor="#ffffff">
 	{% if index.8 > 0 %}
 		
-		<a href="/trakberry/graph_gf6/get/{{index.8}}" onclick="window.open('/trakberry/graph_gf6/get/{{index.8}}', 'newwindow', 'width=1400, height=600'); return false;">	
+		<a href="{{request.session.local_toggle}}/graph_gf6/get/{{index.8}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/{{index.8}}', 'newwindow', 'width=1400, height=600'); return false;">	
 		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
 			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
 			background-image: linear-gradient(0deg, {{index.12}},{{index.10}},{{index.11}});
@@ -150,7 +155,7 @@ function drawCurveTypes() {
 	{% if index.16 > 0 %}
 
 	
-			<a href="/trakberry/graph_gf6/get/{{index.0}}" onclick="window.open('/trakberry/graph_gf6/get/{{index.0}}', 'newwindow', 'width=1400, height=600'); return false;">
+			<a href="{{request.session.local_toggle}}/graph_gf6/get/{{index.16}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/{{index.16}}', 'newwindow', 'width=1400, height=600'); return false;">
 		
 		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
 			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
@@ -192,7 +197,7 @@ function drawCurveTypes() {
 		
 		</div>
 		<div class="col=sm-2">
-		<a href="/trakberry/graph_close/">
+		<a href="{{request.session.local_toggle}}/graph_close/">
 		<button style="text-align: left;width:2%;font-size: 70%; margin-left:10%;border-style:solid;border-color:#A1A1A1;background-color:#C9C9C9;border-radius: 5px;color: #000000;">
 		<center><b>X</b></center></button></a>
 		

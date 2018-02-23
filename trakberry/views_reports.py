@@ -32,7 +32,7 @@ def mup(x):
 # Updated December 28,2015
 # Module to retrieve report information
 def production_report_date(request):
-	machine_list = ['756','629','677','686','620','748','574','615','749','755','614','750']
+	machine_list = ['1504','1506','1519','1520','1502','1507','1515','1501','749','755','614','750']
 	m_s = ['' for x in range(36)]
 	part = [0 for x in range(36)] 
 	op = [0 for x in range(36)] 
@@ -125,7 +125,7 @@ def production_report_date(request):
 			try:
 				count_cell[ ycnt ] = count_cell[ ycnt ] + count[cnt]
 			except:
-				count_cell[ cnt ] = 88	
+				count_cell[ cnt ] = 88
 			
 			
 			machine[cnt] = machine_list[y]
