@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from trakberry.forms import sup_downForm, sup_dispForm, sup_closeForm, report_employee_Form, sup_vac_filterForm, sup_message_Form
 from trakberry.views import done
+from views2 import main_login_form
 from views_mod1 import find_current_date
 from trakberry.views2 import login_initial
 from trakberry.views_testing import machine_list_display
@@ -83,12 +84,19 @@ def supervisor_display(request):
 #	Below is a check to send an email for techs once a day. If yes then it reroutes from email_hour_check() 
 	email_hour_check()
 #	******************************************************************************************
+
+	
 	try:
-		request.session["login_supervisor"] 
-		name_supervisor = request.session["login_supervisor"]
+		request.session["login_name"] 
+		name_supervisor = request.session["login_name"]
 		
 	except:
-		request.session["login_supervisor"] = "none"
+		request.session["login_name"] = ""
+		name_supervisor = ""
+	
+	if name_supervisor =="":
+		return main_login_form(request)
+
 		
   # initialize current time and set 'u' to shift start time
 	t=int(time.time())
@@ -757,8 +765,16 @@ def vacation_display_initial(request):
 	return vacation_display(request)
 	
 	
-def vacation_display(request):	
+def vacation_display(request):
 	
+	# Check if someone is logged in first and if not rerout to login page
+	try:
+		if request.session["login_name"]  =="":
+			return main_login_form(request)
+	except:
+		return main_login_form(request)
+
+
 	# Call current datetime using external function because it would conflict with from datetime import datetime
 	t = vacation_temp()
 

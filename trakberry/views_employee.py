@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
+from views2 import main_login_form
 from trakberry.views_testing import emp_list_display
 from forms import toggletest_Form
 from trakberry.forms import emp_training_form, emp_info_form, job_info_form
@@ -438,6 +439,14 @@ def job_info_display(request):
 	return render(request, "job_info_display.html", {'List':tmp})
 	
 def matrix_info_init(request):
+	
+	# Check if someone is logged in first and if not rerout to login page
+	try:
+		if request.session["login_name"]  =="":
+			return main_login_form(request)
+	except:
+		return main_login_form(request)
+		
 	x = request.session["shift_primary"]
 	if x == "Cont A Nights":
 		x = "Cont A Nights CSD 2"
