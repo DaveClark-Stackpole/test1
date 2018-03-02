@@ -869,7 +869,7 @@ def vacation_display(request):
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' or shift = '%s' or shift = '%s' or shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, current_first, current_last)
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16, shift17)
 
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -1129,7 +1129,7 @@ def vacation_display_increment(request):
 		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
 	else:
 		#sql = "SELECT * FROM vacation where shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' and start >= '%s' and start <= '%s'" %(shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, current_first, current_last)
-		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16, shift17)
 
 
 	cur.execute(sql)
@@ -1371,7 +1371,7 @@ def vacation_display_decrement(request):
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 	else:		
-		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16)
+		sql = "SELECT * FROM vacation where ((start between '%s' and '%s') or (end between '%s' and '%s')) and (shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s' OR shift = '%s')" %( current_first, current_last, current_first, current_last,shift1, shift2, shift3, shift4, shift5, shift6, shift7, shift8, shift9, shift10, shift11, shift12, shift13, shift14, shift15, shift16, shift17)
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	db.close()
