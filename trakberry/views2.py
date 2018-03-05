@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from views_db import db_open
 from views_mod1 import find_current_date
 from views_test import layer_choice_init
-from trakberry.forms import login_Form
+from trakberry.forms import login_Form, login_password_update_Form
 from datetime import datetime
 import MySQLdb
 import time
@@ -95,7 +95,7 @@ def login_initial(request,login_name):
 			request.session["shift4"] = 'Cont A Nights'
 			
 						
-		elif login_name == 'Brian MacCurtain':
+		elif login_name == 'Chris Strutton':
 			request.session["matrix_shift"] = 'Cont B Nights CSD 2'
 			request.session["shift_primary"] = 'Cont B Nights'
 			request.session["sfilter3"] = 'checked'
@@ -261,8 +261,63 @@ def main_login_form(request):
 	request.session["login_name"] = ""
 	request.session["login_password"] = ""
 	return render(request,'main_login_form.html', args)	
+
+# Password Update
+def main_password_update(request):	
 	
+	login_name = request.session["login_name"]
 	
+	if request.POST:
+        			
+		login_password1 = request.POST.get("login_password1")
+		login_password2 = request.POST.get("login_password2")
+		
+		if login_password1 != login_password2:
+			return render(request, "reroute_main_password_updatee.html")
+		request.session["login_password"] = login_password1
+		
+		
+		
+		
+		login_password_update(request)
+		
+		
+		login_initial(request,login_name)
+	
+		#return render(request, "reroute_main_password_updatee.html")
+		return main(request)
+
+	else:
+		form = login_password_update_Form()
+	
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	request.session["login_password"] = ""
+	return render(request,'main_password_update_form.html', {'login_name':login_name,'args':args})
+
+# Updates the Password of the current user
+def login_password_update(request):
+	login_name = request.session["login_name"]
+	login_password = request.session["login_password"]
+	db, cur =db_open()
+	try:
+		sql = "SELECT password FROM tkb_users where name = '%s'"%(login_name)
+		cur.execute(sql)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		
+		tql = ('update tkb_users SET password="%s" WHERE name="%s"' % (login_password,login_name))
+		cur.execute(tql)
+		db.commit()
+		
+	except:
+		cur.execute ('''INSERT INTO tkb_users(name,password) VALUES(%s,%s)''',(login_name,login_password))
+		db.commit()
+
+		
+	return
+
 def main_A(request):
 	return main(request)
 	
@@ -294,12 +349,25 @@ def main(request):
 	#del request.session['mykey']
 	log_pass = 0
 	
+	# Password Check Section
+#	sql = "SELECT * FROM tkb_layered where Name = '%s'" %(name)
+#	cursor.execute(sql)
+#	tmp = cursor.fetchall()
+#	tmp2 = tmp[0]
+	
+	# Call password check Sub Module 
+	log_pass = main_password_check(name,password)
+	
+	# below line is for testing
+	#return render(request, "reroute_main_password_update.html", {'log_pass': log_pass,'name':name,'password':password})
+	
+	
 	# Administrator Password
-	if name == 'Dave Clark':
-		if password == 'Jaden2008':
-			log_pass = 1
-	elif password == 'stackberry':
-		log_pass = 1
+	#if name == 'Dave Clark':
+	#	if password == 'Jaden2008':
+	#		log_pass = 1
+	#elif password == 'stackberry':
+	#	log_pass = 1
 
 		
 		
@@ -333,8 +401,16 @@ def main(request):
 			return layer_choice_init(request)
 		
 		return render(request, "main.html")
+	elif log_pass == 0:
+		return main_login_form(request)
+	elif log_pass == 3:
+		return main_login_form(request)
+		
 	else:
-		return main_login(request)	
+		#return main_login(request)
+		return render(request, "reroute_main_password_updatee.html")
+		#return main_password_update(request)
+		
 		
 # Reset Login_Password  and re route back to main for re login
 def main_logout(request):
@@ -344,8 +420,34 @@ def main_logout(request):
 		del request.session['login_name']
 	except:
 		request.session['login_password'] = ' '
-	return main(request)		
+	return main(request)
 
+#  ******  Password Check Sub Module ***********
+def main_password_check(name,password):
+	db, cur = db_open()
+	# Create the table if it does not exist
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,name CHAR(50), password CHAR(50), active INT(2))""")
+	# Check password to match name.  If no record of name then divert to except and reroute to create new password
+	try:
+		sql = "SELECT password FROM tkb_users where name = '%s'"%(name)
+		cur.execute(sql)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		
+		if tmp2 == password:
+			log_pass = 1
+		else:
+			log_pass = 0
+	# Reroute to create new password
+	except:
+		if name == "":
+			log_pass = 3
+		else:
+			log_pass = 2
+	
+	return log_pass
+	
+	
 # Check if Layered Audit has been entered for this name and todays date
 def layered_audit_check(name):
 

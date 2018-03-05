@@ -52,6 +52,7 @@ from views_testing import clear_login
 from views import display, db_write, create_table, test, details_session, details_track, reports, test_time, scheduler, inventory, display2, fade_in, fade2
 from views import create_test_table, alter_table_name, done, new, graph, graph2, graph3, graph749, graph748, graph750, graph677, ttip,graph_close, display_time, graph_close_snap
 from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, display_initialize, test44, tech_reset,testB
+from views2 import main_password_update
 # ***********************************************************************************************************************************************************
 
 
@@ -216,7 +217,7 @@ urlpatterns = [
     url(r'^tech_message/', tech_message),	
 	url(r'^tech_report_email/', tech_report_email),
 	url(r'^tech_name_update/', tech_name_update),
-	
+	url(r'^main_password_update/', main_password_update),
 	
 	# **************  Maintenance Section ***************************************
 	url(r'^maint/', maint),

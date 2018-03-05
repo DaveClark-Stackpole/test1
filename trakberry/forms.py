@@ -72,8 +72,12 @@ class sup_vac_filterForm(forms.Form):
 	
 class login_Form(forms.Form):
 	name = forms.CharField()	
-	password = forms.CharField()			
+	password = forms.CharField()
 
+class login_password_update_Form(forms.Form):
+	password1 = forms.CharField()
+	password2 = forms.CharField()
+	
 class robot_machine_form(forms.Form):
 	robot = forms.CharField()
 	machine1 = forms.CharField()	
