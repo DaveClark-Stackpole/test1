@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 
-from views2 import main_login, main_login_form, main, main_logout, switch_local, switch_net
+from views2 import main_login, main_login_form, main, main_logout, switch_local, switch_net, main_test_init
 from views_machinery import machinery
 from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
 from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
@@ -271,7 +271,7 @@ urlpatterns = [
 	# ************************************************************************
 	
 	# **************  Testing Section ***************************************
-	
+	url(r'^main_test_init/', main_test_init),
 	url(r'^email_test_1/', email_test_1),
 	url(r'^email_test_2/', email_test_2),
 	url(r'^email1/', email1),

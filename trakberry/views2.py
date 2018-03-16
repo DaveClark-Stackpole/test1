@@ -248,8 +248,7 @@ def main_login_form(request):
 		
 		login_initial(request,login_name)
 	
-		
-								
+	
 		return main(request)
 
 		
@@ -264,7 +263,7 @@ def main_login_form(request):
 
 # Password Update
 def main_password_update(request):	
-	
+	#return render(request, "test_temp2.html")
 	login_name = request.session["login_name"]
 	
 	if request.POST:
@@ -284,8 +283,8 @@ def main_password_update(request):
 		
 		login_initial(request,login_name)
 	
-		#return render(request, "reroute_main_password_updatee.html")
-		return main(request)
+		return render(request, "reroute_main.html")
+		#return main(request)
 
 	else:
 		form = login_password_update_Form()
@@ -312,7 +311,7 @@ def login_password_update(request):
 		db.commit()
 		
 	except:
-		cur.execute ('''INSERT INTO tkb_users(name,password) VALUES(%s,%s)''',(login_name,login_password))
+		cur.execute ('''INSERT INTO tkb_users(user_name,password) VALUES(%s,%s)''',(login_name,login_password))
 		db.commit()
 
 		
@@ -320,7 +319,22 @@ def login_password_update(request):
 
 def main_A(request):
 	return main(request)
-	
+
+
+# ********************************* Main Test *****************************************
+# Use a counter for testing to see how many times through main
+# And delete all session variables to start fresh
+def main_test_init(request):
+	# Delete all session variables
+	for key in request.session.keys():
+		del request.session[key]
+	# Assign a counter session variable
+	request.session["test_counter"] = 0
+	request.session["local_switch"] = 1  #Make sure it's 1 for local use
+	return render(request, "reroute_test_main.html")
+# ************************************************************************************
+
+
 def main(request):
 	# Check if it's local running or not and if not then force the path as /trakberry
 	# Run switch_net to set it back to network or switch_local for local use
@@ -343,11 +357,13 @@ def main(request):
 		password = 'no'
 		name = ""
 		
-
-		
+	ctr = request.session["test_counter"]
+	
+	
 	# how to delete a session variable
 	#del request.session['mykey']
-	log_pass = 0
+	
+	log_pass = -99
 	
 	# Password Check Section
 #	sql = "SELECT * FROM tkb_layered where Name = '%s'" %(name)
@@ -355,9 +371,22 @@ def main(request):
 #	tmp = cursor.fetchall()
 #	tmp2 = tmp[0]
 	
-	# Call password check Sub Module 
-	log_pass = main_password_check(name,password)
+
+
+	#if ctr > 0:
+	#	return render(request, "test_temp3.html", {'log_pass':log_pass,'name':name,'password':password})
+	request.session["test_counter"] = request.session["test_counter"] + 1
 	
+	# Call password check Sub Module 
+	request.session["test_counter"] = request.session["test_counter"] + .001
+	log_pass = main_password_check(name,password,request)
+	#return render(request, "test_temp3.html", {'log_pass':log_pass,'name':name,'password':password})
+	
+	
+	#if (request.session["test_counter"]) > 2:
+	#	return render(request, "test_temp3.html", {'log_pass':log_pass,'name':name,'password':password})
+		
+		
 	# below line is for testing
 	#return render(request, "reroute_main_password_update.html", {'log_pass': log_pass,'name':name,'password':password})
 	
@@ -368,8 +397,9 @@ def main(request):
 	#		log_pass = 1
 	#elif password == 'stackberry':
 	#	log_pass = 1
+	
+	#return render(request, "test_temp3.html", {'log_pass':log_pass})
 
-		
 		
 	# Code for checking if layered audit needs to be sent.  Make 
 	if log_pass == 1:
@@ -402,11 +432,12 @@ def main(request):
 		
 		return render(request, "main.html")
 	elif log_pass == 0:
-		return main_login_form(request)
+		return main_login(request)
+		return render(request, "reroute_main.html")   # reroute to login again because either no name given or wrong one
 	elif log_pass == 3:
-		return main_login_form(request)
-		
-	else:
+		return main_login(request)
+
+	else: # Reroute with 2 value to change password on old one
 		#return main_login(request)
 		return render(request, "reroute_main_password_updatee.html")
 		#return main_password_update(request)
@@ -423,28 +454,33 @@ def main_logout(request):
 	return main(request)
 
 #  ******  Password Check Sub Module ***********
-def main_password_check(name,password):
+def main_password_check(user_name,password,request):
 	db, cur = db_open()
 	# Create the table if it does not exist
-	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,name CHAR(50), password CHAR(50), active INT(2))""")
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
 	# Check password to match name.  If no record of name then divert to except and reroute to create new password
 	try:
-		sql = "SELECT password FROM tkb_users where name = '%s'"%(name)
+		sql = "SELECT * FROM tkb_users where user_name = '%s'"%(user_name)
 		cur.execute(sql)
 		tmp = cur.fetchall()
 		tmp2 = tmp[0]
-		
-		if tmp2 == password:
+		if tmp2[2] == password:
 			log_pass = 1
 		else:
 			log_pass = 0
+			
+			#return render(request, "test_temp3.html", {'log_pass':log_pass,'name':user_name,'tmp':tmp,'password':password})
 	# Reroute to create new password
 	except:
-		if name == "":
+		if user_name == "":                 # No User given so login again
 			log_pass = 3
-		else:
+		elif password == 'stackberry':      # there is no updated password and stackberry was used so update
 			log_pass = 2
+		else:                               # there is no updated password but stackberry was not used
+			log_pass = 3
+
 	
+	#return render(request, "test_temp.html")
 	return log_pass
 	
 	
