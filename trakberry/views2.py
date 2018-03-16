@@ -9,6 +9,9 @@ from datetime import datetime
 import MySQLdb
 import time
 from django.core.context_processors import csrf
+import smtplib
+from smtplib import SMTP
+
 
 def fup(x):
 	return x[2]
@@ -237,12 +240,11 @@ def login_initial(request,login_name):
 # Login for Main Program
 def main_login_form(request):	
 
-	if request.POST:
-        			
+#	if request.POST:
+	if 'button1' in request.POST:
 		login_name = request.POST.get("login_name")
 		login_password = request.POST.get("login_password")
 
-	
 		request.session["login_name"] = login_name
 		request.session["login_password"] = login_password
 		
@@ -250,8 +252,11 @@ def main_login_form(request):
 	
 	
 		return main(request)
-
 		
+	elif 'button2' in request.POST:
+		
+		return render(request,'login/reroute_lost_password.html')
+
 	else:
 		form = login_Form()
 	args = {}
@@ -261,7 +266,82 @@ def main_login_form(request):
 	request.session["login_password"] = ""
 	return render(request,'main_login_form.html', args)	
 
+# Password Forgot Form
+def main_login_password_lost_form(request):	
+
+	if request.POST:
+		login_name = request.POST.get("login_name")
+		request.session["login_name"] = login_name
+		main_password_lost_email(request)  # Email password to proper login's email
+		return render(request, "main_log.html")  # Completed sending email of password
+
+	else:
+		form = login_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	request.session["login_name"] = ""
+	request.session["login_password"] = ""
+	return render(request,'login/main_login_password_lost.html', args)	
+	
 # Password Update
+
+# Send login password via email
+def main_password_lost_email(request):
+	
+	user_name = request.session["login_name"]
+
+	# retrieve left first character of login_name only
+	name_temp1 = user_name[:1]
+	# retrieve last name of login name only 	
+	name_temp2 = user_name.split(" ",1)[1]
+	name_temp3 = name_temp1 + name_temp2 + '@stackpole.com'
+	
+	toaddrs = name_temp3
+
+	
+	
+	#return render(request,'login/done_email_password.html', {'user_name':user_name})
+
+
+	db, cur = db_open()
+	# Create the table if it does not exist
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
+	# Check password to match name.  If no record of name then divert to except and reroute to create new password
+	try:
+		sql = "SELECT * FROM tkb_users where user_name = '%s'"%(user_name)
+		cur.execute(sql)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		password = tmp2[2]
+
+	except:
+		password = 'stackberry'
+
+	password = 'Password is : ' + password
+
+	message_subject = 'Trackberry Password for :' + request.session["login_name"]
+
+
+	fromaddr = 'stackpole@stackpole.com'
+	frname = 'Dave'
+	server = SMTP('smtp.gmail.com', 587)
+	server.ehlo()
+	server.starttls()
+	server.ehlo()
+	server.login('StackpolePMDS@gmail.com', 'stacktest6060')
+	
+	message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+
+	
+	
+	message = message + message_subject + "\r\n\r\n" + password
+	server.sendmail(fromaddr, toaddrs, message)
+	server.quit()
+	
+	db.close()
+	return
+	
 def main_password_update(request):	
 	#return render(request, "test_temp2.html")
 	login_name = request.session["login_name"]
