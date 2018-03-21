@@ -118,8 +118,12 @@
 -->
 {% block refresh %}
 
+
+
+
+
 {% if request.session.refresh_tech != 3 %}
-<meta http-equiv="refresh" content="8; url=/trakberry/tech" />
+<meta http-equiv="refresh" content="8; url={{request.session.local_toggle}}/tech" />
 
 {% endif %}
 
@@ -127,7 +131,7 @@
 {% endblock %}
 {% if request.session.refresh_tech == 1 %}
 
-<meta http-equiv="refresh" content="0; url=/trakberry/tech" />
+<meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/tech" />
 {% endif %}
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

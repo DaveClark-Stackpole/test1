@@ -84,7 +84,22 @@ def tech_email_test(request):
 		return render(request, "email_downtime.html")
 		
 	return render(request, "email_downtime_cycle.html")
-		
+
+def time_write():
+	t = int(time.time())
+	db,cur = db_open()
+	i = 101
+	mach = 555
+	part = 'time_update'
+	x = 1
+	a = '1'
+	cur.execute('''insert into tkb_prodtrak(pi_id,part_number,machine,part_timestamp,autotime,last_time_diff) VALUES(%s,%s,%s,%s,%s,%s)''',(i,part,part,t,mach,mach))
+	db.commit()
+	db.close()
+	return
+	
+	
+	
 def tech(request):
 	#Do the Hour Check to see if email needs sending
 
@@ -93,6 +108,19 @@ def tech(request):
 #	if send_email == 1:
 #		return e_test(request)	
 #		return render(request, "email_downtime.html")
+
+
+# New Time Check to send 
+	t1 = int(time.time())
+	try:
+		t2 = request.session["time2"]
+	except:
+		t2 = t1
+		request.session["time2"] = t1
+		
+	if (t1 - t2) > 300:
+		request.session["time2"] = t1
+		time_write()  # Write current time to DB tkb_prodtrak
 
 	try:
 		request.session["login_tech"] 
