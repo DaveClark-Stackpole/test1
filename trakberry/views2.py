@@ -443,7 +443,7 @@ def main(request):
 	# how to delete a session variable
 	#del request.session['mykey']
 	
-	log_pass = -99
+	log_pass = 0   # Make this -99 if you use password checker
 	
 	# Password Check Section
 #	sql = "SELECT * FROM tkb_layered where Name = '%s'" %(name)
@@ -455,11 +455,20 @@ def main(request):
 
 	#if ctr > 0:
 	#	return render(request, "test_temp3.html", {'log_pass':log_pass,'name':name,'password':password})
-	request.session["test_counter"] = request.session["test_counter"] + 1
+	#request.session["test_counter"] = request.session["test_counter"] + 1
 	
 	# Call password check Sub Module 
-	request.session["test_counter"] = request.session["test_counter"] + .001
-	log_pass = main_password_check(name,password,request)
+	#request.session["test_counter"] = request.session["test_counter"] + .001
+	
+	
+	# *******************************************************************************
+	# Password Checker       ********************************************************
+	# *******************************************************************************
+	#log_pass = main_password_check(name,password,request)   # Uncomment when you want to use it
+	# *******************************************************************************
+	# *******************************************************************************
+	
+	
 	#return render(request, "test_temp3.html", {'log_pass':log_pass,'name':name,'password':password})
 	
 	
@@ -472,11 +481,11 @@ def main(request):
 	
 	
 	# Administrator Password
-	#if name == 'Dave Clark':
-	#	if password == 'Jaden2008':
-	#		log_pass = 1
-	#elif password == 'stackberry':
-	#	log_pass = 1
+	if name == 'Dave Clark':
+		if password == 'Jaden2008':
+			log_pass = 1
+	elif password == 'stackberry':
+		log_pass = 1
 	
 	#return render(request, "test_temp3.html", {'log_pass':log_pass})
 
