@@ -437,7 +437,7 @@ def main(request):
 		password = 'no'
 		name = ""
 		
-	ctr = request.session["test_counter"]
+	#ctr = request.session["test_counter"]
 	
 	
 	# how to delete a session variable
