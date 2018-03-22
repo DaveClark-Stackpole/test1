@@ -109,7 +109,19 @@ def tech(request):
 #		return e_test(request)	
 #		return render(request, "email_downtime.html")
 
-
+	# Check if it's local running or not and if not then force the path as /trakberry
+	# Run switch_net to set it back to network or switch_local for local use
+	try:
+		if request.session["local_switch"] == 1:
+			request.session["local_toggle"] = ""
+		else:
+			request.session["local_toggle"] = "/trakberry"
+	except:
+		request.session["local_toggle"] = "/trakberry"
+	# ******************************************************************************
+	
+	
+	
 # New Time Check to send 
 	t1 = int(time.time())
 	try:
