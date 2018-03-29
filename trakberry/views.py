@@ -161,7 +161,7 @@ def display2(request):
   mc3 = ['629','620','615','614']
   info = ['','','','','','','','','','','','']
   # Machine Rates for 1:50-3632  2:50-0786
-  machine_rate1 = [54,54,49,55]
+  machine_rate1 = [12,54,49,55]
   machine_rate2 = [49,49,45,50]
   aaa = 0
   bbb = 0
