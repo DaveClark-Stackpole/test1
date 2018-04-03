@@ -118,7 +118,7 @@ def login_initial(request,login_name):
 			request.session["sfilter10"] = 'checked'
 			request.session["shift10"] = 'Press Setter'			
 									
-		elif login_name == 'Frank Ponte':
+		elif login_name == 'Stefan Poulin':
 			request.session["matrix_shift"] = 'Day CSD 2'
 			request.session["shift_primary"] = 'CSD2 Day'
 			request.session["sfilter1"] = 'checked'
