@@ -32,7 +32,7 @@ def mup(x):
 # Updated December 28,2015
 # Module to retrieve report information
 def production_report_date(request):
-	machine_list = ['1504','1506','1519','1520','1502','1507','1515','1501','749','755','614','750']
+	machine_list = ['1504','1502','1515','1506','1507','1501','1519','8','8','1520','8','8']
 	m_s = ['' for x in range(36)]
 	part = [0 for x in range(36)] 
 	op = [0 for x in range(36)] 
@@ -115,7 +115,7 @@ def production_report_date(request):
 			
 			#count_cell[cnt] = xcnt
 			
-			[eup(x) for x in tmp if fup(x) == machine_list[y] and gup(x) == 1 and tup(x)>xx and tup(x)<yy ]
+			[eup(x) for x in tmp if fup(x) == machine_list[y] and gup(x) > 0 and tup(x)>xx and tup(x)<yy ]
 			count[cnt] = sum(int(i) for i in st)
 			
 			# uncomment below to use real one....next line down is just testing

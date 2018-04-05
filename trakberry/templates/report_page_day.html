@@ -76,9 +76,9 @@ a.blue:hover {color: black;}
 </tr>
 <tr>
 <th bgcolor="#CCDDE3" rowspan="2"><center><t>Shift</t></th>
-<th bgcolor="#B7CCB6" colspan="6"><center><t>OP 10</t></th>
-<th bgcolor="#D9A4ED" colspan="6"><center><t>OP 20</t></th>
-<th bgcolor="#CCC59B" colspan="6"><center><t>OP 30</t></th>
+<th bgcolor="#B7CCB6" colspan="6"><center><t>OP 10 / Op 20</t></th>
+<th bgcolor="#D9A4ED" colspan="6"><center><t>OP 30</t></th>
+<th bgcolor="#CCC59B" colspan="6"><center><t>OP 40</t></th>
 </tr>
 	<tr>
 	<th bgcolor="#B7CCB6"><center><t>Machine</t></th>
@@ -125,7 +125,9 @@ a.blue:hover {color: black;}
 <!-- index.6 (target)  -->
 
 
-<td  bgcolor="#D8EBC5">	<center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" class="blue">{{index.0}}</a></o></td>
+<td  bgcolor="#D8EBC5">	<center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+
+	
 <td  bgcolor="#D8EBC5">	<center><o>{{index.2}}</o></td>
 <td  bgcolor="#D8EBC5">	<center><o>{{index.1}}</o></o></td>
 <td  bgcolor="#D8EBC5">	<center><o>{{index.6}}</o></td>
@@ -139,12 +141,20 @@ a.blue:hover {color: black;}
 
 {% endif %}
 {% if index.7 == 2 %}
-<!-- display GF6 input OP20 data -->
-<td  bgcolor="#E5C2F2"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" class="blue">{{index.0}}</a></o></td>
-<td  bgcolor="#E5C2F2"><center><o>{{index.2}}</o></td>
-<td  bgcolor="#E5C2F2"><center><o>{{index.1}}</o></td>
-<td  bgcolor="#E5C2F2">	<center><o>{{index.6}}</o></td>
-<td  bgcolor="#E5C2F2">	<center><o>{{index.5}}</o></td>
+<!-- display GF6 input OP20 data --  Put a blank in when --- comes in as machine number -->
+	{% if index.0 == '8' %}
+		<td  bgcolor="#E5C2F2"><center><o> </o></td>
+		<td  bgcolor="#E5C2F2"><center><o> </o></td>
+		<td  bgcolor="#E5C2F2"><center><o> </o></td>
+		<td  bgcolor="#E5C2F2"><center><o> </o></td>
+		<td  bgcolor="#E5C2F2"><center><o> </o></td>
+	{% else %}
+		<td  bgcolor="#E5C2F2"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+		<td  bgcolor="#E5C2F2"><center><o>{{index.2}}</o></td>
+		<td  bgcolor="#E5C2F2"><center><o>{{index.1}}</o></td>
+		<td  bgcolor="#E5C2F2">	<center><o>{{index.6}}</o></td>
+		<td  bgcolor="#E5C2F2">	<center><o>{{index.5}}</o></td>
+	{% endif %}
 
 {% if index.8 == 13 %}
 <td  bgcolor="#E5C2F2" rowspan="4">	<center><t>{{index.9}}</t></td>
@@ -153,11 +163,19 @@ a.blue:hover {color: black;}
 {% endif %}
 {% if index.7 == 3 %}
 <!-- display GF6 input OP30 data -->
-<td  bgcolor="#D9D5BD"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" class="blue">{{index.0}}</a></o>	<center></td>
-<td  bgcolor="#D9D5BD"><center><o>{{index.2}}</o>	<center></td>
-<td  bgcolor="#D9D5BD"><center><o>{{index.1}}</o>	<center></td>
-<td  bgcolor="#D9D5BD"><center><o>{{index.6}}</o>	<center></td>
-<td  bgcolor="#D9D5BD"><center><o>{{index.5}}</o>	<center></td>
+	{% if index.0 == '8' %}
+		<td  bgcolor="#D9D5BD"><center><o> </o></td>
+		<td  bgcolor="#D9D5BD"><center><o> </o></td>
+		<td  bgcolor="#D9D5BD"><center><o> </o></td>
+		<td  bgcolor="#D9D5BD"><center><o> </o></td>
+		<td  bgcolor="#D9D5BD"><center><o> </o></td>
+	{% else %}
+		<td  bgcolor="#D9D5BD"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+		<td  bgcolor="#D9D5BD"><center><o>{{index.2}}</o></td>
+		<td  bgcolor="#D9D5BD"><center><o>{{index.1}}</o></td>
+		<td  bgcolor="#D9D5BD">	<center><o>{{index.6}}</o></td>
+		<td  bgcolor="#D9D5BD">	<center><o>{{index.5}}</o></td>
+	{% endif %}
 
 {% if index.8 == 14 %}
 <td  bgcolor="#D9D5BD" rowspan="4">	<center><t>{{index.9}}</t></td>
@@ -171,7 +189,7 @@ a.blue:hover {color: black;}
 <!-- index.0 (machine) index.1(count) index.2(part) index.5(OEE) -->
 <!-- index.6 (target)  -->
 
-<td  bgcolor="#FAFAF5">	<center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" class="blue">{{index.0}}</a></o></td>
+<td  bgcolor="#FAFAF5">	<center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
 <td  bgcolor="#FAFAF5">	<center><o>{{index.2}}</o></td>
 <td  bgcolor="#FAFAF5">	<center><o>{{index.1}}</o></td>
 <td  bgcolor="#FAFAF5">	<center><o>{{index.6}}</o></td>
@@ -187,11 +205,21 @@ a.blue:hover {color: black;}
 {% endif %}
 {% if index.7 == 2 %}
 <!-- display GF6 input OP20 data -->
-<td  bgcolor="#F0E4F5">	<center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" class="blue">{{index.0}}</a></o></td>
-<td  bgcolor="#F0E4F5"><center><o>{{index.2}}</o></td>
-<td  bgcolor="#F0E4F5">	<center><o>{{index.1}}</o></td>
-<td  bgcolor="#F0E4F5">	<center><o>{{index.6}}</o></td>
-<td  bgcolor="#F0E4F5">	<center><o>{{index.5}}</o></td>
+	{% if index.0 == '8' %}
+		<td  bgcolor="#F0E4F5"><center><o> </o></td>
+		<td  bgcolor="#F0E4F5"><center><o> </o></td>
+		<td  bgcolor="#F0E4F5"><center><o> </o></td>
+		<td  bgcolor="#F0E4F5"><center><o> </o></td>
+		<td  bgcolor="#F0E4F5"><center><o> </o></td>
+	{% else %}
+		<td  bgcolor="#F0E4F5"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+		<td  bgcolor="#F0E4F5"><center><o>{{index.2}}</o></td>
+		<td  bgcolor="#F0E4F5"><center><o>{{index.1}}</o></td>
+		<td  bgcolor="#F0E4F5">	<center><o>{{index.6}}</o></td>
+		<td  bgcolor="#F0E4F5">	<center><o>{{index.5}}</o></td>
+	{% endif %}
+
+
 {% if index.8 == 1 %}
 <td  bgcolor="#F0E4F5" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
@@ -204,11 +232,21 @@ a.blue:hover {color: black;}
 {% endif %}
 {% if index.7 == 3 %}
 <!-- display GF6 input OP30 data -->
-<td  bgcolor="#F5F2DF"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" class="blue">{{index.0}}</a></o>	<center></td>
-<td  bgcolor="#F5F2DF"><center><o>{{index.2}}</o>	<center></td>
-<td  bgcolor="#F5F2DF"><center><o>{{index.1}}</o>	<center></td>
-<td  bgcolor="#F5F2DF"><center><o>{{index.6}}</o>	<center></td>
-<td  bgcolor="#F5F2DF"><center><o>{{index.5}}</o>	<center></td>
+	{% if index.0 == '8' %}
+		<td  bgcolor="#F5F2DF"><center><o> </o></td>
+		<td  bgcolor="#F5F2DF"><center><o> </o></td>
+		<td  bgcolor="#F5F2DF"><center><o> </o></td>
+		<td  bgcolor="#F5F2DF"><center><o> </o></td>
+		<td  bgcolor="#F5F2DF"><center><o> </o></td>
+	{% else %}
+		<td  bgcolor="#F5F2DF"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+		<td  bgcolor="#F5F2DF"><center><o>{{index.2}}</o></td>
+		<td  bgcolor="#F5F2DF"><center><o>{{index.1}}</o></td>
+		<td  bgcolor="#F5F2DF">	<center><o>{{index.6}}</o></td>
+		<td  bgcolor="#F5F2DF">	<center><o>{{index.5}}</o></td>
+	{% endif %}
+
+
 {% if index.8 == 2 %}
 <td  bgcolor="#F5F2DF" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}

@@ -117,11 +117,11 @@ def select_day(request):
 	try:
 		request.session["e_date"]
 	except:
-		request.session["e_date"] = ""		
+		request.session["e_date"] = ""
 	try:
 		request.session["machine"]
 	except:
-		request.session["machine"] = ""				
+		request.session["machine"] = ""
 
 	if request.POST:
 
@@ -222,14 +222,19 @@ def graph_gf6(request, index):
 # Module to obtain graphdata for a past report of a machine and send it to display on a graph	
 def graph_gf6_report(request,index):
 	mm=str(index)
-	machine_number = mm[:3]
-	shift_number=mm[3:9]
+	
+	# take the first 4 digits as your machine number
+	machine_number = mm[:4]
+	
+	# take the remaining digits as your shift association
+	shift_number=mm[4:9]
+	
 	machine_number=int(machine_number)
 	shift_number=int(shift_number)
 	global dt
 	request.session["machine_graph"] = machine_number
 	m = str(machine_number)
-	part = '50-3632'
+	part = '50-9341'
 
 	machine_rate = machine_rates(part,m)
 	
