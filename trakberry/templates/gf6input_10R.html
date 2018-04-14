@@ -1,5 +1,5 @@
 
-
+{% extends "main.html" %}
 
 {% block refresh %}
 
@@ -108,18 +108,18 @@ function drawCurveTypes() {
 <center>
 <table style="width:20%;margin-left:10%;">
 <tr><th bgcolor="#B6D2DB" style="font-size: 200%;">
-<center>Magna Tracking</center>
+<center>10R Tracking</center>
 </th></tr></table>
-<table style="width:80%;margin-left:10%;">
+<table style="width:40%;margin-left:10%;">
 	
-<tr><th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>Trilobe<font style="font-size:80%;"> ({{totalA}}pcs )<br> OA:{{AOA}}%  Based on 8hrs (1,440 parts)</center></font></th>
-<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>Optimize<font style="font-size:80%;"> ({{totalB}}pcs) <br> OA:{{BOA}}%</th>
-
+<tr><th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 10/20<font style="font-size:80%;"> ({{totalA}}pcs )<br> OA:{{AOA}}%</center></font></th>
+<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 30<font style="font-size:80%;"> ({{totalB}}pcs) <br> OA:{{BOA}}%</th>
+<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>OP 40<font style="font-size:80%;"> ({{totalC}}pcs )<br> OA:{{COA}}%</center></font></th>
 </tr>
 
 {% for index in list %}
 	<tr>
-{% if index.0 = 'Trilobe' %}
+
 	<th bgcolor="#ffffff">
 	
 	
@@ -128,30 +128,52 @@ function drawCurveTypes() {
 		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
 			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
 			background-image: linear-gradient(0deg, {{index.4}},{{index.2}},{{index.3}});
-			"/><b><center><br><br><br>
-		{{index.0}} <br><font style="font-size:80%;"><b> {{index.7}}pcs<br> OA: {{index.24}}</font></center> <br><br><br>
-
-	
-		
-		
+			"/><b><center>
+		{{index.0}} <br><font style="font-size:80%;"><b> {{index.7}}pcs<br> OA: {{index.24}}</font></center> 
 	</th>	
-	{% endif %}
-	{% if index.8 = 'Optimize' %}
-	<th bgcolor="#ffffff">
 	
+	<th bgcolor="#ffffff">
+	{% if index.8 > 0 %}
 		
 		<a href="{{request.session.local_toggle}}/graph_gf6/get/{{index.8}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/{{index.8}}', 'newwindow', 'width=1400, height=600'); return false;">	
 		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
 			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
 			background-image: linear-gradient(0deg, {{index.12}},{{index.10}},{{index.11}});
-			"/><center><b><br><br><br>
-		{{index.8}}<br> <font style="font-size:80%;"><b>{{index.15}}pcs<br>OA: {{index.25}}</font></center> <br><br><br>
-
-	
+			"/><center><b>
+		{{index.8}}<br> <font style="font-size:80%;"><b>{{index.15}}pcs<br>OA: {{index.25}}</font></center> 
+	{% else %}
+		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:grey;
+			
+			"/><center><b>
+		&nbsp;<br> <font style="font-size:80%;"><b>&nbsp;<br>&nbsp;</font></center> 
+	{% endif %}
 	
 	</th>
 
-{% endif %}
+	<th bgcolor="#ffffff">
+	{% if index.16 > 0 %}
+
+	
+			<a href="{{request.session.local_toggle}}/graph_gf6/get/{{index.16}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/{{index.16}}', 'newwindow', 'width=1400, height=600'); return false;">
+		
+		<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
+			background-image: linear-gradient(0deg, {{index.20}},{{index.18}},{{index.19}});
+			"/><b><center>
+		{{index.16}} <br><font style="font-size:80%;"><b> {{index.23}}pcs<br> OA: {{index.26}}</font></center> 
+
+		
+		{% else %}
+			<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
+			border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:grey;
+			
+			"/><center><b>
+		&nbsp;<br> <font style="font-size:80%;"><b>&nbsp;<br>&nbsp;</font></center> 
+	{% endif %}
+	
+	
+	</th>
 	
 	</tr>
 {% endfor %}

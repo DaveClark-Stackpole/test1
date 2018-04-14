@@ -137,7 +137,7 @@ def select_day(request):
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
-	return render(request,'report_form_date.html', args)		
+	return render(request,'report_form_date.html', args)
 
 # ************************************************************
 # Select Date For Snapshot Report  ***************************
@@ -303,7 +303,7 @@ def graph_gf6_report(request,index):
 	gr_list, brk1, brk2, multiplier  = Graph_Data(t,u,m,tmp,mrr)
 	
 	# Test Return value
-#	return render(request, "test4.html",{'list':tmp})
+	#return render(request, "test4.html",{'list':tmp})
 	
 	
 	return render(request, "graph_gf6.html",{'GList':gr_list})	

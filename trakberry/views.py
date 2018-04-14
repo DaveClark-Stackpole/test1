@@ -155,7 +155,7 @@ def display2(request):
   gx[0], gx[1], gx[2], gx[3], gx[4], gx[5], gx[6], gx[7], gx[8], gx[9], gx[10]= "0%", "15%", "18%", "23%", "30%", "40%", "43%", "47%", "50%", "60%", "100%"   
   
   rate = float(7)
-  machine_list = ['1504','1506','1519','1520','1502','1507','1515','1501','995','996','997','998']
+  machine_list = ['Trilobe','996','995','989','Optimize','998','1515','1501','995','996','997','998']
   graph_link = ['/trakberry/graph677/','/trakberry/graph748/','/trakberry/graph749/','/trakberry/graph750/','/trakberry/graph615/','/trakberry/graph614/','/trakberry/graph629/','/trakberry/graph620/','/trakberry/graph574/','/trakberry/graph755/','/trakberry/graph756/','/trakberry/graph686/']
   mc2 = ['756','686','574','755']
   mc3 = ['629','620','615','614']

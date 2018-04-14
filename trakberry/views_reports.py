@@ -198,7 +198,7 @@ def production_report_date(request):
 	list = zip(machine,count,part,shift,sh_col,OEE,target,op,loop_count,count_cell,m_s)
 	#list = zip(machine,count,part,shift,sh_col,OEE,target,op,loop_count)
 	return render(request, "report_page_day.html", {'List':list, 'S':stemp})
-	#return render(request,"test3.html",{'List':list})
+	#return render(request,"test4.html",{'List':list})
 
 def production_report_date_B(request):
 
