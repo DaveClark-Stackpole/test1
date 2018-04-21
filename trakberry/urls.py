@@ -180,7 +180,12 @@ urlpatterns = [
 	url(r'^edit/', edit_part),
 	url(r'^create_table_1/', create_table_1),
 	url(r'^test44/', test44),
-	url(r'^graph_gf6/get/(?P<index>\d+)/$', graph_gf6),
+	
+	url(r'^graph_gf6/get/(?P<index>\w{0,50})/$', graph_gf6),
+	
+	
+	#url(r'^graph_gf6/get/(?P<index>\d+)/$', graph_gf6),
+	
 	url(r'^graph749/', graph749),
 	url(r'^graph748/', graph748),
 	url(r'^graph750/', graph750),

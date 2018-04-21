@@ -672,7 +672,7 @@ def details_track(request):
 	if temp == 1:
 		tm=int(time.time())
 		# Set the time in seconds for timeout on Display mode
-		en = tm + 600
+		en = tm + 7200
 		
 		request.session["track_end"] = en
 		request.session["details_track"] = 0
@@ -683,6 +683,25 @@ def details_track(request):
 	
 # Run initialize module on first click of Live Track 	
 def display_initialize(request):
+
+
+	# Check if it's local running or not and if not then force the path as /trakberry
+	# Run switch_net to set it back to network or switch_local for local use
+	try:
+		if request.session["local_switch"] == 1:
+			request.session["local_toggle"] = ""
+		else:
+			request.session["local_toggle"] = "/trakberry"
+	except:
+		request.session["local_toggle"] = "/trakberry"
+	# ******************************************************************************
+	
+	try:
+		request.session["login_name"]
+	except:
+		request.session["login_name"] = "John Seagram"
+		
+
 	en = (int(time.time())) + 800
 	request.session["track_end"] = en
 	request.session["details_track"] = 0
@@ -703,7 +722,7 @@ def display(request):
 	except:
 		st=int(time.time())
 		# Set the time in seconds for timeout on Display mode
-		en = st + 800
+		en = st + 7200
 		
 		request.session["track_end"] = en
 		request.session["display_track"] = 0
