@@ -408,7 +408,19 @@ def supervisor_down(request):
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
+	
+	# Old Method
 	rlist = machine_list_display()
+	
+	# New Method
+	#db, cur =db_open()
+	#sql = "SELECT * FROM vw_asset_eam_lp"
+	#cur.execute(sql)
+	#tmp = cur.fetchall()
+	#rlist = tmp[0]
+	
+	
+	#return render(request,"test6.html",{'list':rlist})
 	#request.session["login_tech"] = "none"
 	return render(request,'supervisor_down.html', {'List':rlist,'args':args})	
 

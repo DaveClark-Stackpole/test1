@@ -33,11 +33,18 @@
 <datalist id="browsers">
 	  
 {% for item in List %}
+
+
 <option value={{item.1}}>{{item.1}}</option>
 <option value={{item.1}}({{item.2}})>{{item.1}}({{item.2}})</option>
 <option value={{item.1}}-({{item.0}})>{{item.1}}-({{item.0}})</option>
 <option value={{item.0}}-({{item.1}})>{{item.0}}-({{item.1}})</option>
 <option value={{item.2}}-({{item.1}})>{{item.0}}-({{item.1}})</option>
+
+
+<!-- 
+<option value={{item}} > {{item}} </option>
+-->
 {% endfor %}
 
 </datalist>

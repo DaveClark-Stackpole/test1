@@ -75,6 +75,7 @@ def edit_part(request):
 	return render(request,'tb_edit_partnumber.html', args)
 	
 def select_date(request):
+
 	
 	try:
 		request.session["s_date"]
@@ -109,6 +110,8 @@ def select_date(request):
 # Select Date for Daily Report Display  ***************
 # *****************************************************
 def select_day(request):
+	# Pause Tracking While looking at reports
+	request.session["details_track"] = 1
 	
 	try:
 		request.session["s_date"]

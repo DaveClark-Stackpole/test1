@@ -57,7 +57,11 @@ def Metric_OEE(t,u,down_time,count,h_rate):
 	# Calculate Planned Availability
 	#PT = 28800 - down_time
 	tu = t-u
-	PT = (t-u) - down_time
+	
+	#  Old Calculation 
+	#PT = (t-u) - down_time
+	PT = (t-u)
+	
 	A = (PT / float((t-u)))
 	A = 1
 

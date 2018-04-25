@@ -292,6 +292,12 @@ def maint_call(request, index):
 
 	# Select prodrptdb db located in views_db
 	db, cur = db_open()  
+	sql1 = "SELECT whoisonit FROM pr_downtime1 where idnumber='%s'" %(index)
+	cursor.execute(sql1)
+	tmp = cursor.fetchall()
+	tmp2 = tmp[0]
+	
+	
 	sql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (tec,index))
 	cur.execute(sql)
 	db.commit()
@@ -328,7 +334,7 @@ def maint_logout(request):
 
 	
 		request.session["login_maint"] = tec
-		
+		request.session["login_maint_check"] = 1
 		
 
 		return maint(request)
@@ -339,6 +345,7 @@ def maint_logout(request):
 	args.update(csrf(request))
 	args['form'] = form
 	request.session["login_maint"] = "none"
+	request.session["login_maint_check"] = 0
 	return render(request,'maint_login.html', args)	
 	
 def maint_pass(request, index):	

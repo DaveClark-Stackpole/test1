@@ -1,5 +1,5 @@
 
-{% extends "gf6input.html" %}
+{% extends "main.html" %}
 
 {% block styleA %}
 
@@ -55,7 +55,7 @@ a.blue:hover {color: black;}
 
 
 
-<br><br><br><br>
+
 <div class="noPrint"><br></div>
 
 
@@ -71,28 +71,34 @@ a.blue:hover {color: black;}
 
 
 <table style="width:70%;margin-left:10%;">
-<tr><th bgcolor="#CCDDE3" style="font-size: 200%;" colspan="13">
+<tr><th bgcolor="#CCDDE3" style="font-size: 200%;" colspan="19">
 <center><t>Magna</center></t></th>
 </tr>
 <tr>
 <th bgcolor="#CCDDE3" rowspan="2"><center><t>Shift</t></th>
 <th bgcolor="#B7CCB6" colspan="6"><center><t>Trilobe</t></th>
 <th bgcolor="#D9A4ED" colspan="6"><center><t>Optimized</t></th>
-
+<th bgcolor="#CCC59B" colspan="6"><center><t></t></th>
 </tr>
 	<tr>
 	<th bgcolor="#B7CCB6"><center><t>Machine</t></th>
 	<th bgcolor="#B7CCB6"><center><t>Part</t></th>
 	<th bgcolor="#B7CCB6"><center><t>Count</t></th>
 	<th bgcolor="#B7CCB6"><center><t>Target&nbsp;</t></th>
-	<th bgcolor="#B7CCB6"><center><t>Shift OA&nbsp;&nbsp;&nbsp;</t></th>
-	<th bgcolor="#B7CCB6"><center><t>Day OA</t></th>
+	<th bgcolor="#B7CCB6"><center><t>OEE&nbsp;&nbsp;&nbsp;</t></th>
+	<th bgcolor="#B7CCB6"><center><t>Cell</t></th>
 	<th bgcolor="#D9A4ED"><center><t>Machine</t></th>
 	<th bgcolor="#D9A4ED"><center><t>Part</t></th>
 	<th bgcolor="#D9A4ED"><center><t>Count</t></th>
 	<th bgcolor="#D9A4ED"><center><t>Target&nbsp;</t></th>
-	<th bgcolor="#D9A4ED"><center><t>Shift OA&nbsp;&nbsp;&nbsp;</t></th>
-	<th bgcolor="#D9A4ED"><center><t>Day OA</t></th>
+	<th bgcolor="#D9A4ED"><center><t>OEE&nbsp;&nbsp;&nbsp;</t></th>
+	<th bgcolor="#D9A4ED"><center><t>Cell</t></th>
+	<th bgcolor="#CCC59B"><center><t>Machine</t></th>
+	<th bgcolor="#CCC59B"><center><t>Part</t></th>
+	<th bgcolor="#CCC59B"><center><t>Count</t></th>
+	<th bgcolor="#CCC59B"><center><t>Target</t></th>
+	<th bgcolor="#CCC59B"><center><t>OEE</t></th>
+	<th bgcolor="#CCC59B"><center><t>Cell</t></th>
 	</tr>
 	
 	
@@ -129,7 +135,7 @@ a.blue:hover {color: black;}
 	{% endif %}
 
 {% if index.8 == 12 %}
-<td  bgcolor="#D8EBC5" rowspan="4">	<center><t>---</t></td>
+<td  bgcolor="#D8EBC5" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
 
 
@@ -148,11 +154,27 @@ a.blue:hover {color: black;}
 	{% endif %}
 
 {% if index.8 == 13 %}
-<td  bgcolor="#E5C2F2" rowspan="4">	<center><t>---</t></td>
+<td  bgcolor="#E5C2F2" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
 
 {% endif %}
+{% if index.7 == 3 %}
+<!-- display GF6 input OP30 data -->
+	{% if index.0 == '8' %}
 
+	{% else %}
+		<td  bgcolor="#D9D5BD"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+		<td  bgcolor="#D9D5BD"><center><o>{{index.2}}</o></td>
+		<td  bgcolor="#D9D5BD"><center><o>{{index.1}}</o></td>
+		<td  bgcolor="#D9D5BD">	<center><o>{{index.6}}</o></td>
+		<td  bgcolor="#D9D5BD">	<center><o>{{index.5}}</o></td>
+	{% endif %}
+
+{% if index.8 == 14 %}
+<td  bgcolor="#D9D5BD" rowspan="4">	<center><t>{{index.9}}</t></td>
+{% endif %}
+
+{% endif %} 
 
 {% else %}
 {% if index.7 == 1 %}
@@ -169,10 +191,10 @@ a.blue:hover {color: black;}
 <td  bgcolor="#FAFAF5">	<center><o>{{index.5}}</o></td>
 {% endif %}
 {% if index.8 == 0 %}
-<td  bgcolor="#FAFAF5" rowspan="4">	<center><t>---</t></td>
+<td  bgcolor="#FAFAF5" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
 {% if index.8 == 24 %}
-<td  bgcolor="#FAFAF5" rowspan="4">	<center><t>---</t></td>
+<td  bgcolor="#FAFAF5" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
 
 {% endif %}
@@ -190,16 +212,38 @@ a.blue:hover {color: black;}
 
 
 {% if index.8 == 1 %}
-<td  bgcolor="#F0E4F5" rowspan="4">	<center><t>---</t></td>
+<td  bgcolor="#F0E4F5" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
 
 {% if index.8 == 25 %}
-<td  bgcolor="#F0E4F5" rowspan="4">	<center><t>---</t></td>
+<td  bgcolor="#F0E4F5" rowspan="4">	<center><t>{{index.9}}</t></td>
 {% endif %}
 
 
 {% endif %}
+{% if index.7 == 3 %}
+<!-- display GF6 input OP30 data -->
+	{% if index.0 == '8' %}
 
+	{% else %}
+		<td  bgcolor="#F5F2DF"><center><o><a href="/trakberry/graph_gf6_report/get/{{ index.10 }}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6_report/get/{{index.10}}', 'newwindow', 'width=1400, height=600'); return false;" class="blue">{{index.0}}</a></o></td>
+		<td  bgcolor="#F5F2DF"><center><o>{{index.2}}</o></td>
+		<td  bgcolor="#F5F2DF"><center><o>{{index.1}}</o></td>
+		<td  bgcolor="#F5F2DF">	<center><o>{{index.6}}</o></td>
+		<td  bgcolor="#F5F2DF">	<center><o>{{index.5}}</o></td>
+	{% endif %}
+
+
+{% if index.8 == 2 %}
+<td  bgcolor="#F5F2DF" rowspan="4">	<center><t>{{index.9}}</t></td>
+{% endif %}
+
+{% if index.8 == 26 %}
+<td  bgcolor="#F5F2DF" rowspan="4">	<center><t>{{index.9}}</t></td>
+{% endif %}
+
+
+{% endif %}
 
 {% endif %}
 

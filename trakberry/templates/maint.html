@@ -127,20 +127,19 @@
             <a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;"></a>
         </div>
         <div class="collapse navbar-collapse">
+			{% if request.session.login_maint_check %}
+				<ul class="nav navbar-nav">
 			
-            <ul class="nav navbar-nav">
-			
-				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-                <li><a href="/trakberry/maint"><span class="glyphicon glyphicon-home"></span> Main</a></li>
+					<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+					<li><a href="/trakberry/maint"><span class="glyphicon glyphicon-home"></span> Main</a></li>
 				
-				<li><a href="#"><span class="glyphicon glyphicon-fire"></span>Add Call</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-fire"></span>Add Call</a></li>
 
-				<li><a href="/trakberry/maint_job_history"><span class="glyphicon glyphicon-folder-open"></span> Job History</a></li>
-				<li><a href="/trakberry/maint_map"><span class="glyphicon glyphicon-sunglasses"></span> Map</a></li>
+					<li><a href="/trakberry/maint_job_history"><span class="glyphicon glyphicon-folder-open"></span> Job History</a></li>
+					<li><a href="/trakberry/maint_map"><span class="glyphicon glyphicon-sunglasses"></span> Map</a></li>
 				
-
-			</ul>	
-			
+				</ul>	
+			{% endif %}
 			<ul class="nav navbar-nav navbar-right">	
 			<li><font color="#ffffff" size ="2">Welcome: <u>{{request.session.login_maint}}</u></li>
 			<li><a href="/trakberry/maint_logout" style="color:#47889E"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>

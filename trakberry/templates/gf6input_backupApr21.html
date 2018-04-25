@@ -1,10 +1,9 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!-- <body style="background-color:#07B4DF;">
 
 
+<body bgcolor="#e8eaed">
 
+-->
 
 {% block refresh %}
 
@@ -74,68 +73,39 @@ function drawCurveTypes() {
 
 
 
-
+{% block content %}
 
 <!-- ******   Load Style for Table  ****** -->
 	<link rel='stylesheet' href='/static/style_1/table1.css'>
-	<script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
-	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-	
-	</head>
 <!-- **************************************** -->
 {% if request.session.details_track = 0 %}
-	<meta http-equiv="refresh" content="8; url={{request.session.local_toggle}}/display1" />
+
+
+
+
+	<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/display1" />
 {% endif %}	
-
-<body>
-
-<!-- Menu Bar -->
-<div class="navbar navbar-light navbar-fixed-top" style="background-color: #DFDFDF;border-width: thin;border-color: black;" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/trakberry/" style="position:absolute;left:0px;top:-10px;"><img src="/static/media/stack.jpg"  height="40" width="170"></a>
-        </div>
-        <div class="collapse navbar-collapse">
-            
-            <ul class="nav navbar-nav">
-				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-
-				<li><a href="{{request.session.local_toggle}}/main" style="color:black;"><span class="glyphicon glyphicon-eye-open"></span>Main Program</a></li>
-				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-
-				<!-- Choice if Tracking is on or not for Menu Item -->
-				{% if request.session.details_track = 0 %}
-					<li><a href="{{request.session.local_toggle}}/details_track" style="color:black;background-color: #E08E8E;">Pause Tracking</a></li>
-				{% else %}
-					<li><a href="{{request.session.local_toggle}}/details_track" style="color:black;background-color: #54E143;">Start Tracking</a></li>
-				{% endif %}
-				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-
-				<li><a href="{{request.session.local_toggle}}/reports_day" style="color:black;"><span class="glyphicon glyphicon-th"></span>Daily Reports</a></li>
-				<!-- End Choice -->
-
-
-		</div><!--/.nav-collapse -->
-	</div>
-</div>
-
-<!--  End of Menu Bar -->
-
-{% block content %}
-
-
-
 <br>
 <font style="margin-left:37%;font-size:225%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>
 
+{% if request.session.details_track = 0 %}
 
+	<a href="{{request.session.local_toggle}}/details_track/">
+	
+	<button style="text-align: left;width:150px;margin-left:3%;font-size: 70%;
+		background-color:#BD554D;
+		color: #ffffff;" /><center>Pause</center></button>
+	
+	</a></font><img src="/static/media/running.gif"  height="40" width="50">
+{% else %}
+	<a href="{{request.session.local_toggle}}/details_track/">
+		<button style="text-align: left;width:150px;margin-left:10%;font-size: 70%;
+		background-color:#2AA823;
+		color: #ffffff;" /><center>Resume</center></button>
+	
+	</a></font>
+	
+{% endif %}	
 
 
 
@@ -243,8 +213,7 @@ function drawCurveTypes() {
 </center>
 
 
-</body>
-</html>
+
 
 {% endblock %}	
 
