@@ -118,9 +118,11 @@ urlpatterns = [
 	url(r'^fade2/', fade2),
 	url(r'^ttip/', ttip),
 	
-	
 	url(r'^graph_gf6op/get/(?P<index>\d+)/$', graph_gf6),
-	url(r'^graph_gf6_report/get/(?P<index>\d+)/$', graph_gf6_report),
+	
+	url(r'^graph_gf6_report/get/(?P<index>\w{0,50})/$', graph_gf6_report),
+	#url(r'^graph_gf6_report/get/(?P<index>\d+)/$', graph_gf6_report),
+	
 	url(r'^graph/', graph),
 	url(r'^graph2/', graph2),
 	url(r'^graph3/', graph3),

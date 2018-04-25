@@ -229,15 +229,26 @@ def graph_gf6_report(request,index):
 	# take the first 4 digits as your machine number
 	machine_number = mm[:4]
 	
-	# take the remaining digits as your shift association
-	shift_number=mm[4:9]
-	
-	machine_number=int(machine_number)
+	if machine_number == 'Tril':
+		machine_number = 'Trilobe'
+		shift_number = mm[7:9]
+		part = '50-1467'
+	elif machine_number == 'Opti':
+		machine_number = 'Optimized'
+		shift_number = mm[9:9]
+		part = '50-1437'
+	else:
+		# take the remaining digits as your shift association
+		shift_number=mm[4:9]
+		machine_number=int(machine_number)
+		part = '50-9341'
+		
 	shift_number=int(shift_number)
+	
 	global dt
 	request.session["machine_graph"] = machine_number
 	m = str(machine_number)
-	part = '50-9341'
+
 
 	machine_rate = machine_rates(part,m)
 	
