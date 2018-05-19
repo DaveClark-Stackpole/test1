@@ -105,12 +105,39 @@ def machine_list_display():
 def part_list_display():
 
 	db, cur = db_open()
-	sql = "SELECT DISTINCT Part FROM tkb_inventory_fixed"
+	a = ['' for x in range(0)]
+	b = ['' for x in range(0)]
+	
+	ctr = 1
+	sw = 0
+	sql = "SELECT DISTINCT Part FROM tkb_inventory_fixed ORDER BY %s %s" %('Part','ASC')
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	
+	for i in tmp:
+		if ctr > 3:
+			sw = 1
+			ctr = 0
+		a.append(i[0])
+		b.append(sw)
+		ctr = ctr + 1
+		sw = 0
+		#a.append(i[1])
+		
+	
+	xy = zip(a,b)
+	return xy
+	
+	
+
+def cust_list_display():
+
+	db, cur = db_open()
+	sql = "SELECT DISTINCT Customer FROM tkb_inventory_fixed"
 	cur.execute(sql)
 	tmp = cur.fetchall()
 
 	return tmp
-	
 
 def emp_list_display():
 	db, cur = db_open()

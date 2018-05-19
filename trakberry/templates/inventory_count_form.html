@@ -12,22 +12,50 @@
 <table border ="1" style="width:75%;margin-left:10%;">
 
 <tr>
-<th  bgcolor="#B6D6E0" style="width:20%";>
+
+
+
+
+<th colspan="4" bgcolor="#B6D6E0" style="width:20%";>
 	
 
-<font color="#000000" size ="4" style="float:right;">Part: &nbsp;&nbsp;&nbsp;
+<font color="#000000" size ="5"><center>Part</center>
+
+</th>
+
+</tr><tr>
+
+
+
+<th  bgcolor="#B6D6E0" style="width:20%";>
+
+{% for i in List %}
+
+<br>
+<button style="background-color: #5CC4ED;border-radius: 20px;width:90%;height:200%;font-weight: 700;
+	type="submit" name="one" value="{{i.0}}" /><font color="#000000" size ="3">{{i.0}}</font></button>
+<br>
+{% if i.1 == aa %}
+</th></tr><tr><th bgcolor="#B6D6E0">
+
+{% elif i.1 == bb %}
 </th><th bgcolor="#B6D6E0">
 
 
-<select style="font-size:14px;width:100%;height:30px;" name="Part" >
-	{% for item in List %}
-		<option value={{item.0}}>{{item.0}}</option>
-	{% endfor %}
-</select>
+{% endif %}
+
+
+
+{% endfor %}
+
+
+
 
 </th></tr>
+</table>
 
-
+<!--
+<table border ="1" style="width:58%;margin-left:10%;">
 
 <tr><th  bgcolor="#B6D6E0" style="width:20%";>
 <font color="#000000" size ="4" style="float:right;">Op: &nbsp;&nbsp;&nbsp;
@@ -38,12 +66,25 @@
 </th>
 
 <tr><th  bgcolor="#B6D6E0" style="width:20%";>
-<font color="#000000" size ="4" style="float:right;">Final: &nbsp;&nbsp;&nbsp;
+<font color="#000000" size ="4" style="float:right;">Customer: &nbsp;&nbsp;&nbsp;
+</th>
+<th bgcolor="#B6D6E0">
+<select style="font-size:14px;width:100%;height:30px;" name="Customer" >
+	{% for iitem in LList %}
+		<option value={{iitem.0}}>{{iitem.0}}</option>
+	{% endfor %}
+</select>
+
+</th>
+
+<tr><th  bgcolor="#B6D6E0" style="width:20%";>
+<font color="#000000" size ="4"  style="float:right;">Skids: &nbsp;&nbsp;&nbsp;
 </th>
 
 <th bgcolor="#B6D6E0">
 <input style="font-size:14px;width:100%;height:30px;" type="text" name="Final">
 </th>
+
 <tr><th  bgcolor="#B6D6E0" style="width:20%";>
 <font color="#000000" size ="4"  style="float:right;">Blue: &nbsp;&nbsp;&nbsp;
 </th>
@@ -65,6 +106,17 @@
 <th bgcolor="#B6D6E0">
 <input style="font-size:14px;width:100%;height:30px;" type="text" name="Cart">
 </th>
+
+
+<tr><th  bgcolor="#B6D6E0" style="width:20%";>
+<font color="#000000" size ="4"  style="float:right;">Wire: &nbsp;&nbsp;&nbsp;
+</th>
+
+<th bgcolor="#B6D6E0">
+<input style="font-size:14px;width:100%;height:30px;" type="text" name="Wire">
+</th>
+
+
 <tr><th  bgcolor="#B6D6E0" style="width:20%";>
 <font color="#000000" size ="4"  style="float:right;">Qty: &nbsp;&nbsp;&nbsp;
 </th>
@@ -86,6 +138,9 @@
 </th></tr>
 
 </table>
+
+-->
+
 </form>
 
 </center>

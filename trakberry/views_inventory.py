@@ -6,7 +6,7 @@ from views_db import db_open
 from views_mod1 import find_current_date
 from views_email import e_test
 from views_supervisor import supervisor_tech_call
-from trakberry.views_testing import part_list_display
+from trakberry.views_testing import part_list_display, cust_list_display
 import MySQLdb
 import time
 import datetime
@@ -27,24 +27,26 @@ def inventory_type_entry(request):
         			
 		part = request.POST.get("inventory_part")
 		storage = request.POST.get("inventory_storage")
+		customer = request.POST.get("inventory_customer")
 		qty = request.POST.get("inventory_qty")
 		
 		request.session['inventory_part'] = part
 		request.session['inventory_storage'] = storage
+		request.session['inventory_customer'] = customer
 		request.session['inventory_qty'] = qty
 
 
 		db, cur = db_open()
 		
 		try:
-			sql2 = "SELECT * from tkb_inventory_fixed WHERE Part = '%s' and Storage = '%s'" % (part, storage)
+			sql2 = "SELECT * from tkb_inventory_fixed WHERE Part = '%s' and Storage = '%s' and Customer = '%s'" % (part, storage,customer)
 			cur.execute(sql2)
 			tmp = cur.fetchall()
 			tmp2 = tmp[0]
 
 			return render(request,'done_inventory_fixed.html')
 		except:
-			cur.execute('''INSERT INTO tkb_inventory_fixed(Part,Storage,Quantity) VALUES(%s,%s,%s)''', (part,storage,qty))
+			cur.execute('''INSERT INTO tkb_inventory_fixed(Part,Storage,Customer,Quantity) VALUES(%s,%s,%s,%s)''', (part,storage,customer,qty))
 			db.commit()
 			return render(request,'done_inventory_fixed.html')
 			
@@ -77,18 +79,25 @@ def inventory_fix(request):
 			cur.execute(sql2)
 			db.commit()
 	return render(request,'done_test.html')
+
+def inventory_entry1(request):
+	tmp = part_list_display()
 	
 def inventory_entry(request):	
 	tmp = part_list_display()
+	c_tmp = cust_list_display()
 	if request.POST:
-		u = 2
+		u = 3
+		customer = ''
 		T = int(time.time())
 		part = request.POST.get("Part")
 		op = request.POST.get("Op")
 		final = request.POST.get("Final")
+		customer = request.POST.get("Customer")
 		blue = request.POST.get("Blue")
 		green = request.POST.get("Green")
 		cart = request.POST.get("Cart")
+		wire = request.POST.get("Wire")
 		quantity = request.POST.get("Quantity")
 		try:
 			final = int(final)
@@ -106,7 +115,10 @@ def inventory_entry(request):
 			cart = int(cart)
 		except:
 			cart = 0	
-			
+		try:
+			wire = int(wire)
+		except:
+			wire = 0		
 		try:
 			q = int(quantity)
 		except:
@@ -115,9 +127,10 @@ def inventory_entry(request):
 		# Update Inventory
 		db, cur = db_open()
 		
+		
 		if final > 0:
 			storage = "Final"
-			sql1 = "SELECT Quantity from tkb_inventory_fixed WHERE Part = '%s' and Storage = '%s'" % (part, storage)
+			sql1 = "SELECT Quantity from tkb_inventory_fixed WHERE Part = '%s' and Storage = '%s' and Customer ='%s'" % (part, storage, customer)
 			cur.execute(sql1)
 			tmp = cur.fetchall()
 			tmp2 = tmp[0]
@@ -150,9 +163,18 @@ def inventory_entry(request):
 			tmp2 = tmp[0]
 			ht = int(tmp2[0])
 			q = q + (cart * ht)	
+		
+		if wire > 0:
+			storage = "wire"
+			sql4 = "SELECT Quantity from tkb_inventory_fixed WHERE Part = '%s' and Storage = '%s'" % (part, storage)
+			cur.execute(sql4)
+			tmp = cur.fetchall()
+			tmp2 = tmp[0]
+			ht = int(tmp2[0])
+			q = q + (wire * ht)	
 			
 			
-		cur.execute('''INSERT INTO tkb_inventory_ops(Timestamp,Part,Op,Final,Blue,Green,Cart,Quantity,Count_Update) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (T,part,op,final,blue,green,cart,q,u))
+		cur.execute('''INSERT INTO tkb_inventory_ops(Timestamp,Part,Customer,Op,Final,Blue,Green,Cart,Wire,Quantity,Count_Update) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (T,part,customer,op,final,blue,green,cart,wire,q,u))
 		db.commit()
 		db.close()
 		return render(request,'done_inventory_entry.html')
@@ -166,7 +188,10 @@ def inventory_entry(request):
 	args.update(csrf(request))
 	args['form'] = form
 	
-	return render(request,'inventory_count_form.html', {'List':tmp,'args':args})
+	#return render(request, "test992.html", {'X':tmp})
+	aa = 1
+	bb = 0
+	return render(request,'inventory_count_form.html', {'List':tmp,'LList':c_tmp,'aa':aa,'bb':bb,'args':args})
 	
 
 	
