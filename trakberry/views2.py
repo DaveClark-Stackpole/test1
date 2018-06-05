@@ -441,7 +441,7 @@ def main(request):
 	except:
 		password = 'no'
 		name = ""
-		
+	
 	#ctr = request.session["test_counter"]
 	
 	

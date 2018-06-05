@@ -189,11 +189,14 @@ def tech(request):
 	a9 = "Al Vilandre"
 	a10 = "Woodrow Sismar"
 	a11 = "Mayank Gehlot"
+	a13 = "Les Vaters"
 	a12 = "Phuc Bui"
+	a12 = "Jered Pankratz"
+
 	
 	d1 = '2015-05-01'
 	d2 = '2015-07-01'
-	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12)
+	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
 
 	cursor.execute(sqlT)
 	tmp = cursor.fetchall()
@@ -284,7 +287,9 @@ def tech(request):
 		request.session["login_image"] = "/static/media/tech_training.jpg"
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"		
 			
-			
+	elif request.session["login_tech"] == "Terry Kennedy":
+		request.session["login_image"] = "/static/media/tech_terry.jpg"
+		request.session["login_back"] = "/static/media/back_terry.jpg"		
 	else:
 		request.session["login_image"] = "/static/media/tech_rick.jpg"
 		request.session["login_back"] = "/static/media/back_rick.jpg"
@@ -325,7 +330,10 @@ def tech(request):
 	# ********************************************************************************************************
 	
 	
-	return render(request,"tech.html",{'L':list,'cnt':cnt,'M':tmp4,'N':n,'Z':Z})
+	tcur=int(time.time())
+	
+	
+	return render(request,"tech.html",{'L':list,'cnt':cnt,'M':tmp4,'N':n,'Z':Z,'TCUR':tcur})
 
 def tech_message_close(request):
 	request.session["refresh_tech"] = 0

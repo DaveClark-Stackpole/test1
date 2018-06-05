@@ -105,7 +105,7 @@
 
 <body>
 
-<img alt="full screen background image" src="{{request.session.login_back}}" id="full-screen-background-image"/>
+<img alt="full screen background image" src="{{request.session.login_back}}?{{TCUR}}" id="full-screen-background-image"/>
 
 <!--
 
@@ -144,7 +144,7 @@
                 <span class="icon-bar"></span>
             </button>
 			<font color="#ffffff" size ="3"><b>Tech App</b></b></font>
-			<img src="{{request.session.login_image}}"  style="border-radius: 25px;" height="60" width="70">
+			<img src="{{request.session.login_image}}?{{TCUR}}"  style="border-radius: 25px;" height="60" width="70">
             <a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;"></a>
         </div>
         <div class="collapse navbar-collapse">

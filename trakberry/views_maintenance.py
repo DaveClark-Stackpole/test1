@@ -293,8 +293,8 @@ def maint_call(request, index):
 	# Select prodrptdb db located in views_db
 	db, cur = db_open()  
 	sql1 = "SELECT whoisonit FROM pr_downtime1 where idnumber='%s'" %(index)
-	cursor.execute(sql1)
-	tmp = cursor.fetchall()
+	cur.execute(sql1)
+	tmp = cur.fetchall()
 	tmp2 = tmp[0]
 	
 	
