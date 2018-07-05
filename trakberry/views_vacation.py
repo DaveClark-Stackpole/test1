@@ -53,8 +53,11 @@ def vacation_set_current2():
 
 	t = vacation_temp()
 	month_st = t.month
+	#month_st = month_st - 1
 	year_st = t.year
 	day_st = t.day
+	
+	#day_st = 10
 	
 	if int(month_st)<10:
 		current_first = str(year_st) + "-" + "0" + str(month_st) 
@@ -67,7 +70,31 @@ def vacation_set_current2():
 		current_first = current_first + "-" + str(day_st)
 		
 	return current_first
+	
+def vacation_set_current3():
 
+	t = vacation_temp()
+	month_st = t.month
+	#month_st = month_st - 1
+	year_st = t.year
+	day_st = t.day
+	
+	# Force it to start from June 19
+	day_st = 19
+	month_st = 6
+	
+	if int(month_st)<10:
+		current_first = str(year_st) + "-" + "0" + str(month_st) 
+	else:
+		current_first = str(year_st) + "-" + str(month_st) 	
+		
+	if int(day_st)<10:
+		current_first = current_first + "-" + "0" + str(day_st)
+	else:
+		current_first = current_first + "-" + str(day_st)
+		
+	return current_first
+	
 def vacation_backup(request):
 
 	# backup Vacation Table

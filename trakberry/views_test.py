@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_db import db_open
+from views_vacation import vacation_set_current3
 from views_mod1 import find_current_date
 #from views2 import main_A
 from trakberry.forms import login_Form,layered_entry_Form
@@ -469,4 +470,83 @@ def layer_retrieve(request,index):
 
 def sup_mess(request):
 	return render(request,'sup_mess.html')
+	
+	
+def create_scrap_table(request):
+	# Create a Testing Table
+	
+	db, cursor = db_open()  
+	
+	cursor.execute("""DROP TABLE IF EXISTS data_scrap_production""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS data_scrap_production(Id INT PRIMARY KEY AUTO_INCREMENT,Date datetime, PartID CHAR(30), DeptID CHAR(30), MachineID CHAR(30), OperationID CHAR(30), Scrap INT(20), Production INT(20), Scrap_Cost Varchar(30), Scrap_ID INT(20))""")
+  
+	db.commit()
+	db.close()
+	return render(request,'done_test.html')
+	
+def test_scrap_production(request):
+	# Test entries for date
+	current = vacation_set_current3()
+	
+	db, cursor = db_open() 
+	
+	sql = "SELECT * FROM sc_production1 where pdate >= '%s'" %(current)
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	
+	done_check = 1
+	for x in tmp:
+		xx = 0
+		try:
+			xx = x[4]
+		except:
+			xx = 0
+		cursor.execute('''INSERT INTO data_scrap_production(Date,MachineID,OperationID,Production,PartID) VALUES(%s,%s,%s,%s,%s)''', (x[10],x[1],x[2],xx,x[3]))
+		db.commit()
+	
+
+	try:
+		mql = "SELECT MAX(Date) FROM data_scrap_production"
+		cursor.execute(mql)
+		tmp = cursor.fetchall()
+		tmp2 = tmp[0]
+		max_date = tmp2[0]
+	except:
+		max_date = current
+	
+	
+	wql = "SELECT * FROM vw_scraplist where Date > '%s'" %(max_date)
+	cursor.execute(wql)
+	tmp2 = cursor.fetchall()
+	
+	for x in tmp2:
+		cursor.execute('''INSERT INTO data_scrap_production(Date,PartID,MachineID,Scrap,Scrap_Cost,Scrap_ID) VALUES(%s,%s,%s,%s,%s,%s)''', (x[0],x[1],x[4],x[7],x[9],x[10]))
+		db.commit()
+		
+	db.close()
+	return render(request,'done_test.html')
+	
+def test_scrap1(request):
+	
+	db, cursor = db_open()
+	sql = "SELECT MAX(Date) FROM vw_scraplist" 
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	tmp2 = tmp[0]
+	tmp3 = tmp2[0]
+	
+	db.close()
+	
+	return render(request,"test_a.html",{'tmp3':tmp3})
+	
+  
+  
+  
+  
+	
+
+	
+	
+	
+	
 	

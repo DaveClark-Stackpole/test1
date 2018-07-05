@@ -42,9 +42,10 @@ from views_mod1 import table_copy
 from views_email import e_test
 from views import fix_time
 from views_test import test_list, toggle_1, layer_test, layer_entry, layer_transfer_temp, layer_choice_init, layer_choice, layer_select, layer_audit_check_reset
-from views_test import layer_retrieve,sup_mess
+from views_test import layer_retrieve,sup_mess, test_scrap1
 from views_test_email import email1, done_email_1
 from views_testing import clear_login
+from views_test import create_scrap_table, test_scrap_production
 # ***********************************************************************************************************************************************************
 
 
@@ -309,6 +310,9 @@ urlpatterns = [
 	url(r'^layer_audit_check_reset/', layer_audit_check_reset),
 	url(r'^layer_retrieve/get/(?P<index>\d+)/$', layer_retrieve),
 	url(r'^clear_login/', clear_login),
+	url(r'^create_scrap_table/', create_scrap_table),
+	url(r'^test_scrap_production/', test_scrap_production),
+	url(r'^test_scrap1/', test_scrap1),
 #	url(r'^hour_check/', hour_check),
 
 	

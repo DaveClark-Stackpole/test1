@@ -266,10 +266,11 @@ def supervisor_display(request):
 #	request.session["refresh_sup"] = 0
 #	tmp4 =''
 	Z_Value = 1
+	tcur=int(time.time())
 
   # call up 'display.html' template and transfer appropriate variables.  
 	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})
-	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'args':args})
+	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'TCUR':tcur,'args':args})
 
 def sup_message(request):	
 	A = 'Chris Strutton'
@@ -390,6 +391,23 @@ def supervisor_down(request):
 		problem = request.POST.get("reason")
 		priority = request.POST.get("priority")
 		whoisonit = request.session["whoisonit"]
+		
+		# take comment into tx and ensure no "" exist.  If they do change them to ''
+		tx = problem
+		tx = ' ' + tx
+		if (tx.find('"'))>0:
+			#request.session["test_comment"] = tx
+			#return out(request)
+			ty = list(tx)
+			ta = tx.find('"')
+			tb = tx.rfind('"')
+			ty[ta] = "'"
+			ty[tb] = "'"
+			tc = "".join(ty)
+		else:
+			tc = tx
+		problem = tc
+		
 		
 		# call external function to produce datetime.datetime.now()
 		t = vacation_temp()
@@ -1935,7 +1953,7 @@ def tech_report_email():
 		#email_name = ["stackpolepmds@gmail.com","dave7995@gmail.com"]
 		#toaddrs = "; ".join(email_name)
 		
-		toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","dclark@stackpole.com"]
+		toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com"]
 		
 		fromaddr = 'stackpole@stackpole.com'
 		frname = 'Dave'

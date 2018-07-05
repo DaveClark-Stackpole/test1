@@ -199,7 +199,10 @@ def login_initial(request,login_name):
 			request.session["shift_primary"] = 'Furnace Setter'
 			request.session["sfilter17"] = 'checked'
 			request.session["shift17"] = 'Furnace Setter'	
-			
+		elif login_name == 'Scott Herman':
+			request.session["shift_primary"] = 'Furnace Setter'
+			request.session["sfilter17"] = 'checked'
+			request.session["shift17"] = 'Furnace Setter'		
 
 			
 		elif login_name == 'Matt Ohm':

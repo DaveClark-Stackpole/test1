@@ -191,12 +191,14 @@ def tech(request):
 	a11 = "Mayank Gehlot"
 	a13 = "Les Vaters"
 	a12 = "Phuc Bui"
-	a12 = "Jered Pankratz"
+	a14 = "Jered Pankratz"
+	a15 = "Derek Peachey"
+	a16 = "Rob Wood"
 
 	
 	d1 = '2015-05-01'
 	d2 = '2015-07-01'
-	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
+	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16)
 
 	cursor.execute(sqlT)
 	tmp = cursor.fetchall()
@@ -285,7 +287,13 @@ def tech(request):
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"
 	elif request.session["login_tech"] == "Phuc Bui":
 		request.session["login_image"] = "/static/media/tech_training.jpg"
-		request.session["login_back"] = "/static/media/back_tech_training.jpg"		
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"	
+	elif request.session["login_tech"] == "Derek Peachey":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"
+	elif request.session["login_tech"] == "Rob Wood":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"
 			
 	elif request.session["login_tech"] == "Terry Kennedy":
 		request.session["login_image"] = "/static/media/tech_terry.jpg"
@@ -381,6 +389,15 @@ def job_close(request, index):
 	tmp = cursor.fetchall()
 	tmp2 = tmp[0]
 	
+	ssql = "SELECT * FROM pr_downtime1 where idnumber='%s'" %(index)
+	cursor.execute(ssql)
+	ttmp = cursor.fetchall()
+	m2 = ttmp[0]
+	m1 = m2[0]
+	m3 = m2[1]
+	#m2 = ttmp[1]
+	
+	
 	try:
 		request.session["tech_comment"]
 	except:
@@ -429,7 +446,8 @@ def job_close(request, index):
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
-	return render(request,'tech_close.html', args)	
+	return render(request,'tech_close.html',{'Machine':m1,'Description':m3,'args': args})
+#	return render(request,'tech_message_form.html', {'List':tmp,'A':A,'args':args})	
 		
 def tech_logout(request):	
 
@@ -522,8 +540,11 @@ def tech_history(request):
         			
 		machine = request.POST.get("machine")
 		request.session["machine_search"] = machine
-		db, cur = db_open()  		
-		sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
+		db, cur = db_open() 
+		if len(machine) == 3:
+			sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
+		else:
+			sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,4) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
 		cur.execute(sql)
 		tmp = cur.fetchall()
 		db.close

@@ -350,15 +350,16 @@ function goBack() {
 				
 				
 				{%endblock%}
-				
-								<!-- Administrator -->
-				{% if request.session.login_name = "Dave Clark" %}
+				<li><a href="{{request.session.local_toggle}}/sup_message"><span class="glyphicon glyphicon-wrench"></span>Message</a></li>
+								<!-- Administrator 
+
 				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Administrator<b class="caret"></b></a>
 					<ul class="dropdown-menu multi-level">
 
 						<li><a href="{{request.session.local_toggle}}/sup_message">Message</a></li>
-						<li><a href="{{request.session.local_toggle}}/inventory_type_entry">Inventory Fixed</a></li>
+						<!--<li><a href="{{request.session.local_toggle}}/inventory_type_entry">Inventory Fixed</a></li>
 						<li><a href="{{request.session.local_toggle}}/inventory_entry">Inventory Count</a></li>
+						-->
 						<!--
 						<li><a href="/trakberry/employee_manual_enter">Employee Matrix Batch Clear</a></li>
 						<li><a href="/trakberry/emp_info_enter_manual">Employee Matrix Manual Entry</a></li>
@@ -367,7 +368,7 @@ function goBack() {
 						
 					</ul>	
 				</li>
-				{% endif %}
+	
 				
 				
 				</ul>
@@ -390,7 +391,10 @@ function goBack() {
 
 <font color=#000000 >
 {% block background %}
-<img alt="full screen background image" src="/static/media/b1.jpg" id="full-screen-background-image"/>
+<img alt="full screen background image" src="/static/media/b1.jpg?{{TCUR}}" id="full-screen-background-image"/>
+
+
+
 {% endblock %}
 
 
