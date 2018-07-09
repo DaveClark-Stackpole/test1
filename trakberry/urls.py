@@ -54,6 +54,7 @@ from views import display, db_write, create_table, test, details_session, detail
 from views import create_test_table, alter_table_name, done, new, graph, graph2, graph3, graph749, graph748, graph750, graph677, ttip,graph_close, display_time, graph_close_snap
 from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, display_initialize, test44, tech_reset,testB
 from views2 import main_password_update
+from views3 import excel_test
 # ***********************************************************************************************************************************************************
 
 
@@ -313,6 +314,7 @@ urlpatterns = [
 	url(r'^create_scrap_table/', create_scrap_table),
 	url(r'^test_scrap_production/', test_scrap_production),
 	url(r'^test_scrap1/', test_scrap1),
+	url(r'^excel_test/', excel_test),
 #	url(r'^hour_check/', hour_check),
 
 	
