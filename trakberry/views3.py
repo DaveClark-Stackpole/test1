@@ -19,12 +19,12 @@ def excel_test(request):
 	
 	# Change to directory where imported inventory.xlsm is located
 #		Use this for local testing
-	label_link = '/home/trackberry/file/import1/Inventory/importedxls/'
+#	label_link = '/home/trackberry/file/import1/Inventory/importedxls/'
 #		Use this one for actual server
-#	label_link = '/home/file/import1/Inventory/importedxls'
+	label_link = '/home/file/import1/Inventory/importedxls'
 	
-	sheet = 'INVENTORY SYSTEM.xlsm'
-	sheet_name = 'PROSUM REPORT'
+	sheet = 'inventory.xlsx'
+	sheet_name = 'Sheet1'
 	os.chdir(label_link)
 	
 	book = xlrd.open_workbook(sheet)
@@ -32,8 +32,9 @@ def excel_test(request):
 	#working = book.sheet_by_index(1)
 	working = book.sheet_by_name(sheet_name)
 	
-	a = working.cell(7,7).value
-	b = working.cell(7,0).value
+	a = working.cell(1,0).value
+	b = working.cell(1,10).value
+	#b = working.cell(7,0).value
 	#mlist = book.sheet_names()
 	#mlist.encode('ascii','ignore')
 	
