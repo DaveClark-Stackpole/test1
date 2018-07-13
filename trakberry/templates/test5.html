@@ -4,9 +4,18 @@
 
 <br><br>
 
-A value : {{a}}
+<table> 
 
-<br>
 
-B value : {{b}}
+{% for item in a %}
+	<tr>
+	{% for x in item %}
+		<td bgcolor="#CCDDE3" style="font-size:12px;">{{x}}  </td>
+	{% endfor %}
+	</tr>
+{% endfor %}
+
+</table>
+<br><br><br>
+B : {{b}}
 </body></html>

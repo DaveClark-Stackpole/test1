@@ -94,6 +94,28 @@ def vacation_set_current3():
 		current_first = current_first + "-" + str(day_st)
 		
 	return current_first
+
+def vacation_set_current4():
+
+	t = vacation_temp()
+	month_st = t.month
+	#month_st = month_st - 1
+	year_st = t.year
+	day_st = t.day
+	
+	day_st = 12
+	
+	if int(month_st)<10:
+		current_first = str(year_st) + "-" + "0" + str(month_st) 
+	else:
+		current_first = str(year_st) + "-" + str(month_st) 	
+		
+	if int(day_st)<10:
+		current_first = current_first + "-" + "0" + str(day_st)
+	else:
+		current_first = current_first + "-" + str(day_st)
+		
+	return current_first
 	
 def vacation_backup(request):
 
