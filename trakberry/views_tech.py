@@ -194,11 +194,14 @@ def tech(request):
 	a14 = "Jered Pankratz"
 	a15 = "Derek Peachey"
 	a16 = "Rob Wood"
+	a17 = "Greg Hundt"
+	a18 = "Kyle Scheuerman"
+	
 
 	
 	d1 = '2015-05-01'
 	d2 = '2015-07-01'
-	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16)
+	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18)
 
 	cursor.execute(sqlT)
 	tmp = cursor.fetchall()
@@ -282,6 +285,12 @@ def tech(request):
 	elif request.session["login_tech"] == "Muoi Le":
 		request.session["login_image"] = "/static/media/tech_training.jpg"
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"
+	elif request.session["login_tech"] == "Greg Hundt":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"
+	elif request.session["login_tech"] == "Kyle Scheuerman":
+		request.session["login_image"] = "/static/media/tech_training.jpg"
+		request.session["login_back"] = "/static/media/back_tech_training.jpg"		
 	elif request.session["login_tech"] == "Mayank Gehlot":
 		request.session["login_image"] = "/static/media/tech_training.jpg"
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"
