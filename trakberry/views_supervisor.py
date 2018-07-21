@@ -1953,7 +1953,9 @@ def tech_report_email():
 		#email_name = ["stackpolepmds@gmail.com","dave7995@gmail.com"]
 		#toaddrs = "; ".join(email_name)
 		
-		toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com"]
+		
+		# Add name to email list
+		toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com","dgleba@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com"]
 		
 		fromaddr = 'stackpole@stackpole.com'
 		frname = 'Dave'

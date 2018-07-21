@@ -528,16 +528,16 @@ def test_scrap_production(request):
 	
 def test_scrap1(request):
 	
-	db, cursor = db_open()
-	sql = "SELECT MAX(Date) FROM vw_scraplist" 
-	cursor.execute(sql)
-	tmp = cursor.fetchall()
-	tmp2 = tmp[0]
-	tmp3 = tmp2[0]
+	#db, cursor = db_open()
+#	sql = "SELECT MAX(Date) FROM vw_scraplist" 
+#	cursor.execute(sql)
+#	tmp = cursor.fetchall()
+#	tmp2 = tmp[0]
+#	tmp3 = tmp2[0]
 	
-	db.close()
+#	db.close()
 	
-	return render(request,"test_a.html",{'tmp3':tmp3})
+	return render(request,"test_a.html")
 	
   
   
