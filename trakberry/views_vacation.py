@@ -81,7 +81,7 @@ def vacation_set_current3():
 	
 	# Force it to start from June 19
 	day_st = 19
-	month_st = 6
+	month_st = 7
 	
 	if int(month_st)<10:
 		current_first = str(year_st) + "-" + "0" + str(month_st) 

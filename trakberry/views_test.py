@@ -520,7 +520,7 @@ def test_scrap_production(request):
 	tmp2 = cursor.fetchall()
 	
 	for x in tmp2:
-		cursor.execute('''INSERT INTO data_scrap_production(Date,PartID,MachineID,Scrap,Scrap_Cost,Scrap_ID) VALUES(%s,%s,%s,%s,%s,%s)''', (x[0],x[1],x[4],x[7],x[9],x[10]))
+		cursor.execute('''INSERT INTO data_scrap_production(Date,PartID,MachineID,DeptID,Scrap,Scrap_Cost,Scrap_ID) VALUES(%s,%s,%s,%s,%s,%s,%s)''', (x[0],x[1],x[4],x[3],x[7],x[9],x[10]))
 		db.commit()
 		
 	db.close()
