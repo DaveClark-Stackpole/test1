@@ -64,6 +64,11 @@ class sup_dispForm(forms.Form):
 	reason = forms.CharField()	
 	priority = forms.CharField()
 
+class job_dispForm(forms.Form):
+	machine = forms.CharField()	
+	clock = forms.CharField()
+	production = forms.CharField()
+	
 class sup_closeForm(forms.Form):
 	comment = forms.CharField()		
 
