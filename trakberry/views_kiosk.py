@@ -22,24 +22,24 @@ from views_db import db_open
 
 def kiosk(request):
 
-		if request.POST:
-			request.session["test"] = 999
-		a = request.POST
-		try:
-			b=int(a.get("one"))
-		except:
-			return render(request,'display_sup_refresh.html')	
-		if b == -1:
-			return done(request)
-		if b == -2:
-			request.session["call_route"] = 'supervisor'
-			request.session["url_route"] = 'main.html'
-			return done_tech(request)
-		if b == -3:
-			return done_elec(request)	
-		if b == -4:
-			return done_maint(request)		
-		request.session["index"] = b
+#		if request.POST:
+#			request.session["test"] = 999
+#		a = request.POST
+#		try:
+#			b=int(a.get("one"))
+#		except:
+#			return render(request,'display_sup_refresh.html')	
+#		if b == -1:
+#			return done(request)
+#		if b == -2:
+#			request.session["call_route"] = 'supervisor'
+#			request.session["url_route"] = 'main.html'
+#			return done_tech(request)
+#		if b == -3:
+#			return done_elec(request)	
+#		if b == -4:
+#			return done_maint(request)		
+#		request.session["index"] = b
 #		#request.session["test"] = request.POST
 #		return done_edit(request)
 #	else:
