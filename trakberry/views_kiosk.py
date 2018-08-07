@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import sup_downForm, sup_dispForm, sup_closeForm, report_employee_Form, sup_vac_filterForm, sup_message_Form,job_dispForm
+from trakberry.forms import sup_downForm, sup_dispForm, sup_closeForm, report_employee_Form, sup_vac_filterForm, sup_message_Form,job_dispForm,kiosk_dispForm1,kiosk_dispForm2
 from trakberry.views import done
 from views2 import main_login_form
 from views_mod1 import find_current_date
@@ -14,52 +14,87 @@ import json
 import time 
 import smtplib
 from smtplib import SMTP
+from django.core.context_processors import csrf
 
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open
 
-
+# Kiosk Main Page.   Display buttons and route to action when they're pressed
 def kiosk(request):
 
-#		if request.POST:
-#			request.session["test"] = 999
-#		a = request.POST
+	if request.POST:
+		button_t = request.POST
 #		try:
-#			b=int(a.get("one"))
+		
+		button_pressed =int(button_t.get("kiosk_button1"))
 #		except:
-#			return render(request,'display_sup_refresh.html')	
-#		if b == -1:
-#			return done(request)
-#		if b == -2:
-#			request.session["call_route"] = 'supervisor'
-#			request.session["url_route"] = 'main.html'
-#			return done_tech(request)
-#		if b == -3:
-#			return done_elec(request)	
-#		if b == -4:
-#			return done_maint(request)		
-#		request.session["index"] = b
-#		#request.session["test"] = request.POST
-#		return done_edit(request)
-#	else:
-#		form = job_dispForm()
-#	args = {}
-#	args.update(csrf(request))
-#	args['form'] = form
-#	
+#			return kiosk_none1(request)
 
-#	 ********************************************************************************************************
+		# If button pressed is Job (Tagged as -1 )
+		if button_pressed == -1:
+			return kiosk_job(request)
+		# If button pressed is Production (Tagged as -2)
+		if button_pressed == -2:
+			return kiosk_production(request)
+		# If button pressed is Help (Tagged as -3)
+		if button_pressed == -3:
+			return kiosk_help(request)
+		# If button pressed is Scrap (Tagged as -4)
+		if button_pressed == -4:
+			return kiosk_scrap(request)
+			
+		# If no button pressed...Probably should never get here
+		return kiosk_none6(request)
 
-#	cnt = 0
-#	request.session["refresh_sup"] = 0
-#	tmp4 =''
-#	Z_Value = 1
-#	tcur=int(time.time())
 
-  # call up 'display.html' template and transfer appropriate variables.  
-	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})
-#	return render(request,"kiosk.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'TCUR':tcur,'args':args})
+	else:
+		form = kiosk_dispForm1()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
 
-	return render(request,"kiosk.html")
+	return render(request,"kiosk/kiosk.html",{'args':args})
 
+
+def kiosk_job(request):
+
+	return render(request, "kiosk/kiosk_job.html")
+
+def kiosk_job2(request):
+	if request.POST:
+		button_tag = request.POST
+#		try:
+		button_pressed2 = int(button_tag.get("kb"))
+#		except:
+#			return kiosk_none(request)
+		
+		# If button pressed is StartJob (Tagged as -1)
+		if button_pressed2 == -1:
+			return kiosk_job_assign(request)
+		if button_pressed2 == -2:
+			return kiosk_job_leave(request)
+		return kiosk_done4(request)
+	else:
+		form = kiosk_dispForm2()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	return render(request, "kiosk/kiosk_job2.html",{'args':args})
+	
+	
+def kiosk_production(request):
+	return render(request, "kiosk/kiosk_production.html")
+def kiosk_help(request):
+	return render(request, "kiosk/kiosk_help.html")
+def kiosk_job_assign(request):
+	return render(request, "kiosk/kiosk_job_assign.html")
+def kiosk_job_leave(request):
+	return render(request, "kiosk/kiosk_job_leave.html")
+def kiosk_scrap(request):
+	return render(request, "kiosk/kiosk_scrap.html")
+def kiosk_none(request):
+	return render(request, "kiosk/kiosk_none.html")	
+def kiosk_none1(request):
+	return render(request, "kiosk/kiosk_none1.html")	

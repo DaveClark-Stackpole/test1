@@ -68,6 +68,12 @@ class job_dispForm(forms.Form):
 	machine = forms.CharField()	
 	clock = forms.CharField()
 	production = forms.CharField()
+
+class kiosk_dispForm1(forms.Form):
+	button1 = forms.CharField()	
+class kiosk_dispForm2(forms.Form):
+	button1 = forms.CharField()	
+	
 	
 class sup_closeForm(forms.Form):
 	comment = forms.CharField()		
