@@ -1,14 +1,87 @@
 
-
-<!DOCTYPE html>
-<html>
-<body>
-<br><br>
-
-<font size="7">
-Assign Job
-</font>
+<!-- ********************************** -->
+<!-- ****   Kiosk_Job_assign.html   *** -->
+<!-- ********************************** -->
 
 
-</body>
-</html>
+{% extends "kiosk/kiosk.html" %}
+{% block content %}
+
+<form action="" method="post">{% csrf_token %}
+
+<center>
+<table style="width:30%;">
+
+<tr valign="middle"><th style="padding:20px;border-radius: 20px;" bgcolor="#DCDCDC" ><center>
+<font color="#000000" size ="4">Clock Number<br>
+<input style="font-size:14px;width:320px;height:30px;" name="clock" type="text">
+</th></tr>
+
+
+<tr valign="middle"><th style="padding:20px;border-radius: 20px;" bgcolor="#DCDCDC" ><center>
+<font color="#000000" size ="4">Machine / Job
+
+<select style="font-size:14px;width:320px;height:30px;"  name="job1">
+
+<option selected="selected"></option>
+<option value="344">344</option>
+<option value="346">346</option>
+<option value="341">341</option>
+<option value="342">342</option>
+<option value="343">343</option>
+
+</select>
+
+
+
+<br>
+
+<font color="#000000" size ="4">Machine / Job
+<select style="font-size:14px;width:320px;height:30px;"  name="job2">
+
+<option selected="selected"></option>
+<option value="344">344</option>
+<option value="346">346</option>
+<option value="341">341</option>
+<option value="342">342</option>
+<option value="343">343</option>
+
+</select>
+<br>
+
+<font color="#000000" size ="4">Machine / Job
+<select style="font-size:14px;width:320px;height:30px;"  name="job3">
+
+<option selected="selected"></option>
+<option value="344">344</option>
+<option value="346">346</option>
+<option value="341">341</option>
+<option value="342">342</option>
+<option value="343">343</option>
+
+</select>
+<br>
+
+<font color="#000000" size ="4">Machine / Job
+<select style="font-size:14px;width:320px;height:30px;"  name="job4">
+
+<option selected="selected"></option>
+<option value="344">344</option>
+<option value="346">346</option>
+<option value="341">341</option>
+<option value="342">342</option>
+<option value="343">343</option>
+
+</select>
+<br>
+
+</th></tr>
+
+
+
+</table>
+</center>
+</form>
+
+
+{% endblock %}

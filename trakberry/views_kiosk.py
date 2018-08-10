@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import sup_downForm, sup_dispForm, sup_closeForm, report_employee_Form, sup_vac_filterForm, sup_message_Form,job_dispForm,kiosk_dispForm1,kiosk_dispForm2
+from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3
 from trakberry.views import done
 from views2 import main_login_form
 from views_mod1 import find_current_date
@@ -15,32 +15,29 @@ import time
 import smtplib
 from smtplib import SMTP
 from django.core.context_processors import csrf
-
+from views_routes import direction
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open
 
+# *********************************************************************************************************
+# MAIN KIOSK PAGE
+# *********************************************************************************************************
 # Kiosk Main Page.   Display buttons and route to action when they're pressed
 def kiosk(request):
-
+	# Utilize variable route_1 and assign it a value to kick to another module.
+	# that module needs to have a pattern defined in url.py because direction(request)
+	# will route externally to it looking for the pattern.
 	if request.POST:
-		button_t = request.POST
-#		try:
-		
-		button_pressed =int(button_t.get("kiosk_button1"))
-#		except:
-#			return kiosk_none1(request)
-
-		# If button pressed is Job (Tagged as -1 )
+		button_1 = request.POST
+		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
-			return kiosk_job(request)
-		# If button pressed is Production (Tagged as -2)
+			request.session["route_1"] = 'kiosk_job'
+			return direction(request)
 		if button_pressed == -2:
 			return kiosk_production(request)
-		# If button pressed is Help (Tagged as -3)
 		if button_pressed == -3:
 			return kiosk_help(request)
-		# If button pressed is Scrap (Tagged as -4)
 		if button_pressed == -4:
 			return kiosk_scrap(request)
 			
@@ -56,45 +53,70 @@ def kiosk(request):
 
 	return render(request,"kiosk/kiosk.html",{'args':args})
 
-
+# *********************************************************************************************************
+# Secondary Pages generated from Main Page Button Presses
+# *********************************************************************************************************
+# Kiosk Secondary page initiated by JOB button press on main page
 def kiosk_job(request):
-
-	return render(request, "kiosk/kiosk_job.html")
-
-def kiosk_job2(request):
 	if request.POST:
-		button_tag = request.POST
-#		try:
-		button_pressed2 = int(button_tag.get("kb"))
-#		except:
-#			return kiosk_none(request)
-		
-		# If button pressed is StartJob (Tagged as -1)
-		if button_pressed2 == -1:
-			return kiosk_job_assign(request)
-		if button_pressed2 == -2:
-			return kiosk_job_leave(request)
+		button_1 = request.POST
+		button_pressed = int(button_1.get("kiosk_button1"))
+		if button_pressed == -1:
+			request.session["route_1"] = 'kiosk_job_assign'
+			return direction(request)
+		if button_pressed == -2:
+			request.session["route_1"] = 'kiosk_job_leave'
+			return direction(request)
 		return kiosk_done4(request)
 	else:
-		form = kiosk_dispForm2()
+		form = kiosk_dispForm1()
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form  
 	
-	return render(request, "kiosk/kiosk_job2.html",{'args':args})
-	
-	
+	return render(request, "kiosk/kiosk_job.html",{'args':args})
+
+
 def kiosk_production(request):
 	return render(request, "kiosk/kiosk_production.html")
 def kiosk_help(request):
 	return render(request, "kiosk/kiosk_help.html")
-def kiosk_job_assign(request):
-	return render(request, "kiosk/kiosk_job_assign.html")
-def kiosk_job_leave(request):
-	return render(request, "kiosk/kiosk_job_leave.html")
 def kiosk_scrap(request):
 	return render(request, "kiosk/kiosk_scrap.html")
-def kiosk_none(request):
-	return render(request, "kiosk/kiosk_none.html")	
-def kiosk_none1(request):
-	return render(request, "kiosk/kiosk_none1.html")	
+# *********************************************************************************************************
+
+
+# *********************************************************************************************************
+# Third Tier Pages generated from Secondary Page Button Presses
+# *********************************************************************************************************
+# Kiosk Third Tier page initiated by Job | Assign button press on Secondary Page
+def kiosk_job_assign(request):
+	if request.POST:
+		kiosk_clock = request.POST.get("clock")
+		kiosk_job1 = request.POST.get("job1")
+		kiosk_job2 = request.POST.get("job2")
+		kiosk_job3 = request.POST.get("job3")
+		kiosk_job4 = request.POST.get("job4")
+		
+		# Finished and reroute
+		return kiosk_job_assign_enter(request)
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	return render(request, "kiosk/kiosk_job_assign.html",{'args':args})
+	
+	
+def kiosk_job_leave(request):
+	return render(request, "kiosk/kiosk_job_leave.html")
+	
+	
+	
+	
+	
+	
+	
+	

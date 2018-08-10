@@ -86,7 +86,7 @@ from views_inventory import push_button, inventory_type_entry, inventory_entry, 
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Kiosk Section ********************************************************************************************
-from views_kiosk import kiosk,kiosk_job2
+from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave
 
 # ***********************************************************************************************************************************************************
 
@@ -327,7 +327,10 @@ urlpatterns = [
 	
 	# **************  Kiosk Section ***************************************
 	url(r'^kiosk/', kiosk),
-	url(r'^kiosk_job2/', kiosk_job2),
+	url(r'^kiosk_job/', kiosk_job),
+	url(r'^kiosk_job_assign/', kiosk_job_assign),
+	url(r'^kiosk_job_leave/', kiosk_job_leave),
+
 	# ************************************************************************
 	
 	

@@ -74,6 +74,15 @@ class kiosk_dispForm1(forms.Form):
 class kiosk_dispForm2(forms.Form):
 	button1 = forms.CharField()	
 	
+class kiosk_dispForm3(forms.Form):
+	clock = forms.CharField()
+	asset1 = forms.CharField()
+	asset2 = forms.CharField()
+	asset3 = forms.CharField()
+	asset4 = forms.CharField()
+	asset5 = forms.CharField()
+	asset6 = forms.CharField()
+	asset7 = forms.CharField()
 	
 class sup_closeForm(forms.Form):
 	comment = forms.CharField()		
