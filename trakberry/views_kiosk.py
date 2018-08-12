@@ -91,6 +91,7 @@ def kiosk_scrap(request):
 # *********************************************************************************************************
 # Kiosk Third Tier page initiated by Job | Assign button press on Secondary Page
 def kiosk_job_assign(request):
+
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
 		kiosk_job1 = request.POST.get("job1")
@@ -108,8 +109,59 @@ def kiosk_job_assign(request):
 				return direction(request)
 		except:
 			dummy = 1
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button2"))
+			if kiosk_button1 == -2:
+				request.session["route_1"] = 'kiosk'
+				return direction(request)
+		except:
+			dummy = 1
 		# Finished and reroute
-		return kiosk_job_assign_enter(request)
+
+		# Check if clock number is already assigned or not a valid clock number
+		if kiosk_clock == "":
+			request.session["route_1"] = 'kiosk_error_badclocknumber'
+			return direction(request)
+		#
+		# ???  Also add code here to see if this clock number is already on a job  ???
+		#
+		# ???  Also add code to see if this is a valid clock number   ???
+		#
+		# *********************************************************************
+			
+		# Check if any entry was one with a non numerical value.  If so reroute back to reset kiosk job assign
+		job_empty = 0
+		try:
+			if kiosk_job1 !="":
+				job_empty = 1
+				kiosk_job1 = int(kiosk_job1)
+			if kiosk_job2 !="":
+				job_empty = 1
+				kiosk_job2 = int(kiosk_job2)
+			if kiosk_job3 !="":
+				job_empty = 1
+				kiosk_job3 = int(kiosk_job3)
+			if kiosk_job4 !="":
+				job_empty = 1
+				kiosk_job4 = int(kiosk_job4)
+			if kiosk_job5 !="":
+				job_empty = 1
+				kiosk_job5 = int(kiosk_job5)
+			if kiosk_job6 !="":
+				job_empty = 1
+				kiosk_job6 = int(kiosk_job6)
+			if kiosk_job7 !="":
+				job_empty = 1
+				kiosk_job7 = int(kiosk_job7)
+		except:
+			request.session["route_1"] = 'kiosk_error_badjobnumber'
+			return direction(request)
+		if job_empty == 0:
+			request.session["route_1"] = 'kiosk_error_badjobnumber'
+			return direction(request)
+		# ***************************************************************************************************
+		
+		return kiosk_job_assign_enter(request,kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,kiosk_job7)
 
 	else:
 		form = kiosk_dispForm3()
@@ -128,11 +180,20 @@ def kiosk_job_assign(request):
 	
 	return render(request, "kiosk/kiosk_job_assign.html",{'tmp':tmp,'args':args})
 
+def kiosk_error_badjobnumber(request):
+	request.session["route_1"] = 'kiosk_job_assign'
+	return render(request, "kiosk/kiosk_error_badjobnumber.html")
+def kiosk_error_badclocknumber(request):
+	request.session["route_1"] = 'kiosk_job_assign'
+	return render(request, "kiosk/kiosk_error_badclocknumber.html")
 
+def kiosk_job_assign_enter(request,kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,kiosk_job7):
+	
+	
+	return render(request, "kiosk/kiosk_job_leave.html")
 	
 def kiosk_job_leave(request):
 	return render(request, "kiosk/kiosk_job_leave.html")
-	
 	
 
 	

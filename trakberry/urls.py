@@ -86,7 +86,8 @@ from views_inventory import push_button, inventory_type_entry, inventory_entry, 
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Kiosk Section ********************************************************************************************
-from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave
+from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave,kiosk_error_badjobnumber,kiosk_error_badclocknumber
+
 
 # ***********************************************************************************************************************************************************
 
@@ -329,6 +330,8 @@ urlpatterns = [
 	url(r'^kiosk/', kiosk),
 	url(r'^kiosk_job/', kiosk_job),
 	url(r'^kiosk_job_assign/', kiosk_job_assign),
+	url(r'^kiosk_error_badjobnumber/', kiosk_error_badjobnumber),
+	url(r'^kiosk_error_badclocknumber/', kiosk_error_badclocknumber),
 	url(r'^kiosk_job_leave/', kiosk_job_leave),
 
 	# ************************************************************************
