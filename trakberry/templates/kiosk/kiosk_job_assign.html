@@ -8,27 +8,37 @@
 {% block content %}
 
 <form action="" method="post">{% csrf_token %}
-
+<br><br><br><br>
 <center>
 <table style="width:30%;">
 
-<tr valign="middle"><th style="padding:20px;border-radius: 20px;" bgcolor="#DCDCDC" ><center>
+<tr valign="middle"><th style="padding:20px;opacity: 0.75;filter:alpha(opacity=75);border-radius: 30px;" bgcolor="#DCDCDC" >
+	
+<!-- Place Stuff inside Box here  -->
+<button style="background-color: #AAAAAA;border-radius: 10px;width:80px;height:30px;font-weight: 700;font-size:14px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Reset</button>
+
+	
+<br>
+<center>
 <font color="#000000" size ="4">Clock Number<br>
-<input style="font-size:14px;width:320px;height:30px;" name="clock" type="text">
-</th></tr>
+<input style="font-size:14px;width:190px;height:30px;" name="clock" type="text" autofocus >
+
+<br><br>
+<font color="#000000" size ="4">Jobs
+<br>
+<select style="font-size:14px;width:150px;height:30px;"  name="job1">
 
 
-<tr valign="middle"><th style="padding:20px;border-radius: 20px;" bgcolor="#DCDCDC" ><center>
-<font color="#000000" size ="4">Machine / Job
 
-<select style="font-size:14px;width:320px;height:30px;"  name="job1">
+
+
+
 
 <option selected="selected"></option>
-<option value="344">344</option>
-<option value="346">346</option>
-<option value="341">341</option>
-<option value="342">342</option>
-<option value="343">343</option>
+
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
 
 </select>
 
@@ -36,44 +46,70 @@
 
 <br>
 
-<font color="#000000" size ="4">Machine / Job
-<select style="font-size:14px;width:320px;height:30px;"  name="job2">
+
+<select style="font-size:14px;width:150px;height:30px;"  name="job2">
 
 <option selected="selected"></option>
-<option value="344">344</option>
-<option value="346">346</option>
-<option value="341">341</option>
-<option value="342">342</option>
-<option value="343">343</option>
+
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
 
 </select>
 <br>
 
-<font color="#000000" size ="4">Machine / Job
-<select style="font-size:14px;width:320px;height:30px;"  name="job3">
+
+<select style="font-size:14px;width:150px;height:30px;"  name="job3">
 
 <option selected="selected"></option>
-<option value="344">344</option>
-<option value="346">346</option>
-<option value="341">341</option>
-<option value="342">342</option>
-<option value="343">343</option>
+
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
 
 </select>
 <br>
 
-<font color="#000000" size ="4">Machine / Job
-<select style="font-size:14px;width:320px;height:30px;"  name="job4">
-
+<select style="font-size:14px;width:150px;height:30px;"  name="job4">
 <option selected="selected"></option>
-<option value="344">344</option>
-<option value="346">346</option>
-<option value="341">341</option>
-<option value="342">342</option>
-<option value="343">343</option>
-
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
 </select>
 <br>
+
+
+<select style="font-size:14px;width:150px;height:30px;"  name="job5">
+<option selected="selected"></option>
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
+</select>
+<br>
+
+<select style="font-size:14px;width:150px;height:30px;"  name="job6">
+<option selected="selected"></option>
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
+</select>
+<br>
+
+<select style="font-size:14px;width:150px;height:30px;"  name="job7">
+<option selected="selected"></option>
+{% for i in tmp %}
+<option value={{i.0}}>{{i.0}}</option>
+{% endfor %}
+</select>
+<br>
+<br>
+
+
+
+<input style="text-align: left;width:200px;height:40px;font-size: 18px;border-style: solid;border-color:#AAAAAA;border-radius: 10px;;align=right;" type="submit" value="              Enter">
+
+
+	
 
 </th></tr>
 

@@ -80,6 +80,7 @@ def test_array(request):
 	return render(request,"test7.html",{'list':rlist})
 
 # **********************************************
+
 def machine_list_display():
 	global st, nt, pt
 	db, cur = db_open()
@@ -101,6 +102,8 @@ def machine_list_display():
 	#rlist = zip(nt,st,pt)
 	return rlist
 	#return render(request,"test6.html",{'list':rlist})
+
+# **********************************************
 
 def part_list_display():
 

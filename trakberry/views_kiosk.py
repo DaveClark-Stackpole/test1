@@ -97,23 +97,44 @@ def kiosk_job_assign(request):
 		kiosk_job2 = request.POST.get("job2")
 		kiosk_job3 = request.POST.get("job3")
 		kiosk_job4 = request.POST.get("job4")
+		kiosk_job5 = request.POST.get("job5")
+		kiosk_job6 = request.POST.get("job6")
+		kiosk_job7 = request.POST.get("job7")
 		
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
+			if kiosk_button1 == -1:
+				request.session["route_1"] = 'kiosk_job_assign'
+				return direction(request)
+		except:
+			dummy = 1
 		# Finished and reroute
 		return kiosk_job_assign_enter(request)
 
 	else:
 		form = kiosk_dispForm3()
+		
+	db, cur = db_open()
+	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp
+	db.close()
+	
+	
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form  
 	
-	return render(request, "kiosk/kiosk_job_assign.html",{'args':args})
-	
+	return render(request, "kiosk/kiosk_job_assign.html",{'tmp':tmp,'args':args})
+
+
 	
 def kiosk_job_leave(request):
 	return render(request, "kiosk/kiosk_job_leave.html")
 	
 	
+
 	
 	
 	
