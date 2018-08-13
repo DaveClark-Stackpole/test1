@@ -10,39 +10,62 @@
 <form action="" method="post">{% csrf_token %}
 <br><br><br><br>
 <center>
-<table style="width:30%;">
+<table style="width:70%;">
 
 <tr valign="middle"><th style="padding:20px;opacity: 0.75;filter:alpha(opacity=75);border-radius: 30px;" bgcolor="#DCDCDC" >
 	
 <!-- Place Stuff inside Box here  -->
-<button style="background-color: #AAAAAA;border-radius: 10px;width:80px;height:30px;font-weight: 700;font-size:14px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Reset</button>
+<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Reset</button>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<button style="background-color: #AAAAAA;border-radius: 10px;width:80px;height:30px;font-weight: 700;font-size:14px;align=right;" type="submit" name="kiosk_assign_button2" value="-2">Cancel</button>
+<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=right;" type="submit" name="kiosk_assign_button2" value="-2">Cancel</button>
 <br>
 <center>
-<font color="#000000" size ="4">Clock Number<br>
-<input style="font-size:14px;width:190px;height:30px;" name="clock" type="text" autofocus >
+<font color="#000000" size ="6">Clock Number<br>
+<input style="font-size:23px;width:190px;height:60px;" name="clock" type="number" autofocus >
 
 <br><br>
-<font color="#000000" size ="4">Jobs (Must be number only)
+<font color="#000000" size ="6">Jobs</font> 
 <br>
-<select style="font-size:14px;width:150px;height:30px;"  name="job1">
 
 
 
+<input style="font-size:23px;width:320px;height:60px;" list="browsers" name="job1">	
+<datalist id="browsers">
+	  
+{% for item in tmp %}
 
+<option value={{item.0}}>{{item.0}}</option>
 
-
-
-<option selected="selected"></option>
-
-{% for i in tmp %}
-<option value={{i.0}}>{{i.0}}</option>
+<!-- 
+<option value={{item}} > {{item}} </option>
+-->
 {% endfor %}
 
-</select>
+</datalist>
+
+
+<!-- Below Script creates datalist structure for old browsers and Safari -->
+<script>
+$(document).ready(function () {
+	var nativedatalist = !!('list' in document.createElement('input')) && 
+		!!(document.createElement('datalist') && window.HTMLDataListElement);
+	
+	if (!nativedatalist) {
+		$('input[list]').each(function () {
+			var availableTags = $('#' + $(this).attr("list")).find('option').map(function () {
+				return this.value;
+			}).get();
+			$(this).autocomplete({ source: availableTags });
+		});
+	}
+});
+</script>
+
+
+
 
 
 
