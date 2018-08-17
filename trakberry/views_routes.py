@@ -22,6 +22,7 @@ from views_db import db_open
 
 
 def direction(request):
+
 	return render(request, "kiosk/route.html")
 
 

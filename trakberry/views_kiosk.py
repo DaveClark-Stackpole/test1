@@ -25,6 +25,11 @@ from views_db import db_open
 # *********************************************************************************************************
 # Kiosk Main Page.   Display buttons and route to action when they're pressed
 def kiosk(request):
+	
+	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
+	request.session["local_toggle"] = "/trakberry"
+	
+	
 	# Utilize variable route_1 and assign it a value to kick to another module.
 	# that module needs to have a pattern defined in url.py because direction(request)
 	# will route externally to it looking for the pattern.
@@ -33,6 +38,7 @@ def kiosk(request):
 		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
 			request.session["route_1"] = 'kiosk_job'
+			
 			return direction(request)
 		if button_pressed == -2:
 			return kiosk_production(request)
@@ -131,6 +137,7 @@ def kiosk_job_assign(request):
 			
 		# Check if any entry was one with a non numerical value.  If so reroute back to reset kiosk job assign
 		job_empty = 0
+		
 		try:
 			if kiosk_job1 !="":
 				job_empty = 1
@@ -150,9 +157,7 @@ def kiosk_job_assign(request):
 			if kiosk_job6 !="":
 				job_empty = 1
 				kiosk_job6 = int(kiosk_job6)
-			if kiosk_job7 !="":
-				job_empty = 1
-				kiosk_job7 = int(kiosk_job7)
+
 		except:
 			request.session["route_1"] = 'kiosk_error_badjobnumber'
 			return direction(request)
