@@ -1,14 +1,43 @@
 
+<!-- ********************************** -->
+<!-- ****   Kiosk_Job_leave.html   *** -->
+<!-- ********************************** -->
 
-<!DOCTYPE html>
-<html>
-<body>
+
+{% extends "kiosk/kiosk.html" %}
+{% block content %}
+
+<form action="" method="post">{% csrf_token %}
+
+<center>
+<table style="width:70%;">
+
+<tr valign="middle"><th style="padding:20px;opacity: 0.99;filter:alpha(opacity=99);border-radius: 30px;" bgcolor="#DCDCDC" >
+	
+<!-- Place Stuff inside Box here  -->
+<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Reset</button>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+<input style="background-color: #AAA00A;border-radius: 10px;width:140px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=right;" type="submit" name="kiosk_assign_button2" value="-2">Cancel</button>
+
+
+
+<br><br>
+<center>
+<font color="#000000" size ="6">Clock Number<br>
+<input style="font-size:23px;width:190px;height:60px;" name="clock" type="number" autofocus >
+
 <br><br>
 
-<font size="7">
-Leave Job
-</font>
+</th></tr>
 
+</table>
+</center>
+</form>
 
-</body>
-</html>
+{% endblock %}

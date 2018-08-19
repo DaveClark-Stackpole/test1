@@ -27,7 +27,7 @@ from views_db import db_open
 def kiosk(request):
 	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
-	request.session["local_toggle"] = "/trakberry"
+	#request.session["local_toggle"] = "/trakberry"
 	
 	
 	# Utilize variable route_1 and assign it a value to kick to another module.
@@ -98,6 +98,7 @@ def kiosk_scrap(request):
 # Kiosk Third Tier page initiated by Job | Assign button press on Secondary Page
 def kiosk_job_assign(request):
 
+	db, cur = db_open()
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
 		kiosk_job1 = request.POST.get("job1")
@@ -106,7 +107,7 @@ def kiosk_job_assign(request):
 		kiosk_job4 = request.POST.get("job4")
 		kiosk_job5 = request.POST.get("job5")
 		kiosk_job6 = request.POST.get("job6")
-		kiosk_job7 = request.POST.get("job7")
+#		kiosk_job7 = request.POST.get("job7")
 		
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
@@ -128,7 +129,21 @@ def kiosk_job_assign(request):
 		if kiosk_clock == "":
 			request.session["route_1"] = 'kiosk_error_badclocknumber'
 			return direction(request)
-		#
+		#Assigned already Check
+		ch = 0
+		try:
+			TimeOut = -1
+			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+			cur.execute(sql)
+			tmp2 = cur.fetchall()
+			tmp1 = tmp2[0]
+			ch = 1
+		except:
+			ch = 0
+		if ch == 1:
+			request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
+			return direction(request)
+	
 		# ???  Also add code here to see if this clock number is already on a job  ???
 		#
 		# ???  Also add code to see if this is a valid clock number   ???
@@ -141,23 +156,32 @@ def kiosk_job_assign(request):
 		try:
 			if kiosk_job1 !="":
 				job_empty = 1
-				kiosk_job1 = int(kiosk_job1)
+				request.session["kiosk_job1"] = (kiosk_job1)
 			if kiosk_job2 !="":
 				job_empty = 1
-				kiosk_job2 = int(kiosk_job2)
+				request.session["kiosk_job2"] = (kiosk_job2)
 			if kiosk_job3 !="":
 				job_empty = 1
-				kiosk_job3 = int(kiosk_job3)
+				request.session["kiosk_job3"] = (kiosk_job3)
 			if kiosk_job4 !="":
 				job_empty = 1
-				kiosk_job4 = int(kiosk_job4)
+				request.session["kiosk_job4"] = (kiosk_job4)
 			if kiosk_job5 !="":
 				job_empty = 1
-				kiosk_job5 = int(kiosk_job5)
+				request.session["kiosk_job5"] = (kiosk_job5)
 			if kiosk_job6 !="":
 				job_empty = 1
-				kiosk_job6 = int(kiosk_job6)
-
+				request.session["kiosk_job6"] = (kiosk_job6)
+			
+			# Assign the request variables so they're stored upon transfer to other module
+			request.session["kiosk_clock"] = kiosk_clock
+			request.session["kiosk_job1"] = kiosk_job1
+			request.session["kiosk_job2"] = kiosk_job2
+			request.session["kiosk_job3"] = kiosk_job3
+			request.session["kiosk_job4"] = kiosk_job4
+			request.session["kiosk_job5"] = kiosk_job5
+			request.session["kiosk_job6"] = kiosk_job6
+			
 		except:
 			request.session["route_1"] = 'kiosk_error_badjobnumber'
 			return direction(request)
@@ -166,12 +190,12 @@ def kiosk_job_assign(request):
 			return direction(request)
 		# ***************************************************************************************************
 		
-		return kiosk_job_assign_enter(request,kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,kiosk_job7)
+		return kiosk_job_assign_enter(request)
 
 	else:
 		form = kiosk_dispForm3()
 		
-	db, cur = db_open()
+	
 	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -191,16 +215,71 @@ def kiosk_error_badjobnumber(request):
 def kiosk_error_badclocknumber(request):
 	request.session["route_1"] = 'kiosk_job_assign'
 	return render(request, "kiosk/kiosk_error_badclocknumber.html")
+def kiosk_error_assigned_clocknumber(request):
+	request.session["route_1"] = 'kiosk_job_assign'
+	return render(request, "kiosk/kiosk_error_assigned_clocknumber.html")
 
-def kiosk_job_assign_enter(request,kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,kiosk_job7):
+def kiosk_job_assign_enter(request):
+	db, cur = db_open()
+	# Make the table if it's never been created
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_kiosk(Id INT PRIMARY KEY AUTO_INCREMENT,Clock INT(30), TimeStamp_In Int(20), TimeStamp_Out Int(20), Job1 CHAR(30), Job2 CHAR(30) , Job3 CHAR(30) , Job4 CHAR(30) , Job5 CHAR(30) , Job6 CHAR(30) )""")
 	
+	kiosk_clock = request.session["kiosk_clock"]
+	kiosk_job1 = request.session["kiosk_job1"]
+	kiosk_job2 = request.session["kiosk_job2"]
+	kiosk_job3 = request.session["kiosk_job3"]
+	kiosk_job4 = request.session["kiosk_job4"]
+	kiosk_job5 = request.session["kiosk_job5"]
+	kiosk_job6 = request.session["kiosk_job6"]
+	TimeOut = -1
 	
-	return render(request, "kiosk/kiosk_job_leave.html")
+	TimeStamp = int(time.time())
+	cur.execute('''INSERT INTO tkb_kiosk(Clock,Job1,Job2,Job3,Job4,Job5,Job6,TimeStamp_In,TimeStamp_Out) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,TimeStamp,TimeOut))
+	db.commit()
+	db.close()
 	
+	request.session["route_1"] = 'kiosk'
+	return direction(request)
+
 def kiosk_job_leave(request):
-	return render(request, "kiosk/kiosk_job_leave.html")
-	
+	if request.POST:
+		kiosk_clock = request.POST.get("clock")
+		
+		# Assign the request variables so they're stored upon transfer to other module
+		request.session["kiosk_clock"] = kiosk_clock
+		return kiosk_job_leave_enter(request)
+	else:
+		form = kiosk_dispForm3()
 
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	return render(request, "kiosk/kiosk_job_leave.html",{'args':args})
+
+def kiosk_job_leave_enter(request):
+	db, cur = db_open()
+	# Make the table if it's never been created
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_kiosk(Id INT PRIMARY KEY AUTO_INCREMENT,Clock INT(30), TimeStamp_In Int(20), TimeStamp_Out Int(20), Job1 CHAR(30), Job2 CHAR(30) , Job3 CHAR(30) , Job4 CHAR(30) , Job5 CHAR(30) , Job6 CHAR(30) )""")
+	
+	kiosk_clock = request.session["kiosk_clock"]
+	
+	TimeOut = -1
+	#sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+	#cur.execute(sql)
+	#tmp2 = cur.fetchall()
+	#tmp1 = tmp2[0]
+
+	#return render(request, "kiosk/kiosk_test.html",{'tmp':tmp})
+	
+	TimeStamp = int(time.time())
+	cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,kiosk_clock,TimeOut))
+	cur.execute(cql)
+	db.commit()
+	db.close()
+	
+	
+	request.session["route_1"] = 'kiosk'
+	return direction(request)
 	
 	
 	
