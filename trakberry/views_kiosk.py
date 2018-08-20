@@ -27,7 +27,7 @@ from views_db import db_open
 def kiosk(request):
 	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
-	#request.session["local_toggle"] = "/trakberry"
+	request.session["local_toggle"] = "/trakberry"
 	
 	
 	# Utilize variable route_1 and assign it a value to kick to another module.
@@ -153,25 +153,37 @@ def kiosk_job_assign(request):
 		# Check if any entry was one with a non numerical value.  If so reroute back to reset kiosk job assign
 		job_empty = 0
 		
+		j1 = '343'
+		j2 = '343'
+		j3 = '343'
+		j4 = '343'
+		j5 = '343'
+		j6 = '343'
 		try:
 			if kiosk_job1 !="":
 				job_empty = 1
 				request.session["kiosk_job1"] = (kiosk_job1)
+				j1 = kiosk_job1
 			if kiosk_job2 !="":
 				job_empty = 1
 				request.session["kiosk_job2"] = (kiosk_job2)
+				j2 = kiosk_job2
 			if kiosk_job3 !="":
 				job_empty = 1
 				request.session["kiosk_job3"] = (kiosk_job3)
+				j3 = kiosk_job3
 			if kiosk_job4 !="":
 				job_empty = 1
 				request.session["kiosk_job4"] = (kiosk_job4)
+				j4 = kiosk_job4
 			if kiosk_job5 !="":
 				job_empty = 1
 				request.session["kiosk_job5"] = (kiosk_job5)
+				j5 = kiosk_job5
 			if kiosk_job6 !="":
 				job_empty = 1
 				request.session["kiosk_job6"] = (kiosk_job6)
+				j6 = kiosk_job6
 			
 			# Assign the request variables so they're stored upon transfer to other module
 			request.session["kiosk_clock"] = kiosk_clock
@@ -182,6 +194,19 @@ def kiosk_job_assign(request):
 			request.session["kiosk_job5"] = kiosk_job5
 			request.session["kiosk_job6"] = kiosk_job6
 			
+			job_chk = 0
+			try:
+				TimeOut = -1
+				sql = "SELECT * FROM vw_asset_eam_lp WHERE left(Asset,4) = '%s' or left(Asset,4) = '%s' or left(Asset,4) = '%s' or left(Asset,4) = '%s' or left(Asset,4) = '%s' or left(Asset,4) = '%s'" %(j1,j2,j3,j4,j5,j6)
+				cur.execute(sql)
+				tmp2 = cur.fetchall()
+				tmp1 = tmp2[0]
+				ch = 1
+			except:
+				ch = 0
+			
+			
+			
 		except:
 			request.session["route_1"] = 'kiosk_error_badjobnumber'
 			return direction(request)
@@ -189,7 +214,7 @@ def kiosk_job_assign(request):
 			request.session["route_1"] = 'kiosk_error_badjobnumber'
 			return direction(request)
 		# ***************************************************************************************************
-		
+		db.close()
 		return kiosk_job_assign_enter(request)
 
 	else:
@@ -220,10 +245,13 @@ def kiosk_error_assigned_clocknumber(request):
 	return render(request, "kiosk/kiosk_error_assigned_clocknumber.html")
 
 def kiosk_job_assign_enter(request):
+	
 	db, cur = db_open()
+	
 	# Make the table if it's never been created
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_kiosk(Id INT PRIMARY KEY AUTO_INCREMENT,Clock INT(30), TimeStamp_In Int(20), TimeStamp_Out Int(20), Job1 CHAR(30), Job2 CHAR(30) , Job3 CHAR(30) , Job4 CHAR(30) , Job5 CHAR(30) , Job6 CHAR(30) )""")
-	
+	# Use below line as a break point to check things out
+	#return render(request, "kiosk/kiosk_test.html")
 	kiosk_clock = request.session["kiosk_clock"]
 	kiosk_job1 = request.session["kiosk_job1"]
 	kiosk_job2 = request.session["kiosk_job2"]
@@ -232,6 +260,8 @@ def kiosk_job_assign_enter(request):
 	kiosk_job5 = request.session["kiosk_job5"]
 	kiosk_job6 = request.session["kiosk_job6"]
 	TimeOut = -1
+	
+	
 	
 	TimeStamp = int(time.time())
 	cur.execute('''INSERT INTO tkb_kiosk(Clock,Job1,Job2,Job3,Job4,Job5,Job6,TimeStamp_In,TimeStamp_Out) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,TimeStamp,TimeOut))
@@ -259,6 +289,7 @@ def kiosk_job_leave(request):
 def kiosk_job_leave_enter(request):
 	db, cur = db_open()
 	# Make the table if it's never been created
+	
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_kiosk(Id INT PRIMARY KEY AUTO_INCREMENT,Clock INT(30), TimeStamp_In Int(20), TimeStamp_Out Int(20), Job1 CHAR(30), Job2 CHAR(30) , Job3 CHAR(30) , Job4 CHAR(30) , Job5 CHAR(30) , Job6 CHAR(30) )""")
 	
 	kiosk_clock = request.session["kiosk_clock"]
