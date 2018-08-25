@@ -203,13 +203,13 @@ def kiosk_job_assign(request):
 #				ch = 1
 #			except:
 #				ch = 0
-			request.session["route_1"] = 'kiosk_error_badjobnumber'
-			return direction(request)
+
 	
 			
 			
 		except:
-			return render(request, "kiosk/kiosk_test.html")
+			request.session["route_1"] = 'kiosk_error_badjobnumber'
+			return direction(request)
 #			request.session["route_1"] = 'kiosk_error_badjobnumber'
 #			return direction(request)
 		if job_empty == 0:
@@ -314,7 +314,35 @@ def kiosk_job_leave_enter(request):
 	request.session["route_1"] = 'kiosk'
 	return direction(request)
 	
+def manpower_layout(request):
+
+	db, cur = db_open()
+	TimeOut = -1
+	id_limit = 211738
+	part = '50-9341'
+	sql = "SELECT DISTINCT asset_num,machine FROM sc_production1 WHERE partno = '%s' and id > '%s' ORDER BY %s %s " %(part,id_limit,'machine','ASC')
+	cur.execute(sql)
+	tmp = cur.fetchall()
 	
+	TimeOut = -1
+	mql = "SELECT Clock,Job1,Job2,Job3,Job4,Job5,Job6 FROM tkb_kiosk WHERE TimeStamp_Out = '%s'" %(TimeOut)
+	cur.execute(mql)
+	tmp2 = cur.fetchall()
+	
+	J = [[] for x in range(len(tmp))]
+	ctr = 0
+	for i in tmp:
+		J[ctr].append(i[0])
+		a = '---'
+		
+		for ii in tmp2:
+			if ii[1] == i[0]:
+				J[ctr].append(ii[0])
+			else:
+				J[ctr].append(a)
+		ctr = ctr + 1
+	
+	return render(request, "kiosk/kiosk_test.html",{'tmp':J})
 	
 	
 	

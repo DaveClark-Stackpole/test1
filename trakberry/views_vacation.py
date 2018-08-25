@@ -103,7 +103,7 @@ def vacation_set_current4():
 	year_st = t.year
 	day_st = t.day
 	
-	day_st = 12
+	#day_st = 12
 	
 	if int(month_st)<10:
 		current_first = str(year_st) + "-" + "0" + str(month_st) 

@@ -15,12 +15,18 @@ import smtplib
 from smtplib import SMTP
 from django.template.loader import render_to_string  #To render html content to string
 from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
+import shutil
+import os
 
 def push_button(request):
-
+	pathX = r'/home/file/import1/Inventory'
+	#pathX = r'C:/Hello/HelloWorld'  
+	print os.path.dirname(pathX) 
+	
+	shutil.copy2('test.txt', '/importedxls/test.txt') # complete target filename given
 	return render(request, "push_button.html")
 	
-	
+
 def inventory_type_entry(request):	
 
 	if request.POST:

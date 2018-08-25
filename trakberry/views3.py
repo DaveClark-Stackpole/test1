@@ -21,11 +21,11 @@ def excel_test(request):
 	# if needed this assigns mlist to the current path
 #	mlist = os.getcwd()
 	
-	# Change to directory where imported inventory.xlsm is located
+#	Change to directory where imported inventory.xlsm is located
 #		Use this for local testing
-	label_link = '/home/trackberry/file/import1/Inventory/importedxls/'
+#	label_link = '/home/trackberry/file/import1/Inventory/importedxls/'
 #		Use this one for actual server
-#	label_link = '/home/file/import1/Inventory/importedxls'
+	label_link = '/home/file/import1/Inventory/importedxls'
 	
 	sheet = 'inventory.xlsx'
 	sheet_name = 'Sheet1'
@@ -87,22 +87,24 @@ def excel_test(request):
 	b = 35
 	
 #	Only uncomment below line to re do table completely	
-#	inventory_initial()
+	inventory_initial()
 #	Select today as the date to put in for entry
 	current_first = vacation_set_current4()
 	
 	db, cur = db_open()
 #  Below Section will insert a as a new entry
-#	x = 1
-#	for i in range(1,26):
-#		current_part = a[i][0]
-#		for ii in range(1,35):
-#			y = a[i][ii]
-#			cur.execute('''INSERT INTO tkb_inventory(Date_Entered,Part,Quantity,Category) VALUES(%s,%s,%s,%s)''', (current_first,current_part,y,ii))
-#			db.commit()
+	x = 1
+	for i in range(1,26):
+		current_part = a[i][0]
+		for ii in range(1,35):
+			y = a[i][ii]
+			cur.execute('''INSERT INTO tkb_inventory(Date_Entered,Part,Quantity,Category) VALUES(%s,%s,%s,%s)''', (current_first,current_part,y,ii))
+			db.commit()
+
+	db.close()
 
 
-
+	return render(request,"test4.html",{'Date':current_first})
 
 	
 	# If there's a current date already there put it into temp_a[][] compare to a[][]
