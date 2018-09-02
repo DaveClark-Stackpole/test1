@@ -1875,6 +1875,7 @@ def email_hour_check():
 	# obtain current date from different module to avoid datetime style conflict
 
 	h = 6
+	h2 = 13
 	m = 40
 	ch = 0
 	send_email = 0
@@ -1910,9 +1911,28 @@ def email_hour_check():
 			
 #			Email Reports from techs
 			tech_report_email()
-			
+		
+		#elif hour >=h2:
+		#	try:
+		#		tql = "SELECT employee FROM tkb_email_conf where date='%s'" %(current_date)
+		#		cursor.execute(tql)
+		#		tmp3 = cursor.fetchall()
+		#		tmp4 = tmp3[0]
+		#		try:
+		#			ssent = tmp4[0]
+		#		except:
+		#			ssent = ''
+		#	except:
+		#		ssent = ''
+		#	if ssent != 'y':
+		#		checking = 1
+		#		echecking = 'y'
+		#		cursor.execute('''INSERT INTO tkb_email_conf(date,checking,employee) VALUES(%s,%s,%s)''', (current_date,checking,echecking))
+		#		db.commit()
+		#		
+		#		tech_report_email()
 		else:
-			return 
+			return
 			
 		db.close()
 			
@@ -1955,8 +1975,8 @@ def tech_report_email():
 		
 		
 		# Add name to email list
-		toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com","dgleba@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com","dpeachy@stackpole.com"]
-		
+		#toaddrs = ["ttobey@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com","dgleba@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com","dpeachy@stackpole.com"]
+		toaddrs = ["dclark@stackpole.com"]
 		fromaddr = 'stackpole@stackpole.com'
 		frname = 'Dave'
 		server = SMTP('smtp.gmail.com', 587)
@@ -1967,8 +1987,8 @@ def tech_report_email():
 	
 	
 	
-		#message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
-		message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
+		message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+		#message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
 		
 		message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
 		for x in tmp:

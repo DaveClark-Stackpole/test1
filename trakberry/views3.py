@@ -87,19 +87,31 @@ def excel_test(request):
 	b = 35
 	
 #	Only uncomment below line to re do table completely	
-	inventory_initial()
+#	inventory_initial()
 #	Select today as the date to put in for entry
 	current_first = vacation_set_current4()
 	
 	db, cur = db_open()
 #  Below Section will insert a as a new entry
-	x = 1
-	for i in range(1,26):
-		current_part = a[i][0]
-		for ii in range(1,35):
-			y = a[i][ii]
-			cur.execute('''INSERT INTO tkb_inventory(Date_Entered,Part,Quantity,Category) VALUES(%s,%s,%s,%s)''', (current_first,current_part,y,ii))
-			db.commit()
+# It uses Try and Except to see if one for that date exists
+
+# Above won't work.   Need to confirm todays date is in inventory
+
+	try:
+		sql = "SELECT * FROM tkb_inventory where Date_Entered = '%s'" %(current_first)
+		cur.execute(sql)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		request.session["test_excel"] = "Already one there"
+	except:
+		x = 1
+		for i in range(1,26):
+			current_part = a[i][0]
+			for ii in range(1,35):
+				y = a[i][ii]
+				cur.execute('''INSERT INTO tkb_inventory(Date_Entered,Part,Quantity,Category) VALUES(%s,%s,%s,%s)''', (current_first,current_part,y,ii))
+				db.commit()
+		request.session["test_excel"] = "Added New One"
 
 	db.close()
 
