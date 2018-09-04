@@ -87,7 +87,7 @@ def excel_test(request):
 	b = 35
 	
 #	Only uncomment below line to re do table completely	
-#	inventory_initial()
+	inventory_initial()
 #	Select today as the date to put in for entry
 	current_first = vacation_set_current4()
 	
