@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from views_db import db_open
 from trakberry.forms import login_Form, login_password_update_Form
 from datetime import datetime
+
 import MySQLdb
 import time
 import os
@@ -38,11 +39,13 @@ def excel_test(request):
 	
 	# First variable is ROW 
 	# Second variable is COLUMN
-	tot = 26
+	tot = 24
+	tdate = tot+1
 	
-	a = [[] for x in range(tot)]
 	
-	for i in range(1,26):
+	a = [[] for x in range(tot+1)]
+	
+	for i in range(1,tot):
 		for ii in range(0,35):
 			x = working.cell(i,ii).value
 			if x > 0 and x < 10000000:
@@ -55,7 +58,19 @@ def excel_test(request):
 					x = str(x)
 			a[i].append(x)
 	#a = working.cell(1,0).value
-	b = working.cell(1,5).value
+	# Date
+	b = working.cell(24,0).value
+	excel_date = int(b)
+	
+	dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date - 2)
+
+	#tt = vacation_temp()
+
+
+	#return render(request,"test4.html",{'Date':dt,'RD':tt})
+	
+	
+	#adate = working.cell(tdate,1).value
 	#b = working.cell(7,0).value
 	#mlist = book.sheet_names()
 	#mlist.encode('ascii','ignore')
@@ -89,7 +104,7 @@ def excel_test(request):
 #	Only uncomment below line to re do table completely	
 	inventory_initial()
 #	Select today as the date to put in for entry
-	current_first = vacation_set_current4()
+	current_first = vacation_set_current4(dt)
 	
 	db, cur = db_open()
 #  Below Section will insert a as a new entry
@@ -105,7 +120,7 @@ def excel_test(request):
 		request.session["test_excel"] = "Already one there"
 	except:
 		x = 1
-		for i in range(1,26):
+		for i in range(1,tot):
 			current_part = a[i][0]
 			for ii in range(1,35):
 				y = a[i][ii]

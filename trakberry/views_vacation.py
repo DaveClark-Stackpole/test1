@@ -95,9 +95,9 @@ def vacation_set_current3():
 		
 	return current_first
 
-def vacation_set_current4():
+def vacation_set_current4(t):
 
-	t = vacation_temp()
+	#t = vacation_temp()
 	month_st = t.month
 	#month_st = month_st - 1
 	year_st = t.year
