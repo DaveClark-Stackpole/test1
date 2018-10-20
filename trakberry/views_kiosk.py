@@ -38,10 +38,12 @@ def kiosk(request):
 		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
 			request.session["route_1"] = 'kiosk_job'
-			
 			return direction(request)
+			
 		if button_pressed == -2:
+			request.session["route_1"] = 'kiosk_production' 
 			return kiosk_production(request)
+			
 		if button_pressed == -3:
 			return kiosk_help(request)
 		if button_pressed == -4:

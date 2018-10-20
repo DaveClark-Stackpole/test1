@@ -39,7 +39,9 @@ def excel_test(request):
 	
 	# First variable is ROW 
 	# Second variable is COLUMN
+	
 	tot = 24
+	toc = 35
 	tdate = tot+1
 	
 	
