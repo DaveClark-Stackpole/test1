@@ -37,12 +37,12 @@ def kiosk(request):
 		button_1 = request.POST
 		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
-			request.session["route_1"] = 'kiosk_job'
+			request.session["route_1"] = 'kiosk_job_assign'
 			return direction(request)
 			
 		if button_pressed == -2:
-			request.session["route_1"] = 'kiosk_production' 
-			return kiosk_production(request)
+			request.session["route_1"] = 'kiosk_production'
+			return direction(request)
 			
 		if button_pressed == -3:
 			return kiosk_help(request)
@@ -86,7 +86,97 @@ def kiosk_job(request):
 
 
 def kiosk_production(request):
-	return render(request, "kiosk/kiosk_production.html")
+	job = ['' for x in range(6)]
+	TimeOut = -1
+	
+	if request.POST:
+		kiosk_clock = request.POST.get("clock")
+		request.session["clock"] = ""
+		request.session["variable1"] = ""
+		request.session["variable2"] = ""
+		request.session["variable3"] = ""
+		request.session["variable4"] = ""
+		request.session["variable5"] = ""
+		request.session["variable6"] = ""
+	#	try:
+		
+		
+		db, cur = db_open()
+		sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+		cur.execute(sql)
+		tmp2 = cur.fetchall()
+		tmp1 = tmp2[0]
+		db.close()
+		
+		if int(tmp1[4]) <2000:
+			request.session["variable1"] = tmp1[7]
+		else:
+			request.session["variable1"] = tmp1[7]
+		if int(tmp1[4]) != tmp1[4]:
+			request.session["variable2"] = "-99"
+		else:
+			request.session["variable2"] = tmp1[5]
+		if int(tmp1[4]) != tmp1[4]:
+			request.session["variable3"] = "-99"
+		else:
+			request.session["variable3"] = tmp1[6]
+		if int(tmp1[4]) != tmp1[4]:
+			request.session["variable4"] = "-99"
+		else:
+			request.session["variable4"] = tmp1[7]
+		if int(tmp1[4]) != tmp1[4]:
+			request.session["variable5"] = "-99"
+		else:
+			request.session["variable5"] = tmp1[8]
+		if int(tmp1[4]) != tmp1[4]:
+			request.session["variable6"] = "-99"
+		else:
+			request.session["variable6"] = tmp1[9]
+		
+		#for x in range(4,9):
+		#	tmp2[x] = tmp1[x]
+		#	if int(tmp1[x]) != tmp1[x]:
+		#		tmp2[x] = -99
+		request.session["clock"] = kiosk_clock
+		#request.session["variable1"] = tmp2[4]
+		
+		#request.session["variable2"] = tmp2[5]
+		#request.session["variable3"] = tmp2[6]
+		#request.session["variable4"] = tmp2[7]
+		#request.session["variable5"] = tmp2[8]
+		#request.session["variable6"] = tmp2[9]
+		request.session["route_1"] = 'kiosk_production_entry'
+		return direction(request)
+	
+	
+	#	except:
+	#		request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
+	#		return direction(request)
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	return render(request, "kiosk/kiosk_production.html",{'args':args})
+
+def kiosk_production_entry(request):
+	
+	if request.POST:
+		kiosk_clock = request.POST.get("clock")
+
+		request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
+		return direction(request)
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	return render(request, "kiosk/kiosk_production_entry.html",{'args':args})
+	
 def kiosk_help(request):
 	return render(request, "kiosk/kiosk_help.html")
 def kiosk_scrap(request):
