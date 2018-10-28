@@ -179,6 +179,10 @@ def kiosk_production_entry(request):
 	
 def kiosk_help(request):
 	return render(request, "kiosk/kiosk_help.html")
+
+def flex_test(request):
+	return render(request, "kiosk/flex_test.html")
+	
 def kiosk_scrap(request):
 	return render(request, "kiosk/kiosk_scrap.html")
 # *********************************************************************************************************
