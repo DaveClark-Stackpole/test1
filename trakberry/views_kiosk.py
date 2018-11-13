@@ -29,6 +29,13 @@ def kiosk(request):
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 	request.session["local_toggle"] = "/trakberry"
 	
+	db, cur = db_open()
+	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp
+	db.close()
+	request.session["tmp"] = tmp
 	
 	# Utilize variable route_1 and assign it a value to kick to another module.
 	# that module needs to have a pattern defined in url.py because direction(request)
@@ -98,60 +105,112 @@ def kiosk_production(request):
 		request.session["variable4"] = ""
 		request.session["variable5"] = ""
 		request.session["variable6"] = ""
-	#	try:
+		
+
+		
+		try:
+			db, cur = db_open()
+			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+			cur.execute(sql)
+			tmp2 = cur.fetchall()
+			tmp1 = tmp2[0]
+			
 		
 		
-		db, cur = db_open()
-		sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
-		cur.execute(sql)
-		tmp2 = cur.fetchall()
-		tmp1 = tmp2[0]
-		db.close()
-		
-		if int(tmp1[4]) <2000:
-			request.session["variable1"] = tmp1[7]
-		else:
-			request.session["variable1"] = tmp1[7]
-		if int(tmp1[4]) != tmp1[4]:
-			request.session["variable2"] = "-99"
-		else:
-			request.session["variable2"] = tmp1[5]
-		if int(tmp1[4]) != tmp1[4]:
-			request.session["variable3"] = "-99"
-		else:
-			request.session["variable3"] = tmp1[6]
-		if int(tmp1[4]) != tmp1[4]:
-			request.session["variable4"] = "-99"
-		else:
-			request.session["variable4"] = tmp1[7]
-		if int(tmp1[4]) != tmp1[4]:
-			request.session["variable5"] = "-99"
-		else:
-			request.session["variable5"] = tmp1[8]
-		if int(tmp1[4]) != tmp1[4]:
-			request.session["variable6"] = "-99"
-		else:
-			request.session["variable6"] = tmp1[9]
-		
-		#for x in range(4,9):
-		#	tmp2[x] = tmp1[x]
-		#	if int(tmp1[x]) != tmp1[x]:
-		#		tmp2[x] = -99
-		request.session["clock"] = kiosk_clock
-		#request.session["variable1"] = tmp2[4]
-		
-		#request.session["variable2"] = tmp2[5]
-		#request.session["variable3"] = tmp2[6]
-		#request.session["variable4"] = tmp2[7]
-		#request.session["variable5"] = tmp2[8]
-		#request.session["variable6"] = tmp2[9]
-		request.session["route_1"] = 'kiosk_production_entry'
-		return direction(request)
+			try:
+				request.session["variable1"] = int(tmp1[4])
+				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[4]),'id','DESC')
+				cur.execute(aql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				request.session["part1"] = tmp4[3]
+				
+			except:
+				request.session["variable1"] = 99
+			try:
+				request.session["variable2"] = int(tmp1[5])
+				bql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[5]),'id','DESC')
+				cur.execute(bql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				tt = len(tmp4[3])
+				if len(tmp4[3])>1:
+					request.session["part2"] = 98
+				else:
+					request.session["part2"] = -1
+					
+				#request.session["part2"] = tt
+
+			except:
+				request.session["variable2"] = 99
+			try:
+				request.session["variable3"] = int(tmp1[6])
+				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[6]),'id','DESC')
+				cur.execute(aql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				if len(tmp4[3])<1:
+					request.session["part3"] = 0
+				else:
+					request.session["part3"] = tmp4[3]
+				
+			except:
+				request.session["variable3"] = 99
+			try:
+				request.session["variable4"] = int(tmp1[7])
+				dql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[7]),'id','DESC')
+				cur.execute(dql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				request.session["part4"] = tmp4[3]
+				
+			except:
+				request.session["variable4"] = 99
+			try:
+				request.session["variable5"] = int(tmp1[8])
+				dql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[8]),'id','DESC')
+				cur.execute(dql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				request.session["part5"] = tmp4[3]
+			except:
+				request.session["variable5"] = 99
+			try:
+				request.session["variable6"] = int(tmp1[9])
+				dql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[9]),'id','DESC')
+				cur.execute(dql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				request.session["part6"] = tmp4[3]
+			except:
+				request.session["variable6"] = 99
+			
+			db.close()
+			
+			request.session["clock"] = kiosk_clock
+			request.session["route_1"] = 'kiosk_production_entry'
+			return direction(request)
 	
 	
-	#	except:
-	#		request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
-	#		return direction(request)
+		except:
+			db, cur = db_open()
+			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+			cur.execute(sql)
+			tmp2 = cur.fetchall()
+			tmp1 = tmp2[0]
+			
+		
+		
+			#try:
+	#		request.session["variable1"] = int(tmp1[4])
+	#		aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[4]),'id','DESC')
+	#		cur.execute(aql)
+	#		tmp3 = cur.fetchall()
+	#		tmp4 = tmp3[0]
+	#		request.session["part1"] = tmp4[2]
+			
+			request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
+			return direction(request)
 
 	else:
 		form = kiosk_dispForm3()
@@ -319,12 +378,12 @@ def kiosk_job_assign(request):
 		form = kiosk_dispForm3()
 		
 	
-	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
-	cur.execute(sql)
-	tmp = cur.fetchall()
-	tmp2 = tmp
+#	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
+#	cur.execute(sql)
+#	tmp = cur.fetchall()
+#	tmp2 = tmp
 	db.close()
-	
+	tmp = request.session["tmp"]
 	
 	args = {}
 	args.update(csrf(request))

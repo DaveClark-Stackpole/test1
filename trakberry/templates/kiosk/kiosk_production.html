@@ -5,6 +5,12 @@
 
 
 {% extends "kiosk/kiosk.html" %}
+
+{% block grid %}
+	<link rel="stylesheet" href="/static/style_1/grid_kiosk_job_production.css">
+{% endblock %}
+
+
 {% block content %}
 
 <form action="" method="post">{% csrf_token %}

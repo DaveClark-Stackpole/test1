@@ -186,7 +186,7 @@ def tech(request):
 	a6 = "Terry Kennedy"
 	a7 = "Paul Wilson"
 	a8 = "Chris Strutton"
-	a9 = "Al Vilandre"
+	a9 = "Ervin Kuepfer"
 	a10 = "Woodrow Sismar"
 	a11 = "Mayank Gehlot"
 	a13 = "Les Vaters"
@@ -279,7 +279,7 @@ def tech(request):
 	elif request.session["login_tech"] == "Woodrow Sismar":
 		request.session["login_image"] = "/static/media/tech_woodrow.jpg"
 		request.session["login_back"] = "/static/media/back_woodrow.jpg"
-	elif request.session["login_tech"] == "Al Vilandre":
+	elif request.session["login_tech"] == "Ervin Kuepfer":
 		request.session["login_image"] = "/static/media/tech_training.jpg"
 		request.session["login_back"] = "/static/media/back_tech_training.jpg"			
 	elif request.session["login_tech"] == "Muoi Le":
