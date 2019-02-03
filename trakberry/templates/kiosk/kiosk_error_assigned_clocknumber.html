@@ -14,20 +14,40 @@
 <tr valign="middle"><th style="padding:20px;opacity: 0.75;filter:alpha(opacity=75);border-radius: 30px;" bgcolor="#DCDCDC" >
 	
 <center>
-<font color="#FF0000" size ="4"><u>Error!</u> <br>
+<font color="#000000" size ="5"><u>Error!</u> <br>
 This Clock Number is on a Job Already.   Leave Job then Assign again.  <br><br> <br><br>
 
-<a href="{{request.session.local_toggle}}/kiosk_job_assign">
-<<  Go Back
+
+
+<a href="{{request.session.local_toggle}}/kiosk">
+<button style="background-color: #DE8F7E;border-radius: 10px;width:180px;height:60px;font-weight: 700;font-size:23px;align=left;"><center><font color="#000000"><< Go Back</font></center></button>
 </a>
 <br><br><br><br>
-Variable <br><br>
-{{request.session.variable1}} <br>
-{{request.session.variable2}} <br>
-{{request.session.variable3}} <br>
-{{request.session.variable4}} <br>
-{{request.session.variable5}} <br>
-{{request.session.variable6}} <br>
+Jobs Assigned <br><br>
 
+{% if request.session.variable1 != 99 %}
+{{request.session.variable1}} <br>
+{% endif %}
+
+{% if request.session.variable2 != 99 %}
+{{request.session.variable2}} <br>
+{% endif %}
+
+{% if request.session.variable3 != 99 %}
+{{request.session.variable3}} <br>
+{% endif %}
+
+{% if request.session.variable4 != 99 %}
+{{request.session.variable4}} <br>
+{% endif %}
+
+{% if request.session.variable5 != 99 %}
+
+{{request.session.variable5}} <br>
+{% endif %}
+
+{% if request.session.variable6 != 99 %}
+{{request.session.variable6}} <br>
+{% endif %}
 
 {% endblock %}

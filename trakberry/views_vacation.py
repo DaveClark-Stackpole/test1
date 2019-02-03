@@ -71,6 +71,43 @@ def vacation_set_current2():
 		
 	return current_first
 	
+def vacation_set_current5():  # Use this one to set Kiosk Date properly
+
+	t = vacation_temp()
+	month_st = t.month
+	year_st = t.year
+	day_st = t.day
+	day_st = day_st
+	hour_st = t.hour
+	
+	
+	
+
+	if int(hour_st) >= 3 and int(hour_st) <= 11:
+		shift = "Mid"
+	if int(hour_st) >11 and int(hour_st) <=19:
+		shift = "Day"
+	if int(hour_st) > 19 and int(hour_st) <24: 
+		shift = "Aft"
+	if int(hour_st) <3:
+		shift = "Aft"
+		day_st = day_st - 1
+		
+		
+		
+	
+	if int(month_st)<10:
+		current_first = str(year_st) + "-" + "0" + str(month_st) 
+	else:
+		current_first = str(year_st) + "-" + str(month_st) 	
+		
+	if int(day_st)<10:
+		current_first = current_first + "-" + "0" + str(day_st)
+	else:
+		current_first = current_first + "-" + str(day_st)
+		
+	return current_first, shift
+	
 def vacation_set_current3():
 
 	t = vacation_temp()

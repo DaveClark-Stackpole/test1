@@ -307,6 +307,9 @@ def tech(request):
 	elif request.session["login_tech"] == "Terry Kennedy":
 		request.session["login_image"] = "/static/media/tech_terry.jpg"
 		request.session["login_back"] = "/static/media/back_terry.jpg"		
+	elif request.session["login_tech"] == "Les Vaters":
+		request.session["login_image"] = "/static/media/tech_vaters.jpg"
+		request.session["login_back"] = "/static/media/back_vaters.jpg"	
 	else:
 		request.session["login_image"] = "/static/media/tech_rick.jpg"
 		request.session["login_back"] = "/static/media/back_rick.jpg"
