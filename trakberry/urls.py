@@ -23,7 +23,7 @@ from django.contrib import admin
 from views2 import main_login, main_login_form, main, main_logout, switch_local, switch_net, main_test_init, main_login_password_lost_form
 from views_machinery import machinery
 from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
-from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_recent, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
+from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_history2, tech_recent, tech_recent2, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
 from views_tech import tech_message_close,tech_message_reply1, tech_report_email, email_hour_check,tech_name_update
 #from views_tech import hour_check
 from views_transfer import transfer
@@ -54,7 +54,7 @@ from views import display, db_write, create_table, test, details_session, detail
 from views import create_test_table, alter_table_name, done, new, graph, graph2, graph3, graph749, graph748, graph750, graph677, ttip,graph_close, display_time, graph_close_snap
 from views import graph677_snap, graph748_snap, graph749_snap, graph750_snap, display_initialize, test44, tech_reset,testB
 from views2 import main_password_update
-from views3 import excel_test
+from views3 import excel_test,manpower_update
 # ***********************************************************************************************************************************************************
 
 
@@ -87,12 +87,13 @@ from views_inventory import push_button, inventory_type_entry, inventory_entry, 
 
 # *******************************************  Kiosk Section ********************************************************************************************
 from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave,kiosk_error_badjobnumber,kiosk_error_badclocknumber,kiosk_error_assigned_clocknumber
-from views_kiosk import kiosk_production, kiosk_production_entry,flex_test
+from views_kiosk import kiosk_production, kiosk_production_entry,flex_test,manual_production_entry,manual_production_entry2
+from views_kiosk import entry_recent
 
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Manpower Section ********************************************************************************************
-from views_kiosk import manpower_layout
+from views_kiosk import manpower_layout, tenr_fix
 
 
 # ***********************************************************************************************************************************************************
@@ -232,8 +233,11 @@ urlpatterns = [
 	url(r'^jcall/get/(?P<index>\d+)/$', job_call),
 	url(r'^jclose/get/(?P<index>\d+)/$', job_close),
 	url(r'^jpass/get/(?P<index>\d+)/$', job_pass),
-	url(r'^tech_history/', tech_history),	
+	url(r'^tech_history/', tech_history),
+	url(r'^tech_history2/', tech_history2),
+	
 	url(r'^tech_recent/', tech_recent),
+	url(r'^tech_recent2/', tech_recent2),
 	url(r'^tech_tech_call/', tech_tech_call),
     url(r'^tech_map/', tech_map),
     url(r'^tech_message/', tech_message),	
@@ -327,6 +331,7 @@ urlpatterns = [
 	url(r'^test_scrap_production/', test_scrap_production),
 	url(r'^test_scrap1/', test_scrap1),
 	url(r'^excel_test/', excel_test),
+	url(r'^manpower_update/', manpower_update),
 #	url(r'^hour_check/', hour_check),
 
 	
@@ -343,6 +348,10 @@ urlpatterns = [
 	url(r'^kiosk_error_assigned_clocknumber/', kiosk_error_assigned_clocknumber),
 	url(r'^kiosk_job_leave/', kiosk_job_leave),
 	url(r'^kiosk_production_entry/', kiosk_production_entry),
+	url(r'^manual_production_entry/', manual_production_entry),
+	url(r'^manual_production_entry2/', manual_production_entry2),
+	url(r'^entry_recent/', entry_recent),
+	url(r'^tenr_fix/', tenr_fix),
 
 	# ************************************************************************
 		# **************  Manpower Section ***************************************

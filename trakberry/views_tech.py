@@ -533,7 +533,7 @@ def tech_recent(request):
 
 	
 	db, cursor = db_open()  		
-	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 60" 
+	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 100" 
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
 	db.close
@@ -541,7 +541,18 @@ def tech_recent(request):
 	request.session["machine_search"] = machine
 	request.session["tech_display"] = 1
 	return render(request,"tech_search_display.html",{'machine':tmp})
-
+	
+def tech_recent2(request):
+	db, cursor = db_open()  		
+	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 100" 
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	db.close
+	machine="Recent Machine Breakdowns"
+	request.session["machine_search"] = machine
+	request.session["tech_display"] = 1
+	return render(request,"tech_search_display2.html",{'machine':tmp})
+	
 def tech_map(request):
 
 	return render(request,"tech_map.html")	
@@ -570,6 +581,29 @@ def tech_history(request):
 	args.update(csrf(request))
 	args['form'] = form
 	return render(request,'tech_search.html', args)		
+
+def tech_history2(request):	
+	if request.POST:     			
+		machine = request.POST.get("machine")
+		request.session["machine_search"] = machine
+		db, cur = db_open() 
+		if len(machine) == 3:
+			sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
+		else:
+			sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,4) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
+		cur.execute(sql)
+		tmp = cur.fetchall()
+		db.close
+		request.session["tech_display"] = 0
+		return render(request,"tech_search_display2.html",{'machine':tmp})
+		
+	else:
+		
+		form = tech_searchForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	return render(request,'tech_search2.html', args)		
 
 def tech_tech_call(request):
 	request.session["call_route"] = 'tech'

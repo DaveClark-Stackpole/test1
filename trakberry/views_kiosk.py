@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3, sup_downForm
+from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm
 from trakberry.views import done
 from views2 import main_login_form
 from views_mod1 import find_current_date
@@ -19,6 +19,7 @@ from views_routes import direction
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open
+from datetime import datetime
 
 # *********************************************************************************************************
 # MAIN KIOSK PAGE
@@ -44,13 +45,13 @@ def kiosk(request):
 		button_1 = request.POST
 		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
-			request.session["route_1"] = 'kiosk' # disable when ready to run
-			#request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
+			#request.session["route_1"] = 'kiosk' # disable when ready to run
+			request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
 			return direction(request)
 			
 		if button_pressed == -2:
-			request.session["route_1"] = 'kiosk'   #disable when ready to run
-			#request.session["route_1"] = 'kiosk_production' # enable when ready to run
+			#request.session["route_1"] = 'kiosk'   #disable when ready to run
+			request.session["route_1"] = 'kiosk_production' # enable when ready to run
 			return direction(request)
 			
 		if button_pressed == -3:
@@ -250,6 +251,298 @@ def kiosk_production(request):
 	args['form'] = form  
 	
 	return render(request, "kiosk/kiosk_production.html",{'args':args})
+
+def manual_production_entry6(request):
+	return render(request, "kiosk/kiosk_test.html")
+
+def manual_production_entry3(request):
+	
+	current_first, shift  = vacation_set_current5()
+	#request.session["current_first"] = current_first
+	
+	
+	kiosk_job = ['' for x in range(0)]
+	kiosk_part = ['' for x in range(0)]
+	kiosk_prod = ['' for x in range(0)]
+	kiosk_hrs = ['' for x in range(0)]
+	kiosk_dwn = ['' for x in range(0)]
+	kiosk_clock = ['' for x in range(0)] 
+	
+	if request.POST:
+		
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
+			if kiosk_button1 == -1:
+				request.session["route_1"] = 'kiosk'
+				return direction(request)
+		except:
+			dummy = 1
+			
+		x_job = "job"
+		x_part = "part"
+		x_prod = "prod"
+		x_hrs = "hrs"
+		x_dwn = "dwn"
+		
+		kiosk_date = request.POST.get("date_en")
+		kiosk_shift = request.POST.get("shift")
+		
+		for i in range(1,7): # Read in all the data entered for production into appropriate variables
+		#try:
+			x_job = x_job + str(i)
+			x_part = x_part + str(i)
+			x_prod = x_prod + str(i)
+			x_hrs = x_hrs + str(i)
+			x_dwn = x_dwn + str(i)
+			kiosk_job.append(request.POST.get(x_job))
+			kiosk_part.append(request.POST.get(x_part))
+			kiosk_prod.append(request.POST.get(x_prod))
+			kiosk_hrs.append(request.POST.get(x_hrs))
+			kiosk_dwn.append(request.POST.get(x_dwn))
+			
+			x_job = "job"
+			x_part = "part"
+			x_prod = "prod"
+			x_hrs = "hrs"
+			x_dwn = "dwn"
+			
+		shift_time = "None"
+		#except:
+		#	dummy = 1
+		if kiosk_shift=="Aft":
+			shift_time="3pm-11pm"
+		if kiosk_shift=="Day":
+			shift_time="7am-3pm"
+		if kiosk_shift=="Mid":
+			shift_time="11pm-7am"
+			
+		#pprod = int(kiosk_prod[1])
+		#pprod2 = int(kiosk_prod[0])
+		
+		# Empty variables
+		xy = "_"
+		zy = 0
+		db, cur = db_open()
+		
+		for i in range(0,6):
+			job = kiosk_job[i]
+			part = kiosk_part[i]
+			prod = kiosk_prod[i]
+			hrs = kiosk_hrs[i]
+			dwn = kiosk_dwn[i]
+			clock_number = request.session["clock"]
+			
+			try:
+				dummy = len(job)
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,xy,zy,zy,zy,zy,zy,xy))
+				db.commit()
+			except:
+				dummy = 1
+		
+		TimeStamp = int(time.time())
+		TimeOut = - 1
+		cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,clock_number,TimeOut))
+		cur.execute(cql)
+		db.commit()
+	
+		db.close()
+		
+
+		
+		# Below is to test variables
+		#return render(request, "kiosk/kiosk_test2.html",{'job':kiosk_job,'part':pprod2,'prod':pprod,'hrs':kiosk_hrs,'dwn':kiosk_dwn}) 
+		
+		request.session["route_1"] = 'manual_production_entry'
+		return direction(request)
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	tcur=int(time.time())
+
+	return render(request, "kiosk/manual_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift})
+	
+def manual_production_entry(request):
+	pn_len = 3
+	db, cur = db_open()
+	current_first, shift  = vacation_set_current5()
+	#try:
+	
+
+
+  
+	aql = "SELECT MAX(id)  FROM sc_production1" 
+	
+	#aql = "SELECT * FROM sc_production1 WHERE LENGTH(partno)> '%d' ORDER BY %s %s" %(pn_len,'id','DESC')
+	cur.execute(aql)
+	tmp3 = cur.fetchall()
+	tmp4 = tmp3[0]
+	tmp5 = tmp4[0]
+	
+	bql = "Select shift From sc_production1 WHERE id = '%d'" %(tmp5)
+	cur.execute(bql)
+	tmp3 = cur.fetchall()
+	tmp4 = tmp3[0]
+	kshift = tmp4[0]
+	
+	try:
+		dql = "Select pdate From sc_production1 WHERE id = '%d'" %(tmp5)
+		cur.execute(dql)
+		tmp3 = cur.fetchall()
+		tmp4 = tmp3[0]
+		dt = tmp4[0]
+		ddt = str(dt)
+		current_first = ddt
+	except:
+		dummy = 1
+	
+	
+	#cur.execute('select id, pdate from sc_production1 where id=422079')
+	#id, date_str = cur.fetchone()
+	#date_stt = str(date_str)
+	
+	
+	#created_date = datetime.strptime(date_stt, '%Y-%m-%d')
+	#ddt = "Select pdate From sc_production1 WHERE id = '%d'" %(tmp5)
+	#cur.execute(ddt)
+	#ddt = cursor.execute('select pdate from sc_production1 where "%d"' %(tmp5))
+	
+	
+	#date_str = cur.fetchone()
+	#dt = datetime.strptime(date_str, '%Y-%m-%d')
+	
+	#cur.execute(dql)
+	#tmp3 = str(cur.fetchall())
+	#tmp4 = str(tmp3[0])
+	#dt = tmp3
+	
+	#return render(request, "kiosk/kiosk_test.html",{'datee':ddt,'shift':kshift})
+	
+	#current_first = tmp4[10]
+	#kshift = tmp4[11]
+	if kshift=="3pm-11pm":
+		shift="Aft"
+	if kshift=="7am-3pm":
+		shift="Day"
+	if kshift=="11pm-7am":
+		shift="Mid"
+			
+	#except:
+	#	dummy = 1
+	
+
+
+	
+	
+	
+	if request.POST:
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
+			if kiosk_button1 == -1:
+				request.session["route_1"] = 'manual_production_entry'
+				return direction(request)
+		except:
+			clock = request.POST.get("clock")
+			ddate = request.POST.get("date_en")
+			shift = request.POST.get("shift")
+			job = request.POST.get("job")
+			
+			request.session["clock"] = clock
+			request.session["date"] = ddate
+			request.session["shift"] = shift
+			request.session["job"]= job
+
+			request.session["route_1"] = 'manual_production_entry2'
+			pn_len = 3
+			db, cur = db_open()
+			try:
+				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
+				cur.execute(aql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				request.session["machine"] = tmp4[2]
+				
+			except:
+				request.session["machine"] = "XX"
+				
+			try:
+				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
+				cur.execute(aql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				request.session["part"] = tmp4[3]
+				
+			except:
+				request.session["part"] = "XX"
+			db.close()
+			request.session["route_1"] = 'manual_production_entry2'
+			return direction(request)
+	else:
+		form = kiosk_dispForm4()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	tcur=int(time.time())
+
+	return render(request, "kiosk/manual_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift})
+	
+def manual_production_entry2(request):
+	if request.POST:
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
+			if kiosk_button1 == -1:
+				request.session["route_1"] = 'manual_production_entry'
+				return direction(request)
+		except:
+			part = request.POST.get("part")
+			prod = request.POST.get("prod")
+			hrs = request.POST.get("hrs")
+			dwn = request.POST.get("down")
+			mch = request.POST.get("machine")
+			
+			clock_number = request.session["clock"]
+			kiosk_date = request.session["date"] 
+			kiosk_shift = request.session["shift"] 
+			job = request.session["job"]
+			
+			if kiosk_shift=="Aft":
+				shift_time="3pm-11pm"
+			if kiosk_shift=="Day":
+				shift_time="7am-3pm"
+			if kiosk_shift=="Mid":
+				shift_time="11pm-7am"
+			
+			
+			db, cur = db_open()
+		
+			try:
+				xy = "_"
+				zy = 0
+				
+				dummy = len(job)
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,mch,zy,zy,zy,zy,zy,xy))
+				db.commit()
+			except:
+				dummy = 1
+				
+				
+			db.close()
+			request.session["route_1"] = 'manual_production_entry'
+			return direction(request)
+	else:
+		form = kiosk_dispForm4()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	tcur=int(time.time())
+
+	return render(request, "kiosk/manual_production_entry2.html",{'args':args})
+
 
 def kiosk_production_entry(request):
 	
@@ -592,7 +885,60 @@ def kiosk_job_leave_enter(request):
 	
 	request.session["route_1"] = 'kiosk'
 	return direction(request)
+
+
+def tenr_fix(request):
+	db, cur = db_open()
+	id1 = 415585
+	p1 = '50-9341'
+	sh1 = '01-10R'
+	cql = ('update sc_production1 SET sheet_id = "%s" WHERE partno ="%s" and id > "%s"' % (sh1,p1,id1))
+	cur.execute(cql)
+	db.commit()
 	
+	
+	#trg1 = 0
+	#m1 = 'OP30'
+	#cql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and machine = "%s"' % (trg1,p1,id1,m1))
+	#cur.execute(cql)
+	#db.commit()
+	
+	
+	a1 = '1502'
+	t1 = 862
+	pd1 = 480
+	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
+	cur.execute(sql)
+	db.commit()
+	a1 = '1507'
+	t1 = 796
+	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
+	cur.execute(sql)
+	db.commit()
+	a1 = '1529'
+	t1 = 413
+	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
+	cur.execute(sql)
+	db.commit()
+	a1 = '1539'
+	t1 = 724
+	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
+	cur.execute(sql)
+	db.commit()
+	a1 = '1540'
+	t1 = 790
+	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
+	cur.execute(sql)
+	db.commit()
+	a1 = '1543'
+	t1 = 892
+	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
+	cur.execute(sql)
+	db.commit()
+	db.close()
+	return render(request, "done_update.html")
+
+
 def manpower_layout(request):
 
 	db, cur = db_open()
@@ -656,5 +1002,17 @@ def manual_entry(request):
 	args.update(csrf(request))
 	args['form'] = form
 
-	return render(request,'manual_entry.html', {'args':args})	
+	return render(request,'manual_entry.html', {'args':args})
+	
+def entry_recent(request):
+	db, cursor = db_open()  		
+	sql = "SELECT * FROM sc_production ORDER BY id DESC limit 50" 
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	db.close
+	machine="Recent Machine Breakdowns"
+	request.session["machine_search"] = machine
+	request.session["tech_display"] = 1
+	return render(request,"entry_recent_display.html",{'machine':tmp})
+	
 	

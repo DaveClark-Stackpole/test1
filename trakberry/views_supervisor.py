@@ -395,15 +395,38 @@ def supervisor_down(request):
 		# take comment into tx and ensure no "" exist.  If they do change them to ''
 		tx = problem
 		tx = ' ' + tx
-		if (tx.find('"'))>0:
+		tps = list(tx)
+		
+		
+
+#		hh = [ord(c) for c in tps]
+		
+			
+#		if tps[2] == "x":
+#			if(39 in hh):
+#				a = "Appostrophe 39"
+#				return render(request,'test_temp2.html', {'v1':a})	
+#			if(8217 in hh):
+#				a = "Appostrophe 8127"
+#				return render(request,'test_temp2.html', {'v1':a})		
+			
+#			return render(request,'test_temp2.html', {'v1':hh})	
+
+			
+			
+			
+		if (tx.find("'"))>0:
+			#return render(request,'test_temp2.html', {'variable':tx})	
 			#request.session["test_comment"] = tx
 			#return out(request)
 			ty = list(tx)
-			ta = tx.find('"')
-			tb = tx.rfind('"')
-			ty[ta] = "'"
-			ty[tb] = "'"
+			ta = tx.find("'")
+			#tb = tx.rfind("'")
+			ty[ta] = ""
+			#ty[tb] = "'"
 			tc = "".join(ty)
+			
+			return render(request,'test_temp2.html', {'v1':ty,'v2':tc})	
 		else:
 			tc = tx
 		problem = tc
@@ -1981,7 +2004,7 @@ def tech_report_email():
 		
 		
 		# Add name to email list
-		toaddrs = ["ttobey@stackpole.com","dmilne@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com","dgleba@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com","dpeachy@stackpole.com"]
+		toaddrs = ["ttobey@stackpole.com","dmilne@stackpole.com","kbisch@stackpole.com","wsismar@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","avilandre@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","kcrowder@stackpole.com","amalo@stackpole.com","dclark@stackpole.com","dgleba@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com","kfrey@stackpole.com","ghundt@stackpole.com","dpeachy@stackpole.com"]
 		#toaddrs = ["dclark@stackpole.com"]
 		fromaddr = 'stackpole@stackpole.com'
 		frname = 'Dave'

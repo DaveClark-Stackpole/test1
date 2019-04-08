@@ -40,43 +40,50 @@ def excel_test(request):
 	# First variable is ROW 
 	# Second variable is COLUMN
 	
-	tot = 24
+	tot = 246
 	toc = 35
 	tdate = tot+1
-	
-	
-	a = [[] for x in range(tot+1)]
-	
-	for i in range(1,tot):
-		for ii in range(0,35):
-			x = working.cell(i,ii).value
-			if x > 0 and x < 10000000:
-				x = int(x)
-				dummy = 1
-			else:
-				if len(str(x)) < 5:
-					x = 0
-				else:
-					x = str(x)
-			a[i].append(x)
+	jj = 1
+
+	a = [[] for x in range(600)]
+	b = [[] for y in range(600)]
+	for i in range(205,tot):
+		for ii in range(0,17):
+			#x = working.cell(i,ii).value
+			#if x > 0 and x < 10000000:
+			#	x = int(x)
+			#	dummy = 1
+			#else:
+			#	if len(str(x)) < 5:
+			#		x = 0
+			#	else:
+			if len(str(working.cell(i,ii).value)) > 5:
+				#x = str(working.cell(i,ii).value) + "(" + str(working.cell(204,ii).value) + ")"
+				x = str(working.cell(i,ii).value) 
+				y = str(working.cell(204,ii).value) 
+				
+				z = x + "(" + y + ")"
+				a[jj].append(x)
+				b[jj].append(y)
+				jj = jj + 1
 	#a = working.cell(1,0).value
 	# Date
-	b = working.cell(24,0).value
-	excel_date = int(b)
+	c = working.cell(24,0).value
+	excel_date = int(c)
 	
 	dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date - 2)
 
 	#tt = vacation_temp()
 
 
-	#return render(request,"test4.html",{'Date':dt,'RD':tt})
+	#return render(request,"test4.html",{'Date':dt,'A':a,'B':b})
 	
 	
 	#adate = working.cell(tdate,1).value
 	#b = working.cell(7,0).value
 	#mlist = book.sheet_names()
 	#mlist.encode('ascii','ignore')
-	c = a[5][5]
+	#c = a[5][5]
 	#mlist = xl_workbook.nsheets
 
 	#mlist = os.listdir('.')
@@ -101,7 +108,7 @@ def excel_test(request):
 
 
 	
-	b = 35
+	#b = 35
 	
 #	Only uncomment below line to re do table completely	
 	inventory_initial()
@@ -114,21 +121,18 @@ def excel_test(request):
 
 # Above won't work.   Need to confirm todays date is in inventory
 
-	try:
-		sql = "SELECT * FROM tkb_inventory where Date_Entered = '%s'" %(current_first)
-		cur.execute(sql)
-		tmp = cur.fetchall()
-		tmp2 = tmp[0]
-		request.session["test_excel"] = "Already one there"
-	except:
-		x = 1
-		for i in range(1,tot):
-			current_part = a[i][0]
-			for ii in range(1,35):
-				y = a[i][ii]
-				cur.execute('''INSERT INTO tkb_inventory(Date_Entered,Part,Quantity,Category) VALUES(%s,%s,%s,%s)''', (current_first,current_part,y,ii))
-				db.commit()
-		request.session["test_excel"] = "Added New One"
+
+# The below Code was for Inventory
+
+	x = 1
+	for i in range(1,jj):
+		#y = a[i]
+		y = str(a[i][0])
+		#y = "a"
+		yy = str(b[i][0])
+		cur.execute('''INSERT INTO tkb_manpower(Employee,Shift) VALUES(%s,%s)''', (y,yy))
+		db.commit()
+	request.session["test_excel"] = "Added New One"
 
 	db.close()
 
@@ -225,19 +229,61 @@ def inventory_initial():
 	db, cursor = db_open()  
 	
 #	Use below line to recreate the table format
-	cursor.execute("""DROP TABLE IF EXISTS tkb_inventory""")
+	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
 
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_inventory(Id INT PRIMARY KEY AUTO_INCREMENT,Date_Entered Date, Part CHAR(30), Quantity INT(20), Category INT(5))""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_manpower(Id INT PRIMARY KEY AUTO_INCREMENT,Employee CHAR(80), Shift CHAR(80))""")
 	db.commit()
 	db.close()
 	return
 	
+def manpower_initial():
+
+	# create inventory table if one doesn't exist
+	db, cursor = db_open()  
 	
+#	Use below line to recreate the table format
+	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
+
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_manpower(Id INT PRIMARY KEY AUTO_INCREMENT,Employee CHAR(80), Shift CHAR(80),Trained CHAR(160))""")
+	db.commit()
+	db.close()
+	return
 	
-	
-	
-	
-	
+# Update DB so it has current manpower
+def manpower_update(request):
+	label_link = '/home/file/import1/Inventory/importedxls'
+	sheet = 'inventory.xlsx'
+	sheet_name = 'Sheet1'
+	os.chdir(label_link)
+	book = xlrd.open_workbook(sheet)
+	working = book.sheet_by_name(sheet_name)
+	tot = 246  # Row on Excel Sheet
+	toc = 35   # Col on Excel Sheet
+	tdate = tot+1
+	jj = 1
+	a = [[] for x in range(600)]
+	b = [[] for y in range(600)]
+	for i in range(205,tot):
+		for ii in range(0,17):
+			if len(str(working.cell(i,ii).value)) > 5:
+				x = str(working.cell(i,ii).value) 
+				y = str(working.cell(204,ii).value) 
+				z = x + "(" + y + ")"
+				a[jj].append(x)
+				b[jj].append(y)
+				jj = jj + 1
+	manpower_initial()   # Initialize the Manpower list
+	db, cur = db_open()
+	x = 1
+	for i in range(1,jj):
+		y = str(a[i][0])
+		yy = str(b[i][0])
+		cur.execute('''INSERT INTO tkb_manpower(Employee,Shift) VALUES(%s,%s)''', (y,yy))
+		db.commit()
+	db.close()
+	return render(request,"test4.html")
+
+
 	
 	
 	

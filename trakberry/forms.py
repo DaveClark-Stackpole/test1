@@ -83,7 +83,12 @@ class kiosk_dispForm3(forms.Form):
 	asset5 = forms.CharField()
 	asset6 = forms.CharField()
 	asset7 = forms.CharField()
-	
+class kiosk_dispForm4(forms.Form):
+	clock = forms.CharField()
+	date_en = forms.CharField()
+	job = forms.CharField()
+	shift = forms.CharField()
+
 class sup_closeForm(forms.Form):
 	comment = forms.CharField()		
 

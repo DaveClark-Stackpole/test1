@@ -137,6 +137,10 @@ function goBack() {
 <!-- **** Styling for tool tip ******************  -->
 	<link rel='stylesheet' href='/static/tooltip/css/stylee.css'>
 	<link rel='stylesheet' href='/static/tooltip/css/tooltips.css'>
+	
+	<link rel="stylesheet" href="/static/style_1/grid_kiosk_job_production2.css?{{TCUR}}">   <!-- Use this for the Production Entry Format -->
+	
+	
 	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script> -->
 	<script src="/static/bootstrap/js/1.7.0/jquery.min.js"></script>
 	<!--[if !IE | (gt IE 8)]><!-->
@@ -211,13 +215,15 @@ function goBack() {
                 
 				{% endblock%}
 				{%block active_2%}
-				<li><a href="{{request.session.local_toggle}}/display_initialize"><span class="glyphicon glyphicon-eye-open"></span> Live Track</a></li>
+				<li><!-- <a href="{{request.session.local_toggle}}/display_initialize"> --><a href ="#"><span class="glyphicon glyphicon-eye-open"></span> Live Track</a></li>
 				{%endblock%}
 				{%block active_3%}
 				<!-- Message App -->
 				<!--
 				<li><a href="{{request.session.local_toggle}}/sup_message">Message</a></li>
 				-->
+				
+				<!--   Below is the old Reports Section for graphs  
 				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span>Reports <b class="caret"></b></a>
 				{%endblock%}	
                     <ul class="dropdown-menu multi-level">
@@ -226,9 +232,9 @@ function goBack() {
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Production</a>
                             <ul class="dropdown-menu">
                                 
-                                <li class="dropdown-submenu">
+                                <li class="dropdown-submenu">   
 									<!--<li><a href="#">Production Snapshot</a></li>-->
-									<!--<li><a href="{{request.session.local_toggle}}/reports_snapshot">Production Snapshot</a></li> </li> -->
+									<!--<li><a href="{{request.session.local_toggle}}/reports_snapshot">Production Snapshot</a></li> </li> --> <!--
 									<li><a href="#">Production Snapshot</a></li> </li>
 									
                                 <li class="dropdown-submenu">
@@ -245,10 +251,24 @@ function goBack() {
                         
                         <!-- <li class="divider"></li> -->
                        
-					
+						<!--
 						
                     </ul>
-                </li>
+                </li> -->
+				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span>Production<b class="caret"></b></a>
+					<ul class="dropdown-menu multi-level">
+                        <li><a href="{{request.session.local_toggle}}/manual_production_entry">Production Entries</a></li>
+                        
+                        
+                        
+						<li class="divider"></li> 
+						<li><a href="#">Cycle Times</a></li>
+                        <li><a href="#">Production Reports</a></li>
+						
+						
+                    </ul>
+				
+				</li>
 				{%block active_31%}
 				<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span>Supervisors<b class="caret"></b></a>
 				{%endblock%}
@@ -274,7 +294,11 @@ function goBack() {
 							</ul>
                         </li>
 						-->
+						<li><a href="{{request.session.local_toggle}}/tech_recent2">Downtime History (100)</a></li>
+						<li><a href="{{request.session.local_toggle}}/tech_history2">Downtime Search</a></li>
+						
 						<li><a href="{{request.session.local_toggle}}/vacation_display_initial">Vacations</a></li>
+						<li><a href="{{request.session.local_toggle}}/manual_production_entry">Production Entries</a></li>
 						
 							
                         
