@@ -11,6 +11,9 @@ from django.core.context_processors import csrf
 from smtplib import SMTP
 import MySQLdb
 
+#ADD THIS FOR ACKNOWLEDGEMENT
+
+
 # Methods for opening database for all and returning db and cur
 def db_open():
 #	Change host , username , password and db to suit 
