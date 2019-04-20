@@ -98,9 +98,19 @@ def kiosk_job(request):
 def kiosk_production(request):
 	job = ['' for x in range(6)]
 	TimeOut = -1
+	request.session["machine1"] = "1"
+	request.session["machine2"] = "2"
+	request.session["machine3"] = "3"
+	request.session["machine4"] = "4"
+	request.session["machine5"] = "5"
+	request.session["machine6"] = "6"
 	
-	if request.POST:
-		kiosk_clock = request.POST.get("clock")
+	dummy2 = 1
+	
+	if dummy2 == 1:
+#	if request.POST:
+		kiosk_clock = request.session["current_clock"]
+#		kiosk_clock = request.POST.get("clock")
 		request.session["clock"] = ""
 		request.session["variable1"] = ""
 		request.session["variable2"] = ""
@@ -117,103 +127,96 @@ def kiosk_production(request):
 		except:
 			dummy = 1
 			
-#		pn_len = 3
-#		a = '331'
-#		db, cur = db_open()
-#		bql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(a,pn_len,'id','DESC')
-#		cur.execute(bql)
-#		tmp9 = cur.fetchall()
-#		tmp8 = tmp9[0]
-#		request.session["part17"] = tmp8[3]
-#		db.close()		
-#		return render(request, "kiosk/kiosk_test2.html",{'job':tmp9}) 
-		
-		
+			
+		db, cur = db_open()
 		try:
-			db, cur = db_open()
 			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
 			cur.execute(sql)
 			tmp2 = cur.fetchall()
 			tmp1 = tmp2[0]
-			
-			
-		
 			try:
 				pn_len = 3
 				request.session["variable1"] = int(tmp1[4])
-				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(int(tmp1[4]),pn_len,'id','DESC')
-				cur.execute(aql)
-				tmp3 = cur.fetchall()
-				tmp4 = tmp3[0]
-				request.session["part1"] = tmp4[3]
 				
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[4]))
+				cur.execute(sql)
+				tmp = cur.fetchall()
+				tmpp = tmp[0]
+				request.session["part1"] = tmpp[2]
+				request.session["machine1"] = tmpp[5]
 			except:
 				request.session["part1"] = -1
+				request.session["machine1"] = "XX"
 				if len(tmp1[4])<2:
 					request.session["variable1"] = 99
 			try:
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[5]))
+				cur.execute(sql)
+				tmp = cur.fetchall()
+				tmpp = tmp[0]
+				request.session["part2"] = tmpp[2]
+				request.session["machine2"] = tmpp[5]
 				request.session["variable2"] = int(tmp1[5])
-				bql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[5]),'id','DESC')
-				cur.execute(bql)
-				tmp3 = cur.fetchall()
-				tmp4 = tmp3[0]
-				tt = len(tmp4[3])
-				if len(tmp4[3])>1:
-					request.session["part2"] = tmp4[3]
-				else:
-					request.session["part2"] = -1
-					
-				#request.session["part2"] = tt
-				#return render(request, "kiosk/kiosk_test2.html",{'ass':tt})
-			
+	
 			except:
 				request.session["part2"] = -1
+				request.session["machine2"] = "XX"
 				if len(tmp1[5]) < 2:
 					request.session["variable2"] = 99
 			try:
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[6]))
+				cur.execute(sql)
+				tmp = cur.fetchall()
+				tmpp = tmp[0]
+				request.session["part3"] = tmpp[2]
+				request.session["machine3"] = tmpp[5]
 				request.session["variable3"] = int(tmp1[6])
-				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[6]),'id','DESC')
-				cur.execute(aql)
-				tmp3 = cur.fetchall()
-				tmp4 = tmp3[0]
-				if len(tmp4[3])<1:
-					request.session["part3"] = 0
-				else:
-					request.session["part3"] = tmp4[3]
-				
 			except:
-				request.session["variable3"] = 99
+				request.session["part3"] = -1
+				request.session["machine3"] = "XX"
+				if len(tmp1[6]) < 2:
+					request.session["variable3"] = 99
+					
 			try:
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[7]))
+				cur.execute(sql)
+				tmp = cur.fetchall()
+				tmpp = tmp[0]
+				request.session["part4"] = tmpp[2]
+				request.session["machine4"] = tmpp[5]
 				request.session["variable4"] = int(tmp1[7])
-				dql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[7]),'id','DESC')
-				cur.execute(dql)
-				tmp3 = cur.fetchall()
-				tmp4 = tmp3[0]
-				request.session["part4"] = tmp4[3]
-				
 			except:
-				request.session["variable4"] = 99
 				request.session["part4"] = -1
+				request.session["machine4"] = "XX"
+				if len(tmp1[7]) < 2:
+					request.session["variable4"] = 99
 			try:
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[8]))
+				cur.execute(sql)
+				tmp = cur.fetchall()
+				tmpp = tmp[0]
+				request.session["part5"] = tmpp[2]
+				request.session["machine5"] = tmpp[5]
 				request.session["variable5"] = int(tmp1[8])
-				dql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[8]),'id','DESC')
-				cur.execute(dql)
-				tmp3 = cur.fetchall()
-				tmp4 = tmp3[0]
-				request.session["part5"] = tmp4[3]
 			except:
-				request.session["variable5"] = 99
 				request.session["part5"] = -1
+				request.session["machine5"] = "XX"
+				if len(tmp1[8]) < 2:
+					request.session["variable5"] = 99
 			try:
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[9]))
+				cur.execute(sql)
+				tmp = cur.fetchall()     
+				tmpp = tmp[0]
+				request.session["part6"] = tmpp[2]
+				request.session["machine6"] = tmpp[5]
 				request.session["variable6"] = int(tmp1[9])
-				dql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[9]),'id','DESC')
-				cur.execute(dql)
-				tmp3 = cur.fetchall()
-				tmp4 = tmp3[0]
-				request.session["part6"] = tmp4[3]
 			except:
-				request.session["variable6"] = 99
 				request.session["part6"] = -1
+				request.session["machine6"] = "XX"
+				if len(tmp1[9]) < 2:
+					request.session["variable6"] = 99
+
 			
 			db.close()
 			
@@ -221,29 +224,14 @@ def kiosk_production(request):
 			
 			request.session["clock"] = kiosk_clock
 			request.session["route_1"] = 'kiosk_production_entry'
+			#return render(request, "kiosk/kiosk_test3.html") 
 			return direction(request)
 	
 	
-		except:
-			#db, cur = db_open()
-			#sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
-			#cur.execute(sql)
-			#tmp2 = cur.fetchall()
-			#tmp1 = tmp2[0]
-			
-		
-		
-			#try:
-	#		request.session["variable1"] = int(tmp1[4])
-	#		aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s'ORDER BY %s %s" %(int(tmp1[4]),'id','DESC')
-	#		cur.execute(aql)
-	#		tmp3 = cur.fetchall()
-	#		tmp4 = tmp3[0]
-	#		request.session["part1"] = tmp4[2]
-			
+		except:	
 			request.session["route_1"] = 'kiosk_error_badclocknumber'
 			return direction(request)
-
+	
 	else:
 		form = kiosk_dispForm3()
 	args = {}
@@ -555,12 +543,23 @@ def kiosk_production_entry(request):
 	kiosk_prod = ['' for x in range(0)]
 	kiosk_hrs = ['' for x in range(0)]
 	kiosk_dwn = ['' for x in range(0)]
+	kiosk_machine = ['' for x in range(0)]
 	
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
 			if kiosk_button1 == -1:
+				TimeStamp = int(time.time())
+				TimeOut = - 1
+				try:
+					db, cur = db_open()
+					cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,kiosk_clock,TimeOut))
+					cur.execute(cql)
+					db.commit()
+					db.close()
+				except:
+					dummy = 1
 				request.session["route_1"] = 'kiosk'
 				return direction(request)
 		except:
@@ -610,6 +609,7 @@ def kiosk_production_entry(request):
 		# Empty variables
 		xy = "_"
 		zy = 0
+
 		db, cur = db_open()
 		
 		for i in range(0,6):
@@ -619,10 +619,22 @@ def kiosk_production_entry(request):
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
 			clock_number = request.session["clock"]
-			
+			if i == 0 :
+				m = request.session["machine1"]
+			elif i ==1:
+				m = request.session["machine2"]
+			elif i ==2:
+				m = request.session["machine3"]
+			elif i ==3:
+				m = request.session["machine4"]
+			elif i ==4:
+				m = request.session["machine5"]
+			elif i ==5:
+				m = request.session["machine6"]
+
 			try:
 				dummy = len(job)
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,xy,zy,zy,zy,zy,zy,xy))
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,zy,zy,xy))
 				db.commit()
 			except:
 				dummy = 1
@@ -703,24 +715,25 @@ def kiosk_job_assign(request):
 			return direction(request)
 		#Assigned already Check
 		ch = 0
-		try:
-			TimeOut = -1
-			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
-			cur.execute(sql)
-			tmp2 = cur.fetchall()
-			tmp1 = tmp2[0]
-			ch = 1
-		except:
-			ch = 0
-		if ch == 1:
-			request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
-			return direction(request)
+		
+		
+		# Commented out the check to see if someone is in kiosk and not signed out
+#		try:
+#			TimeOut = -1
+#			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+#			cur.execute(sql)
+#			tmp2 = cur.fetchall()
+#			tmp1 = tmp2[0]
+#			ch = 1
+#		except:
+#			ch = 0
+#		if ch == 1:
+#			request.session["route_1"] = 'kiosk_error_assigned_clocknumber'
+#			return direction(request)
+#       End of section to check if someone is in kiosk and not signed out.
+
 	
-		# ???  Also add code here to see if this clock number is already on a job  ???
-		#
-		# ???  Also add code to see if this is a valid clock number   ???
-		#
-		# *********************************************************************
+
 			
 		# Check if any entry was one with a non numerical value.  If so reroute back to reset kiosk job assign
 		job_empty = 0
@@ -842,8 +855,14 @@ def kiosk_job_assign_enter(request):
 	db.commit()
 	db.close()
 	
-	request.session["route_1"] = 'kiosk'
+	
+	request.session["current_clock"] = kiosk_clock
+	request.session["route_1"] = 'kiosk_production' # enable when ready to run
 	return direction(request)
+			
+			
+#	request.session["route_1"] = 'kiosk'
+#	return direction(request)
 
 def kiosk_job_leave(request):
 	if request.POST:
@@ -886,12 +905,103 @@ def kiosk_job_leave_enter(request):
 	request.session["route_1"] = 'kiosk'
 	return direction(request)
 
+def tenr_fix2(request):
+	db, cur = db_open()
+	id1 = 438347
+	part1 = '50-9341'
+	asset = '1501'
+	
+	
+	
+	hql = "SELECT MAX(Id) FROM sc_production1 where partno = '%s'" %(part1)
+	cur.execute(hql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	tmp3 = tmp2[0]
+	
+	
+	request.session["testvariable1"] = tmp3
+	request.session["testvariable2"] = id1
+	
+	sql = "SELECT * FROM sc_production1 WHERE Id >= '%d' and Id<= '%d' and partno = '%s'" %(id1,tmp3,part1)
+	cur.execute(sql)
+	tmp2 = cur.fetchall()
+	tmp1 = tmp2[0]
+	
+	for i in tmp2:
+		asset1 = i[1]
+		runtime1 = i[12]
+		id1 = i[0]
 
+		try:
+			sql = "SELECT cycletime FROM tkb_cycletime WHERE asset = '%s' and part = '%s'" %(asset1,part1)
+			cur.execute(sql)
+			tmp = cur.fetchall()
+			tmpp = tmp[0]
+			ct = tmpp[0]
+			
+			target1 = (runtime1 * 60 * 60) / ct
+			
+			cql = ('update sc_production1 SET target = "%s" WHERE Id ="%s"' % (target1,id1))
+			cur.execute(cql)
+			db.commit()
+			
+
+		except:
+			dummy = 2
+
+	return render(request, "done_update.html")
+	
+def tenr_fix3(request):
+	# new
+	prt = ['50-5128','50-5145','50-5132']
+
+	db, cur = db_open()
+	id1 = 437584
+	
+	for j in range (0,3):
+		id1 = 437584
+		part1 = prt[j]
+		asset = '788'
+#		if j == 2 :
+#			return render(request, "done_update.html",{'temp1':part1})
+		hql = "SELECT MAX(Id) FROM sc_production1 where partno = '%s'" %(part1)
+		cur.execute(hql)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		tmp3 = tmp2[0]
+
+		sql = "SELECT * FROM sc_production1 WHERE Id >= '%d' and Id<= '%d' and partno = '%s'" %(id1,tmp3,part1)
+		cur.execute(sql)
+		tmp2 = cur.fetchall()
+		tmp1 = tmp2[0]
+
+		for i in tmp2:
+			asset1 = i[1]
+			id1 = i[0]
+
+			try:
+				sql = "SELECT machine FROM tkb_cycletime WHERE asset = '%s'" %(asset1)
+				cur.execute(sql)
+				tmp = cur.fetchall()
+				tmpp = tmp[0]
+				ct = tmpp[0]
+				cql = ('update sc_production1 SET machine = "%s" WHERE Id ="%s"' % (ct,id1))
+				cur.execute(cql)
+				db.commit()
+			except:
+				dummy = 2
+
+	return render(request, "done_update.html")
+	
 def tenr_fix(request):
 	db, cur = db_open()
-	id1 = 415585
+	id1 = 438347
 	p1 = '50-9341'
 	sh1 = '01-10R'
+	
+	
+	
 	cql = ('update sc_production1 SET sheet_id = "%s" WHERE partno ="%s" and id > "%s"' % (sh1,p1,id1))
 	cur.execute(cql)
 	db.commit()
@@ -904,38 +1014,7 @@ def tenr_fix(request):
 	#db.commit()
 	
 	
-	a1 = '1502'
-	t1 = 862
-	pd1 = 480
-	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
-	cur.execute(sql)
-	db.commit()
-	a1 = '1507'
-	t1 = 796
-	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
-	cur.execute(sql)
-	db.commit()
-	a1 = '1529'
-	t1 = 413
-	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
-	cur.execute(sql)
-	db.commit()
-	a1 = '1539'
-	t1 = 724
-	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
-	cur.execute(sql)
-	db.commit()
-	a1 = '1540'
-	t1 = 790
-	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
-	cur.execute(sql)
-	db.commit()
-	a1 = '1543'
-	t1 = 892
-	sql = ('update sc_production1 SET target = "%s" WHERE partno ="%s" and id > "%s" and asset_num = "%s" and planned_downtime_min_forshift < "%s"' % (t1,p1,id1,a1,pd1))
-	cur.execute(sql)
-	db.commit()
-	db.close()
+
 	return render(request, "done_update.html")
 
 
@@ -1015,4 +1094,15 @@ def entry_recent(request):
 	request.session["tech_display"] = 1
 	return render(request,"entry_recent_display.html",{'machine':tmp})
 	
+def manual_cycletime_table(request):
 	
+	db, cur = db_open()
+	
+	# Make the table if it's never been created
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_cycletime(Id INT PRIMARY KEY AUTO_INCREMENT,asset CHAR(30), timest Int(20), cycletime Int(20))""")
+
+
+	db.commit()
+	db.close()
+	
+	return render(request, "kiosk/kiosk_test.html")

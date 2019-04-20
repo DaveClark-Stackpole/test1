@@ -88,7 +88,7 @@ from views_inventory import push_button, inventory_type_entry, inventory_entry, 
 # *******************************************  Kiosk Section ********************************************************************************************
 from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave,kiosk_error_badjobnumber,kiosk_error_badclocknumber,kiosk_error_assigned_clocknumber
 from views_kiosk import kiosk_production, kiosk_production_entry,flex_test,manual_production_entry,manual_production_entry2
-from views_kiosk import entry_recent
+from views_kiosk import entry_recent, manual_cycletime_table, tenr_fix2, tenr_fix3
 
 
 # ***********************************************************************************************************************************************************
@@ -352,6 +352,9 @@ urlpatterns = [
 	url(r'^manual_production_entry2/', manual_production_entry2),
 	url(r'^entry_recent/', entry_recent),
 	url(r'^tenr_fix/', tenr_fix),
+	url(r'^tenr_fix2/', tenr_fix2),
+	url(r'^tenr_fix3/', tenr_fix3),
+	url(r'^manual_cycletime_table/', manual_cycletime_table),
 
 	# ************************************************************************
 		# **************  Manpower Section ***************************************
