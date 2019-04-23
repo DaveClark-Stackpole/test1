@@ -13,6 +13,7 @@ import MySQLdb
 import json
 import time 
 import smtplib
+import decimal
 from smtplib import SMTP
 from django.core.context_processors import csrf
 from views_routes import direction
@@ -29,7 +30,14 @@ def kiosk(request):
 	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 	request.session["local_toggle"] = "/trakberry"
-	
+	request.session["kiosk_menu_screen"] = 1
+	request.session["cycletime1"] = 0
+	request.session["cycletime2"] = 0
+	request.session["cycletime3"] = 0
+	request.session["cycletime4"] = 0
+	request.session["cycletime5"] = 0
+	request.session["cycletime6"] = 0
+
 	db, cur = db_open()
 	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
 	cur.execute(sql)
@@ -122,7 +130,10 @@ def kiosk_production(request):
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button2"))
 			if kiosk_button1 == -2:
-				request.session["route_1"] = 'kiosk'
+				if request.session["kiosk_main_screen"] == 1:
+					request.session["route_1"] = 'kiosk'
+				else:
+					request.session["route_1"] = 'kiosk_menu'
 				return direction(request)
 		except:
 			dummy = 1
@@ -144,6 +155,11 @@ def kiosk_production(request):
 				tmpp = tmp[0]
 				request.session["part1"] = tmpp[2]
 				request.session["machine1"] = tmpp[5]
+				try:
+					request.session["cycletime1"] = str(tmpp[4])
+				except:
+					request.session["cycletime1"] = 0
+
 			except:
 				request.session["part1"] = -1
 				request.session["machine1"] = "XX"
@@ -157,6 +173,10 @@ def kiosk_production(request):
 				request.session["part2"] = tmpp[2]
 				request.session["machine2"] = tmpp[5]
 				request.session["variable2"] = int(tmp1[5])
+				try:
+					request.session["cycletime2"] = str(tmpp[4])
+				except:
+					request.session["cycletime2"] = 0
 	
 			except:
 				request.session["part2"] = -1
@@ -171,6 +191,10 @@ def kiosk_production(request):
 				request.session["part3"] = tmpp[2]
 				request.session["machine3"] = tmpp[5]
 				request.session["variable3"] = int(tmp1[6])
+				try:
+					request.session["cycletime3"] = str(tmpp[4])
+				except:
+					request.session["cycletime3"] = 0
 			except:
 				request.session["part3"] = -1
 				request.session["machine3"] = "XX"
@@ -185,6 +209,10 @@ def kiosk_production(request):
 				request.session["part4"] = tmpp[2]
 				request.session["machine4"] = tmpp[5]
 				request.session["variable4"] = int(tmp1[7])
+				try:
+					request.session["cycletime4"] = str(tmpp[4])
+				except:
+					request.session["cycletime4"] = 0
 			except:
 				request.session["part4"] = -1
 				request.session["machine4"] = "XX"
@@ -198,6 +226,10 @@ def kiosk_production(request):
 				request.session["part5"] = tmpp[2]
 				request.session["machine5"] = tmpp[5]
 				request.session["variable5"] = int(tmp1[8])
+				try:
+					request.session["cycletime5"] = sr(tmpp[4])
+				except:
+					request.session["cycletime5"] = 0
 			except:
 				request.session["part5"] = -1
 				request.session["machine5"] = "XX"
@@ -211,6 +243,10 @@ def kiosk_production(request):
 				request.session["part6"] = tmpp[2]
 				request.session["machine6"] = tmpp[5]
 				request.session["variable6"] = int(tmp1[9])
+				try:
+					request.session["cycletime6"] = str(tmpp[4])
+				except:
+					request.session["cycletime6"] = 0
 			except:
 				request.session["part6"] = -1
 				request.session["machine6"] = "XX"
@@ -538,7 +574,11 @@ def kiosk_production_entry(request):
 					db.close()
 				except:
 					dummy = 1
-				request.session["route_1"] = 'kiosk'
+				if request.session["kiosk_menu_screen"] == 1:
+					request.session["route_1"] = 'kiosk'
+				else:
+					request.session["route_1"] = 'kiosk_menu'
+
 				return direction(request)
 		except:
 			dummy = 1
@@ -598,23 +638,42 @@ def kiosk_production_entry(request):
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
 			clock_number = request.session["clock"]
+
 			if i == 0 :
 				m = request.session["machine1"]
+				ct = request.session["cycletime1"]
+
 			elif i ==1:
 				m = request.session["machine2"]
+				ct = request.session["cycletime2"]
 			elif i ==2:
 				m = request.session["machine3"]
+				ct = request.session["cycletime3"]
 			elif i ==3:
 				m = request.session["machine4"]
+				ct = request.session["cycletime4"]
 			elif i ==4:
 				m = request.session["machine5"]
+				ct = request.session["cycletime5"]
 			elif i ==5:
 				m = request.session["machine6"]
-
+				ct = request.session["cycletime6"]
+			
 			try:
 				dummy = len(job)
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,zy,zy,sheet_id))
-				db.commit()
+
+				try:
+					ct = float(ct)
+					h = float(hrs)
+					target1 = ((h * 60 * 60) / (ct))
+				except:
+					target1 = int(int(prod) / .85)
+
+					
+					#target1 = (runtime1 * 60 * 60) / ct
+
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id))
+				# db.commit()
 			except:
 				dummy = 1
 		
@@ -682,10 +741,14 @@ def kiosk_job_assign(request):
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button2"))
 			if kiosk_button1 == -2:
-				request.session["route_1"] = 'kiosk'
+				if request.session["kiosk_menu_screen"] == 1:
+					request.session["route_1"] = 'kiosk'
+				else:
+					request.session["route_1"] = 'kiosk_menu'
 				return direction(request)
 		except:
 			dummy = 1
+
 		# Finished and reroute
 
 		# Check if clock number is already assigned or not a valid clock number
@@ -1089,7 +1152,13 @@ def kiosk_menu(request):
 	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 	request.session["local_toggle"] = "/trakberry"
-	
+	request.session["kiosk_menu_screen"] = 2
+	request.session["cycletime1"] = 0
+	request.session["cycletime2"] = 0
+	request.session["cycletime3"] = 0
+	request.session["cycletime4"] = 0
+	request.session["cycletime5"] = 0
+	request.session["cycletime6"] = 0
 
 	if request.POST:
 		button_1 = request.POST
