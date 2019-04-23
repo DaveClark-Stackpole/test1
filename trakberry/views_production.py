@@ -23,5 +23,8 @@ from datetime import datetime
 
 # *********************************************************************************************************
 # MAIN Production View
+# This is the main Administrator View to tackle things like cycle times, view production etc.
 # *********************************************************************************************************
 
+def mgmt(request):
+	return render(request, "mgmt.html")

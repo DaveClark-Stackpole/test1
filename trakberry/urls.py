@@ -93,10 +93,18 @@ from views_kiosk import entry_recent, manual_cycletime_table, tenr_fix2, tenr_fi
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Manpower Section ********************************************************************************************
-from views_kiosk import manpower_layout, tenr_fix
+from views_kiosk import manpower_layout, tenr_fix,kiosk_menu
 
 
 # ***********************************************************************************************************************************************************
+
+# ***********************************************************************************************************************************************************
+# *******************************************  Management Section ********************************************************************************************
+from views_production import mgmt
+
+
+# ***********************************************************************************************************************************************************
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -348,6 +356,7 @@ urlpatterns = [
 	url(r'^kiosk_error_assigned_clocknumber/', kiosk_error_assigned_clocknumber),
 	url(r'^kiosk_job_leave/', kiosk_job_leave),
 	url(r'^kiosk_production_entry/', kiosk_production_entry),
+	url(r'^kiosk_menu/', kiosk_menu),
 	url(r'^manual_production_entry/', manual_production_entry),
 	url(r'^manual_production_entry2/', manual_production_entry2),
 	url(r'^entry_recent/', entry_recent),
@@ -361,7 +370,14 @@ urlpatterns = [
 	url(r'^manpower_layout/', manpower_layout),
 
 	# ************************************************************************
-	
+
+
+		# **************  Management Section ***************************************
+	url(r'^mgmt/', mgmt),
+
+	# ************************************************************************
+
+
 	# Retrieve Data from ADMIN views for testing
 	url(r'^retrieve/', retrieve),
 	url(r'^create_table/', create_table),

@@ -310,6 +310,7 @@ def manual_production_entry3(request):
 		# Empty variables
 		xy = "_"
 		zy = 0
+		sheet_id = 'kiosk'
 		db, cur = db_open()
 		
 		for i in range(0,6):
@@ -322,7 +323,7 @@ def manual_production_entry3(request):
 			
 			try:
 				dummy = len(job)
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,xy,zy,zy,zy,zy,zy,xy))
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,xy,zy,zy,zy,zy,zy,zy))
 				db.commit()
 			except:
 				dummy = 1
@@ -357,14 +358,8 @@ def manual_production_entry(request):
 	pn_len = 3
 	db, cur = db_open()
 	current_first, shift  = vacation_set_current5()
-	#try:
-	
 
-
-  
 	aql = "SELECT MAX(id)  FROM sc_production1" 
-	
-	#aql = "SELECT * FROM sc_production1 WHERE LENGTH(partno)> '%d' ORDER BY %s %s" %(pn_len,'id','DESC')
 	cur.execute(aql)
 	tmp3 = cur.fetchall()
 	tmp4 = tmp3[0]
@@ -385,32 +380,8 @@ def manual_production_entry(request):
 		ddt = str(dt)
 		current_first = ddt
 	except:
-		dummy = 1
+		dummy = 1 
 	
-	
-	#cur.execute('select id, pdate from sc_production1 where id=422079')
-	#id, date_str = cur.fetchone()
-	#date_stt = str(date_str)
-	
-	
-	#created_date = datetime.strptime(date_stt, '%Y-%m-%d')
-	#ddt = "Select pdate From sc_production1 WHERE id = '%d'" %(tmp5)
-	#cur.execute(ddt)
-	#ddt = cursor.execute('select pdate from sc_production1 where "%d"' %(tmp5))
-	
-	
-	#date_str = cur.fetchone()
-	#dt = datetime.strptime(date_str, '%Y-%m-%d')
-	
-	#cur.execute(dql)
-	#tmp3 = str(cur.fetchall())
-	#tmp4 = str(tmp3[0])
-	#dt = tmp3
-	
-	#return render(request, "kiosk/kiosk_test.html",{'datee':ddt,'shift':kshift})
-	
-	#current_first = tmp4[10]
-	#kshift = tmp4[11]
 	if kshift=="3pm-11pm":
 		shift="Aft"
 	if kshift=="7am-3pm":
@@ -418,14 +389,6 @@ def manual_production_entry(request):
 	if kshift=="11pm-7am":
 		shift="Mid"
 			
-	#except:
-	#	dummy = 1
-	
-
-
-	
-	
-	
 	if request.POST:
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
@@ -442,10 +405,23 @@ def manual_production_entry(request):
 			request.session["date"] = ddate
 			request.session["shift"] = shift
 			request.session["job"]= job
-
-			request.session["route_1"] = 'manual_production_entry2'
 			pn_len = 3
+
 			db, cur = db_open()
+
+#			New Code to find the current operation using cycletime table (It works and use when ready)
+#			try:
+#				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(job)
+#				cur.execute(sql)
+#				tmp = cur.fetchall()
+#				tmpp = tmp[0]
+#				request.session["machine"] = tmpp[5]
+#			except:
+#				request.session["machine"] = "XX"
+#			if len(request.session["machine"])<2:
+#				request.session["machine"] = "XX"
+
+#			Below is the old code to find the current operation using latest entry
 			try:
 				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
 				cur.execute(aql)
@@ -456,6 +432,8 @@ def manual_production_entry(request):
 			except:
 				request.session["machine"] = "XX"
 				
+
+
 			try:
 				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
 				cur.execute(aql)
@@ -609,6 +587,7 @@ def kiosk_production_entry(request):
 		# Empty variables
 		xy = "_"
 		zy = 0
+		sheet_id = 'kiosk'
 
 		db, cur = db_open()
 		
@@ -634,7 +613,7 @@ def kiosk_production_entry(request):
 
 			try:
 				dummy = len(job)
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,zy,zy,xy))
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,zy,zy,sheet_id))
 				db.commit()
 			except:
 				dummy = 1
@@ -1106,3 +1085,34 @@ def manual_cycletime_table(request):
 	db.close()
 	
 	return render(request, "kiosk/kiosk_test.html")
+def kiosk_menu(request):
+	
+	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
+	request.session["local_toggle"] = "/trakberry"
+	
+
+	if request.POST:
+		button_1 = request.POST
+		button_pressed =int(button_1.get("kiosk_button1"))
+		if button_pressed == -1:
+			#request.session["route_1"] = 'kiosk' # disable when ready to run
+			request.session["route_2"] = 2
+			request.session["route_1"] = 3 # enable when ready to run
+			return direction(request)
+			
+		if button_pressed == -2:
+			#request.session["route_1"] = 'kiosk'   #disable when ready to run
+			request.session["route_2"] = 2
+			request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
+			return direction(request)
+			
+
+
+
+	else:
+		form = kiosk_dispForm1()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+
+	return render(request,"kiosk/kiosk_menu.html",{'args':args})

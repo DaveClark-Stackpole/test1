@@ -2,10 +2,11 @@
 <html>
 <body>
 
-
+{% if request.session.route_1 =  3 %}}
+<meta http-equiv="refresh" content="0; url=http://pmdsdata.stackpole.ca/prodhour-10r-op30/index.php?-table=sc_prod_hour&-action=login_prompt&-cursor=0&-skip=0&-limit=30&-mode=list&-sort=p_date+desc%2C+p_shift+desc%2C+p_hour+desc&p_cell=10ROP30" />
+{% else %}
 <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/{{request.session.route_1}}" />
-
-
+{% endif %}
 
 </body>
 </html>
