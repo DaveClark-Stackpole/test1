@@ -93,7 +93,7 @@ from views_kiosk import entry_recent, manual_cycletime_table, tenr_fix2, tenr_fi
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Manpower Section ********************************************************************************************
-from views_kiosk import manpower_layout, tenr_fix,kiosk_menu
+from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower
 
 
 # ***********************************************************************************************************************************************************
@@ -364,6 +364,7 @@ urlpatterns = [
 	url(r'^tenr_fix2/', tenr_fix2),
 	url(r'^tenr_fix3/', tenr_fix3),
 	url(r'^manual_cycletime_table/', manual_cycletime_table),
+	url(r'^ab1v_manpower/', ab1v_manpower),
 
 	# ************************************************************************
 		# **************  Manpower Section ***************************************

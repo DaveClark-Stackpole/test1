@@ -949,9 +949,9 @@ def kiosk_job_leave_enter(request):
 
 def tenr_fix2(request):
 	db, cur = db_open()
-	id1 = 438347
+	id1 = 418767
 	part1 = '50-9341'
-	asset = '1501'
+	asset = '1502'
 	
 	
 	
@@ -1148,6 +1148,8 @@ def manual_cycletime_table(request):
 	db.close()
 	
 	return render(request, "kiosk/kiosk_test.html")
+
+
 def kiosk_menu(request):
 	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
@@ -1176,8 +1178,6 @@ def kiosk_menu(request):
 			return direction(request)
 			
 
-
-
 	else:
 		form = kiosk_dispForm1()
 	args = {}
@@ -1185,3 +1185,61 @@ def kiosk_menu(request):
 	args['form'] = form
 
 	return render(request,"kiosk/kiosk_menu.html",{'args':args})
+
+def ab1v_manpower(request):
+
+	db, cur = db_open()  
+	
+	cur.execute("""DROP TABLE IF EXISTS tkb_ab1v""")
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_ab1v(Id INT PRIMARY KEY AUTO_INCREMENT,asset_num CHAR(30), machine CHAR(30), partno CHAR(30), actual_produced Int(20), comments CHAR(30), pdate date, shift CHAR(30)) """)
+
+	id1 = 438221
+	pd = '2019-04-00'
+	part1 = '50-5145'
+	part2 = '50-5132'
+	part3 = '50-5128'
+	machine1 = 'Cremer Furnace'
+	sql = "SELECT * FROM sc_production1 WHERE partno = '%s' or partno = '%s' or partno = '%s'" %(part1,part2,part3)
+	cur.execute(sql)
+	tmp2 = cur.fetchall()
+
+	for tmp1 in tmp2:
+		cur.execute('''INSERT INTO tkb_ab1v(asset_num,machine,partno,actual_produced,comments,pdate,shift) VALUES(%s,%s,%s,%s,%s,%s,%s)''', (tmp1[1],tmp1[2],tmp1[3],tmp1[4],tmp1[9],tmp1[10],tmp1[11]))
+		db.commit()
+		cday = tmp1[10]
+
+	sql = "SELECT * FROM tkb_ab1v WHERE pdate > '%s' and machine != '%s' ORDER BY %s %s " %(pd,machine1,'pdate','ASC')
+	cur.execute(sql)
+	tmp2 = cur.fetchall()
+	
+	cur.execute("""DROP TABLE IF EXISTS tkb_ab1v""")
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_ab1v(Id INT PRIMARY KEY AUTO_INCREMENT,asset_num CHAR(30), machine CHAR(30), partno CHAR(30), actual_produced Int(20), comments CHAR(30), pdate date, shift CHAR(30)) """)
+
+
+	for tmp1 in tmp2:
+		day1 = tmp1[6]
+		if tmp1[2] == "OP_Insp":
+			total1 = tmp1[4]
+		elif tmp1[2][:4] == 'OP10' :
+			total1 = tmp1[4]
+		
+		else:
+			total1 = 0
+		if tmp1[2] == 'OP100':
+			total1 = 0
+		comments = tmp1[4]
+
+		cur.execute('''INSERT INTO tkb_ab1v(asset_num,machine,partno,actual_produced,comments,pdate,shift) VALUES(%s,%s,%s,%s,%s,%s,%s)''', (tmp1[1],tmp1[2],tmp1[3],total1,comments,tmp1[6],tmp1[7]))
+		db.commit()
+
+	db.close()
+	return render(request, "done_update.html")
+
+	def ab1v_manpower2(request):
+
+		sql = "SELECT DISTINCT comments FROM tkb_ab1v WHERE pdate = '%s' and machine != '%s' ORDER BY %s %s " %(pd,machine1,'pdate','ASC')
+		cur.execute(sql)
+		tmp2 = cur.fetchall()
+
+
+		return render(request, "done_update.html")

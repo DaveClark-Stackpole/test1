@@ -231,3 +231,4 @@ def message_create(request):
 	db.commit()
 	db.close()
 	return render(request,'done_test.html')
+
