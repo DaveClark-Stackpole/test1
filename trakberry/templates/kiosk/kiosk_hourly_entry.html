@@ -18,7 +18,7 @@
 <div class="grid-container">
 
 	<div class="item6">
-		<input style="background-color: #AAA00A;border-radius: 10px;width:140px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
+		<input style="background-color: #AAA00A;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
 	</div>
 
 	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="pcell" value={{request.session.pcell}}></div>
@@ -27,29 +27,25 @@
 	</div>
 	
 	
-	<div class="item2"><font color="#000000" size ="5"><u><b>Clock</b></u></font></div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Date</b></u></font></div>
-	<div class="item2"></div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Shift</b></u></font></div>
-	<div class="item2"></div>
-	
-	<div class="item2"><input style="font-size:23px;width:100px;height:60px;text-align:center;" name="clock" type="number" value={{request.session.clock}}></div>
-	<div class="item3"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="date_en" value={{Curr}}></div>
-	<div class="item2">
+	<div class="item6"><font color="#000000" size ="5"><u><b>Date</b></u></font></div>
+	<div class="item7"><font color="#000000" size ="5"><u><b>Shift</b></u></font></div>
+	<div class="item8"><font color="#000000" size ="5"><u><b>Initials</b></u></font></div>
+
+	<div class="item6"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="date_en" value={{Curr}}></div>
+	<div class="item7">
 		<select  style="font-size:23px;width:100px;height:60px;text-align:center;" name="shift" id="shift">
-			<option selected = "selected">{{Shift}} </option>
+			<option selected = "selected">{{Shift}}</option>
 			<option> Mid </option>
 			<option> Day </option>
 			<option> Aft </option>
 		</select>
 	</div>
-	<div class="item2"></div>
-	
-	<div class="item2"><font color="#000000" size ="5"><u><b>Jobs</b></u></font> </div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Part</b></u></font> </div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Production</b></u></font> </div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Hours</b></u></font> </div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Downtime </b></u></font> </div>
+	<div class="item8"><input style="font-size:23px;width:100px;height:60px;text-align:center;" name="clock" value={{request.session.clock}}></div>
+
+	<div class="item6"><font color="#000000" size ="5"><u><b>Hour</b></u></font> </div>
+	<div class="item11"><font color="#000000" size ="5"><u><b>Parts Made</b></u></font> </div>
+	<div class="item12"><font color="#000000" size ="5"><u><b>Downtime Code</b></u></font> </div>
+
 
 {% if request.session.variable1 != 99 %}
 	<div class="item2"><input style="font-size:23px;width:100px;height:60px;text-align:center;" value={{request.session.variable1}}  name="job1" type="text"></div>
