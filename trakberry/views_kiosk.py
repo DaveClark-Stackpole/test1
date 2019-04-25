@@ -684,13 +684,12 @@ def kiosk_production_entry(request):
 		db.commit()
 	
 		db.close()
-		
-
-		
-		# Below is to test variables
-		#return render(request, "kiosk/kiosk_test2.html",{'job':kiosk_job,'part':pprod2,'prod':pprod,'hrs':kiosk_hrs,'dwn':kiosk_dwn}) 
-		
-		request.session["route_1"] = 'kiosk'
+	
+	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
+		if request.session["kiosk_menu_screen"] == 1:
+			request.session["route_1"] = 'kiosk'
+		else:
+			request.session["route_1"] = 'kiosk_menu'
 		return direction(request)
 
 	else:
@@ -1235,11 +1234,56 @@ def ab1v_manpower(request):
 	db.close()
 	return render(request, "done_update.html")
 
-	def ab1v_manpower2(request):
+def kiosk_hourly_entry(request):
+	
+	current_first, shift  = vacation_set_current5()
+	request.session["pcell"] = '10ROP30'
 
-		sql = "SELECT DISTINCT comments FROM tkb_ab1v WHERE pdate = '%s' and machine != '%s' ORDER BY %s %s " %(pd,machine1,'pdate','ASC')
-		cur.execute(sql)
-		tmp2 = cur.fetchall()
+	if request.POST:
+		kiosk_hourly_clock = request.POST.get("clock")
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
+			if kiosk_button1 == -1:
+				if request.session["kiosk_menu_screen"] == 1:
+					request.session["route_1"] = 'kiosk'
+				else:
+					request.session["route_1"] = 'kiosk_menu'
+				return direction(request)
+		except:
+			dummy = 1
 
+		kiosk_hourly_date = request.POST.get("date_en")
+		kiosk_hourly_shift = request.POST.get("shift")
+		
+		shift_time = "None"
 
-		return render(request, "done_update.html")
+		if kiosk_hourly_shift=="Aft":
+			shift_time="3pm-11pm"
+		if kiosk_hourly_shift=="Day":
+			shift_time="7am-3pm"
+		if kiosk_hourly_shift=="Mid":
+			shift_time="11pm-7am"
+
+		sheet_id = 'kiosk'
+
+	#	db, cur = db_open()
+	#	cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id))
+	#	db.commit()
+	#	db.close()
+	
+	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
+		if request.session["kiosk_menu_screen"] == 1:
+			request.session["route_1"] = 'kiosk'
+		else:
+			request.session["route_1"] = 'kiosk_menu'
+		return direction(request)
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	tcur=int(time.time())
+
+	return render(request, "kiosk/kiosk_hourly_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift})

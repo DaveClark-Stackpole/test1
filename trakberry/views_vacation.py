@@ -79,9 +79,6 @@ def vacation_set_current5():  # Use this one to set Kiosk Date properly
 	day_st = t.day
 	day_st = day_st
 	hour_st = t.hour
-	
-	
-	
 
 	if int(hour_st) >= 3 and int(hour_st) <= 11:
 		shift = "Mid"
@@ -93,9 +90,7 @@ def vacation_set_current5():  # Use this one to set Kiosk Date properly
 		shift = "Aft"
 		day_st = day_st - 1
 		
-		
-		
-	
+
 	if int(month_st)<10:
 		current_first = str(year_st) + "-" + "0" + str(month_st) 
 	else:
