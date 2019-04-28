@@ -1135,6 +1135,7 @@ def entry_recent(request):
 	request.session["tech_display"] = 1
 	return render(request,"entry_recent_display.html",{'machine':tmp})
 	
+
 def manual_cycletime_table(request):
 	
 	db, cur = db_open()
@@ -1235,9 +1236,9 @@ def ab1v_manpower(request):
 	return render(request, "done_update.html")
 
 def kiosk_hourly_entry(request):
-	
+	request.session["hourly_drop"] = 'Hourly Trilobe'
 	current_first, shift  = vacation_set_current5()
-	request.session["pcell"] = '10ROP30'
+#	request.session["pcell"] = '10ROP30'
 
 	if request.POST:
 		kiosk_hourly_clock = request.POST.get("clock")
@@ -1252,24 +1253,35 @@ def kiosk_hourly_entry(request):
 		except:
 			dummy = 1
 
+		request.session["kiosk_hrs"] = 1
+
+		kiosk_hourly_pcell = request.POST.get("pcell")
 		kiosk_hourly_date = request.POST.get("date_en")
 		kiosk_hourly_shift = request.POST.get("shift")
+		kiosk_hourly_clock = request.POST.get("clock")
+		kiosk_hourly_hour = request.POST.get("hrs")
+		kiosk_hourly_qty = request.POST.get("qty")
+		kiosk_hourly_dtcode = request.POST.get("dtcode")
+		kiosk_hourly_dtmin = request.POST.get("dtmin")
+		kiosk_hourly_dtreason = request.POST.get("dtreason")
 		
+		kiosk_hourly_target = 1
+		shift_target = 1
+		shift_actual = 1
+
+		
+		#h = request.session["bugbug"]
+
 		shift_time = "None"
 
-		if kiosk_hourly_shift=="Aft":
-			shift_time="3pm-11pm"
-		if kiosk_hourly_shift=="Day":
-			shift_time="7am-3pm"
-		if kiosk_hourly_shift=="Mid":
-			shift_time="11pm-7am"
+		
 
 		sheet_id = 'kiosk'
 
-	#	db, cur = db_open()
-	#	cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id))
-	#	db.commit()
-	#	db.close()
+		db, cur = db_open()
+		cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
+		db.commit()
+		db.close()
 	
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
 		if request.session["kiosk_menu_screen"] == 1:
@@ -1286,4 +1298,63 @@ def kiosk_hourly_entry(request):
 	
 	tcur=int(time.time())
 
-	return render(request, "kiosk/kiosk_hourly_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift})
+	p_cell = request.session["pcell"]
+
+	db, cur = db_open()
+	s1 = "SELECT MAX(id)  FROM sc_prod_hour WHERE p_cell = '%s'" %(p_cell) 
+	cur.execute(s1)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	tmp3 = tmp2[0]
+
+
+	s2 = "SELECT * From sc_prod_hour WHERE id = '%s'" %(tmp3) 
+	cur.execute(s2)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	tmp3 = tmp2[2]
+
+
+	request.session["clock"] = tmp3
+	hrs = int(tmp2[6])
+	hrs = hrs + 1
+	if hrs > 8:
+		if request.session["hourly_title"] == 'Hourly Trilobe':
+			if hrs > 12:
+				hrs = 1
+		else:
+			hrs = 1
+
+	request.session["hrs"] = str(hrs)
+	kiosk_hourly_shift = tmp2[5]
+	#h = request.session["bugbug"]
+
+	request.session["shift"] = tmp2[5]
+#	if kiosk_hourly_shift=="4D":
+#		request.session["shift"] = "Day"
+#	elif kiosk_hourly_shift == "3N":
+#		request.session["shift"] = "Mid"
+#	elif kiosk_hourly_shift == "2CD":
+#		request.session["shift"] = "Day"
+#	elif kiosk_hourly_shift == "5A":
+#		request.session["shift"] = "Aft"
+
+
+
+	db.close()
+
+
+	return render(request, "kiosk/kiosk_hourly_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first})
+
+def tenr1(request):
+	request.session["pcell"] = '10ROP30'
+	request.session["hourly_title"] = 'Hourly 10R'
+	request.session["mgmt_login_password"] = 'bort'
+	request.session["mgmt_login_name"] = 'Dave'
+	return render(request, "done_update2.html")
+def trilobe(request):
+	request.session["pcell"] = 'TRI'
+	request.session["hourly_title"] = 'Hourly Trilobe'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")

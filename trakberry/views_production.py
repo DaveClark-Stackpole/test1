@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm
+from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm,login_Form
 from trakberry.views import done
 from views2 import main_login_form
 from views_mod1 import find_current_date
@@ -19,7 +19,7 @@ from views_routes import direction
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open
-from datetime import datetime
+from datetime import datetime 
 
 # *********************************************************************************************************
 # MAIN Production View
@@ -28,3 +28,34 @@ from datetime import datetime
 
 def mgmt(request):
 	return render(request, "mgmt.html")
+
+# Reset the password so it logs out
+def mgmt_logout(request):
+	request.session["mgmt_login_password"] = " "
+	return render(request, "mgmt.html")
+
+def mgmt_login_form(request):	
+
+#	if request.POST:
+	if 'button1' in request.POST:
+		login_name = request.POST.get("login_name")
+		login_password = request.POST.get("login_password")
+
+		request.session["mgmt_login_name"] = login_name
+		request.session["mgmt_login_password"] = login_password
+	
+		return mgmt(request)
+		
+	elif 'button2' in request.POST:
+		
+		return render(request,'login/reroute_lost_password.html')
+
+	else:
+		form = login_Form()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	request.session["login_name"] = ""
+	request.session["login_password"] = ""
+	return render(request,'mgmt_login_form.html', args)	
+

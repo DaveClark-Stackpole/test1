@@ -16,25 +16,26 @@
 <br><br>
 <center>
 <div class="grid-container">
-
+	<div class="item1" style="font-size:50px;text-align:center;"><b><u>{{request.session.hourly_title}}</u></b></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
 	<div class="item6">
-		<input style="background-color: #AAA00A;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
+		<input style="background-color: rgb(177, 167, 182);border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
 	</div>
 
 	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="pcell" value={{request.session.pcell}}></div>
-	<div class="item8">
+	<div class="item14">
 		<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Cancel</button>
 	</div>
 	
 	
-	<div class="item6"><font color="#000000" size ="5"><u><b>Date</b></u></font></div>
+	<div class="item13"><font color="#000000" size ="5" style="text-align:center;"><u><b>Date</b></u></font></div>
 	<div class="item7"><font color="#000000" size ="5"><u><b>Shift</b></u></font></div>
 	<div class="item8"><font color="#000000" size ="5"><u><b>Initials</b></u></font></div>
 
-	<div class="item6"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="date_en" value={{Curr}}></div>
+	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="date_en" value={{Curr}}></div>
 	<div class="item7">
-		<select  style="font-size:23px;width:100px;height:60px;text-align:center;" name="shift" id="shift">
-			<option selected = "selected">{{Shift}}</option>
+		<select  style="font-size:23px;width:200px;height:60px;text-align:center;" name="shift" id="shift">
+			<option selected = "selected">{{request.session.shift}}</option>
 			<option> Mid </option>
 			<option> Day </option>
 			<option> Aft </option>
@@ -42,42 +43,14 @@
 	</div>
 	<div class="item8"><input style="font-size:23px;width:100px;height:60px;text-align:center;" name="clock" value={{request.session.clock}}></div>
 
-	<div class="item6"><font color="#000000" size ="5"><u><b>Hour</b></u></font> </div>
-	<div class="item11"><font color="#000000" size ="5"><u><b>Parts Made</b></u></font> </div>
-	<div class="item12"><font color="#000000" size ="5"><u><b>Downtime Code</b></u></font> </div>
+	<div class="item13"><font color="#000000" size ="5"><u><b>Hour</b></u></font> </div>
+	<div class="item7"><font color="#000000" size ="5"><u><b>Parts Made</b></u></font> </div>
+	<div class="item8"><font color="#000000" size ="5"><u><b>Downtime</b></u></font> </div>
 
 
-{% if request.session.variable1 != 99 %}
-	<div class="item2"><input style="font-size:23px;width:100px;height:60px;text-align:center;" value={{request.session.variable1}}  name="job1" type="text"></div>
-
-	{% if request.session.part1 = -1 %}
-		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part1" type="text"  autofocus>
-				<option selected = "selected"></option>
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
-			</select>
-		</div>
-	{% else %}
-		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part1" type="text">
-				<option selected = "selected">{{request.session.part1}}  </option>
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
-			</select>
-		</div>
-	{% endif %}
-	{% if request.session.part1 = -1 %}
-		<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="prod1" type="number" autofocus></div>
-	{% else %}
-		<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="prod1" type="number" autofocus></div>
-	{% endif %}
-	
-	<div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs1" type="text">
-			<option selected = "selected">8</option>
+	<div class="item13">
+		<select style="font-size:23px;width:200px;height:60px;text-align:center;"  value = 8 name="hrs" type="text">
+			<option selected = "selected">{{request.session.hrs}}</option>
 			<option>1</option>
 			<option>2</option>
 			<option>3</option>
@@ -86,14 +59,51 @@
 			<option>6</option>
 			<option>7</option>
 			<option>8</option>
+			{% if request.session.hourly_title == request.session.hourly_drop %}
+				<option>9</option>
+				<option>10</option>
+				<option>11</option>
+				<option>12</option>
+			{% endif %}	
 		</select>
 	</div>
-	
-	<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="dwn1" type="text"></div>
-{% endif %}
 
 
+	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="qty" type="text" autofocus></div>
 
+	<div class="item8">
+		<select style="font-size:18px;width:300px;height:60px;text-align:center;" name="dtcode" type="text">
+			<option selected = "selected"></option>
+			<option>Unplanned Down Tech</option>
+			<option>Unplanned Down Maint</option>
+			<option>Quality 1st Off</option>
+			<option>Quality Issue</option>
+			<option>Material (Issue/Shortage/etc)</option>
+			<option>Housekeeping</option>
+			<option>Scheduled/Planned Down</option>
+			<option>Training</option>
+			<option>Lunch or Break</option>
+			<option>People shortage</option>
+			<option>Other</option>
+		</select>
+	</div>
+
+	<div class="item13"><font color="#000000" size ="5"><u><b>Downtime Min</b></u></font> </div>
+	<div class="item7"><font color="#000000" size ="5"><u><b>Downtime Reason</b></u></font> </div>
+	<div class="item8"><font color="#000000" size ="5"><u><b></b></u></font> </div>
+
+	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="dtmin" type="text" ></div>
+	<div class="item15"><input style="font-size:23px;width:550px;height:60px;text-align:center;" name="dtreason" type="text" ></div>
+
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
+	<div class="item1" style="font-size:50px;text-align:center;"></div>
 </div>
 </form>
 

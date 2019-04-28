@@ -93,14 +93,14 @@ from views_kiosk import entry_recent, manual_cycletime_table, tenr_fix2, tenr_fi
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Manpower Section ********************************************************************************************
-from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower
+from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower,tenr1,trilobe
 
 
 # ***********************************************************************************************************************************************************
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Management Section ********************************************************************************************
-from views_production import mgmt
+from views_production import mgmt,mgmt_login_form,mgmt_logout
 
 
 # ***********************************************************************************************************************************************************
@@ -358,6 +358,8 @@ urlpatterns = [
 	url(r'^kiosk_production_entry/', kiosk_production_entry),
 	url(r'^kiosk_hourly_entry/', kiosk_hourly_entry),
 	url(r'^kiosk_menu/', kiosk_menu),
+	url(r'^tenr1/', tenr1),
+	url(r'^trilobe/', trilobe),
 	url(r'^manual_production_entry/', manual_production_entry),
 	url(r'^manual_production_entry2/', manual_production_entry2),
 	url(r'^entry_recent/', entry_recent),
@@ -376,6 +378,8 @@ urlpatterns = [
 
 		# **************  Management Section ***************************************
 	url(r'^mgmt/', mgmt),
+	url(r'^mgmt_login_form/', mgmt_login_form),
+	url(r'^mgmt_logout/', mgmt_logout),
 
 	# ************************************************************************
 
