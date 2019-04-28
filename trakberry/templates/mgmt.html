@@ -87,6 +87,9 @@
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+
+
 </style>
 
   <title>Management Page</title>
@@ -134,14 +137,17 @@
 				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 
 
-                    <li><a href="/trakberry/tech"><span class="glyphicon glyphicon-home"></span> Main</a></li>
+                    <li><a href="{{request.session.local_toggle}}/mgmt"><span class="glyphicon glyphicon-home"></span> Main</a></li>
                     <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
                     <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span> Production<b class="caret"></b></a>
                          <ul class="dropdown-menu multi-level"  style="background-color:rgb(245, 237, 219)" >
-                         <li><a href="{{request.session.local_toggle}}/manual_production_entry">Production Entries</a></li>
-                         <li class="divider"   style="background-color:rgb(192, 178, 178)" ></li> 
-                         <li><a href="#">Cycle Times</a></li>
-                         <li><a href="#">Production Reports</a></li>
+                            <li><a href="#">Production Reports</a></li>
+                         
+                             <li class="divider"   style="background-color:rgb(192, 178, 178)" ></li> 
+                            <li><a href="#">Production Entries</a></li>
+                            <li><a href="{{request.session.local_toggle}}/mgmt_production_hourly">Hourly Entries</a></li>
+                            <li><a href="#">Cycle Times</a></li>
+                         
                         </ul>
         
                      </li>

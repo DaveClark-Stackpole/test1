@@ -38,8 +38,13 @@ def mgmt_login_form(request):
 
 #	if request.POST:
 	if 'button1' in request.POST:
+
+
 		login_name = request.POST.get("login_name")
 		login_password = request.POST.get("login_password")
+
+		if len(login_name) < 5:
+			login_password = 'wrong'
 
 		request.session["mgmt_login_name"] = login_name
 		request.session["mgmt_login_password"] = login_password
@@ -58,4 +63,17 @@ def mgmt_login_form(request):
 	request.session["login_name"] = ""
 	request.session["login_password"] = ""
 	return render(request,'mgmt_login_form.html', args)	
+
+def mgmt_production_hourly(request):
+
+	db, cur = db_open()
+	s1 = "SELECT * FROM sc_prod_hour ORDER BY id DESC limit 20" 
+	cur.execute(s1)
+	tmp = cur.fetchall()
+	db.close()
+
+	return render(request,'mgmt_production_hourly.html', {'tmp':tmp})	
+
+
+
 
