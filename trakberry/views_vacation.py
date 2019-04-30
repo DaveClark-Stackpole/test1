@@ -70,10 +70,33 @@ def vacation_set_current2():
 		current_first = current_first + "-" + str(day_st)
 		
 	return current_first
-	
+
+def vacation_set_current6(t):
+	month_st = t.month
+	year_st = t.year
+	day_st = t.day
+	day_st = day_st
+	day_st = day_st - 1
+
+	if int(month_st)<10:
+		current_first = str(year_st) + "-" + "0" + str(month_st) 
+	else:
+		current_first = str(year_st) + "-" + str(month_st) 	
+		
+	if int(day_st)<10:
+		current_first = current_first + "-" + "0" + str(day_st)
+	else:
+		current_first = current_first + "-" + str(day_st)
+		
+	return current_first
+
+
+
 def vacation_set_current5():  # Use this one to set Kiosk Date properly
 
 	t = vacation_temp()
+
+
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day

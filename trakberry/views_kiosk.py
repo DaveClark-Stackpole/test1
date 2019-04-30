@@ -700,7 +700,15 @@ def kiosk_production_entry(request):
 	
 	tcur=int(time.time())
 
-	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift})
+	db, cur = db_open()
+	sql = "SELECT DISTINCT parts_no FROM sc_prod_parts ORDER BY %s %s" %('parts_no','ASC')
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+	db.close()
+
+
+	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
 	
 def kiosk_help(request):
 	return render(request, "kiosk/kiosk_help.html")
@@ -842,18 +850,28 @@ def kiosk_job_assign(request):
 			request.session["route_1"] = 'kiosk_error_badjobnumber'
 			return direction(request)
 		# ***************************************************************************************************
-		db.close()
+	
 		return kiosk_job_assign_enter(request)
 
 	else:
 		form = kiosk_dispForm3()
 		
 	
+
+
+	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp
+	db.close()
+	request.session["tmp"] = tmp
+
+
 #	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
 #	cur.execute(sql)
 #	tmp = cur.fetchall()
 #	tmp2 = tmp
-	db.close()
+	
 	tmp = request.session["tmp"]
 	
 	args = {}
@@ -1348,7 +1366,7 @@ def kiosk_hourly_entry(request):
 
 def tenr1(request):
 	request.session["pcell"] = '10ROP30'
-	request.session["hourly_title"] = 'Hourly 10R'
+	request.session["hourly_title"] = 'Hourly 10ROP30'
 	request.session["mgmt_login_password"] = 'bort'
 	request.session["mgmt_login_name"] = 'Dave'
 	return render(request, "done_update2.html")
@@ -1358,3 +1376,34 @@ def trilobe(request):
 	request.session["mgmt_login_password"] = 'boob'
 	request.session["mgmt_login_name"] = 'Dean'
 	return render(request, "done_update2.html")
+def tenr2(request):
+	request.session["pcell"] = '10R'
+	request.session["hourly_title"] = 'Hourly 10R'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")
+
+def kiosk_initial_6L_Output(request):
+	request.session["pcell"] = '6LOutput'
+	request.session["hourly_title"] = 'Hourly 6L Output'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")	
+def kiosk_initial_9HP(request):
+	request.session["pcell"] = '9HP'
+	request.session["hourly_title"] = 'Hourly 9HP'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")	
+def kiosk_initial_6L_IN(request):
+	request.session["pcell"] = '6L_IN'
+	request.session["hourly_title"] = 'Hourly 6L Input'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")	
+def kiosk_initial_GF9(request):
+	request.session["pcell"] = 'GF9'
+	request.session["hourly_title"] = 'Hourly GF9'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")	

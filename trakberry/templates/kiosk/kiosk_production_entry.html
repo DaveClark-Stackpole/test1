@@ -65,18 +65,18 @@
 		<div class="item2">
 			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part1" type="text"  autofocus>
 				<option selected = "selected"></option>
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
+				{% for k in Parts %}
+					<option>{{k.0}}</option>
+				{% endfor %}
 			</select>
 		</div>
 	{% else %}
 		<div class="item2">
 			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part1" type="text">
 				<option selected = "selected">{{request.session.part1}}  </option>
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
+				{% for k in Parts %}
+					<option>{{k.0}}</option>
+				{% endfor %}
 			</select>
 		</div>
 	{% endif %}
@@ -110,18 +110,18 @@
 	{% if request.session.part2 = -1 %}
 		<div class="item2">
 			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part2" type="text" >
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
+				{% for k in Parts %}
+					<option>k</option>
+				{% endfor %}
 			</select>
 		</div>
 	{% else %}
 		<div class="item2">
 			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part2" type="text">
 				<option selected = "selected">{{request.session.part2}}  </option>
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
+				{% for k in Parts %}
+					<option>{{k.0}}</option>
+				{% endfor %}
 			</select>
 		</div>
 	{% endif %}
@@ -150,18 +150,18 @@
 	{% if request.session.part3 = -1 %}
 		<div class="item2">
 			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part3" type="text">
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
+				{% for k in Parts %}
+					<option>{{k.0}}</option>
+				{% endfor %}
 			</select>
 		</div>
 	{% else %}
 		<div class="item2">
 			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part3" type="text">
 				<option selected = "selected">{{request.session.part3}}  </option>
-				<option>50-5128</option>
-				<option>50-5132</option>
-				<option>50-5145</option>
+				{% for k in Parts %}
+					<option>{{k.0}}</option>
+				{% endfor %}
 			</select>
 		</div>
 	{% endif %}

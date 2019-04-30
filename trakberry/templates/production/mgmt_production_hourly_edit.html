@@ -3,27 +3,30 @@
 <!-- ********************************** -->
 
 
-{% extends "kiosk/kiosk.html" %}
-
-{% block grid %}
-	<link rel="stylesheet" href="/static/style_1/grid_kiosk_job_production.css?{{TCUR}}">
-{% endblock %}
-
+{% extends "mgmt.html" %}
 {% block content %}
+<style>
+
+
+</style>
+
+	<link rel="stylesheet" href="/static/style_1/grid_mgmt_production_hourly.css?{{TCUR}}">
 
 <form action="" method="post">{% csrf_token %}
 
 <br><br>
 <center>
 <div class="grid-container">
-	<div class="item1" style="font-size:50px;text-align:center;"><b><u>{{request.session.hourly_title}}</u></b></div>
+	<div class="item1" style="font-size:50px;text-align:center;"><b><u>Hourly Editing</u></b></div>
 	<div class="item1" style="font-size:50px;text-align:center;"></div>
 	<div class="item6">
-		<input style="background-color: rgb(177, 167, 182);border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
+        <input style="font-size:23px;width:200px;height:60px;text-align:center;" name="mgmt_hourly_cell" value={{request.session.mgmt_hourly_cell}}>
 	</div>
 
-	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="pcell" value={{request.session.pcell}}></div>
-	<div class="item14">
+	<div class="item7">
+            <input style="background-color: rgb(177, 167, 182);border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Update">
+        </div>
+	<div class="item8">
 		<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Cancel</button>
 	</div>
 	
@@ -32,20 +35,16 @@
 	<div class="item7"><font color="#000000" size ="5"><u><b>Shift</b></u></font></div>
 	<div class="item8"><font color="#000000" size ="5"><u><b>Initials</b></u></font></div>
 
-	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="date_en" value={{Curr}}></div>
+	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="mgmt_hourly_date" value={{request.session.mgmt_hourly_date}}></div>
 	<div class="item7">
-		<select  style="font-size:23px;width:200px;height:60px;text-align:center;" name="shift" id="shift">
-			<option selected = "selected">{{request.session.shift}}</option>
+		<select  style="font-size:23px;width:200px;height:60px;text-align:center;" name="mgmt_hourly_shift" id="shift">
+			<option selected = "selected">{{request.session.mgmt_hourly_shift}}</option>
 			<option> Mid </option>
 			<option> Day </option>
 			<option> Aft </option>
-			<option> Cont A Day </option>
-			<option> Cont B Day </option>
-			<option> Cont A Mid </option>
-			<option> Cont B Mid </option>
 		</select>
 	</div>
-	<div class="item8"><input style="font-size:23px;width:100px;height:60px;text-align:center;" name="clock" value={{request.session.clock}}></div>
+	<div class="item8"><input style="font-size:23px;width:100px;height:60px;text-align:center;" name="mgmt_hourly_initials" value={{request.session.mgmt_hourly_initials}}></div>
 
 	<div class="item13"><font color="#000000" size ="5"><u><b>Hour</b></u></font> </div>
 	<div class="item7"><font color="#000000" size ="5"><u><b>Parts Made</b></u></font> </div>
@@ -53,8 +52,8 @@
 
 
 	<div class="item13">
-		<select style="font-size:23px;width:200px;height:60px;text-align:center;"  value = 8 name="hrs" type="text">
-			<option selected = "selected">{{request.session.hrs}}</option>
+		<select style="font-size:23px;width:200px;height:60px;text-align:center;"  value = {{request.session.mgmt_hourly_hour}} name="mgmt_hourly_hour" type="text">
+			<option selected = "selected">{{request.session.mgmt_hourly_hour}}</option>
 			<option>1</option>
 			<option>2</option>
 			<option>3</option>
@@ -63,20 +62,19 @@
 			<option>6</option>
 			<option>7</option>
 			<option>8</option>
-			{% if request.session.hourly_title == request.session.hourly_drop %}
 				<option>9</option>
 				<option>10</option>
 				<option>11</option>
 				<option>12</option>
-			{% endif %}	
+
 		</select>
 	</div>
 
 
-	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="qty"  type="number" autofocus></div>
+	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="mgmt_hourly_actual" value={{request.session.mgmt_hourly_actual}} type="text" autofocus></div>
 
 	<div class="item8">
-		<select style="font-size:18px;width:300px;height:60px;text-align:center;" name="dtcode" type="text">
+		<select style="font-size:18px;width:300px;height:60px;text-align:center;" name="mgmt_hourly_dtcode" value={{request.session.mgmt_hourly_dtcode}}type="text">
 			<option selected = "selected"></option>
 			<option>Unplanned Down Tech</option>
 			<option>Unplanned Down Maint</option>
@@ -96,8 +94,8 @@
 	<div class="item7"><font color="#000000" size ="5"><u><b>Downtime Reason</b></u></font> </div>
 	<div class="item8"><font color="#000000" size ="5"><u><b></b></u></font> </div>
 
-	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="dtmin" type="text" ></div>
-	<div class="item15"><input style="font-size:23px;width:550px;height:60px;text-align:center;" name="dtreason" type="text" ></div>
+	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="mgmt_hourly_dtmins" value={{request.session.mgmt_hourly_dtmins}} type="text" ></div>
+	<div class="item15"><input style="font-size:23px;width:550px;height:60px;text-align:center;" name="mgmt_hourly_dtreason" value={{request.session.mgmt_hourly_dtreason}} type="text" ></div>
 
 	<div class="item1" style="font-size:50px;text-align:center;"></div>
 	<div class="item1" style="font-size:50px;text-align:center;"></div>
