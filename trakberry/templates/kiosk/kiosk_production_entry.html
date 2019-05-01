@@ -72,7 +72,7 @@
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part1" type="text">
+			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part1" type="text">
 				<option selected = "selected">{{request.session.part1}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
@@ -117,7 +117,7 @@
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part2" type="text">
+			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part2" type="text">
 				<option selected = "selected">{{request.session.part2}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
@@ -149,7 +149,7 @@
 	<!-- Safeguard test is set to -1 if no value is found -->
 	{% if request.session.part3 = -1 %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part3" type="text">
+			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part3" type="text">
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}

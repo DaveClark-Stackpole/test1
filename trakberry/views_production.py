@@ -131,7 +131,7 @@ def mgmt_production_hourly_edit(request, index):
 
 
 
-		cql = ('update sc_prod_hour SET p_cell = "%s",initial="%s",hourly_actual="%s" WHERE id ="%s"' % (mgmt_hourly_cell,mgmt_hourly_initials,mgmt_hourly_actual,tmp_index))
+		cql = ('update sc_prod_hour SET p_cell = "%s",initial="%s",hourly_actual="%s", p_date="%s", p_shift="%s" WHERE id ="%s"' % (mgmt_hourly_cell,mgmt_hourly_initials,mgmt_hourly_actual,mgmt_hourly_date,mgmt_hourly_shift,tmp_index))
 		cur.execute(cql)
 		db.commit()
 		db.close()

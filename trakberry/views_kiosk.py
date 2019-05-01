@@ -1373,7 +1373,7 @@ def tenr1(request):
 def trilobe(request):
 	request.session["pcell"] = 'TRI'
 	request.session["hourly_title"] = 'Hourly Trilobe'
-	request.session["mgmt_login_password"] = 'boob'
+	request.session["kiosk_label"] = 'B'
 	request.session["mgmt_login_name"] = 'Dean'
 	return render(request, "done_update2.html")
 def tenr2(request):
