@@ -1273,7 +1273,11 @@ def kiosk_hourly_entry(request):
 
 		request.session["kiosk_hrs"] = 1
 
-		kiosk_hourly_pcell = request.POST.get("pcell")
+		kiosk_hourly_pcell = request.session["pcell"]
+
+		if request.session["pcell"] == "AB1V-INPUT":
+			kiosk_hourly_pcell = request.POST.get("pcell")
+
 		kiosk_hourly_date = request.POST.get("date_en")
 		kiosk_hourly_shift = request.POST.get("shift")
 		kiosk_hourly_clock = request.POST.get("clock")
@@ -1295,11 +1299,13 @@ def kiosk_hourly_entry(request):
 		
 
 		sheet_id = 'kiosk'
-
-		db, cur = db_open()
-		cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
-		db.commit()
-		db.close()
+		try:
+			db, cur = db_open()
+			cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
+			db.commit()
+			db.close()
+		except:
+			dummy = 1
 	
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
 		if request.session["kiosk_menu_screen"] == 1:
@@ -1404,6 +1410,12 @@ def kiosk_initial_6L_IN(request):
 def kiosk_initial_GF9(request):
 	request.session["pcell"] = 'GF9'
 	request.session["hourly_title"] = 'Hourly GF9'
+	request.session["mgmt_login_password"] = 'boob'
+	request.session["mgmt_login_name"] = 'Dean'
+	return render(request, "done_update2.html")	
+def kiosk_initial_AB1V(request):
+	request.session["pcell"] = 'AB1V-INPUT'
+	request.session["hourly_title"] = 'Hourly AB1V'
 	request.session["mgmt_login_password"] = 'boob'
 	request.session["mgmt_login_name"] = 'Dean'
 	return render(request, "done_update2.html")	

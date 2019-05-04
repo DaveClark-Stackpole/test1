@@ -93,6 +93,7 @@ def mgmt_production_hourly_edit(request, index):
 	request.session["mgmt_hourly_initials"] = tmp2[2]
 	request.session["mgmt_hourly_shift"] = tmp2[5]
 	ddate = tmp2[4]
+	ddd = vacation_set_current6(ddate)
 	request.session["mgmt_hourly_date"] = vacation_set_current6(ddate)
 	request.session["mgmt_hourly_hour"] = tmp2[6]
 	request.session["mgmt_hourly_actual"] = tmp2[8]
@@ -119,6 +120,8 @@ def mgmt_production_hourly_edit(request, index):
 				return direction(request)
 		except:
 			dummy = 1
+
+#		return render(request,'kiosk/kiosk_test2.html',{'tmp':ddd})
 		mgmt_hourly_date = request.POST.get("mgmt_hourly_date")
 		mgmt_hourly_cell = request.POST.get("mgmt_hourly_cell")
 		mgmt_hourly_initials = request.POST.get("mgmt_hourly_initials")
@@ -130,10 +133,13 @@ def mgmt_production_hourly_edit(request, index):
 		mgmt_hourly_dtreason = request.POST.get("mgmt_hourly_reason")
 
 
-
-		cql = ('update sc_prod_hour SET p_cell = "%s",initial="%s",hourly_actual="%s", p_date="%s", p_shift="%s" WHERE id ="%s"' % (mgmt_hourly_cell,mgmt_hourly_initials,mgmt_hourly_actual,mgmt_hourly_date,mgmt_hourly_shift,tmp_index))
-		cur.execute(cql)
-		db.commit()
+		try:
+			cql = ('update sc_prod_hour SET p_cell = "%s",initial="%s",hourly_actual="%s", p_date="%s", p_shift="%s" WHERE id ="%s"' % (mgmt_hourly_cell,mgmt_hourly_initials,mgmt_hourly_actual,mgmt_hourly_date,mgmt_hourly_shift,tmp_index))
+			cur.execute(cql)
+			db.commit()
+		except:
+			dummy = 1
+			
 		db.close()
 		request.session["route_1"] = 'mgmt_production_hourly'
 		return direction(request)
@@ -160,7 +166,7 @@ def mgmt_production_hourly_edit(request, index):
 
 
 
-	return render(request, "production/mgmt_production_hourly_edit.html",{'args':args,'tmp':tmp2})
+	return render(request, "production/mgmt_production_hourly_edit.html",{'args':args,'tmp':tmp2,'ddate':ddd})
 
 
 

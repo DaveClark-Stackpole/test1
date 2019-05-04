@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-
+<meta http-equiv="refresh" content="240; url={{request.session.local_toggle}}/kiosk_menu" />
 <form action="" method="post">{% csrf_token %}
 
 <br><br>
@@ -22,7 +22,16 @@
 		<input style="background-color: rgb(177, 167, 182);border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
 	</div>
 
-	<div class="item7"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="pcell" value={{request.session.pcell}}></div>
+	<div class="item7" style="font-size:23px;width:200px;height:60px;text-align:center;">
+		{% if request.session.pcell = "AB1V-INPUT" %}
+		<select  style="font-size:23px;width:200px;height:60px;text-align:center;" name="pcell" id="pcell">
+			<option selected = "selected">{{request.session.pcell}}</option>
+			<option> AB1V-INPUT </option>
+			<option> AB1V-REACTION </option>
+			<option> AB1V-OVERDRIVE </option>
+		</select>
+		{% endif %}
+	</div>
 	<div class="item14">
 		<button style="background-color: #AAAAAA;border-radius: 10px;width:120px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" name="kiosk_assign_button1" value="-1">Cancel</button>
 	</div>
@@ -96,7 +105,7 @@
 	<div class="item7"><font color="#000000" size ="5"><u><b>Downtime Reason</b></u></font> </div>
 	<div class="item8"><font color="#000000" size ="5"><u><b></b></u></font> </div>
 
-	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="dtmin" type="text" ></div>
+	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" name="dtmin"  type="number"  ></div>
 	<div class="item15"><input style="font-size:23px;width:550px;height:60px;text-align:center;" name="dtreason" type="text" ></div>
 
 	<div class="item1" style="font-size:50px;text-align:center;"></div>

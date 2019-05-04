@@ -35,7 +35,7 @@
 	<div class="item7"><font color="#000000" size ="5"><u><b>Shift</b></u></font></div>
 	<div class="item8"><font color="#000000" size ="5"><u><b>Initials</b></u></font></div>
 
-	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="mgmt_hourly_date" value={{request.session.mgmt_hourly_date}}></div>
+	<div class="item13"><input style="font-size:23px;width:200px;height:60px;text-align:center;" type="date" name="mgmt_hourly_date" value="{{ddate}}"></div>
 	<div class="item7">
 		<select  style="font-size:23px;width:200px;height:60px;text-align:center;" name="mgmt_hourly_shift" id="shift">
 			<option selected = "selected">{{request.session.mgmt_hourly_shift}}</option>
