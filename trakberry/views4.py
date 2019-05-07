@@ -83,3 +83,77 @@ def ios_test(request):
 	db.close()
 	return render(request, "kiosk/kiosk_test4.html",{'tmp':tmp})
 
+def NotDone(request):
+	shift = '11pm-7am'
+	pdate = '2019-05-07'
+	job_missed = ['' for z in range(0)]
+	part_missed = ['' for z in range(0)]
+
+	db, cur = db_open()
+	s1ql = "SELECT DISTINCT asset FROM tkb_cycletime"
+	cur.execute(s1ql)
+	tmp1 = cur.fetchall()
+	
+
+	s2ql = "SELECT asset_num FROM sc_production1 where shift = '%s' and pdate = '%s'" %(shift,pdate)
+	cur.execute(s2ql)
+	tmp2 = cur.fetchall()
+	
+
+	xx = 0
+	for x in tmp1:
+		ch = 0
+		a = x[0]
+		for y in tmp2:
+			xx = xx + 1
+			b = y[0]
+
+			if a == b:
+				ch = 1
+#				job_missed.append(b)
+#				part_missed.append(c)
+#				hh = request.session["hh"]
+		if ch == 0:
+			job_missed.append(a)
+#			part_missed.append(c)
+#	List = zip(job_missed,part_missed)
+
+
+	return render(request, "kiosk/kiosk_test4.html",{'tmp':job_missed})
+
+def IsDone(request):
+	shift = '11pm-7am'
+	pdate = '2019-05-07'
+	job_missed = ['' for z in range(0)]
+	part_missed = ['' for z in range(0)]
+
+	db, cur = db_open()
+	s1ql = "SELECT DISTINCT asset FROM tkb_cycletime"
+	cur.execute(s1ql)
+	tmp1 = cur.fetchall()
+	
+	s2ql = "SELECT asset_num,partno FROM sc_production1 where shift = '%s' and pdate = '%s'" %(shift,pdate)
+	cur.execute(s2ql)
+	tmp2 = cur.fetchall()
+	
+	xx = 0
+	for x in tmp1:
+		ch = 0
+		a = x[0]
+		for y in tmp2:
+			xx = xx + 1
+			b = y[0]
+			c = y[1]
+			if a == b:
+				ch = 1
+				job_missed.append(b)
+				part_missed.append(c)
+#				hh = request.session["hh"]
+		if ch == 0:
+			dummy = 1
+#			job_missed.append(a)
+#			part_missed.append(c)
+	List = zip(job_missed,part_missed)
+
+
+	return render(request, "kiosk/kiosk_test5.html",{'tmp':List})

@@ -548,6 +548,7 @@ def manual_production_entry2(request):
 
 def kiosk_production_entry(request):
 	
+	request.session["ppm_check"] = 0
 	current_first, shift  = vacation_set_current5()
 	#request.session["current_first"] = current_first
 	
@@ -1184,6 +1185,12 @@ def kiosk_menu(request):
 		button_1 = request.POST
 		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
+			try:
+				request.session["pcell"]
+			except:
+				request.session["route_1"] = 'kiosk_menu'
+				return direction(request)
+
 			#request.session["route_1"] = 'kiosk' # disable when ready to run
 			request.session["route_2"] = 2
 			request.session["route_1"] = 3 # enable when ready to run

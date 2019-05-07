@@ -103,7 +103,7 @@ from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower,tenr1
 # *******************************************  Management Section ********************************************************************************************
 from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit
 
-from views4 import ios_test
+from views4 import ios_test, IsDone, NotDone
 
 # ***********************************************************************************************************************************************************
 
@@ -313,6 +313,8 @@ urlpatterns = [
 	url(r'^email1/', email1),
 
 	url(r'^ios_test/', ios_test),
+	url(r'^IsDone/', IsDone),
+	url(r'^NotDone/', NotDone),
 	
 	url(r'^form_robot_machine_enter/', form_robot_machine_enter),
 	url(r'^display_robot_machine/', display_robot_machine),
