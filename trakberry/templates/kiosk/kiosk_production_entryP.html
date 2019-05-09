@@ -76,7 +76,7 @@
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
-
+            <input style="font-size:16px;width:70px;height:60px;"  name="ppm1" type="number">
 		</div>
 	{% else %}
 		<div class="item2">
@@ -86,7 +86,7 @@
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
-
+            <input style="font-size:16px;width:70px;height:60px;"  name="ppm1" type="number">
 		</div>
 	{% endif %}
 	{% if request.session.part1 = -1 %}
@@ -106,7 +106,8 @@
 			<option>6</option>
 			<option>7</option>
 			<option>8</option>
-		</select>
+        </select>
+      
 	</div>
 	
 	<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="dwn1" type="number"></div>

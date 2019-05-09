@@ -27,7 +27,10 @@ from datetime import datetime
 # *********************************************************************************************************
 # Kiosk Main Page.   Display buttons and route to action when they're pressed
 def kiosk(request):
-	
+	request.session["route_1"] = 'kiosk_menu' # enable when ready to run
+	return direction(request)
+
+
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 	request.session["local_toggle"] = "/trakberry"
 	request.session["kiosk_menu_screen"] = 1
@@ -104,6 +107,7 @@ def kiosk_job(request):
 
 
 def kiosk_production(request):
+	
 	job = ['' for x in range(6)]
 	TimeOut = -1
 	request.session["machine1"] = "1"
@@ -145,9 +149,11 @@ def kiosk_production(request):
 			cur.execute(sql)
 			tmp2 = cur.fetchall()
 			tmp1 = tmp2[0]
+
 			try:
 				pn_len = 3
 				request.session["variable1"] = int(tmp1[4])
+				
 				
 				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[4]))
 				cur.execute(sql)
@@ -260,12 +266,17 @@ def kiosk_production(request):
 			
 			request.session["clock"] = kiosk_clock
 			request.session["route_1"] = 'kiosk_production_entry'
+
+			if int(request.session["variable1"]) == 272:
+				request.session["presscheck"] = 1
+
+
 			#return render(request, "kiosk/kiosk_test3.html") 
 			return direction(request)
 	
 	
 		except:	
-			request.session["route_1"] = 'kiosk_error_badclocknumber'
+			request.session["route_1"] = 'kiosk_menu'
 			return direction(request)
 	
 	else:
@@ -459,11 +470,12 @@ def manual_production_entry(request):
 
 #			Below is the old code to find the current operation using latest entry
 			try:
-				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
+				aql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' " % (job)
+#				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
 				cur.execute(aql)
 				tmp3 = cur.fetchall()
 				tmp4 = tmp3[0]
-				request.session["machine"] = tmp4[2]
+				request.session["machine"] = tmp4[5]
 				
 			except:
 				request.session["machine"] = "XX"
@@ -480,6 +492,8 @@ def manual_production_entry(request):
 			except:
 				request.session["part"] = "XX"
 			db.close()
+#			request.session["machine"] ='GF7 Stop All'
+		#	return render(request,"kiosk/kiosk_test2.html")
 			request.session["route_1"] = 'manual_production_entry2'
 			return direction(request)
 	else:
@@ -504,7 +518,7 @@ def manual_production_entry2(request):
 			prod = request.POST.get("prod")
 			hrs = request.POST.get("hrs")
 			dwn = request.POST.get("down")
-			mch = request.POST.get("machine")
+			mch = request.session['machine']
 			
 			clock_number = request.session["clock"]
 			kiosk_date = request.session["date"] 
@@ -548,7 +562,7 @@ def manual_production_entry2(request):
 
 def kiosk_production_entry(request):
 	
-	request.session["ppm_check"] = 0
+
 	current_first, shift  = vacation_set_current5()
 	#request.session["current_first"] = current_first
 	
@@ -639,7 +653,7 @@ def kiosk_production_entry(request):
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
 			clock_number = request.session["clock"]
-
+			
 			if i == 0 :
 				m = request.session["machine1"]
 				ct = request.session["cycletime1"]
@@ -688,7 +702,7 @@ def kiosk_production_entry(request):
 	
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
 		if request.session["kiosk_menu_screen"] == 1:
-			request.session["route_1"] = 'kiosk'
+			request.session["route_1"] = 'kiosk_menu'
 		else:
 			request.session["route_1"] = 'kiosk_menu'
 		return direction(request)
@@ -709,8 +723,16 @@ def kiosk_production_entry(request):
 	db.close()
 
 
+	#return render(request, "kiosk/kiosk_test5.html")
+
+
+	if request.session["check1"] == 1:
+		return render(request, "kiosk/kiosk_production_entryP.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
+
 	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
 	
+
+
 def kiosk_help(request):
 	return render(request, "kiosk/kiosk_help.html")
 
@@ -728,6 +750,8 @@ def kiosk_scrap(request):
 # Kiosk Third Tier page initiated by Job | Assign button press on Secondary Page
 def kiosk_job_assign(request):
 
+	request.session["ppm_check"] = 0
+	request.session["check1"] = 0
 	db, cur = db_open()
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
@@ -737,8 +761,14 @@ def kiosk_job_assign(request):
 		kiosk_job4 = request.POST.get("job4")
 		kiosk_job5 = request.POST.get("job5")
 		kiosk_job6 = request.POST.get("job6")
-#		kiosk_job7 = request.POST.get("job7")
-		
+		if kiosk_job1 == '272':
+			request.session["check1"] = 1
+			
+
+
+
+		#return render(request, "kiosk/kiosk_test5.html",{'kiosk_job':kiosk_job1})
+
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
 			if kiosk_button1 == -1:

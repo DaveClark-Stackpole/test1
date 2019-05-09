@@ -85,7 +85,10 @@ def ios_test(request):
 
 def NotDone(request):
 	shift = '11pm-7am'
-	pdate = '2019-05-07'
+#	shift = '7am-3pm'
+#	shift = '3pm-11pm'
+
+	pdate = '2019-05-09'
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
@@ -123,7 +126,10 @@ def NotDone(request):
 
 def IsDone(request):
 	shift = '11pm-7am'
-	pdate = '2019-05-07'
+#	shift = '7am-3pm'
+#	shift = '3pm-11pm'
+
+	pdate = '2019-05-09'
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
