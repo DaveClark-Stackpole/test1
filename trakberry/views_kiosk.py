@@ -20,6 +20,7 @@ from views_routes import direction
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open
+from views_mod1 import kiosk_lastpart_find
 from datetime import datetime
 
 # *********************************************************************************************************
@@ -130,7 +131,7 @@ def kiosk_production(request):
 		request.session["variable4"] = ""
 		request.session["variable5"] = ""
 		request.session["variable6"] = ""
-		
+
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button2"))
 			if kiosk_button1 == -2:
@@ -150,16 +151,26 @@ def kiosk_production(request):
 			tmp2 = cur.fetchall()
 			tmp1 = tmp2[0]
 
+			# Call kiosk_lastpart_find (in views_mod1 to get last part for all 6 parts  ***COOL CODE)
+			prt1 = kiosk_lastpart_find (tmp1[4])
+			prt2 = kiosk_lastpart_find (tmp1[5])
+			prt3 = kiosk_lastpart_find (tmp1[6])
+			prt4 = kiosk_lastpart_find (tmp1[7])
+			prt5 = kiosk_lastpart_find (tmp1[8])
+			prt6 = kiosk_lastpart_find (tmp1[9])
+			# ***************************************************************************************
+
 			try:
 				pn_len = 3
 				request.session["variable1"] = int(tmp1[4])
+
 				
-				
-				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[4]))
+
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(tmp1[4])
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
-				request.session["part1"] = tmpp[2]
+				request.session["part1"] = prt1
 				request.session["machine1"] = tmpp[5]
 				try:
 					request.session["cycletime1"] = str(tmpp[4])
@@ -176,7 +187,7 @@ def kiosk_production(request):
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
-				request.session["part2"] = tmpp[2]
+				request.session["part2"] = prt2
 				request.session["machine2"] = tmpp[5]
 				request.session["variable2"] = int(tmp1[5])
 				try:
@@ -194,7 +205,7 @@ def kiosk_production(request):
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
-				request.session["part3"] = tmpp[2]
+				request.session["part3"] = prt3
 				request.session["machine3"] = tmpp[5]
 				request.session["variable3"] = int(tmp1[6])
 				try:
@@ -212,7 +223,7 @@ def kiosk_production(request):
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
-				request.session["part4"] = tmpp[2]
+				request.session["part4"] = prt4
 				request.session["machine4"] = tmpp[5]
 				request.session["variable4"] = int(tmp1[7])
 				try:
@@ -229,7 +240,7 @@ def kiosk_production(request):
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
-				request.session["part5"] = tmpp[2]
+				request.session["part5"] = prt5
 				request.session["machine5"] = tmpp[5]
 				request.session["variable5"] = int(tmp1[8])
 				try:
@@ -246,7 +257,7 @@ def kiosk_production(request):
 				cur.execute(sql)
 				tmp = cur.fetchall()     
 				tmpp = tmp[0]
-				request.session["part6"] = tmpp[2]
+				request.session["part6"] = prt6
 				request.session["machine6"] = tmpp[5]
 				request.session["variable6"] = int(tmp1[9])
 				try:

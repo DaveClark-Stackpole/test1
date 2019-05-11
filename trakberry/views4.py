@@ -88,7 +88,7 @@ def NotDone(request):
 #	shift = '7am-3pm'
 #	shift = '3pm-11pm'
 
-	pdate = '2019-05-09'
+	pdate = '2019-05-10'
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
@@ -128,8 +128,8 @@ def IsDone(request):
 	shift = '11pm-7am'
 #	shift = '7am-3pm'
 #	shift = '3pm-11pm'
-
-	pdate = '2019-05-09'
+	y = request.session['helpppee']
+	pdate = '2019-05-10'
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
