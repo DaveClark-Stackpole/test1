@@ -278,9 +278,6 @@ def kiosk_production(request):
 			request.session["clock"] = kiosk_clock
 			request.session["route_1"] = 'kiosk_production_entry'
 
-			if int(request.session["variable1"]) == 272:
-				request.session["presscheck"] = 1
-
 
 			#return render(request, "kiosk/kiosk_test3.html") 
 			return direction(request)
@@ -584,6 +581,7 @@ def kiosk_production_entry(request):
 	kiosk_hrs = ['' for x in range(0)]
 	kiosk_dwn = ['' for x in range(0)]
 	kiosk_machine = ['' for x in range(0)]
+	kiosk_ppm = ['' for x in range(0)]
 	
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
@@ -614,6 +612,7 @@ def kiosk_production_entry(request):
 		x_prod = "prod"
 		x_hrs = "hrs"
 		x_dwn = "dwn"
+		x_ppm = "ppm"
 		
 		kiosk_date = request.POST.get("date_en")
 		kiosk_shift = request.POST.get("shift")
@@ -625,17 +624,20 @@ def kiosk_production_entry(request):
 			x_prod = x_prod + str(i)
 			x_hrs = x_hrs + str(i)
 			x_dwn = x_dwn + str(i)
+			x_ppm =x_ppm + str(i)
 			kiosk_job.append(request.POST.get(x_job))
 			kiosk_part.append(request.POST.get(x_part))
 			kiosk_prod.append(request.POST.get(x_prod))
 			kiosk_hrs.append(request.POST.get(x_hrs))
 			kiosk_dwn.append(request.POST.get(x_dwn))
+			kiosk_ppm.append(request.POST.get(x_ppm))
 			
 			x_job = "job"
 			x_part = "part"
 			x_prod = "prod"
 			x_hrs = "hrs"
 			x_dwn = "dwn"
+			x_ppm = "ppm"
 			
 		shift_time = "None"
 		#except:
@@ -663,6 +665,8 @@ def kiosk_production_entry(request):
 			prod = kiosk_prod[i]
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
+			ppm = kiosk_ppm[i]
+
 			clock_number = request.session["clock"]
 			
 			if i == 0 :
@@ -687,6 +691,17 @@ def kiosk_production_entry(request):
 			
 			try:
 				dummy = len(job)
+				
+#				if request.session["check1"] == 1:
+#					ppm = float(ppm)
+#					ct = (60 / ppm)
+#					return render(request, "kiosk/kiosk_test5.html",{'ppm':ct})
+
+				try:
+					ppm = float(ppm)
+					ct = (60 / ppm)
+				except:
+					dummy = 1
 
 				try:
 					ct = float(ct)
@@ -695,7 +710,7 @@ def kiosk_production_entry(request):
 				except:
 					target1 = int(int(prod) / .85)
 
-					
+
 					#target1 = (runtime1 * 60 * 60) / ct
 
 				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id))
@@ -736,7 +751,7 @@ def kiosk_production_entry(request):
 
 	#return render(request, "kiosk/kiosk_test5.html")
 
-
+	# Check if it's a CSD2 press .  If so go to kiosk_production_entryP where we use ppm otherwise kiosk_production_entry
 	if request.session["check1"] == 1:
 		return render(request, "kiosk/kiosk_production_entryP.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
 
@@ -763,6 +778,12 @@ def kiosk_job_assign(request):
 
 	request.session["ppm_check"] = 0
 	request.session["check1"] = 0
+	request.session["press1"] = 0
+	request.session["press2"] = 0
+	request.session["press3"] = 0
+	request.session["press4"] = 0
+	request.session["press5"] = 0
+	request.session["press6"] = 0
 	db, cur = db_open()
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
@@ -772,11 +793,26 @@ def kiosk_job_assign(request):
 		kiosk_job4 = request.POST.get("job4")
 		kiosk_job5 = request.POST.get("job5")
 		kiosk_job6 = request.POST.get("job6")
-		if kiosk_job1 == '272':
+
+		#check to see if it's a CSD2 Press entry and add PPM field for entry if it is.  Only look at 2 first characters as 27 is necessary
+		if kiosk_job1[:2] == '27':
 			request.session["check1"] = 1
-			
-
-
+			request.session["press1"] = 1
+		if kiosk_job2[:2] == '27':
+			request.session["check1"] = 1
+			request.session["press2"] = 1
+		if kiosk_job3[:2] == '27':
+			request.session["check1"] = 1
+			request.session["press3"] = 1
+		if kiosk_job4[:2] == '27':
+			request.session["check1"] = 1
+			request.session["press4"] = 1
+		if kiosk_job5[:2] == '27':
+			request.session["check1"] = 1
+			request.session["press5"] = 1
+		if kiosk_job6[:2] == '27':
+			request.session["check1"] = 1
+			request.session["press6"] = 1				
 
 		#return render(request, "kiosk/kiosk_test5.html",{'kiosk_job':kiosk_job1})
 

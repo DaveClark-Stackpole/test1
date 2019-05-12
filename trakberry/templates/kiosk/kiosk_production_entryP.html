@@ -60,7 +60,10 @@
 	-->
 		</b></u></font> 
 	</div>
-	<div class="item2"><font color="#000000" size ="5"><u><b>Part</b></u></font> </div>
+	<div class="item2">
+		<font color="#000000" size ="5"><u><b>Part</b></u></font>
+		<font color="#000000" size ="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><b>PPM</b></u></font> 
+	</div>
 	<div class="item2"><font color="#000000" size ="5"><u><b>Production</b></u></font> </div>
 	<div class="item2"><font color="#000000" size ="5"><u><b>Hours</b></u></font> </div>
 	<div class="item2"><font color="#000000" size ="5"><u><b>Dtime (Min) </b></u></font> </div>
@@ -70,29 +73,31 @@
 
 	{% if request.session.part1 = -1 %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part1" type="text"  autofocus>
+			<select style="font-size:18px;width:120px;height:60px;text-align:center;" name="part1" type="text"  autofocus>
 				<option selected = "selected"></option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
-            <input style="font-size:16px;width:70px;height:60px;"  name="ppm1" type="number">
+            <input style="font-size:16px;width:70px;height:60px;"  name="ppm1" type="number"  step="0.01" autofocus>
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part1" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part1" type="text">
 				<option selected = "selected">{{request.session.part1}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
-            <input style="font-size:16px;width:70px;height:60px;"  name="ppm1" type="number">
+			{% if request.session.press1 %}
+            	<input style="font-size:16px;width:70px;height:60px;"  name="ppm1" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% endif %}
 	{% if request.session.part1 = -1 %}
-		<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="prod1" type="number" autofocus></div>
+		<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="prod1" type="number"></div>
 	{% else %}
-		<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="prod1" type="number" autofocus></div>
+		<div class="item2"><input style="font-size:23px;width:100px;height:60px;"  name="prod1" type="number"></div>
 	{% endif %}
 	
 	<div class="item2">
@@ -119,20 +124,26 @@
 	<!-- Safeguard test is set to -1 if no value is found -->
 	{% if request.session.part2 = -1 %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part2" type="text" >
+			<select style="font-size:18px;width:120px;height:60px;text-align:center;" name="part2" type="text" >
 				{% for k in Parts %}
 					<option>k</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press2 %}
+				<input style="font-size:16px;width:70px;height:60px;"  name="ppm2" type="number"  step="0.01" autofocus>
+			{% endif %}	
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part2" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part2" type="text">
 				<option selected = "selected">{{request.session.part2}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press2 %}
+				<input style="font-size:16px;width:70px;height:60px;"  name="ppm2" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% endif %}
 	<!--   end of safegaurd test -->
@@ -159,20 +170,26 @@
 	<!-- Safeguard test is set to -1 if no value is found -->
 	{% if request.session.part3 = -1 %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part3" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part3" type="text">
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press3 %}
+				<input style="font-size:16px;width:70px;height:60px;"  name="ppm3" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part3" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part3" type="text">
 				<option selected = "selected">{{request.session.part3}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press3 %}
+				<input style="font-size:16px;width:70px;height:60px;"  name="ppm3" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% endif %}
 	<!--   end of safegaurd test -->
@@ -198,21 +215,27 @@
 
 	{% if request.session.part4 = -1 %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part4" type="text"  autofocus>
+			<select style="font-size:18px;width:120px;height:60px;text-align:center;" name="part4" type="text"  autofocus>
 				<option selected = "selected"></option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press4 %}
+				<input style="font-size:16px;width:70px;height:60px;"  name="ppm4" type="number"  step="0.01" autofocus>
+			{% endif %}	
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part4" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part4" type="text">
 				<option selected = "selected">{{request.session.part4}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press4 %}
+				<input style="font-size:16px;width:70px;height:60px;"  name="ppm4" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% endif %}
 	{% if request.session.part4 = -1 %}
@@ -243,21 +266,27 @@
 
 	{% if request.session.part5 = -1 %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part5" type="text"  autofocus>
+			<select style="font-size:18px;width:120px;height:60px;text-align:center;" name="part5" type="text"  autofocus>
 				<option selected = "selected"></option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press5 %}
+			<input style="font-size:16px;width:70px;height:60px;"  name="ppm5" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part5" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part5" type="text">
 				<option selected = "selected">{{request.session.part5}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press5 %}
+			<input style="font-size:16px;width:70px;height:60px;"  name="ppm5" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% endif %}
 	{% if request.session.part5 = -1 %}
@@ -288,21 +317,27 @@
 
 	{% if request.session.part6 = -1 %}
 		<div class="item2">
-			<select style="font-size:18px;width:100px;height:60px;text-align:center;" name="part6" type="text"  autofocus>
+			<select style="font-size:18px;width:120px;height:60px;text-align:center;" name="part6" type="text"  autofocus>
 				<option selected = "selected"></option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press6 %}
+			<input style="font-size:16px;width:70px;height:60px;"  name="ppm6" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% else %}
 		<div class="item2">
-			<select style="font-size:16px;width:100px;height:60px;text-align:center;" name="part6" type="text">
+			<select style="font-size:16px;width:120px;height:60px;text-align:center;" name="part6" type="text">
 				<option selected = "selected">{{request.session.part6}}  </option>
 				{% for k in Parts %}
 					<option>{{k.0}}</option>
 				{% endfor %}
 			</select>
+			{% if request.session.press6 %}
+			<input style="font-size:16px;width:70px;height:60px;"  name="ppm6" type="number"  step="0.01" autofocus>
+			{% endif %}
 		</div>
 	{% endif %}
 	{% if request.session.part6 = -1 %}
