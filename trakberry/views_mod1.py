@@ -43,10 +43,5 @@ def kiosk_lastpart_find(asset):
 	tp4 = tp3[0]
 	part = tp4[0]
 	db.close()
-
-	
-
-
-
 	return part
 	

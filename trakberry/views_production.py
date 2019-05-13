@@ -66,8 +66,13 @@ def mgmt_login_form(request):
 
 def mgmt_production_hourly(request):
 
+	request.session["mgmt_table_call"] = "SELECT * FROM sc_prod_hour ORDER BY id DESC limit 20" 
+
+	request.session["tester"] = "SELECT * FROM sc_production1 ORDER BY id DESC limit 20" 
+
+
 	db, cur = db_open()
-	s1 = "SELECT * FROM sc_prod_hour ORDER BY id DESC limit 20" 
+	s1 = request.session["mgmt_table_call"]
 	cur.execute(s1)
 	tmp = cur.fetchall()
 	db.close()
