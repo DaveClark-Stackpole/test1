@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm,login_Form
 from trakberry.views import done
 from views2 import main_login_form
-from views_mod1 import find_current_date
+from views_mod1 import find_current_date, mgmt_display
 from trakberry.views2 import login_initial
 from trakberry.views_testing import machine_list_display
 from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2, vacation_set_current5,vacation_set_current6
@@ -65,22 +65,88 @@ def mgmt_login_form(request):
 	return render(request,'mgmt_login_form.html', args)	
 
 def mgmt_production_hourly(request):
+	table_headers = ["ID","Cell","Operator","Date","Shift","Hour","Target","Actual","Shift Target","Shift Actual","DT Code","DT Mins","DT Reason","Created"]
+	table_variables = ["id","p_cell","initial","p_date","p_shift","p_hour","hourly_target","hourly_actual","shift_target","shift_actual","downtime_code","downtime_mins","downtime_reason","created_at"]
 
-	request.session["mgmt_table_call"] = "SELECT * FROM sc_prod_hour ORDER BY id DESC limit 20" 
+	mgmt_temp = "SELECT "
+	for i in table_variables:
+		mgmt_temp = mgmt_temp + i + ","
+	mgmt_temp = mgmt_temp[:-1] + " FROM sc_prod_hour"
 
-	request.session["tester"] = "SELECT * FROM sc_production1 ORDER BY id DESC limit 20" 
+	request.session["mgmt_table_name"] = 'sc_prod_hour'
+	request.session["mgmt_table_call"] = mgmt_temp
+	request.session["mgmt_edit"] = "mgmt_production_hourly_edit"
+	request.session["table_headers"] = table_headers
+	request.session["table_variables"] = table_variables
+
+	return mgmt_display(request)
+
+def mgmt_production(request):
+	table_headers = ["ID","Asset","Job","Part","Amount","DTime","Clock","Date","Shift","Runtime","Target"]
+	table_variables = ["id","asset_num","machine","partno","actual_produced","down_time","comments","pdate","shift","shift_hours_length","target"]
+
+	mgmt_temp = "SELECT "
+	for i in table_variables:
+		mgmt_temp = mgmt_temp + i + ","
+	mgmt_temp = mgmt_temp[:-1] + " FROM sc_production1"
+
+	request.session["mgmt_table_name"] = 'sc_production1'
+	request.session["mgmt_table_call"] = mgmt_temp
+	request.session["mgmt_edit"] = "mgmt_display_edit"
+	request.session["table_headers"] = table_headers
+	request.session["table_variables"] = table_variables
+
+	return mgmt_display(request)
+
+def mgmt_cycletime(request):
+	table_headers = ["ID","Asset","Part","Cycletime","Job"]
+	table_variables = ["Id","asset","part","cycletime","machine"]
+
+	mgmt_temp = "SELECT "
+	for i in table_variables:
+		mgmt_temp = mgmt_temp + i + ","
+	mgmt_temp = mgmt_temp[:-1] + " FROM tkb_cycletime"
+
+	request.session["mgmt_table_name"] = 'tkb_cycletime'
+	request.session["mgmt_table_call"] = mgmt_temp
+	request.session["mgmt_edit"] = "mgmt_display_edit"
+	request.session["table_headers"] = table_headers
+	request.session["table_variables"] = table_variables
+
+	return mgmt_display(request)
 
 
-	db, cur = db_open()
-	s1 = request.session["mgmt_table_call"]
-	cur.execute(s1)
+def mgmt_display_edit(request,index):
+	update_list = ''
+	ctr = 0
+	tmp_index = index
+	db, cur = db_open() 
+	sq1 = request.session["mgmt_table_call"] + "  where id = '%s'" %(tmp_index)
+	cur.execute(sq1)
 	tmp = cur.fetchall()
-	db.close()
+	tmp2 = tmp[0]
+	
+	update_list = "('update "+request.session['mgmt_table_name']+" SET "
+	for x in request.session["table_variables"]:
+		if ctr > 0:
+			update_list = update_list + x + '="%s",'
+		else:
+			call_id = x
+		ctr = ctr + 1
 
-	return render(request,'mgmt_production_hourly.html', {'tmp':tmp})	
+	request.session["update_list"] = update_list[:-1] + ' WHERE '+ call_id + '="%s"' + ' % '
 
 
-def mgmt_production_hourly_edit(request, index):	
+#	cql = ('update sc_prod_hour SET p_cell = "%s",initial="%s",hourly_actual="%s", p_date="%s", p_shift="%s" WHERE id ="%s"' % (mgmt_hourly_cell,mgmt_hourly_initials,mgmt_hourly_actual,mgmt_hourly_date,mgmt_hourly_shift,tmp_index))
+	
+
+
+	return render(request, "kiosk/kiosk_test5.html",{'tmp':tmp})
+	return render(request, "production/mgmt_display_edit.html",{'args':args,'tmp':tmp2,'ddate':ddd})
+
+
+
+def mgmt_production_hourly_edit(request, index):
 	tmp_index = index
 	#request.session["index"] = index
 	db, cur = db_open() 
@@ -150,16 +216,12 @@ def mgmt_production_hourly_edit(request, index):
 		return direction(request)
 		#return render(request,'kiosk/kiosk_test2.html',{'tmp':tmp2})
 
-
-
-
 	else:
 		form = kiosk_dispForm3()
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form  
 
-#
 #	db, cur = db_open()
 #	s1 = "SELECT MAX(id)  FROM sc_prod_hour WHERE p_cell = '%s'" %(p_cell) 
 #	cur.execute(s1)
@@ -167,13 +229,7 @@ def mgmt_production_hourly_edit(request, index):
 #	tmp2 = tmp[0]
 #	tmp3 = tmp2[0]
 
-
-
-
-
 	return render(request, "production/mgmt_production_hourly_edit.html",{'args':args,'tmp':tmp2,'ddate':ddd})
-
-
 
 # ***********************************************************************************************************************************
 

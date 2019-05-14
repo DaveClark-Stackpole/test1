@@ -101,7 +101,7 @@ from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower,tenr1
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Management Section ********************************************************************************************
-from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit
+from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit, mgmt_production, mgmt_display_edit, mgmt_cycletime
 
 from views4 import ios_test, IsDone, NotDone
 
@@ -394,7 +394,10 @@ urlpatterns = [
 	url(r'^mgmt_login_form/', mgmt_login_form),
 	url(r'^mgmt_logout/', mgmt_logout),
 	url(r'^mgmt_production_hourly/', mgmt_production_hourly),
+	url(r'^mgmt_production/', mgmt_production),
+	url(r'^mgmt_cycletime/', mgmt_cycletime),
 	url(r'^mgmt_production_hourly_edit/get/(?P<index>\d+)/$', mgmt_production_hourly_edit),
+	url(r'^mgmt_display_edit/get/(?P<index>\d+)/$', mgmt_display_edit),
 
 	# ************************************************************************
 

@@ -479,6 +479,7 @@ def manual_production_entry(request):
 #			Below is the old code to find the current operation using latest entry
 			try:
 				aql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' " % (job)
+
 #				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
 				cur.execute(aql)
 				tmp3 = cur.fetchall()
@@ -492,6 +493,8 @@ def manual_production_entry(request):
 
 			try:
 				aql = "SELECT * FROM sc_production1 WHERE asset_num = '%s' and LENGTH(partno)> '%d' ORDER BY %s %s" %(job,pn_len,'id','DESC')
+
+				
 				cur.execute(aql)
 				tmp3 = cur.fetchall()
 				tmp4 = tmp3[0]

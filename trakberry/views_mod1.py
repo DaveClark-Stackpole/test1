@@ -44,4 +44,20 @@ def kiosk_lastpart_find(asset):
 	part = tp4[0]
 	db.close()
 	return part
-	
+
+# Generic Templay kickout for mtemp (headers) and mgmt_table_call which calls the sql required matching headers count
+def mgmt_display(request):
+
+	#request.session["mgmt_table_call"] = "SELECT id,asset_num,machine,partno,actual_produced,down_time,comments,pdate,shift,shift_hours_length,target FROM sc_production1"
+	s1 = "SELECT "
+
+	for a in request.session["table_variables"]:
+		s1 = s1 + a + ','
+	s1 = s1[:-1]
+	s1 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY id DESC limit 20"
+
+	db, cur = db_open()
+	cur.execute(s1)
+	tmp = cur.fetchall()
+	db.close()
+	return render(request,'mgmt_display.html', {'tmp':tmp})	
