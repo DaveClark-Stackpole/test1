@@ -88,7 +88,7 @@ def NotDone(request):
 #	shift = '7am-3pm'
 #	shift = '3pm-11pm'
 
-	pdate = '2019-05-13'
+	pdate = '2019-05-17'
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
@@ -125,6 +125,28 @@ def NotDone(request):
 	return render(request, "kiosk/kiosk_test4.html",{'tmp':job_missed})
 
 def IsDone(request):
+	id1 = 1
+	name1 = '"Dave"'
+#	name1 = str(name1)
+
+#	cur.execute("""SELECT COUNT(*) FROM test WHERE attribute = %s AND unit_id IN %s""", (a, unit_ids))
+	
+#	cql =" ('update role SET name="%s" WHERE Id="%s" ' %(name1,id1)) "
+
+	name1 = '"Dave"'
+	cql = ("""update role SET name = %s WHERE Id = %s""" % (name1,id1))
+	dql = str(cql)
+
+	yy = request.session["ymym"]
+#	cql = ('update role SET name="%s" WHERE Id="%s"' %(name1,id1))
+	db, cur = db_open()
+	cur.execute(dql)
+	db.commit()
+	db.close()
+
+	return render(request, "kiosk/kiosk_test5.html")
+
+
 	shift = '11pm-7am'
 #	shift = '7am-3pm'
 #	shift = '3pm-11pm'

@@ -152,6 +152,7 @@ def kiosk_production(request):
 			tmp1 = tmp2[0]
 
 			# Call kiosk_lastpart_find (in views_mod1 to get last part for all 6 parts  ***COOL CODE)
+			# if no lastpart found then default to  "" for part 
 			prt1 = kiosk_lastpart_find (tmp1[4])
 			prt2 = kiosk_lastpart_find (tmp1[5])
 			prt3 = kiosk_lastpart_find (tmp1[6])
@@ -284,6 +285,8 @@ def kiosk_production(request):
 	
 	
 		except:	
+			#Problem is above
+
 			request.session["route_1"] = 'kiosk_menu'
 			return direction(request)
 	
@@ -797,6 +800,10 @@ def kiosk_job_assign(request):
 		kiosk_job5 = request.POST.get("job5")
 		kiosk_job6 = request.POST.get("job6")
 
+		
+
+
+	
 		#check to see if it's a CSD2 Press entry and add PPM field for entry if it is.  Only look at 2 first characters as 27 is necessary
 		if kiosk_job1[:2] == '27':
 			request.session["check1"] = 1
@@ -908,13 +915,14 @@ def kiosk_job_assign(request):
 			
 		job_chk = 0
 		try:
+			dummy = 1
 #				TimeOut = -1
 			for i in range(0,5):
 				request.session["kiosk_error"] = J[i]
-				sql = "SELECT * FROM vw_asset_eam_lp WHERE left(Asset,4) = '%s'" %(J[i])
-				cur.execute(sql)
-				tmp2 = cur.fetchall()
-				tmp1 = tmp2[0]
+#				sql = "SELECT * FROM vw_asset_eam_lp WHERE left(Asset,4) = '%s'" %(J[i])
+#				cur.execute(sql)
+#				tmp2 = cur.fetchall()
+#				tmp1 = tmp2[0]
 #				ch = 1
 #			except:
 #				ch = 0
@@ -931,7 +939,7 @@ def kiosk_job_assign(request):
 			request.session["route_1"] = 'kiosk_error_badjobnumber'
 			return direction(request)
 		# ***************************************************************************************************
-	
+
 		return kiosk_job_assign_enter(request)
 
 	else:

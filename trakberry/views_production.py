@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm,login_Form
 from trakberry.views import done
 from views2 import main_login_form
-from views_mod1 import find_current_date, mgmt_display
+from views_mod1 import find_current_date, mgmt_display, mgmt_display_edit
 from trakberry.views2 import login_initial
 from trakberry.views_testing import machine_list_display
 from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2, vacation_set_current5,vacation_set_current6
@@ -78,6 +78,7 @@ def mgmt_production_hourly(request):
 	request.session["mgmt_edit"] = "mgmt_production_hourly_edit"
 	request.session["table_headers"] = table_headers
 	request.session["table_variables"] = table_variables
+	request.session["mgmt_production_call"] = 'mgmt_production_hourly'
 
 	return mgmt_display(request)
 
@@ -95,6 +96,7 @@ def mgmt_production(request):
 	request.session["mgmt_edit"] = "mgmt_display_edit"
 	request.session["table_headers"] = table_headers
 	request.session["table_variables"] = table_variables
+	request.session["mgmt_production_call"] = 'mgmt_production'
 
 	return mgmt_display(request)
 
@@ -112,37 +114,12 @@ def mgmt_cycletime(request):
 	request.session["mgmt_edit"] = "mgmt_display_edit"
 	request.session["table_headers"] = table_headers
 	request.session["table_variables"] = table_variables
+	request.session["mgmt_production_call"] = 'mgmt_cycletime'
 
 	return mgmt_display(request)
 
 
-def mgmt_display_edit(request,index):
-	update_list = ''
-	ctr = 0
-	tmp_index = index
-	db, cur = db_open() 
-	sq1 = request.session["mgmt_table_call"] + "  where id = '%s'" %(tmp_index)
-	cur.execute(sq1)
-	tmp = cur.fetchall()
-	tmp2 = tmp[0]
-	
-	update_list = "('update "+request.session['mgmt_table_name']+" SET "
-	for x in request.session["table_variables"]:
-		if ctr > 0:
-			update_list = update_list + x + '="%s",'
-		else:
-			call_id = x
-		ctr = ctr + 1
 
-	request.session["update_list"] = update_list[:-1] + ' WHERE '+ call_id + '="%s"' + ' % '
-
-
-#	cql = ('update sc_prod_hour SET p_cell = "%s",initial="%s",hourly_actual="%s", p_date="%s", p_shift="%s" WHERE id ="%s"' % (mgmt_hourly_cell,mgmt_hourly_initials,mgmt_hourly_actual,mgmt_hourly_date,mgmt_hourly_shift,tmp_index))
-	
-
-
-	return render(request, "kiosk/kiosk_test5.html",{'tmp':tmp})
-	return render(request, "production/mgmt_display_edit.html",{'args':args,'tmp':tmp2,'ddate':ddd})
 
 
 
