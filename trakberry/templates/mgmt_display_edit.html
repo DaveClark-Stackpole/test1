@@ -41,7 +41,12 @@
 </tr>
 {% for i in tmp%}
      <td nowrap><font size ="2" style="color:rgb(100, 100, 100)">
+
+        {% if i.2 == 1%}
+            <input style="width:150px;"  type="date" name="{{i.0}}" value={{i.1}}>
+        {% else %}
             <input style="width:90px;" name="{{i.0}}" value="{{i.1}}">
+        {% endif %}
      </td>
 
 {% endfor %}

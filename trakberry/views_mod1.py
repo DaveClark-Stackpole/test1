@@ -8,6 +8,7 @@ import MySQLdb
 import time
 from django.core.context_processors import csrf
 import datetime as dt 
+from views_vacation import vacation_temp, vacation_set_current, vacation_set_current6, vacation_set_current5
 
 
 
@@ -55,12 +56,20 @@ def kiosk_lastpart_find(asset):
 
 # Generic Templay kickout for mtemp (headers) and mgmt_table_call which calls the sql required matching headers count
 def mgmt_display(request):
-
+	
 	#request.session["mgmt_table_call"] = "SELECT id,asset_num,machine,partno,actual_produced,down_time,comments,pdate,shift,shift_hours_length,target FROM sc_production1"
 	s1 = "SELECT "
-
+	date_check = ['' for y in range(0)]
+	ctr_var = 1
+	request.session["date_check"] = 0
 	for a in request.session["table_variables"]:
 		s1 = s1 + a + ','
+		if a == 'pdate':
+			date_check.append(1)
+		else:
+			date_check.append(0)
+		ctr_var = ctr_var + 1
+	request.session["date_check"] = date_check
 	s1 = s1[:-1]
 	s1 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY id DESC limit 20"
 #	u = request.session['booboo']
@@ -77,6 +86,8 @@ def mgmt_display_edit(request,index):
 	# request.session["table_variables"] ==> The name in the DB 
 
 	p = ['' for y in range(0)]
+	v = ['' for y in range(0)]
+	datecheck = ['' for y in range(0)]
 	a1 = ['' for y in range(0)]
 
 	# call in to tmp the row to edit
@@ -91,11 +102,20 @@ def mgmt_display_edit(request,index):
 
 	ptr = 1
 	for x in tmp2:
+		if type(x) is dt.date:
+			y = vacation_set_current6(x)
+#			current_first, shift  = vacation_set_current5()
+			datecheck.append(1)
+			v.append(y)
+		else:
+			datecheck.append(0)
+			v.append(x)
 		p.append(ptr)
 		ptr = ptr + 1
+		
 
-	tmp3 = zip(p,tmp2)
-
+	tmp3 = zip(p,v,datecheck)
+	
 	if request.POST:
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
@@ -115,20 +135,14 @@ def mgmt_display_edit(request,index):
 		# Brilliant recursive algorithm to update known table with known variables
 		tb1 = request.session["mgmt_table_name"]
 		i1 = index
-#		db, cur = db_open()       # Open DB
+		db, cur = db_open()       # Open DB
 		for x in request.session["table_variables"]:  # column names
 			#  x ==>  name of column
 			#  a1[ctr] ==> value of column
 			col1 = x
 
 			v1 = a1[ctr]
-			v2 = tmp2[ctr]
-			# Date messes up .   Trying to figure a fix
-			if ctr == 3:
-				if (str(v1)) == (str(v2)):
-					ttt = request.session['yoo']
-				ttt = request.session['boo']
-
+			v2 = v[ctr]
 			if ctr == 0 :
 				id1 = x
 			if ctr > 0:
@@ -139,10 +153,10 @@ def mgmt_display_edit(request,index):
 				zql = zql[:index] + col1 + zql[index+3:]
 				index = zql.find('xx3')
 				zql = zql[:index] + id1 + zql[index+3:]
-#				cur.execute(zql)   # Execute SQL
-#				db.commit()
+				cur.execute(zql)   # Execute SQL
+				db.commit()
 			ctr = ctr + 1
-#		db.close()
+		db.close()
 		request.session["route_1"] = request.session["mgmt_production_call"]
 		return direction(request)
 
@@ -151,7 +165,6 @@ def mgmt_display_edit(request,index):
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form  
-
 	return render(request,'mgmt_display_edit.html', {'tmp':tmp3})	
 
 
