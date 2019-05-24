@@ -97,6 +97,9 @@ def mgmt_production(request):
 	request.session["table_headers"] = table_headers
 	request.session["table_variables"] = table_variables
 	request.session["mgmt_production_call"] = 'mgmt_production'
+	request.session['starting_id'] = '99999999'
+	request.session['direction_id'] = 1
+	request.session['ctr'] = 1
 
 	return mgmt_display(request)
 

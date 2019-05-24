@@ -58,27 +58,113 @@ def kiosk_lastpart_find(asset):
 def mgmt_display(request):
 	
 	#request.session["mgmt_table_call"] = "SELECT id,asset_num,machine,partno,actual_produced,down_time,comments,pdate,shift,shift_hours_length,target FROM sc_production1"
-	s1 = "SELECT "
+	
+	s2 = ""
 	date_check = ['' for y in range(0)]
 	ctr_var = 1
 	request.session["date_check"] = 0
 	for a in request.session["table_variables"]:
-		s1 = s1 + a + ','
+
+		if ctr_var == 1:
+			id_name = a
+		s2 = s2 + a + ','
 		if a == 'pdate':
 			date_check.append(1)
 		else:
 			date_check.append(0)
 		ctr_var = ctr_var + 1
 	request.session["date_check"] = date_check
-	s1 = s1[:-1]
-	s1 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY id DESC limit 20"
+	s2 = s2[:-1]
+	try:
+		min_id = request.session["starting_id"]
+		direction_id = request.session['direction_id']
+	except:
+		db, cur = db_open()
+		s3 = 'SELECT MAX('+id_name+') FROM '+request.session["mgmt_table_name"]
+		cur.execute(s3)
+		tmp3_1 = cur.fetchall()
+		tmp3_2=tmp3_1[0]
+		min_id = tmp3_2[0]
+		min_id = min_id + 1
+		db.close()
+		direction_id = 1
+#	min_id = 456638
+	
+#	s2 = s2 + id_name + ') FROM '+ request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20"
+	if direction_id == 1:
+		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s ORDER BY xx4 DESC limit 20""")%(min_id)
+	else:	
+		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 DESC limit 20""")%(min_id)
+		if request.session['ctr'] == 2:
+			r=request.session['d']
+		request.session['ctr'] = 2
+	index = s1.find('xx1')
+	s1 = s1[:index] + s2 + s1[index+3:]
+	index = s1.find('xx2')
+	s1 = s1[:index] + request.session["mgmt_table_name"] + s1[index+3:]
+	index = s1.find('xx3')
+	s1 = s1[:index] + id_name + s1[index+3:]
+	index = s1.find('xx4')
+	s1 = s1[:index] + id_name + s1[index+3:]
+
+#	hhh=request.session["aborrinn"]
+
+#	s1 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20" 
+#	s2 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY id DESC limit 20"
+	
+#	sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+#	a1sql = "SELECT MAX(id)  FROM sc_production1 WHERE asset_num = '%s'" %(asset)
 #	u = request.session['booboo']
 	db, cur = db_open()
-
 	cur.execute(s1)
 	tmp = cur.fetchall()
+	tmp1=tmp[0]
+
+#	try:
+#		min_id = request.session["min_id"]
+#	except:
+#		min_id = tmp1[0] # set the min_id to first one on page as a default
+
+	# set min_id to the last id on the page
+
+	# this point needs to re establish the Min and Max id value for ones displayed
+	#need to work on the below code
+	for b in tmp:
+		tmp1=b[0]
+		if tmp1>min_id:
+			min_id = tmp1
+
+	last_id = min_id
+	for b in tmp:
+		tmp1=b[0]
+#		request.session['dkekkk']
+		if tmp1<last_id:
+			last_id = tmp1
+	# *****************************************************************************
+
+#	request.session["djdkkje"]
+#	cur.execute(s2)
+#	tmp2=cur.fetchall()
+#	tmp3 = tmp2[0]
+	
 	db.close()
-	return render(request,'mgmt_display.html', {'tmp':tmp})	
+
+#	hh = request.session["stopherenoq"]
+	request.session["ending_id"] = last_id
+
+	
+
+	return render(request,'mgmt_display.html', {'tmp':tmp})
+
+def mgmt_display_next(request):
+	
+	request.session['direction_id'] = 1
+ 	request.session['starting_id'] = request.session['ending_id']
+	return mgmt_display(request)
+
+def mgmt_display_prev(request):
+	request.session['direction_id'] = -1
+	return mgmt_display(request)
 
 def mgmt_display_edit(request,index):
 

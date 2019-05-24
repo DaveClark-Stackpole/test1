@@ -20,6 +20,11 @@
         a.blue:hover {color: black;background-color: rgb(255, 223, 78);border-radius: 10px;}
 </style>
 <center>
+        <br><br>
+        <a href="{{request.session.local_toggle}}/mgmt_display_prev" class="blue"><<<<< PREV </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{{request.session.local_toggle}}/mgmt_display_next" class="blue"> NEXT >>>></a>
+                <br><br>
 <table style="overflow-x:auto;">
 <tr>
         {% for x in request.session.table_headers %}
