@@ -73,31 +73,33 @@ def mgmt_display(request):
 		else:
 			date_check.append(0)
 		ctr_var = ctr_var + 1
+	request.session['ctr_var'] = ctr_var    #Assign the session variable to number of columns there are.  Use this on template to span
 	request.session["date_check"] = date_check
 	s2 = s2[:-1]
-	try:
-		min_id = request.session["starting_id"]
-		direction_id = request.session['direction_id']
-	except:
-		db, cur = db_open()
-		s3 = 'SELECT MAX('+id_name+') FROM '+request.session["mgmt_table_name"]
-		cur.execute(s3)
-		tmp3_1 = cur.fetchall()
-		tmp3_2=tmp3_1[0]
-		min_id = tmp3_2[0]
-		min_id = min_id + 1
-		db.close()
-		direction_id = 1
+#	try:
+	min_id = request.session["starting_id"]
+	direction_id = int(request.session['direction_id'])
+	cctr = int(request.session['ctr'])
+
+#	except:
+#		db, cur = db_open()
+#		s3 = 'SELECT MAX('+id_name+') FROM '+request.session["mgmt_table_name"]
+#		cur.execute(s3)
+#		tmp3_1 = cur.fetchall()
+#		tmp3_2=tmp3_1[0]
+#		min_id = tmp3_2[0]
+#		min_id = min_id + 1
+#		db.close()
+#		direction_id = 1
 #	min_id = 456638
 	
 #	s2 = s2 + id_name + ') FROM '+ request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20"
 	if direction_id == 1:
 		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s ORDER BY xx4 DESC limit 20""")%(min_id)
 	else:	
-		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 DESC limit 20""")%(min_id)
-		if request.session['ctr'] == 2:
-			r=request.session['d']
-		request.session['ctr'] = 2
+		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 ASC limit 20""")%(min_id)
+	
+
 	index = s1.find('xx1')
 	s1 = s1[:index] + s2 + s1[index+3:]
 	index = s1.find('xx2')
@@ -107,28 +109,30 @@ def mgmt_display(request):
 	index = s1.find('xx4')
 	s1 = s1[:index] + id_name + s1[index+3:]
 
-#	hhh=request.session["aborrinn"]
+#	Below Error check for end of or start of table.  Refresh to start if it is.
+	try:
+		db, cur = db_open()
+		cur.execute(s1)
+		tmp = cur.fetchall()
+		tmp1=tmp[0]
+		db.close()
+	except:
+		request.session["route_1"] = request.session["mgmt_production_call"]
+		return direction(request)
 
-#	s1 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20" 
-#	s2 = s1 + ' FROM ' + request.session["mgmt_table_name"] + " ORDER BY id DESC limit 20"
+
+	cctr = int(request.session['ctr'])
 	
-#	sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
-#	a1sql = "SELECT MAX(id)  FROM sc_production1 WHERE asset_num = '%s'" %(asset)
-#	u = request.session['booboo']
-	db, cur = db_open()
-	cur.execute(s1)
-	tmp = cur.fetchall()
-	tmp1=tmp[0]
 
-#	try:
-#		min_id = request.session["min_id"]
-#	except:
-#		min_id = tmp1[0] # set the min_id to first one on page as a default
 
 	# set min_id to the last id on the page
 
 	# this point needs to re establish the Min and Max id value for ones displayed
 	#need to work on the below code
+
+	if direction_id == 0:
+		tmp = tmp[::-1]
+
 	for b in tmp:
 		tmp1=b[0]
 		if tmp1>min_id:
@@ -137,23 +141,14 @@ def mgmt_display(request):
 	last_id = min_id
 	for b in tmp:
 		tmp1=b[0]
-#		request.session['dkekkk']
 		if tmp1<last_id:
 			last_id = tmp1
-	# *****************************************************************************
 
-#	request.session["djdkkje"]
-#	cur.execute(s2)
-#	tmp2=cur.fetchall()
-#	tmp3 = tmp2[0]
+#	if cctr == 8:
+#		jjj = request.session['bike']
+	request.session['ending_id'] = last_id
+	request.session['starting_id'] = min_id
 	
-	db.close()
-
-#	hh = request.session["stopherenoq"]
-	request.session["ending_id"] = last_id
-
-	
-
 	return render(request,'mgmt_display.html', {'tmp':tmp})
 
 def mgmt_display_next(request):
@@ -163,14 +158,12 @@ def mgmt_display_next(request):
 	return mgmt_display(request)
 
 def mgmt_display_prev(request):
-	request.session['direction_id'] = -1
+	request.session['direction_id'] = 0
 	return mgmt_display(request)
 
 def mgmt_display_edit(request,index):
-
 	# request.session["table_headers"]  ==>  The name displayed on page 
 	# request.session["table_variables"] ==> The name in the DB 
-
 	p = ['' for y in range(0)]
 	v = ['' for y in range(0)]
 	datecheck = ['' for y in range(0)]
@@ -190,7 +183,6 @@ def mgmt_display_edit(request,index):
 	for x in tmp2:
 		if type(x) is dt.date:
 			y = vacation_set_current6(x)
-#			current_first, shift  = vacation_set_current5()
 			datecheck.append(1)
 			v.append(y)
 		else:
@@ -210,7 +202,6 @@ def mgmt_display_edit(request,index):
 				return direction(request)
 		except:
 			dummy = 1
-
 #		return render(request,'kiosk/kiosk_test2.html',{'tmp':ddd})
 		for i in tmp3:
 			pst = str(i[0])
@@ -226,7 +217,6 @@ def mgmt_display_edit(request,index):
 			#  x ==>  name of column
 			#  a1[ctr] ==> value of column
 			col1 = x
-
 			v1 = a1[ctr]
 			v2 = v[ctr]
 			if ctr == 0 :
@@ -243,6 +233,7 @@ def mgmt_display_edit(request,index):
 				db.commit()
 			ctr = ctr + 1
 		db.close()
+		return mgmt_display(request)
 		request.session["route_1"] = request.session["mgmt_production_call"]
 		return direction(request)
 
@@ -253,7 +244,97 @@ def mgmt_display_edit(request,index):
 	args['form'] = form  
 	return render(request,'mgmt_display_edit.html', {'tmp':tmp3})	
 
+def mgmt_display_insert(request,index):
+	# request.session["table_headers"]  ==>  The name displayed on page 
+	# request.session["table_variables"] ==> The name in the DB 
+	p = ['' for y in range(0)]
+	v = ['' for y in range(0)]
+	datecheck = ['' for y in range(0)]
+	a1 = ['' for y in range(0)]
 
+	# call in to tmp the row to edit
+	update_list = ''
+	ctr = 0
+	tmp_index = index
+	db, cur = db_open() 
+	sq1 = request.session["mgmt_table_call"] + "  where id = '%s'" %(tmp_index)
+	cur.execute(sq1)
+	tmp = cur.fetchall()
+	tmp2 = tmp[0]
+
+	ptr = 1
+	for x in tmp2:
+		if type(x) is dt.date:
+			y = vacation_set_current6(x)
+			datecheck.append(1)
+			v.append(y)
+		else:
+			datecheck.append(0)
+			v.append(x)
+		p.append(ptr)
+		ptr = ptr + 1
+		
+
+	tmp3 = zip(p,v,datecheck)
+	
+	if request.POST:
+		try:
+			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
+			if kiosk_button1 == -1:
+				request.session["route_1"] = 'mgmt_production_hourly'
+				return direction(request)
+		except:
+			dummy = 1
+#		return render(request,'kiosk/kiosk_test2.html',{'tmp':ddd})
+		for i in tmp3:
+			pst = str(i[0])
+			b1 = request.POST.get(pst)
+			b1=str(b1)
+			c1 = '"' + b1 + '"'
+			a1.append(c1)
+		# Brilliant recursive algorithm to update known table with known variables
+		tb1 = request.session["mgmt_table_name"]
+		i1 = index
+		db, cur = db_open()       # Open DB
+		for x in request.session["table_variables"]:  # column names
+			#  x ==>  name of column
+			#  a1[ctr] ==> value of column
+			col1 = x
+			v1 = a1[ctr]
+			v2 = v[ctr]
+			if ctr == 0 :
+				id1 = x
+			if ctr > 0:
+				
+				s1 = ("""SELECT xx1 FROM xx2 where xx3<%s ORDER BY xx4 DESC limit 20""")%(min_id)
+
+				zql = ("""INSERT INTO xx1(xx2) VALUES(xx3)""",(xx4))
+				
+				cur.execute('''INSERT INTO tkb_kiosk(Clock,Job1,Job2,Job3,Job4,Job5,Job6,TimeStamp_In,TimeStamp_Out) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,TimeStamp,TimeOut))
+				db.commit()
+				db.close()
+
+				zql = ("""update xx1 SET xx2=%s where xx3=%s"""%(v1,i1))
+				index = zql.find('xx1')
+				zql = zql[:index] + tb1 + zql[index+3:]
+				index = zql.find('xx2')
+				zql = zql[:index] + col1 + zql[index+3:]
+				index = zql.find('xx3')
+				zql = zql[:index] + id1 + zql[index+3:]
+				cur.execute(zql)   # Execute SQL
+				db.commit()
+			ctr = ctr + 1
+		db.close()
+		return mgmt_display(request)
+		request.session["route_1"] = request.session["mgmt_production_call"]
+		return direction(request)
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	return render(request,'mgmt_display_edit.html', {'tmp':tmp3})	
 
 
 

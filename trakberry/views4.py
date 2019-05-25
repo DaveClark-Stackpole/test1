@@ -84,11 +84,11 @@ def ios_test(request):
 	return render(request, "kiosk/kiosk_test4.html",{'tmp':tmp})
 
 def NotDone(request):
-	shift = '11pm-7am'
+#	shift = '11pm-7am'
 #	shift = '7am-3pm'
-#	shift = '3pm-11pm'
+	shift = '3pm-11pm'
 
-	pdate = '2019-05-17'
+	pdate = '2019-05-23'
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 

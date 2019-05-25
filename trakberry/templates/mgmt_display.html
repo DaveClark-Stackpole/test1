@@ -20,12 +20,23 @@
         a.blue:hover {color: black;background-color: rgb(255, 223, 78);border-radius: 10px;}
 </style>
 <center>
-        <br><br>
-        <a href="{{request.session.local_toggle}}/mgmt_display_prev" class="blue"><<<<< PREV </a>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="{{request.session.local_toggle}}/mgmt_display_next" class="blue"> NEXT >>>></a>
-                <br><br>
+
 <table style="overflow-x:auto;">
+<tr>
+        <td colspan="{{request.session.ctr_var}}">
+                <font size ="3" style="color:rgb(100, 100, 100)">
+                        <center><a href="{{request.session.local_toggle}}/mgmt_display_prev" class="blue"><<<< prev </a></font>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                <font size ="5" style="color:rgb(100, 100, 100)">      <b>{{request.session.mgmt_table_title}}</b></font>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                        <font size ="3" style="color:rgb(100, 100, 100)">
+                                       <a href="{{request.session.local_toggle}}/mgmt_display_next" class="blue"> next >>>></a>
+                        </center>
+                </font>
+        </td>
+</tr>
 <tr>
         {% for x in request.session.table_headers %}
                 <td nowrap>

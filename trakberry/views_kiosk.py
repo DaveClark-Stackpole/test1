@@ -822,7 +822,27 @@ def kiosk_job_assign(request):
 			request.session["press5"] = 1
 		if kiosk_job6[:2] == '27':
 			request.session["check1"] = 1
-			request.session["press6"] = 1				
+			request.session["press6"] = 1	
+
+
+		if kiosk_job1[:2] == '90':
+			request.session["check1"] = 3
+			request.session["insp1"] = 3
+		if kiosk_job2[:2] == '90':
+			request.session["check1"] = 3
+			request.session["insp2"] = 3
+		if kiosk_job3[:2] == '90':
+			request.session["check1"] = 3
+			request.session["insp3"] = 3
+		if kiosk_job4[:2] == '90':
+			request.session["check1"] = 3
+			request.session["insp4"] = 3
+		if kiosk_job5[:2] == '90':
+			request.session["check1"] = 3
+			request.session["insp5"] = 3
+		if kiosk_job6[:2] == '90':
+			request.session["check1"] = 3
+			request.session["insp6"] = 3				
 
 		#return render(request, "kiosk/kiosk_test5.html",{'kiosk_job':kiosk_job1})
 

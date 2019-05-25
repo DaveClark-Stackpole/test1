@@ -72,13 +72,16 @@ def mgmt_production_hourly(request):
 	for i in table_variables:
 		mgmt_temp = mgmt_temp + i + ","
 	mgmt_temp = mgmt_temp[:-1] + " FROM sc_prod_hour"
-
 	request.session["mgmt_table_name"] = 'sc_prod_hour'
+	request.session["mgmt_table_title"] = 'Hourly Production'
 	request.session["mgmt_table_call"] = mgmt_temp
 	request.session["mgmt_edit"] = "mgmt_production_hourly_edit"
 	request.session["table_headers"] = table_headers
 	request.session["table_variables"] = table_variables
 	request.session["mgmt_production_call"] = 'mgmt_production_hourly'
+	request.session['starting_id'] = '99999999'
+	request.session['direction_id'] = 1
+	request.session['ctr'] = 0
 
 	return mgmt_display(request)
 
@@ -90,8 +93,8 @@ def mgmt_production(request):
 	for i in table_variables:
 		mgmt_temp = mgmt_temp + i + ","
 	mgmt_temp = mgmt_temp[:-1] + " FROM sc_production1"
-
 	request.session["mgmt_table_name"] = 'sc_production1'
+	request.session["mgmt_table_title"] = 'Production Entries'
 	request.session["mgmt_table_call"] = mgmt_temp
 	request.session["mgmt_edit"] = "mgmt_display_edit"
 	request.session["table_headers"] = table_headers
@@ -99,7 +102,7 @@ def mgmt_production(request):
 	request.session["mgmt_production_call"] = 'mgmt_production'
 	request.session['starting_id'] = '99999999'
 	request.session['direction_id'] = 1
-	request.session['ctr'] = 1
+	request.session['ctr'] = 0
 
 	return mgmt_display(request)
 
@@ -111,13 +114,16 @@ def mgmt_cycletime(request):
 	for i in table_variables:
 		mgmt_temp = mgmt_temp + i + ","
 	mgmt_temp = mgmt_temp[:-1] + " FROM tkb_cycletime"
-
 	request.session["mgmt_table_name"] = 'tkb_cycletime'
+	request.session["mgmt_table_title"] = 'Cycle Times'
 	request.session["mgmt_table_call"] = mgmt_temp
 	request.session["mgmt_edit"] = "mgmt_display_edit"
 	request.session["table_headers"] = table_headers
 	request.session["table_variables"] = table_variables
 	request.session["mgmt_production_call"] = 'mgmt_cycletime'
+	request.session['starting_id'] = '99999999'
+	request.session['direction_id'] = 1
+	request.session['ctr'] = 0
 
 	return mgmt_display(request)
 
