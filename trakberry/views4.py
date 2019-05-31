@@ -56,13 +56,24 @@ def ios_test(request):
 	l = 1
 	len_part = 5
 	id_start = 237056
+	pd = '2019-05-29'
+	po = '50-9341'
+	lft = 'OP'
+	shf = '11pm-7am'
 	dte = []
 	db, cur = db_open()
-	sql = "SELECT DISTINCT partno FROM sc_production1 where LENGTH(partno) > '%d' and id > '%d' ORDER BY %s %s" %(len_part,id_start,'partno','ASC')
+	sql = "SELECT DISTINCT comments FROM sc_production1 where partno = '%s' and pdate  = '%s' and left(machine,2) = '%s' and shift  = '%s' " %(po,pd,lft,shf)
 #	sql = "SELECT DISTINCT asset_num, machine, partno FROM sc_production1  where LENGTH(asset_num) >'%d' and LENGTH(machine) >'%d' ORDER BY %s %s,%s %s" %(l,l,'asset_num','ASC','id','DESC')
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
+
+	ctr = 0
+	for i in tmp:
+		ctr = ctr + 1
+
+
+	return render(request, "kiosk/kiosk_test4.html",{'tmp':ctr})
 
 	for x in tmp:
 #		asset = x[0]

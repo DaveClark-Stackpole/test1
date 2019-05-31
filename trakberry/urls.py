@@ -106,6 +106,9 @@ from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_ho
 from views4 import ios_test, IsDone, NotDone
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
+from views_mod2 import hrly_display
+
+
 # ***********************************************************************************************************************************************************
 
 
@@ -414,6 +417,10 @@ urlpatterns = [
 	url(r'^inventory_type_entry/', inventory_type_entry),
 	url(r'^inventory_entry/', inventory_entry),
 	url(r'^inventory_fix/', inventory_fix),
+
+	# **************  Mod2 Section ***************************************
+	url(r'^hrly_display/', hrly_display),
+
 	
 ]
  
