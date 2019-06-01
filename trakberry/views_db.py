@@ -11,7 +11,7 @@ import MySQLdb
 # Methods for opening database for all and returning db and cur
 def db_open():
 
-	
+	# I've set this so it should be correct
 	# Use this one for Server
 	#db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
 	
