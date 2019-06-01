@@ -611,10 +611,12 @@ def layered_audit_check(name):
   
 def switch_local(request):
 	request.session["local_switch"] = 1
+	request.session["local_toggle"] = ""
 	return main(request)
 	
 def switch_net(request):
 	request.session["local_switch"] = 0
+	request.session["local_toggle"] = "/trakberry"
 	return main(request)
 	
 	

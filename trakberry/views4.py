@@ -25,8 +25,8 @@ from datetime import datetime
 
 def ios_test1(request):
 	# Creates a new backup table of tkb_cycletimes
-	db, cursor = db_open()  
-	
+	db, cursor = db_open()     
+
 	cursor.execute("""DROP TABLE IF EXISTS sc_prod_parts_backup""")
 	cursor.execute("""CREATE TABLE IF NOT EXISTS sc_prod_parts_backup LIKE sc_prod_parts""")
 	cursor.execute('''INSERT sc_prod_parts_backup Select * From sc_prod_parts''')
