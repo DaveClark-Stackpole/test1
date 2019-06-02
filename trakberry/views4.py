@@ -23,16 +23,16 @@ from views_db import db_open
 from datetime import datetime
 
 
-def ios_test1(request):
+def ios_test(request):
 	# Creates a new backup table of tkb_cycletimes
-	db, cursor = db_open()     
+	db, cur = db_open()  
+	s1 = "SELECT p_cell FROM sc_prod_hr_target"
+	cur.execute(s1)
+	tmp = cur.fetchall()
 
-	cursor.execute("""DROP TABLE IF EXISTS sc_prod_parts_backup""")
-	cursor.execute("""CREATE TABLE IF NOT EXISTS sc_prod_parts_backup LIKE sc_prod_parts""")
-	cursor.execute('''INSERT sc_prod_parts_backup Select * From sc_prod_parts''')
 	db.commit()
 	db.close()
-	return render(request, "kiosk/kiosk_test4.html")	
+	return render(request, "kiosk/kiosk_test4.html",{'tmp':tmp})	
 
 def ios_test2(request):
 	# Searches all in sc_production1 unique asset num with machine >1
@@ -51,7 +51,7 @@ def ios_test2(request):
 	db.close()
 	return render(request, "kiosk/kiosk_test4.html",{'tmp':tmp})
 
-def ios_test(request):
+def ios_test1(request):
 	# Searches all in sc_production1 unique asset num with machine >1
 	l = 1
 	len_part = 5
