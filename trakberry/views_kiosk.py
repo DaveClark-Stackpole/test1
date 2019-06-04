@@ -245,7 +245,7 @@ def kiosk_production(request):
 				request.session["machine5"] = tmpp[5]
 				request.session["variable5"] = int(tmp1[8])
 				try:
-					request.session["cycletime5"] = sr(tmpp[4])
+					request.session["cycletime5"] = str(tmpp[4])
 				except:
 					request.session["cycletime5"] = 0
 			except:
