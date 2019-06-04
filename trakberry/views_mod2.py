@@ -36,6 +36,7 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
                 tmp3 = cur.fetchall()
                 tmp4 = tmp3[0]
                 max_id = tmp4[0]
+                
         except:
                 route = 'Filed'
         try:
@@ -65,14 +66,21 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
                 s4 = 4
                 d11 = 99
 
-                new_line = row_ctr % hhh 
+                new_line = row_ctr % hhh # uses Mod of hhh to determine how many on a line.   hhh is the number on a line
+
+                #yyt = vacation_set_current6(tmp[4])
 
                 # new code
                 lst = list(tmp4)
-                d3 = d2 + ',' + d1
-                lst.extend((c2,d2,c1,d1,d3,new_line))
+                d3 = d2 + ',' + d1 # combines the two colors together to d3 format 
+                lst.extend((c2,d2,c1,d1,d3,new_line,tmp[4]))
                 mst=tuple(lst)
                 xx.append(mst)
+
+#                yyt = vacation_set_current6(tmp[4])
+#                xx.append(yyt)
+
+
 
                 row_ctr = row_ctr + 1
 
@@ -82,5 +90,5 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
     db.close()
 
     # This is where you return the value 'hourly' which has all the data needed in tuple form
-    return render(request,'kiosk/kiosk_test4.html', {'tmpp':xx})	
+    return render(request,'production/hrly_display.html', {'tmpp':xx})	
 

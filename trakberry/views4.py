@@ -196,3 +196,43 @@ def IsDone(request):
 
 
 	return render(request, "kiosk/kiosk_test5.html",{'tmp':List})
+	
+
+def target_fix1(request):
+
+	db, cur = db_open()  
+	pr = '27'
+	pid = 460216
+
+	sql = "Select * From sc_production1 where id > '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	ccct = 0
+
+	for i in tmp:
+		try:
+			asset = i[1]
+			hrs = i[12]
+			id1 = i[0]
+			s1ql = "Select * from tkb_cycletime where asset = '%s' " % (asset)
+			cur.execute(s1ql)
+			tmp2 = cur.fetchall()
+			tmp3 = tmp2[0]
+			tmp4 = tmp3[4]
+			ct = str(tmp4)
+			ct = float(ct)
+			h = float(hrs)
+			target1 = ((h * 60 * 60) / (ct))
+			cql = ('update sc_production1 SET target = "%s" WHERE id ="%s"' % (target1,id1))
+			cur.execute(cql)
+			db.commit()
+			ccct = ccct + 1
+
+		except:
+			dummy = 1
+#		if ccct > 0:
+#	uu = request.session['kkeee']
+		
+
+
+	return render(request, "kiosk/kiosk_test6.html",{'tmp':tmp})
