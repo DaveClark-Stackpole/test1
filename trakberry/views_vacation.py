@@ -71,6 +71,52 @@ def vacation_set_current2():
 		
 	return current_first
 
+def vacation_set_current7():  # Use this one to set Kiosk Date properly
+
+	t = vacation_temp()
+	month_st = t.month
+	year_st = t.year
+	day_st = t.day
+	day_st = day_st
+	hour_st = t.hour
+
+
+
+	if int(hour_st) >=23 or int(hour_st) <7:
+		shift1 = "Mid"
+		hour_calc = 22
+	if int(hour_st) < 7:
+		shift1 = "Mid"
+		hour_calc = -2
+	if int(hour_st) >=7 and int(hour_st) <15:
+		shift1 = "Day"
+		hour_calc = 6
+	if int(hour_st) >=15 and int(hour_st) <23: 
+		shift1 = "Aft"
+		hour_calc = 14
+	if int(hour_st) >=19 or int(hour_st) <7:
+		shift2 = "Cont A Mid"
+		shift3 = "Cont B Mid"
+	if int(hour_st) >=7 and int(hour_st) <19:
+		shift2 = "Cont A Day"
+		shift3 = "Cont B Day"
+
+	hour_curr = int(hour_st) - hour_calc
+		
+
+	if int(month_st)<10:
+		current_first = str(year_st) + "-" + "0" + str(month_st) 
+	else:
+		current_first = str(year_st) + "-" + str(month_st) 	
+		
+	if int(day_st)<10:
+		current_first = current_first + "-" + "0" + str(day_st)
+	else:
+		current_first = current_first + "-" + str(day_st)
+	
+
+	return current_first, shift1, shift2, shift3, hour_curr
+	
 def vacation_set_current6(t):
 	month_st = t.month
 	year_st = t.year
@@ -178,10 +224,10 @@ def vacation_backup(request):
 	db, cursor = db_open()  
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation_backup""")
-	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_backup LIKE vacation""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_couldbe LIKE sc_production1""")
 	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
 
-	#db.commit()
+	db.commit()
 	db.close()
 	return render(request,'done_test.html')
 
@@ -242,7 +288,7 @@ def message_create(request):
 	# create Message Table
 	db, cursor = db_open()  
 	
-	cursor.execute("""DROP TABLE IF EXISTS tkb_inventory_fixed""")
+#	cursor.execute("""DROP TABLE IF EXISTS tkb_inventory_fixed""")
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_inventory_fixed LIKE tkb_jobs_test""")
 	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
 

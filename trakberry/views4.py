@@ -135,6 +135,73 @@ def NotDone(request):
 
 	return render(request, "kiosk/kiosk_test4.html",{'tmp':job_missed})
 
+def median(lst):
+    n = len(lst)
+    if n < 1:
+		return None
+    if n % 2 == 1:
+		return sorted(lst)[n//2]
+    else:
+		return sum(sorted(lst)[n//2-1:n//2+1])/2.0
+
+def medium_production2(request):
+	db, cur = db_open()
+
+	asset1 = "683"
+	tuple1 = ['' for x in range(0)]
+	shifthrs1=8
+	bql = "Select actual_produced From sc_production1 where asset_num = '%s' and shift_hours_length = '%d' ORDER BY id DESC limit 10" %(asset1,shifthrs1) 
+	cur.execute(bql)
+	tmp3 = cur.fetchall()
+	for i in tmp3:
+		tuple1.append(i[0])
+	lst = list(tuple1)
+	lst2 = median(lst)
+	request.session["lst2"] = lst2
+	request.session["Asset"] = asset1
+
+
+	db.close()
+	return render(request, "kiosk/kiosk_test7.html",{'tmp':lst})
+	
+def medium_production(request):
+	db, cur = db_open()
+	sql = "Select * From tkb_couldbe"
+	cur.execute(sql)
+	tmp4 = cur.fetchall()
+	for ii in tmp4:
+		ctr = 0
+		tot = 0
+		try:
+			asset1 = ii[1]
+			tuple1 = ['' for x in range(0)]
+			shifthrs1=8
+			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and shift_hours_length = '%d' ORDER BY id DESC limit 35" %(asset1,shifthrs1) 
+			cur.execute(bql)
+			tmp3 = cur.fetchall()
+			for i in tmp3:
+				tuple1.append(i[0])
+			lst = list(tuple1)
+			lst2 = median(lst)
+			tot = int(lst2)
+
+			cql = ("""update tkb_couldbe SET actual = %s WHERE asset1 = %s""" % (tot,asset1))
+			cur.execute(cql)
+			db.commit()
+			if asset1 == '603':
+				request.session["lst2"] = lst
+
+		except:
+			dummy = 1
+		
+	
+
+		#rr = request.session["pumpkin"]
+
+				
+	db.close()
+	return render(request, "kiosk/kiosk_test7.html",{'tmp':lst})
+	
 def IsDone(request):
 	id1 = 1
 	name1 = '"Dave"'

@@ -8,17 +8,22 @@ import MySQLdb
 import time
 from django.core.context_processors import csrf
 import datetime as dt 
-from views_vacation import vacation_temp, vacation_set_current, vacation_set_current6, vacation_set_current5
+from views_vacation import vacation_temp, vacation_set_current7, vacation_set_current6, vacation_set_current5
 
 def hrly_display(request):   # This will return a tuple with hourly prod summary on last hour for each p_cell
     hourly = ['' for x in range(0)]
+    hourly_var = ['' for x in range(0)]
     ert = ['' for x in range(0)]
     xx = ['' for x in range(0)]
     hourly_all = ['' for x in range(0)]
     red_block = '#ff0000'
     green_block = '#62c12e'
     yellow_block = '#faff2b'
+    grey_block = '#a5a4a4'
+
     hhh = 3
+
+    current_first, shift1, shift2, shift3, hour_curr  = vacation_set_current7()
 
     db, cur = db_open()  
     s1 = "SELECT p_cell FROM sc_prod_hr_target"  # Set the p_cell value we'll use to iterate through for each cell
@@ -65,6 +70,22 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
                 s3 = 0
                 s4 = 4
                 d11 = 99
+                hourly_var.append(str(tmp4[4]))
+                if int(tmp4[6]) != (hour_curr-1):
+                        d1 = grey_block 
+                        c1 = '---'
+                if (str(tmp4[4])) != str(current_first):
+                        d2 = grey_block
+                        d1 = grey_block
+                        c1 = '---'
+                        c2 = '---'
+                elif (tmp4[5]) != shift1:
+                        if (tmp4[5]) != shift2:
+                                if (tmp4[5]) != shift3:
+                                        d2 = grey_block
+                                        d1 = grey_block
+                                        c1 = '---'
+                                        c2 = '---'
 
                 new_line = row_ctr % hhh # uses Mod of hhh to determine how many on a line.   hhh is the number on a line
 
@@ -72,7 +93,7 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
 
                 # new code
                 lst = list(tmp4)
-                d3 = d2 + ',' + d1 # combines the two colors together to d3 format 
+                d3 = d2 + ' 60%,' + d1 + ' 40%' # combines the two colors together to d3 format 
                 lst.extend((c2,d2,c1,d1,d3,new_line,tmp[4]))
                 mst=tuple(lst)
                 xx.append(mst)
@@ -89,6 +110,15 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
 
     db.close()
 
+    current_first, shift1, shift2, shift3, hour_curr  = vacation_set_current7()
+    request.session["variableA"] = current_first
+    request.session["variableB"] = shift1
+    request.session["variableC"] = shift2
+    request.session["variableD"] = hourly_var
+    request.session["variableE"] = hour_curr
+
     # This is where you return the value 'hourly' which has all the data needed in tuple form
     return render(request,'production/hrly_display.html', {'tmpp':xx})	
+
+
 

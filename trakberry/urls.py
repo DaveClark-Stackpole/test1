@@ -103,7 +103,7 @@ from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower,tenr1
 # *******************************************  Management Section ********************************************************************************************
 from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit, mgmt_production, mgmt_display_edit, mgmt_cycletime
 
-from views4 import ios_test, IsDone, NotDone, target_fix1
+from views4 import ios_test, IsDone, NotDone, target_fix1, medium_production
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
 from views_mod2 import hrly_display
@@ -318,6 +318,7 @@ urlpatterns = [
 	url(r'^target_fix1/', target_fix1),
 
 	url(r'^ios_test/', ios_test),
+	url(r'^medium_production/', medium_production),
 	url(r'^IsDone/', IsDone),
 	url(r'^NotDone/', NotDone),
 	
