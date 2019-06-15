@@ -16,10 +16,21 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
     ert = ['' for x in range(0)]
     xx = ['' for x in range(0)]
     hourly_all = ['' for x in range(0)]
+    request.session["local_toggle"] = "/trakberry"
     red_block = '#ff0000'
     green_block = '#62c12e'
     yellow_block = '#faff2b'
     grey_block = '#a5a4a4'
+	
+	# Set the toggle for Net/Local
+ #   try:
+	#    if request.session["local_switch"] == 1:
+     #              request.session["local_toggle"] = ""
+    #else:
+#			request.session["local_toggle"] = "/trakberry"
+#	except:
+#		request.session["local_toggle"] = "/trakberry"
+		
 
     hhh = 3
 

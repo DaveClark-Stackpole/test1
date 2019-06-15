@@ -1276,9 +1276,21 @@ def manual_cycletime_table(request):
 	
 	return render(request, "kiosk/kiosk_test.html")
 
+def kiosk_sub_menu(request):
+	if request.POST:
+		button1 = request.POST
+		button_pressed = int(button1.get("kiosk_button1"))
+		
+	else:
+		form = kiosk_dispForm1()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
 
-def kiosk_menu(request):
+	return render(request,"kiosk/kiosk_sub_menu.html",{'args':args})
 	
+		
+def kiosk_menu(request):
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 	request.session["local_toggle"] = "/trakberry"
 	request.session["kiosk_menu_screen"] = 2
@@ -1296,7 +1308,9 @@ def kiosk_menu(request):
 			try:
 				request.session["pcell"]
 			except:
-				request.session["route_1"] = 'kiosk_menu'
+				# Reroute to the submenu to pick the different cells
+				# request.session["route_1"] = 'kiosk_menu'
+				request.session["route_1"] = 'kiosk_sub_menu'
 				return direction(request)
 
 			#request.session["route_1"] = 'kiosk' # disable when ready to run
