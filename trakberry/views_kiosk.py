@@ -1279,7 +1279,48 @@ def manual_cycletime_table(request):
 def kiosk_sub_menu(request):
 	if request.POST:
 		button1 = request.POST
-		button_pressed = int(button1.get("kiosk_button1"))
+		bp1 = int(button1.get("kiosk_button1"))
+		
+		if bp1 == -1:
+			pcell = 'TRI'
+			hourly_title = 'Hourly Trilobe'
+		if bp1 == -2:
+			pcell = '10ROP30'
+			hourly_title = 'Hourly 10ROP30'
+		if bp1 == -3:
+			pcell = '10R'
+			hourly_title = 'Hourly 10R'
+		if bp1 == -4:
+			pcell = '9HP'
+			hourly_title = 'Hourly 9HP'
+		if bp1 == -5:
+			pcell = '6LOutput'
+			hourly_title = 'Hourly 6L Output'
+		if bp1 == -6:
+			pcell = 'GF9'
+			hourly_title = 'Hourly GF9'
+		if bp1 == -7:
+			pcell = 'AB1V-INPUT'
+			hourly_title = 'Hourly AB1V-Input'
+		if bp1 == -8:
+			pcell = 'AB1V-REACTION'
+			hourly_title = 'Hourly AB1V-Reaction'
+		if bp1 == -9:
+			pcell = 'AB1V-OVERDRIVE'
+			hourly_title = 'Hourly AB1V-Overdrive'
+
+
+		request.session["pcell"] = pcell
+		request.session["hourly_title"] = hourly_title
+
+
+
+		request.session["route_1"] = 'kiosk_hourly_entry'
+		return direction(request)
+
+		
+
+
 		
 	else:
 		form = kiosk_dispForm1()
@@ -1292,7 +1333,15 @@ def kiosk_sub_menu(request):
 		
 def kiosk_menu(request):
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
-	request.session["local_toggle"] = "/trakberry"
+	try:
+		local_switch = int(request.session["local_switch"])
+		if local_switch == 1:
+			request.session["local_toggle"] = ""
+		else:
+			request.session["local_toggle"] = "/trakberry"
+	except:
+		request.session["local_toggle"] = "/trakberry"
+
 	request.session["kiosk_menu_screen"] = 2
 	request.session["cycletime1"] = 0
 	request.session["cycletime2"] = 0
@@ -1306,7 +1355,8 @@ def kiosk_menu(request):
 		button_pressed =int(button_1.get("kiosk_button1"))
 		if button_pressed == -1:
 			try:
-				request.session["pcell"]
+				y = request.session["dddd"]
+				#request.session["pcell"]
 			except:
 				# Reroute to the submenu to pick the different cells
 				# request.session["route_1"] = 'kiosk_menu'
@@ -1404,8 +1454,8 @@ def kiosk_hourly_entry(request):
 
 		kiosk_hourly_pcell = request.session["pcell"]
 
-		if request.session["pcell"] == "AB1V-INPUT":
-			kiosk_hourly_pcell = request.POST.get("pcell")
+		#if request.session["pcell"] == "AB1V-INPUT":
+	#		kiosk_hourly_pcell = request.POST.get("pcell")
 
 		kiosk_hourly_date = request.POST.get("date_en")
 		kiosk_hourly_shift = request.POST.get("shift")
@@ -1428,13 +1478,12 @@ def kiosk_hourly_entry(request):
 		
 
 		sheet_id = 'kiosk'
-		try:
-			db, cur = db_open()
-			cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
-			db.commit()
-			db.close()
-		except:
-			dummy = 1
+
+		db, cur = db_open()
+		cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
+		db.commit()
+		db.close()
+
 	
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
 		if request.session["kiosk_menu_screen"] == 1:
