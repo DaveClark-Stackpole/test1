@@ -7,8 +7,10 @@ from django.http import HttpResponseRedirect
 import datetime 
 from views_db import db_open
 
-  
-  
+def vacation_1(i):
+	td = datetime.datetime.fromtimestamp(int(i)).strftime('%Y-%m-%d %H:%M:%S')
+	return td
+
 def back_db(request):
 	#db = MySQLdb.connect(host="10.4.1.245",user="dg417",passwd="dg",db='prodrptdb')
 	db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
@@ -224,7 +226,7 @@ def vacation_backup(request):
 	db, cursor = db_open()  
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation_backup""")
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_couldbe LIKE sc_production1""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS barcode LIKE sc_production1""")
 	#cursor.execute('''INSERT vacation_backup Select * From vacation''')
 
 	db.commit()

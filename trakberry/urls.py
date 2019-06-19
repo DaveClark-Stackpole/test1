@@ -107,6 +107,7 @@ from views4 import ios_test, IsDone, NotDone, target_fix1, medium_production
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
 from views_mod2 import hrly_display
+from views_barcode import barcode_check, barcode_input
 
 
 # ***********************************************************************************************************************************************************
@@ -423,6 +424,10 @@ urlpatterns = [
 
 	# **************  Mod2 Section ***************************************
 	url(r'^hrly_display/', hrly_display),
+
+	# *************  Barcode *********************************************
+	url(r'^barcode_input/', barcode_input),
+	url(r'^barcode_check/', barcode_check),
 
 	
 ]

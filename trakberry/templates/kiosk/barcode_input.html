@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- ********************************* BootStrap Local*******************************-->
+	<script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+	<!-- ***********************************************************************************-->
+{% block grid %}
+	<link rel="stylesheet" href="/static/style_1/grid_kiosk_main3.css">
+{% endblock %}
+
+
+
+
+<style>
+
+
+#full-screen-background-image {z-index: -999;min-height: 110%; min-width: 100%;width: 100%;height: 110%;position: fixed;top: 0;  left: 0;}
+	.banner2_bg{position:absolute;background-color: #000000;opacity: 0.8;filter:alpha(opacity=80);width:auto; height:auto;z-index:-440;	border-radius: 25px;;}
+
+
+</style>
+
+
+{% block content %}
+<meta http-equiv="refresh" content="240; url={{request.session.local_toggle}}/kiosk_menu" />
+<form action="" method="post">{% csrf_token %}
+
+<br><br>
+<input style="font-size:23px;width:550px;height:60px;text-align:center;" name="barcode" type="text"  autofocus>
+
+</form>
+
+
+
+
+{% endblock %}
