@@ -24,8 +24,9 @@ from views_db import db_open
 from views_mod1 import kiosk_lastpart_find
 from datetime import datetime
 import json
-
+ 
 def barcode_input(request):
+    #request.session["local_toggle"]="/trakberry"
     if request.POST:
         bc1 = request.POST.get("barcode")
         request.session["barcode"] = bc1
@@ -62,8 +63,12 @@ def barcode_check(request):
 
     cur.execute('''INSERT INTO barcode(asset_num,scrap) VALUES(%s,%s)''', (bar1,stamp))
     db.commit()
+    
+    request.session["bar1"] = bar1
 
 
     db.close()
+    return render(request,"barcode_ok.html")
+    
     request.session["route_1"] = 'barcode_input'
     return direction(request)

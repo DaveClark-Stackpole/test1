@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<body style="background-color:#b5dd94;">
 <head>
 
 	<!-- ********************************* BootStrap Local*******************************-->
@@ -12,7 +13,7 @@
 {% endblock %}
 
 
-
+ 
 
 <style>
 
@@ -25,15 +26,19 @@
 
 
 {% block content %}
-<meta http-equiv="refresh" content="240; url={{request.session.local_toggle}}/kiosk_menu" />
+
 <form action="" method="post">{% csrf_token %}
 
-<br><br>
-<input style="font-size:23px;width:550px;height:60px;text-align:center;" name="barcode" type="text"  autofocus>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input style="font-size:23px;width:900px;height:500px;text-align:center;" name="barcode" type="text"  autofocus/ >
 
 </form>
 
-
-
+<br><br><br><br>
+<br><br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 {% endblock %}
+
+</body>
+</head>
