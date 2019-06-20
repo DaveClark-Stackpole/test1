@@ -26,7 +26,7 @@ from datetime import datetime
 import json
  
 def barcode_input(request):
-    #request.session["local_toggle"]="/trakberry"
+    request.session["local_toggle"]="/trakberry"
     if request.POST:
         bc1 = request.POST.get("barcode")
         request.session["barcode"] = bc1
