@@ -40,7 +40,7 @@ def barcode_initial(request):
   skid = tmp2[0][3] 
   part = tmp2[0][4]
   request.session["barcode_skid"] = skid
-  request.session["barcode_part"] = part + 1
+  request.session["barcode_part"] = part 
 
   request.session["route_1"] = 'barcode_input'
   return direction(request)
@@ -58,7 +58,7 @@ def barcode_input(request):
 
     if request.POST:
         bc1 = request.POST.get("barcode")
-        request.session["barcode"] = bc1
+        request.session["barcode"] = int(bc1) 
         request.session["route_1"] = 'barcode_check'
         return direction(request)
     else:
