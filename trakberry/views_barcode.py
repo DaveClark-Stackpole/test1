@@ -91,11 +91,12 @@ def barcode_check(request):
       dummy = 1
 
     part = request.session["barcode_part"]
+    part = part + 1
     cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (bar1,stamp,part))
     db.commit()
     
     request.session["bar1"] = bar1
-    part = part + 1
+    
     request.session["barcode_part"] = part
 
     db.close()
