@@ -59,6 +59,7 @@ def barcode_input(request):
     if request.POST:
         bc1 = request.POST.get("barcode")
         request.session["barcode"] = bc1
+        request.session["barcode_part_number"] = right(bc1,4)
         request.session["route_1"] = 'barcode_check'
         return direction(request)
     else:
