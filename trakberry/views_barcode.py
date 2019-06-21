@@ -24,9 +24,38 @@ from views_db import db_open
 from views_mod1 import kiosk_lastpart_find
 from datetime import datetime
 import json
- 
+
+
+def barcode_initial(request):
+  db, cur = db_open()
+  sql = "SELECT max(scrap) FROM barcode"
+  cur.execute(sql)
+  tmp2 = cur.fetchall()
+  tmp3 = tmp2[0]
+
+  sql = "SELECT * from barcode where scrap = '%s'" %(tmp3[0])
+  cur.execute(sql)
+  tmp2 = cur.fetchall()
+  request.session["barcode1"] = tmp2[0][2]
+  skid = tmp2[0][3] 
+  part = tmp2[0][4]
+  request.session["barcode_skid"] = skid
+  request.session["barcode_part"] = part + 1
+
+  request.session["route_1"] = 'barcode_input'
+  return direction(request)
+
+
 def barcode_input(request):
     request.session["local_toggle"]="/trakberry"
+
+    part = request.session["barcode_part"]
+    db, cur = db_open()
+    sql = "SELECT * FROM barcode"
+    cur.execute(sql)
+    tmp2 = cur.fetchall()
+
+
     if request.POST:
         bc1 = request.POST.get("barcode")
         request.session["barcode"] = bc1
@@ -60,12 +89,13 @@ def barcode_check(request):
     except:
       dummy = 1
 
-
-    cur.execute('''INSERT INTO barcode(asset_num,scrap) VALUES(%s,%s)''', (bar1,stamp))
+    part = request.session["barcode_part"]
+    cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (bar1,stamp,part))
     db.commit()
     
     request.session["bar1"] = bar1
-
+    part = part + 1
+    request.session["barcode_part"] = part
 
     db.close()
     return render(request,"barcode_ok.html")

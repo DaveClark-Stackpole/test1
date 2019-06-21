@@ -89,16 +89,16 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #    }
 #}
 
-#DATABASES = {
- #   'default': {
- #       'ENGINE': 'django.db.backends.mysql',
-#		'NAME': 'prodrptdb',#
-#		'USER': 'root'
-#		'PASSWORD': 'password',
-#		'HOST': '127.0.0.1',
-#		'PORT': '',
- #   }
-#}
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+# 		'NAME': 'prodrptdb',
+# 		'USER': 'root',
+# 		'PASSWORD':'password',
+# 		'HOST': '127.0.0.1',
+# 		'PORT': '',
+#    }
+# }
 
 
 DATABASES = {
