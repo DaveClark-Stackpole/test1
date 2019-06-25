@@ -1,0 +1,72 @@
+<html>
+<head>
+
+<style>
+	
+		input:focus,
+		input.has-focus {
+   			 border: green;
+    		color: black:
+		}
+</style>
+
+<script>
+const isIos = () => !!window.navigator.userAgent.match(/iPad|iPhone/i)
+const hasInteracted = (() => {
+    let interacted = false
+    const onTouchStart = {
+        interacted = true
+        document.removeEventListener(onTouchStart)
+    }
+    document.addEventListener('touchstart', onTouchStart')
+    return () => interacted
+})()
+const FOCUS_TYPES = {
+    REAL: 'real',
+    FAKE: 'fake'
+}
+const getFocusType = () => (hasInteracted() || !isIos())
+    ? FOCUS_TYPES.REAL
+    : FOCUS_TYPES.FAKE
+const focus = (input) => {
+    switch getFocusType() {
+        case FOCUS_TYPES.REAL:
+            return input.focus()
+        case FOCUS_TYPES.FAKE:
+            input.classList.add('has-focus')
+            const onBlur = (input) => {
+                input.classList.remove('has-focus')
+                document.removeEventListener(onBlur)
+            }
+            input.addEventListener('blur', onBlur)
+            input.scrollIntoView()
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const autofocusedInput = Array.prototype.slice.call(
+            document.querySelectorAll('input')
+        ).filter((el) => el.hasAttribute('autofocus'))[0]
+    
+    focus(autofocusedInput)
+})
+</script>
+
+</head>
+<body>
+
+<form action="" method="post">{% csrf_token %}
+
+
+
+<input style="font-size:23px;width:100px;height:60px;"  name="var1" autofocus />
+
+	
+</form>
+
+
+
+
+
+
+</body>
+</html>

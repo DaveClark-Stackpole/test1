@@ -969,6 +969,7 @@ def kiosk_job_assign(request):
 
 
 	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
+	#sql = "SELECT asset FROM tkb_cycletime"
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	tmp2 = tmp
@@ -1333,6 +1334,7 @@ def kiosk_sub_menu(request):
 		
 def kiosk_menu(request):
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
+
 	try:
 		local_switch = int(request.session["local_switch"])
 		if local_switch == 1:
@@ -1341,6 +1343,10 @@ def kiosk_menu(request):
 			request.session["local_toggle"] = "/trakberry"
 	except:
 		request.session["local_toggle"] = "/trakberry"
+
+	#Make this /trakberry for server
+	request.session["local_toggle"] = "/trakberry"
+
 
 	request.session["kiosk_menu_screen"] = 2
 	request.session["cycletime1"] = 0

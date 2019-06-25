@@ -263,7 +263,47 @@ def IsDone(request):
 
 
 	return render(request, "kiosk/kiosk_test5.html",{'tmp':List})
+
+def multidrop(request):
+	db, cur = db_open()
+	sql = "SELECT asset FROM tkb_cycletime"
+	cur.execute(sql)
+	tmp = cur.fetchall()
+	tmp2 = tmp
+	db.close()
+	request.session["tmp2"] = tmp2
+	request.session["ttm"] = '''"BY": "Bankock",
+    "BD": "Bangladesh",'''
+	request.session["bobu"] = "BobsYourUncle"
+
+	if request.POST:
+		filter1 = request.POST.get("drop1")
+		request.session["filter1"] = filter1
+
+		return render(request, "mgmt_display_test2.html")
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
 	
+	return render(request, "mgmt_display_test.html",{'args':args})
+
+def scantest(request):
+	if request.POST:
+		filter1 = request.POST.get("var1")
+		request.session["filter1"] = filter1
+
+		return render(request, "kiosk/scantest.html")
+
+	else:
+		form = kiosk_dispForm3()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	
+	return render(request, "kiosk/scantestform.html",{'args':args})
 
 def target_fix1(request):
 
