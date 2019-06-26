@@ -18,12 +18,17 @@
         $('#drop1').multiselect();
     });
 </script>
-<select id="drop1" multiple="multiple">
+
+
+<form action="" method="post">{% csrf_token %}
+<select id="drop1" name="d1" multiple="multiple" type="file">
     {% for i in request.session.tmp2 %}
       <option value={{i.0}}>{{i.0}}</option>
     {% endfor %}
 </select>
-
+<!-- <input name="drop1" type="text"> -->
+<input type="submit" value="Enter" name="button1">
+ </form>
 <!-- multi-select-demo-->
 </body>
 </html>

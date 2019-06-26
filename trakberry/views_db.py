@@ -13,10 +13,11 @@ def db_open():
 
 	# I've set this so it should be correct
 	# Use this one for Server
-	db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
+	try:
+		db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
 	
-	## Use this one for Local
-	#db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
+	except:
+		db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
 
 	cursor = db.cursor()
 	return db, cursor

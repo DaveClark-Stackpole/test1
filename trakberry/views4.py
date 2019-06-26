@@ -276,9 +276,11 @@ def multidrop(request):
     "BD": "Bangladesh",'''
 	request.session["bobu"] = "BobsYourUncle"
 
-	if request.POST:
-		filter1 = request.POST.get("drop1")
+	#if request.POST:
+	if 'button1' in request.POST:
+		filter1 = str(request.POST.get("d1"))
 		request.session["filter1"] = filter1
+	
 
 		return render(request, "mgmt_display_test2.html")
 
