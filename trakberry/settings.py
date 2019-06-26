@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #}
 
 # try:
-#     DATABASES = {
+# DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 # 	    'NAME': 'prodrptdb',

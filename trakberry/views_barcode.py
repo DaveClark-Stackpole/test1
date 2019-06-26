@@ -103,14 +103,18 @@ def barcode_check(request):
      tmp3=tmp2[0]
      tmp4=tmp3[0]
      timestamp = tmp3[2]
+     dd = vacation_1(stamp)
      d = vacation_1(timestamp)
      request.session["alert_time"] = d
+     request.session["now_time"] = dd
      return render(request,"barcode_alert.html")
 
     except:
       dummy = 1
 
     part = request.session["barcode_part"]
+    if len(bar1) >29:
+      return render(request,"barcode_warning.html")
     part = part + 1
     cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (bar1,stamp,part))
     db.commit()
