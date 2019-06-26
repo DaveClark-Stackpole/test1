@@ -89,28 +89,28 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #    }
 #}
 
-try:
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-	    'NAME': 'prodrptdb',
-		'USER': 'root',
-		'PASSWORD':'password',
-		'HOST': '127.0.0.1',
-		'PORT': '',
-        }
-    }
+# try:
+#     DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+# 	    'NAME': 'prodrptdb',
+# 		'USER': 'root',
+# 		'PASSWORD':'password',
+# 		'HOST': '127.0.0.1',
+# 		'PORT': '',
+#         }
+#     }
 
-except:
-    DATABASES = {
+
+DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'prodrptdb',                      
         'USER': 'stuser',                      
         'HOST': '10.4.1.224', 
         'PASSWORD':'stp383', 
-        }
     }
+       }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
