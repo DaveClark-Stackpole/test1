@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from views_mod1 import find_current_date
 from views_test import layer_choice_init
 from trakberry.forms import login_Form, login_password_update_Form
@@ -317,7 +317,7 @@ def main_password_lost_email(request):
 	#return render(request,'login/done_email_password.html', {'user_name':user_name})
 
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	# Create the table if it does not exist
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
 	# Check password to match name.  If no record of name then divert to except and reroute to create new password
@@ -557,7 +557,7 @@ def main_logout(request):
 
 #  ******  Password Check Sub Module ***********
 def main_password_check(user_name,password,request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	# Create the table if it does not exist
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
 	# Check password to match name.  If no record of name then divert to except and reroute to create new password
@@ -592,7 +592,7 @@ def layered_audit_check(name):
 	current_date = find_current_date()
 	t = int(time.time())
 
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	try:
 		sql = "SELECT * FROM tkb_layered where Name = '%s'" %(name)
 		cursor.execute(sql)

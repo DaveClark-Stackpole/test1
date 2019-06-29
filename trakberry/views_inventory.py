@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from trakberry.forms import inventory_entry_Form, inventory_count_Form
-from views_db import db_open
+from views_db import db_open, db_set
 from views_mod1 import find_current_date
 from views_email import e_test
 from views_supervisor import supervisor_tech_call
@@ -42,7 +42,7 @@ def inventory_type_entry(request):
 		request.session['inventory_qty'] = qty
 
 
-		db, cur = db_open()
+		db, cur = db_set(request)
 		
 		try:
 			sql2 = "SELECT * from tkb_inventory_fixed WHERE Part = '%s' and Storage = '%s' and Customer = '%s'" % (part, storage,customer)
@@ -72,7 +72,7 @@ def inventory_type_entry(request):
 
 
 def inventory_fix(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * from tkb_inventory_fixed" 
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -131,7 +131,7 @@ def inventory_entry(request):
 			q = 0
 			
 		# Update Inventory
-		db, cur = db_open()
+		db, cur = db_set(request)
 		
 		
 		if final > 0:

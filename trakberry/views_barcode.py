@@ -20,14 +20,15 @@ from django.core.context_processors import csrf
 from views_routes import direction
 from time import mktime
 from datetime import datetime, date
-from views_db import db_open
+from views_db import db_open, db_set, db_set
 from views_mod1 import kiosk_lastpart_find
 from datetime import datetime
 import json
 
 
 def barcode_initial(request):
-  db, cur = db_open()
+  db_set(request)
+  db, cur = db_set(request)
   sql = "SELECT max(scrap) FROM barcode"
   cur.execute(sql)
   tmp2 = cur.fetchall()
@@ -48,10 +49,11 @@ def barcode_initial(request):
 
 
 def barcode_input(request):
-    request.session["local_toggle"]="/trakberry"
-
+    db, cur = db_set(request)
+    #request.session["local_toggle"]="/trakberry"
+  
     part = request.session["barcode_part"]
-    db, cur = db_open()
+    # db, cur = db_set(request)
     sql = "SELECT * FROM barcode"
     cur.execute(sql)
     tmp2 = cur.fetchall()
@@ -73,7 +75,7 @@ def barcode_input(request):
 def barcode_reset(request):
   b = 0
   a = '0'
-  db, cur = db_open()
+  db, cur = db_set(request)
 
   sql = "SELECT max(scrap) FROM barcode"
   cur.execute(sql)
@@ -93,7 +95,7 @@ def barcode_check(request):
     bar1 = request.session["barcode"]
     bar1=str(bar1)
     stamp = time.time()
-    db, cur = db_open()
+    db, cur = db_set(request)
  #   try:
     
     mql = "SELECT * FROM barcode WHERE asset_num = '%s'" %(bar1)
@@ -107,6 +109,7 @@ def barcode_check(request):
      d = vacation_1(timestamp)
      request.session["alert_time"] = d
      request.session["now_time"] = dd
+     request.session["diff_time"] = int(stamp - timestamp)
      return render(request,"barcode_alert.html")
 
     except:

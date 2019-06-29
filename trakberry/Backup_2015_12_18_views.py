@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from time import strftime
 from datetime import datetime
 import MySQLdb
@@ -173,7 +173,7 @@ def display2(request):
   #u = u - 28800
   
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   
   #sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d'" %(u,t)
@@ -581,7 +581,7 @@ def production_report(request):
 	end_tuple = time.localtime(end_stamp)	
 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	
 	for i in range(0, 4):
 	
@@ -700,7 +700,7 @@ def display_past(request):
   uu = 1444878000
   
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
 
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' AND part_timestamp < '%d'" %(u, uu)
  
@@ -954,7 +954,7 @@ def display_settime(request):
   #u = u - 28800
   # Select prodrptdb db 
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   
   #sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d'" %(u,t)
@@ -1237,7 +1237,7 @@ def display_time(request):
   #u = u - 28800
 
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   
   #sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d'" %(u,t)

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from views_vacation import vacation_set_current3
 from views_mod1 import find_current_date
 #from views2 import main_A
@@ -207,7 +207,7 @@ def layer_test(request):
 def layer_transfer_temp(request):
 
 	# backup layered audit temp Table
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	type_use = request.session["layer_type_use"]
 	
 	dql = ('DELETE FROM tkb_audits_temp WHERE Type="%s"' % (type_use))
@@ -244,7 +244,7 @@ def layer_entry(request):
 		request.session['layered_dep'] = pl
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO tkb_audits(Type,Part,Op,Department,Description) VALUES(%s,%s,%s,%s,%s)''', (dept,part,op,pl,desc))
 		db.commit()
 		db.close()
@@ -278,7 +278,7 @@ def layer_choice(request):
 		type_use = 'Production'
 	# ***********************************************************************
 	request.session["layer_type_use"] = type_use
-	db, cur = db_open()
+	db, cur = db_set(request)
 	
 	if layer_choice == 0:
 		sql1 = "SELECT MIN(Id) FROM tkb_audits_temp WHERE Type = '%s'" % (type_use) 
@@ -336,7 +336,7 @@ def layer_select(request):
 	# write selected layered audit info to table tkb_layered
 	
 	tm = int(time.time())
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql_1 = "Select * from tkb_audits_temp WHERE Id = '%s'" % (audit)
 	cur.execute(sql_1)
 	tmp = cur.fetchall()
@@ -426,7 +426,7 @@ def layer_retrieve(request,index):
 
 	# Retrieve the information for the layered audit required as per the link clicked
 	request.session['layer_test'] = index
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "Select * from tkb_layered WHERE Time_Stamp = '%s'" % (index)
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -475,7 +475,7 @@ def sup_mess(request):
 def create_scrap_table(request):
 	# Create a Testing Table
 	
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	cursor.execute("""DROP TABLE IF EXISTS data_scrap_production""")
 	cursor.execute("""CREATE TABLE IF NOT EXISTS data_scrap_production(Id INT PRIMARY KEY AUTO_INCREMENT,Date datetime, PartID CHAR(30), DeptID CHAR(30), MachineID CHAR(30), OperationID CHAR(30), Scrap INT(20), Production INT(20), Scrap_Cost Varchar(30), Scrap_ID INT(20))""")
@@ -488,7 +488,7 @@ def test_scrap_production(request):
 	# Test entries for date
 	current = vacation_set_current3()
 	
-	db, cursor = db_open() 
+	db, cursor = db_set(request) 
 	
 	sql = "SELECT * FROM sc_production1 where pdate >= '%s'" %(current)
 	cursor.execute(sql)
@@ -528,7 +528,7 @@ def test_scrap_production(request):
 	
 def test_scrap1(request):
 	
-	#db, cursor = db_open()
+	#db, cursor = db_set(request)
 #	sql = "SELECT MAX(Date) FROM vw_scraplist" 
 #	cursor.execute(sql)
 #	tmp = cursor.fetchall()

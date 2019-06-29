@@ -18,7 +18,7 @@ from smtplib import SMTP
 from time import mktime
 from datetime import datetime, date
 
-from views_db import db_open
+from views_db import db_open, db_set
 
 from django.core.context_processors import csrf
 
@@ -47,7 +47,7 @@ def hour_check(request):
 	if hour >= h and min > m:
 		ch = 1
 
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	try:
 		sql = "SELECT checking FROM tkb_email_conf where date='%s' and employee='%s'" %(current_date,t_name)
 		cursor.execute(sql)
@@ -117,7 +117,7 @@ def supervisor_display(request):
    
   # Select prodrptdb db 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 
 	#sqlA = "SELECT SUM(qty) FROM tkb_prodtrak where machine = '%s' AND time >= '%d'" %(machine_list[i], u)
 	  # Select the Qty of entries for selected machine table from the current shift only 
@@ -234,7 +234,7 @@ def supervisor_display(request):
 	except:
 		N = ''
 	R = 0
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	try:
 		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
 		cur.execute(sql)
@@ -274,7 +274,7 @@ def supervisor_display(request):
 
 def sup_message(request):	
 	A = 'Chris Strutton'
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_tech_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -289,7 +289,7 @@ def sup_message(request):
 
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
 
 		db.commit()
@@ -310,7 +310,7 @@ def sup_message_close(request):
 	request.session["refresh_sup"] = 0
 	I = request.session["message_id"]
 	C = 1
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
 	cur.execute(sql)
 	db.commit()
@@ -325,7 +325,7 @@ def sup_message_reply1(request):
 	request.session["refresh_sup"]=0
 	I = request.session["message_id"]
 	C = 1
-	db, cur = db_open()
+	db, cur = db_set(request)
 	
 
 	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
@@ -334,7 +334,7 @@ def sup_message_reply1(request):
 	return sup_message_reply2(request)
 	
 def sup_message_reply2(request):	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_tech_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -351,7 +351,7 @@ def sup_message_reply2(request):
 
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
 
 		db.commit()
@@ -436,7 +436,7 @@ def supervisor_down(request):
 		t = vacation_temp()
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO pr_downtime1(machinenum,problem,priority,whoisonit,called4helptime) VALUES(%s,%s,%s,%s,%s)''', (machinenum,problem,priority,whoisonit,t))
 		db.commit()
 		db.close()
@@ -470,7 +470,7 @@ def supervisor_down(request):
 def supervisor_edit(request):	
 	index = request.session["index"]
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	SQ_Sup = "SELECT * FROM pr_downtime1 where idnumber='%s'" %(index)
 	cursor.execute(SQ_Sup)
 	tmp = cursor.fetchall()
@@ -490,7 +490,7 @@ def supervisor_edit(request):
 		a = request.POST
 		b=int(a.get("one"))
 		
-		db, cursor = db_open()
+		db, cursor = db_set(request)
 		cur = db.cursor()
 		
 		if b==-3:
@@ -552,7 +552,7 @@ def sup_close(request):
 		index = request.session["index"]
 		t = vacation_temp()
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
 		cur.execute(sql)
 		db.commit()
@@ -709,7 +709,7 @@ def vacation_entry(request):
 	
 	#if day_st > day_fi:
 	#	day_fi_temp = 31
-	#	db, cur = db_open() 
+	#	db, cur = db_set(request) 
 	#	cur.execute('''INSERT INTO vacation(employee,shift,start,end,day_start,day_end,type) VALUES(%s,%s,%s,%s,%s,%s,%s)''', (employee,shift,st,fi,day_st,day_fi_temp,ty))
 	#	db.commit()
 	#	db.close()
@@ -717,7 +717,7 @@ def vacation_entry(request):
 	
 	
 		
-	db, cur = db_open() 	
+	db, cur = db_set(request) 	
 	cur.execute('''INSERT INTO vacation(employee,shift,start,end,day_start,day_end,type,month_start,month_end) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (employee,shift,st,fi,day_st,day_fi,ty,mnt_start,mnt_end))
 	db.commit()
 	
@@ -752,7 +752,7 @@ def vacation_entry(request):
 
 
 def vacation_month_fix(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	
 	
 	a = 0
@@ -920,7 +920,7 @@ def vacation_display(request):
 		request.session["shift1"] = "All"
 			
 	# Select prodrptdb db located in views_db
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
@@ -1181,7 +1181,7 @@ def vacation_display_increment(request):
 	
 
 	# Select prodrptdb db located in views_db
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	if shift1 == "All":
 		#sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 		sql = "SELECT * FROM vacation where start between '%s' and '%s'" %(current_first, current_last)
@@ -1425,7 +1425,7 @@ def vacation_display_decrement(request):
 
 	mm = int(month_st)
 	# Select prodrptdb db located in views_db
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 	else:		
@@ -1620,7 +1620,7 @@ def BB_vacation_display_decrement(request):
 		request.session["current_day"] = 99	
 	
 	# Select prodrptdb db located in views_db
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	if shift1 == "All":
 		sql = "SELECT * FROM vacation where start >= '%s' and start <= '%s'" %(current_first, current_last)
 	else:
@@ -1707,7 +1707,7 @@ def BB_vacation_display_decrement(request):
 def vacation_edit(request, index):	
 	tmp = index
 	request.session["index"] = index
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	try:
 		sql = "SELECT * FROM vacation where id_number = '%s'" %(tmp)
 		cur.execute(sql)
@@ -1722,7 +1722,7 @@ def vacation_edit(request, index):
 
 def vacation_delete(request):
 	index = request.session["index"]
-	db, cur = db_open()
+	db, cur = db_set(request)
 	dql = ('DELETE FROM vacation WHERE id_number="%s"' % (index))
 	cur.execute(dql)
 	db.commit()
@@ -1917,7 +1917,7 @@ def email_hour_check():
 	if hour >= h:
 		ch = 1
 
-		db, cursor = db_open()  
+		db, cursor = db_set(request)  
 		try:
 			sql = "SELECT sent FROM tkb_email_conf where date='%s'" %(current_date)
 			cursor.execute(sql)
@@ -1974,7 +1974,7 @@ def tech_report_email():
 	m_ctr = 0
 	subjectA = []
 	
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	tql = "SELECT * FROM tkb_techs"
 	cursor.execute(tql)
 	tmpA = cursor.fetchall()

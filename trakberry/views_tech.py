@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from trakberry.forms import tech_closeForm, tech_loginForm, tech_searchForm, tech_message_Form
-from views_db import db_open
+from views_db import db_open, db_set
 from views_mod1 import find_current_date
 from views_email import e_test
 from views_supervisor import supervisor_tech_call
@@ -42,7 +42,7 @@ def hour_check():
 	if hour >= h and min > m:
 		ch = 1
 
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	try:
 		sql = "SELECT checking FROM tkb_email_conf where date='%s'" %(current_date)
 		cursor.execute(sql)
@@ -167,7 +167,7 @@ def tech(request):
 	tch = []
 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()   
+	db, cursor = db_set(request)   
 
 	#sqlA = "SELECT SUM(qty) FROM tkb_prodtrak where machine = '%s' AND time >= '%d'" %(machine_list[i], u)
 	  # Select the Qty of entries for selected machine table from the current shift only 
@@ -321,7 +321,7 @@ def tech(request):
   # *********************************************************************************************************
 	N = request.session["login_tech"]
 	R = 0
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	try:
 		sql = "SELECT * FROM tkb_message WHERE Receiver_Name = '%s' and Complete = '%s'" %(N,R)	
 		cur.execute(sql)
@@ -359,7 +359,7 @@ def tech_message_close(request):
 	request.session["refresh_tech"] = 0
 	I = request.session["message_id"]
 	C = 1
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
 	cur.execute(sql)
 	db.commit()
@@ -369,7 +369,7 @@ def tech_message_reply1(request):
 	request.session["refresh_tech"]=0
 	I = request.session["message_id"]
 	C = 1
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = ('update tkb_message SET Complete="%s" WHERE idnumber ="%s"' % (C,I))
 	cur.execute(sql)
 	db.commit()
@@ -381,7 +381,7 @@ def job_call(request, index):
 	tec = request.session["login_tech"]
 
 	# Select prodrptdb db located in views_db
-	db, cur = db_open()  
+	db, cur = db_set(request)  
 	sql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (tec,index))
 	cur.execute(sql)
 	db.commit()
@@ -393,7 +393,7 @@ def job_close(request, index):
 	
 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 		
 
 	sql = "SELECT whoisonit FROM pr_downtime1 where idnumber='%s'" %(index)
@@ -438,14 +438,14 @@ def job_close(request, index):
 		
 
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 
 		sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
 		cur.execute(sql)
 		db.commit()
 		db.close()
 		
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 		tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
 		cur.execute(tql)
 		db.commit()
@@ -485,7 +485,7 @@ def tech_logout(request):
 	
 def job_pass(request, index):	
 	
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	sql = "SELECT whoisonit FROM pr_downtime1 where idnumber='%s'" %(index)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -506,14 +506,14 @@ def job_pass(request, index):
 		t = datetime.datetime.now()
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 
 		sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
 		cur.execute(sql)
 		db.commit()
 		db.close()
 		
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 		tql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (tp,index))
 		cur.execute(tql)
 		db.commit()
@@ -532,7 +532,7 @@ def job_pass(request, index):
 def tech_recent(request):
 
 	
-	db, cursor = db_open()  		
+	db, cursor = db_set(request)  		
 	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 100" 
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -543,7 +543,7 @@ def tech_recent(request):
 	return render(request,"tech_search_display.html",{'machine':tmp})
 	
 def tech_recent2(request):
-	db, cursor = db_open()  		
+	db, cursor = db_set(request)  		
 	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 100" 
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -563,7 +563,7 @@ def tech_history(request):
         			
 		machine = request.POST.get("machine")
 		request.session["machine_search"] = machine
-		db, cur = db_open() 
+		db, cur = db_set(request) 
 		if len(machine) == 3:
 			sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
 		else:
@@ -586,7 +586,7 @@ def tech_history2(request):
 	if request.POST:     			
 		machine = request.POST.get("machine")
 		request.session["machine_search"] = machine
-		db, cur = db_open() 
+		db, cur = db_set(request) 
 		if len(machine) == 3:
 			sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
 		else:
@@ -613,7 +613,7 @@ def tech_tech_call(request):
 
 def tech_message(request):	
 	A = 'Chris Strutton'
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_tech_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -630,7 +630,7 @@ def tech_message(request):
 
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
 
 		db.commit()
@@ -648,7 +648,7 @@ def tech_message(request):
 	return render(request,'tech_message_form.html', {'List':tmp,'A':A,'args':args})	
 
 def tech_message_reply2(request):	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_tech_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -665,7 +665,7 @@ def tech_message_reply2(request):
 
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO tkb_message(Sender_Name,Receiver_Name,Info) VALUES(%s,%s,%s)''', (a,b,c))
 
 		db.commit()
@@ -706,7 +706,7 @@ def email_hour_check(t_name):
 	if hour >= h:
 		ch = 1
 
-		db, cursor = db_open()  
+		db, cursor = db_set(request)  
 		try:
 			sql = "SELECT sent FROM tkb_email_conf where date='%s' and employee='%s'" %(current_date,t_name)
 			cursor.execute(sql)
@@ -744,7 +744,7 @@ def tech_report_email(name):
 	m_ctr = 0
 	subjectA = []
 	
-	db, cursor = db_open()  		
+	db, cursor = db_set(request)  		
 	sql = "SELECT * FROM pr_downtime1 WHERE whoisonit = '%s' ORDER BY called4helptime DESC limit 60" %(name)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -832,7 +832,7 @@ def tech_name_update(request):
 	tech.append('Phuc Bui')
 
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	for x in tech:
 		cur.execute('''INSERT INTO tkb_techs(tech) VALUES(%s)''', (x))
 		db.commit()

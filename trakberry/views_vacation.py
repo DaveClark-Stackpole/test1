@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 import datetime 
-from views_db import db_open
+from views_db import db_open, db_set
 
 def vacation_1(i):
 	td = datetime.datetime.fromtimestamp(int(i)).strftime('%Y-%m-%d %H:%M:%S')
@@ -223,7 +223,7 @@ def vacation_set_current4(t):
 def vacation_backup(request):
 
 	# backup Vacation Table
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation_backup""")
 	cursor.execute("""CREATE TABLE IF NOT EXISTS barcode LIKE sc_production1""")
@@ -236,7 +236,7 @@ def vacation_backup(request):
 def vacation_rebuild(request):
 
 	# backup Vacation Table
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation_backup2""")
 	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_backup2 LIKE vacation_backup""")
@@ -249,7 +249,7 @@ def vacation_rebuild(request):
 def vacation_restore(request):
 
 	# backup Vacation Table
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation""")
 	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation LIKE vacation_backup""")
@@ -262,7 +262,7 @@ def vacation_restore(request):
 def vacation_purge(request):
 
 	# distinquish vacation entries that have different months
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation_purge""")
 	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_purge LIKE vacation_backup2""")
@@ -277,7 +277,7 @@ def vacation_purge(request):
 def vacation_purge_delete(request):
 
 	# delete all entries with wrap dates
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	#dql = ('DELETE FROM vacation WHERE month_start != month_end ' )
 	#cursor.execute(dql)
 	#db.commit()
@@ -288,7 +288,7 @@ def vacation_purge_delete(request):
 def message_create(request):
 
 	# create Message Table
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 #	cursor.execute("""DROP TABLE IF EXISTS tkb_inventory_fixed""")
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_inventory_fixed LIKE tkb_jobs_test""")

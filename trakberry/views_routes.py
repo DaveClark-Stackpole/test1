@@ -9,7 +9,7 @@ import smtplib
 from smtplib import SMTP
 from django.core.context_processors import csrf
 from datetime import datetime, date
-from views_db import db_open
+from views_db import db_open, db_set
 
 
 def direction(request):

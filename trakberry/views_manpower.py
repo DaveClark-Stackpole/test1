@@ -18,11 +18,11 @@ from django.core.context_processors import csrf
 from views_routes import direction
 from time import mktime
 from datetime import datetime, date
-from views_db import db_open
+from views_db import db_open, db_set
 
 def manpower_layout(request):
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	TimeOut = -1
 	part = '50-9341'
 	sql = "SELECT DISTINCT asset_num FROM sc_production1 WHERE partno = '%s'" %(part)

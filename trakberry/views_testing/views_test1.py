@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from views_global_mods import machine_rates, Metric_OEE
 
 from time import strftime
@@ -12,7 +12,7 @@ import time
 
 	  
 def fix_time(request):
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	a = 2268996
 	b = 2287243
 	data = []

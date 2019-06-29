@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views_vacation import vacation_set_current2, vacation_temp
 from views_mod1 import time_output
-from views_db import db_open
+from views_db import db_open, db_set
 from forms import toggletest_Form, views_scheduler_selectionForm
 from trakberry.forms import emp_training_form, emp_info_form, job_info_form
 import MySQLdb
@@ -118,7 +118,7 @@ def Assign(E_Working,N_Working, A_Name, A_Job, Name, Job):
 # ====================================================================================================
 	
 def current_schedule(request):
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	sql = "SELECT * FROM tkb_jobs ORDER BY %s %s, %s %s" %('Description', 'ASC', 'Job_Name','ASC')
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -144,7 +144,7 @@ def rotation_info_display(request):
 		request.session["position"] = 'CNC'
 	position = request.session["position"]
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	curr_shift = request.session["matrix_shift"]
 	sql = "SELECT * FROM tkb_employee_matrix WHERE Shift = '%s' and Position = '%s' ORDER BY %s %s , %s %s" %(curr_shift,position,'Employee', 'ASC','Job','ASC')
 	cur.execute(sql)
@@ -270,7 +270,7 @@ def rotation_info_reload(request):
 def schedule_set(request):
 	current_first = vacation_set_current2()
 	request.session["current_first"] = current_first
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_jobs ORDER BY  %s %s, %s %s" %('Description','ASC','Job_Name','ASC')
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -290,7 +290,7 @@ def schedule_init(request):
 	except:
 		shift = request.session["shift_priority"]
 		
-	db, cur = db_open()	
+	db, cur = db_set(request)	
 	aql = "SELECT COUNT(*) from tkb_employee_matrix WHERE Shift = '%s' and Rotation = '%s'" %(shift,r)
 	cur.execute(aql)
 	tmp2 = cur.fetchall()
@@ -341,7 +341,7 @@ def schedule_set2(request):
 		shift = 'Cont A Nights CSD 2'
 		request.session["matrix_shift"] = shift
 		
-	db, cur = db_open()
+	db, cur = db_set(request)
 	
 	employee = '---'
 	final = 0
@@ -415,7 +415,7 @@ def schedule_set2(request):
 	return schedule_set3(request)
 
 def schedule_set2b(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	selection = 1
 	a = '6L Output'
 	b = 'Op 20 (Offline)'
@@ -449,7 +449,7 @@ def schedule_set3(request):
 		shift = 'Cont A Nights CSD 2'
 		request.session["matrix_shift"] = shift
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	Bsql = "SELECT Description, count(*) as total from tkb_schedule where  Shift='%s'  and Finalize != '%s' GROUP by Description ORDER BY %s %s" % (shift,finalize,'Description','ASC')
 	cur.execute(Bsql)
 	bmp = cur.fetchall()
@@ -583,7 +583,7 @@ def schedule_set4(request,list):
 			dindex = request.POST.get("dindex")
 			return schedule_delete(request,dindex)
 	
-#		db, cur = db_open()
+#		db, cur = db_set(request)
 #		for x in list:
 			tn.append(x[0])
 #			if request.POST.get(str(x[0])):
@@ -620,7 +620,7 @@ def schedule_set4(request,list):
 		
 		
 		
-		db, cur = db_open()
+		db, cur = db_set(request)
 		dt = request.session["date_curr"]
 		csql = "SELECT count(*) as total from tkb_schedule where  Shift='%s'  and Date = '%s'" % (shift,dt)
 		cur.execute(csql)
@@ -681,7 +681,7 @@ def schedule_qty(shift,position):
 	selection = 1
 	finalize = 1
 	v = 0
-	db, cur = db_open()
+	db, cur = db_set(request)
 	JCsql = "SELECT count(*) from tkb_schedule where  Shift='%s' and Position='%s' and Selection='%s' and Finalize !='%s'" % (shift,position,selection,finalize)
 	cur.execute(JCsql)
 	tmp = cur.fetchall()	
@@ -710,7 +710,7 @@ def schedule_set5(request,list):
 	rv = 0
 	
 		
-	db, cur = db_open()
+	db, cur = db_set(request)
 	try:
 		shift = request.session["matrix_shift"]
 	except:
@@ -1286,7 +1286,7 @@ def schedule_set5(request,list):
 		e_dash = '---'
 		D=[]
 		J=[]
-		db, cur = db_open()
+		db, cur = db_set(request)
 		for x in listT:
 			ctr = ctr + 1
 			jx = int(x[1]) # ID for the Job assigned
@@ -1411,7 +1411,7 @@ def join_query(emp,shift):
 	x = 1
 	final = 1
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	#sql = "SELECT Description,Job_Name from tkb_schedule where Selection ='%s'" % (x)
 	#sql = "SELECT tkb_schedule.Job_Name, tkb_schedule.Description from tkb_schedule LEFT JOIN tkb_employee_matrix ON tkb_schedule.Selection ='%s' AND tkb_employee_matrix.Rotation = '%s'"%(x,x)
 	sql1 = "SELECT Job_Name, Description from tkb_schedule WHERE Selection ='%s' and Finalize != '%s'"%(x,final)
@@ -1472,7 +1472,7 @@ def schedule_add(request,index):
 		zh = int(zh)
 		zh = zh + 1
 		request.session["route"] = zh
-		db, cur = db_open()
+		db, cur = db_set(request)
 		sql = "SELECT * from tkb_schedule where  Id='%s'" % (index)
 		cur.execute(sql)
 		tmp2 = cur.fetchall()
@@ -1519,7 +1519,7 @@ def schedule_delete(request,index):
 	aj = request.session["job_n"]
 	aj = aj - 1 
 	request.session["job_n"] = aj
-	db, cur = db_open()
+	db, cur = db_set(request)
 
 	dql = ('DELETE FROM tkb_schedule WHERE Id="%s"' % (index))
 	cur.execute(dql)
@@ -1545,7 +1545,7 @@ def schedule_finalize(request):
 
 
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql1 = ('update tkb_schedule SET Date = "%s", Finalize="%s" WHERE Shift ="%s" and Position ="%s" and Finalize != "%s" and Employee != "%s"' % (i,final,shift,position,final,employee))
 	cur.execute(sql1)
 	db.commit()
@@ -1609,7 +1609,7 @@ def schedule_finalize(request):
 	
 # Clears tkb_employee_temp table and tkb_schedule table
 def schedule_reset_data(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql1 = "DELETE FROM tkb_schedule"
 	cur.execute(sql1)
 	db.commit()
@@ -1628,7 +1628,7 @@ def schedule_redisplay1(request):
 	
 # Use this module to Automaticlly force all trained to be clicked for rotation
 def schedule_rotation_start(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	shift = 'Day CSD 2'
 	position = 'Production'
 	ct = 1

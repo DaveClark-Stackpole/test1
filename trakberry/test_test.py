@@ -27,7 +27,7 @@ def db_open():
 	# THEN 
 def start(request):
 
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   cursor.execute("""DROP TABLE IF EXISTS pr_downtime1""")
   cursor.execute("""CREATE TABLE IF NOT EXISTS pr_downtime1(Id INT PRIMARY KEY AUTO_INCREMENT,mid INT(10), machinenum CHAR(30), problem CHAR(30), priority CHAR(30), whoisonit CHAR(30), called4helptime DATETIME DEFAULT NULL)""")
   db.commit()

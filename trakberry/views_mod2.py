@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from views_routes import direction
 from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm,login_Form
 import MySQLdb
@@ -36,7 +36,7 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
 
     current_first, shift1, shift2, shift3, hour_curr  = vacation_set_current7()
 
-    db, cur = db_open()  
+    db, cur = db_set(request)  
     s1 = "SELECT p_cell FROM sc_prod_hr_target"  # Set the p_cell value we'll use to iterate through for each cell
     cur.execute(s1)
     tmp = cur.fetchall()

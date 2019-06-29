@@ -7,7 +7,7 @@ from views_global_mods import machine_rates, Metric_OEE
 import MySQLdb
 import time
 
-from views_db import db_open
+from views_db import db_open, db_set
 
 def fup(x):
 	return x[2]
@@ -81,7 +81,7 @@ def production_report_date(request):
 	if yy_now < yy:
 		yy = yy_now
 		
-	db, cursor = db_open()	
+	db, cursor = db_set(request)	
 	
 	stemp = temp
 	stemp = start_date
@@ -264,7 +264,7 @@ def production_report_date_2(request):
 	if yy_now < yy:
 		yy = yy_now
 		
-	db, cursor = db_open()	
+	db, cursor = db_set(request)	
 	
 	stemp = temp
 	stemp = start_date
@@ -415,7 +415,7 @@ def production_report_date_B(request):
 
 	
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	ctr = 0
 	ctr2 = 0
 	# Loop to respective number of machines, this will be tabled later on
@@ -491,7 +491,7 @@ def production_report(request):
 	end_stamp = int(time.mktime(temp.timetuple()))
 	end_tuple = time.localtime(end_stamp)	
 
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	cursor = db.cursor()
 	
 	for i in range(0, 4):

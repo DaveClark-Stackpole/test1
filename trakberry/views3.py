@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from trakberry.forms import login_Form, login_password_update_Form
 from datetime import datetime
 
@@ -115,7 +115,7 @@ def excel_test(request):
 #	Select today as the date to put in for entry
 	current_first = vacation_set_current4(dt)
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 #  Below Section will insert a as a new entry
 # It uses Try and Except to see if one for that date exists
 
@@ -226,7 +226,7 @@ def excel_test(request):
 def inventory_initial():
 
 	# create inventory table if one doesn't exist
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 #	Use below line to recreate the table format
 	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
@@ -239,7 +239,7 @@ def inventory_initial():
 def manpower_initial():
 
 	# create inventory table if one doesn't exist
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 #	Use below line to recreate the table format
 	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
@@ -273,7 +273,7 @@ def manpower_update(request):
 				b[jj].append(y)
 				jj = jj + 1
 	manpower_initial()   # Initialize the Manpower list
-	db, cur = db_open()
+	db, cur = db_set(request)
 	x = 1
 	for i in range(1,jj):
 		y = str(a[i][0])

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from views_routes import direction
 from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm,login_Form
 import MySQLdb
@@ -22,7 +22,7 @@ def find_current_date():
 def table_copy(request):
 
 	# backup Vacation Table
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_employee_temp LIKE tkb_employee""")
 
@@ -38,7 +38,7 @@ def time_output():
 
 def kiosk_lastpart_find(asset):
 	try:
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 		a1sql = "SELECT MAX(id)  FROM sc_production1 WHERE asset_num = '%s'" %(asset) 
 		cur.execute(a1sql)
 		tp3 = cur.fetchall()
@@ -82,7 +82,7 @@ def mgmt_display(request):
 	cctr = int(request.session['ctr'])
 
 #	except:
-#		db, cur = db_open()
+#		db, cur = db_set(request)
 #		s3 = 'SELECT MAX('+id_name+') FROM '+request.session["mgmt_table_name"]
 #		cur.execute(s3)
 #		tmp3_1 = cur.fetchall()
@@ -111,7 +111,7 @@ def mgmt_display(request):
 
 #	Below Error check for end of or start of table.  Refresh to start if it is.
 	try:
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute(s1)
 		tmp = cur.fetchall()
 		tmp1=tmp[0]
@@ -173,7 +173,7 @@ def mgmt_display_edit(request,index):
 	update_list = ''
 	ctr = 0
 	tmp_index = index
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	sq1 = request.session["mgmt_table_call"] + "  where id = '%s'" %(tmp_index)
 	cur.execute(sq1)
 	tmp = cur.fetchall()
@@ -212,7 +212,7 @@ def mgmt_display_edit(request,index):
 		# Brilliant recursive algorithm to update known table with known variables
 		tb1 = request.session["mgmt_table_name"]
 		i1 = index
-		db, cur = db_open()       # Open DB
+		db, cur = db_set(request)       # Open DB
 		for x in request.session["table_variables"]:  # column names
 			#  x ==>  name of column
 			#  a1[ctr] ==> value of column
@@ -256,7 +256,7 @@ def mgmt_display_insert(request,index):
 	update_list = ''
 	ctr = 0
 	tmp_index = index
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	sq1 = request.session["mgmt_table_call"] + "  where id = '%s'" %(tmp_index)
 	cur.execute(sq1)
 	tmp = cur.fetchall()
@@ -295,7 +295,7 @@ def mgmt_display_insert(request,index):
 		# Brilliant recursive algorithm to update known table with known variables
 		tb1 = request.session["mgmt_table_name"]
 		i1 = index
-		db, cur = db_open()       # Open DB
+		db, cur = db_set(request)       # Open DB
 		for x in request.session["table_variables"]:  # column names
 			#  x ==>  name of column
 			#  a1[ctr] ==> value of column

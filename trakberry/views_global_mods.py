@@ -6,7 +6,7 @@ from datetime import datetime
 import MySQLdb
 import time
 
-from views_db import db_open
+from views_db import db_open, db_set
 
 def machine_rates(part,machine):
 

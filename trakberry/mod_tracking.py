@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from views import display, test, display_time
-from views_db import db_open
+from views_db import db_open, db_set
 from views_global_mods import machine_rates
 from views_reports import production_report, production_report_date
 from trakberry.forms import part_number, report_dateForm
@@ -57,7 +57,7 @@ def edit_part(request):
 		request.session["prt"] = prt	
 		t = int(time.time())
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		sql =( 'insert into tkb_prodtrak(pi_id,machine,part_timestamp,part_number) values("%s","%s","%s","%s")' % (p,mc,t,prt) )
 		
 		cur.execute(sql)
@@ -201,7 +201,7 @@ def graph_gf6(request, index):
 	
 	u = t - (((cur_hour-shift_start)*60*60)+(tm[4]*60)+tm[5])
 
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d' and machine = '%s'" %(u,t,m)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()	
@@ -296,7 +296,7 @@ def graph_gf6_report(request,index):
 	u = int(start_stamp) + int(u_adj)
 	t = int(start_stamp) + int(t_adj)
 	
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d' and machine = '%s'" %(u,t,m)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()	

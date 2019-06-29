@@ -79,7 +79,7 @@ def display_time(request):
   #u = u - 28800
 
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   
   #sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d'" %(u,t)

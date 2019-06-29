@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from time import strftime
 
-from views_db import db_open
+from views_db import db_open, db_set
 from datetime import datetime
 import MySQLdb
 import time
@@ -58,7 +58,7 @@ def transfer(request):
 
   u = 1447837118
 
-  db, cursor = db_open()
+  db, cursor = db_set(request)
 
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   cursor.execute(sql)

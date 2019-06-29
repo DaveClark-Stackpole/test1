@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 import MySQLdb
 import time
 
@@ -23,7 +23,7 @@ def machinery(request):
    
   # Select prodrptdb db 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 
 	#sqlA = "SELECT SUM(qty) FROM tkb_prodtrak where machine = '%s' AND time >= '%d'" %(machine_list[i], u)
 	  # Select the Qty of entries for selected machine table from the current shift only 

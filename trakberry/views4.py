@@ -19,13 +19,13 @@ from django.core.context_processors import csrf
 from views_routes import direction
 from time import mktime
 from datetime import datetime, date
-from views_db import db_open
+from views_db import db_open, db_set
 from datetime import datetime
 
 
 def ios_test(request):
 	# Creates a new backup table of tkb_cycletimes
-	db, cur = db_open()  
+	db, cur = db_set(request)  
 	s1 = "SELECT p_cell FROM sc_prod_hr_target"
 	cur.execute(s1)
 	tmp = cur.fetchall()
@@ -39,7 +39,7 @@ def ios_test2(request):
 	l = 1
 	len_part = 5
 	id_start = 237056
-	db, cur = db_open()
+	db, cur = db_set(request)
 
 	sql = "SELECT DISTINCT partno FROM sc_production1 where LENGTH(partno) > '%d' and id > '%d' ORDER BY %s %s" %(len_part,id_start,'partno','ASC')
 
@@ -61,7 +61,7 @@ def ios_test1(request):
 	lft = 'OP'
 	shf = '11pm-7am'
 	dte = []
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT DISTINCT comments FROM sc_production1 where partno = '%s' and pdate  = '%s' and left(machine,2) = '%s' and shift  = '%s' " %(po,pd,lft,shf)
 #	sql = "SELECT DISTINCT asset_num, machine, partno FROM sc_production1  where LENGTH(asset_num) >'%d' and LENGTH(machine) >'%d' ORDER BY %s %s,%s %s" %(l,l,'asset_num','ASC','id','DESC')
 	cur.execute(sql)
@@ -103,7 +103,7 @@ def NotDone(request):
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	s1ql = "SELECT DISTINCT asset FROM tkb_cycletime"
 	cur.execute(s1ql)
 	tmp1 = cur.fetchall()
@@ -145,7 +145,7 @@ def median(lst):
 		return sum(sorted(lst)[n//2-1:n//2+1])/2.0
 
 def medium_production2(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 
 	asset1 = "683"
 	tuple1 = ['' for x in range(0)]
@@ -165,7 +165,7 @@ def medium_production2(request):
 	return render(request, "kiosk/kiosk_test7.html",{'tmp':lst})
 	
 def medium_production(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "Select * From tkb_couldbe"
 	cur.execute(sql)
 	tmp4 = cur.fetchall()
@@ -217,7 +217,7 @@ def IsDone(request):
 
 	yy = request.session["ymym"]
 #	cql = ('update role SET name="%s" WHERE Id="%s"' %(name1,id1))
-	db, cur = db_open()
+	db, cur = db_set(request)
 	cur.execute(dql)
 	db.commit()
 	db.close()
@@ -233,7 +233,7 @@ def IsDone(request):
 	job_missed = ['' for z in range(0)]
 	part_missed = ['' for z in range(0)]
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	s1ql = "SELECT DISTINCT asset FROM tkb_cycletime"
 	cur.execute(s1ql)
 	tmp1 = cur.fetchall()
@@ -265,7 +265,7 @@ def IsDone(request):
 	return render(request, "kiosk/kiosk_test5.html",{'tmp':List})
 
 def multidrop(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT asset FROM tkb_cycletime"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -309,7 +309,7 @@ def scantest(request):
 
 def target_fix1(request):
 
-	db, cur = db_open()  
+	db, cur = db_set(request)  
 	pr = '27'
 	pid = 450277
 

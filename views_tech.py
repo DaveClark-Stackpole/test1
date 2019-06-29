@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from trakberry.forms import tech_closeForm, tech_loginForm, tech_searchForm
-from views_db import db_open
+from views_db import db_open, db_set
 from views_supervisor import supervisor_tech_call
 import MySQLdb
 import time
@@ -45,7 +45,7 @@ def tech(request):
 	tch = []
 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()   
+	db, cursor = db_set(request)   
 
 	#sqlA = "SELECT SUM(qty) FROM tkb_prodtrak where machine = '%s' AND time >= '%d'" %(machine_list[i], u)
 	  # Select the Qty of entries for selected machine table from the current shift only 
@@ -162,7 +162,7 @@ def job_call(request, index):
 	tec = request.session["login_tech"]
 
 	# Select prodrptdb db located in views_db
-	db, cur = db_open()  
+	db, cur = db_set(request)  
 	sql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (tec,index))
 	cur.execute(sql)
 	db.commit()
@@ -174,7 +174,7 @@ def job_close(request, index):
 	
 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 		
 
 	sql = "SELECT whoisonit FROM pr_downtime1 where idnumber='%s'" %(index)
@@ -210,14 +210,14 @@ def job_close(request, index):
 		
 
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 
 		sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
 		cur.execute(sql)
 		db.commit()
 		db.close()
 		
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 		tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
 		cur.execute(tql)
 		db.commit()
@@ -256,7 +256,7 @@ def tech_logout(request):
 	
 def job_pass(request, index):	
 	
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	sql = "SELECT whoisonit FROM pr_downtime1 where idnumber='%s'" %(index)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -277,14 +277,14 @@ def job_pass(request, index):
 		t = datetime.datetime.now()
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 
 		sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
 		cur.execute(sql)
 		db.commit()
 		db.close()
 		
-		db, cur = db_open()  
+		db, cur = db_set(request)  
 		tql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (tp,index))
 		cur.execute(tql)
 		db.commit()
@@ -303,7 +303,7 @@ def job_pass(request, index):
 def tech_recent(request):
 
 	
-	db, cursor = db_open()  		
+	db, cursor = db_set(request)  		
 	sql = "SELECT * FROM pr_downtime1 ORDER BY called4helptime DESC limit 60" 
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -323,7 +323,7 @@ def tech_history(request):
         			
 		machine = request.POST.get("machine")
 		request.session["machine_search"] = machine
-		db, cur = db_open()  		
+		db, cur = db_set(request)  		
 		sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
 		cur.execute(sql)
 		tmp = cur.fetchall()

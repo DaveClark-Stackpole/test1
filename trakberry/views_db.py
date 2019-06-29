@@ -10,18 +10,42 @@ import MySQLdb
 
 # Methods for opening database for all and returning db and cur
 def db_open():
+	# Will try and connect to the PMDS Server first and test it but if it doesn't work will do local
+	try:
+		db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
+		cursor = db.cursor()
+		sql = "SELECT * from testtest" 
+  		cursor.execute(sql)
+  		tmp2 = cursor.fetchall()
+		return db, cursor
+	except:
+		db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
+		cursor = db.cursor()
+		sql = "SELECT * from testtest" 
+  		cursor.execute(sql)
+  		tmp2 = cursor.fetchall()
+		return db, cursor
 
-	# I've set this so it should be correct
-	# Use this one for Server
+def db_set(request):
+	try:
+		db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
+		cursor = db.cursor()
+		sql = "SELECT * from testtest" 
+  		cursor.execute(sql)
+  		tmp2 = cursor.fetchall()
+		request.session["local_toggle"]="/trakberry"
+		return db, cursor
+	except:
+		db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
+		cursor = db.cursor()
+		sql = "SELECT * from testtest" 
+  		cursor.execute(sql)
+  		tmp2 = cursor.fetchall()
+		request.session["local_toggle"]=""
+		return db, cursor
 
-	db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
-	
+	return
 
-	# db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
-
-	cursor = db.cursor()
-	return db, cursor
-	
 def select_test(request):
 	table = 'tkb_jobs'
 	col1 = 'Description'
@@ -33,7 +57,7 @@ def select_test(request):
 	
 		
 def db_select(table,col1,var1,col2,var2,col3,var3):
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 
 #	if col1=='':
 	sqlcommand = 'SELECT * FROM '+ table

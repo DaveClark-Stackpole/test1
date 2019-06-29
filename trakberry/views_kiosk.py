@@ -19,7 +19,7 @@ from django.core.context_processors import csrf
 from views_routes import direction
 from time import mktime
 from datetime import datetime, date
-from views_db import db_open
+from views_db import db_open, db_set
 from views_mod1 import kiosk_lastpart_find
 from datetime import datetime
 
@@ -42,7 +42,7 @@ def kiosk(request):
 	request.session["cycletime5"] = 0
 	request.session["cycletime6"] = 0
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -144,7 +144,7 @@ def kiosk_production(request):
 			dummy = 1
 			
 			
-		db, cur = db_open()
+		db, cur = db_set(request)
 		try:
 			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
 			cur.execute(sql)
@@ -369,7 +369,7 @@ def manual_production_entry3(request):
 		xy = "_"
 		zy = 0
 		sheet_id = 'kiosk'
-		db, cur = db_open()
+		db, cur = db_set(request)
 		
 		for i in range(0,6):
 			job = kiosk_job[i]
@@ -414,7 +414,7 @@ def manual_production_entry3(request):
 	
 def manual_production_entry(request):
 	pn_len = 3
-	db, cur = db_open()
+	db, cur = db_set(request)
 	current_first, shift  = vacation_set_current5()
 
 	aql = "SELECT MAX(id)  FROM sc_production1" 
@@ -465,7 +465,7 @@ def manual_production_entry(request):
 			request.session["job"]= job
 			pn_len = 3
 
-			db, cur = db_open()
+			db, cur = db_set(request)
 
 #			New Code to find the current operation using cycletime table (It works and use when ready)
 #			try:
@@ -547,7 +547,7 @@ def manual_production_entry2(request):
 				shift_time="11pm-7am"
 			
 			
-			db, cur = db_open()
+			db, cur = db_set(request)
 		
 			try:
 				xy = "_"
@@ -597,7 +597,7 @@ def kiosk_production_entry(request):
 				TimeStamp = int(time.time())
 				TimeOut = - 1
 				try:
-					db, cur = db_open()
+					db, cur = db_set(request)
 					cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,kiosk_clock,TimeOut))
 					cur.execute(cql)
 					db.commit()
@@ -663,7 +663,7 @@ def kiosk_production_entry(request):
 		zy = 0
 		sheet_id = 'kiosk'
 
-		db, cur = db_open()
+		db, cur = db_set(request)
 		
 		for i in range(0,6):
 			job = kiosk_job[i]
@@ -747,7 +747,7 @@ def kiosk_production_entry(request):
 	
 	tcur=int(time.time())
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT DISTINCT parts_no FROM sc_prod_parts ORDER BY %s %s" %('parts_no','ASC')
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -790,7 +790,7 @@ def kiosk_job_assign(request):
 	request.session["press4"] = 0
 	request.session["press5"] = 0
 	request.session["press6"] = 0
-	db, cur = db_open()
+	db, cur = db_set(request)
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
 		kiosk_job1 = request.POST.get("job1")
@@ -1002,7 +1002,7 @@ def kiosk_error_assigned_clocknumber(request):
 
 def kiosk_job_assign_enter(request):
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	
 	# Make the table if it's never been created
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_kiosk(Id INT PRIMARY KEY AUTO_INCREMENT,Clock INT(30), TimeStamp_In Int(20), TimeStamp_Out Int(20), Job1 CHAR(30), Job2 CHAR(30) , Job3 CHAR(30) , Job4 CHAR(30) , Job5 CHAR(30) , Job6 CHAR(30) )""")
@@ -1049,7 +1049,7 @@ def kiosk_job_leave(request):
 	return render(request, "kiosk/kiosk_job_leave.html",{'args':args})
 
 def kiosk_job_leave_enter(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	# Make the table if it's never been created
 	
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_kiosk(Id INT PRIMARY KEY AUTO_INCREMENT,Clock INT(30), TimeStamp_In Int(20), TimeStamp_Out Int(20), Job1 CHAR(30), Job2 CHAR(30) , Job3 CHAR(30) , Job4 CHAR(30) , Job5 CHAR(30) , Job6 CHAR(30) )""")
@@ -1075,7 +1075,7 @@ def kiosk_job_leave_enter(request):
 	return direction(request)
 
 def tenr_fix2(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	id1 = 418767
 	part1 = '50-9341'
 	asset = '1502'
@@ -1125,7 +1125,7 @@ def tenr_fix3(request):
 	# new
 	prt = ['50-5128','50-5145','50-5132']
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	id1 = 437584
 	
 	for j in range (0,3):
@@ -1164,7 +1164,7 @@ def tenr_fix3(request):
 	return render(request, "done_update.html")
 	
 def tenr_fix(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	id1 = 438347
 	p1 = '50-9341'
 	sh1 = '01-10R'
@@ -1189,7 +1189,7 @@ def tenr_fix(request):
 
 def manpower_layout(request):
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	TimeOut = -1
 	id_limit = 211738
 	part = '50-9341'
@@ -1236,7 +1236,7 @@ def manual_entry(request):
 		createdtime = vacation_temp()
 		
 		# Select prodrptdb db located in views_db
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO sc_production1(asset_num,machine,partno,pdate,shift,shift_hours_length,target,createdtime,updatedtime) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (asset_num,machine,partno,pdate,shift,shift_hours_length,target,createdtime,createdtime))
 		db.commit()
 		db.close()
@@ -1253,7 +1253,7 @@ def manual_entry(request):
 	return render(request,'manual_entry.html', {'args':args})
 	
 def entry_recent(request):
-	db, cursor = db_open()  		
+	db, cursor = db_set(request)  		
 	sql = "SELECT * FROM sc_production ORDER BY id DESC limit 50" 
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
@@ -1266,7 +1266,7 @@ def entry_recent(request):
 
 def manual_cycletime_table(request):
 	
-	db, cur = db_open()
+	db, cur = db_set(request)
 	
 	# Make the table if it's never been created
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_cycletime(Id INT PRIMARY KEY AUTO_INCREMENT,asset CHAR(30), timest Int(20), cycletime Int(20))""")
@@ -1333,19 +1333,23 @@ def kiosk_sub_menu(request):
 	
 		
 def kiosk_menu(request):
+	db, cursor = db_set(request)  
+	db.close()
+
+	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 
-	try:
-		local_switch = int(request.session["local_switch"])
-		if local_switch == 1:
-			request.session["local_toggle"] = ""
-		else:
-			request.session["local_toggle"] = "/trakberry"
-	except:
-		request.session["local_toggle"] = "/trakberry"
+	# try:
+	# 	local_switch = int(request.session["local_switch"])
+	# 	if local_switch == 1:
+	# 		request.session["local_toggle"] = ""
+	# 	else:
+	# 		request.session["local_toggle"] = "/trakberry"
+	# except:
+	# 	request.session["local_toggle"] = "/trakberry"
 
-	#Make this /trakberry for server
-	request.session["local_toggle"] = "/trakberry"
+	# #Make this /trakberry for server
+	# request.session["local_toggle"] = "/trakberry"
 
 
 	request.session["kiosk_menu_screen"] = 2
@@ -1391,7 +1395,7 @@ def kiosk_menu(request):
 
 def ab1v_manpower(request):
 
-	db, cur = db_open()  
+	db, cur = db_set(request)  
 	
 	cur.execute("""DROP TABLE IF EXISTS tkb_ab1v""")
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_ab1v(Id INT PRIMARY KEY AUTO_INCREMENT,asset_num CHAR(30), machine CHAR(30), partno CHAR(30), actual_produced Int(20), comments CHAR(30), pdate date, shift CHAR(30)) """)
@@ -1485,7 +1489,7 @@ def kiosk_hourly_entry(request):
 
 		sheet_id = 'kiosk'
 
-		db, cur = db_open()
+		db, cur = db_set(request)
 		cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
 		db.commit()
 		db.close()
@@ -1508,7 +1512,7 @@ def kiosk_hourly_entry(request):
 
 	p_cell = request.session["pcell"]
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	s1 = "SELECT MAX(id)  FROM sc_prod_hour WHERE p_cell = '%s'" %(p_cell) 
 	cur.execute(s1)
 	tmp = cur.fetchall()

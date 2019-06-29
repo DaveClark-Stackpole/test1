@@ -18,7 +18,7 @@ from django.core.context_processors import csrf
 from views_routes import direction
 from time import mktime
 from datetime import datetime, date
-from views_db import db_open
+from views_db import db_open, db_set
 from datetime import datetime 
 
 # *********************************************************************************************************
@@ -135,7 +135,7 @@ def mgmt_cycletime(request):
 def mgmt_production_hourly_edit(request, index):
 	tmp_index = index
 	#request.session["index"] = index
-	db, cur = db_open() 
+	db, cur = db_set(request) 
 	try:
 		sql = "SELECT * FROM sc_prod_hour where id = '%s'" %(tmp_index)
 		cur.execute(sql)
@@ -208,7 +208,7 @@ def mgmt_production_hourly_edit(request, index):
 	args.update(csrf(request))
 	args['form'] = form  
 
-#	db, cur = db_open()
+#	db, cur = db_set(request)
 #	s1 = "SELECT MAX(id)  FROM sc_prod_hour WHERE p_cell = '%s'" %(p_cell) 
 #	cur.execute(s1)
 #	tmp = cur.fetchall()

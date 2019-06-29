@@ -87,30 +87,20 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
-#}
-
-# try:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-# 	    'NAME': 'prodrptdb',
-# 		'USER': 'root',
-# 		'PASSWORD':'password',
-# 		'HOST': '127.0.0.1',
-# 		'PORT': '',
-#         }
-#     }
-
+#}  
 
 DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'prodrptdb',                      
-        'USER': 'stuser',                      
-        'HOST': '10.4.1.224', 
-        'PASSWORD':'stp383', 
-    }
-       }
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', 
+            'NAME': 'prodrptdb',                      
+            'USER': 'stuser',                      
+            'HOST': '10.4.1.224', 
+            'PASSWORD':'stp383', 
+        }
+         }
+
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -125,7 +115,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -133,7 +122,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
-#SESSION_COOKIE_PATH = "/trakberry"
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
+
+
 
 
 

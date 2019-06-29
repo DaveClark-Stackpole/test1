@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from trakberry.forms import robot_machine_form, toggletest_Form
 from views_global_mods import machine_rates, Metric_OEE
 from time import strftime
@@ -63,7 +63,7 @@ def robot_aup(x):
 	# **********************************************
 def test_array(request):
 	global st, nt, pt
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_robot_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -83,7 +83,7 @@ def test_array(request):
 
 def machine_list_display():
 	global st, nt, pt
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_robot_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -107,7 +107,7 @@ def machine_list_display():
 
 def part_list_display():
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	a = ['' for x in range(0)]
 	b = ['' for x in range(0)]
 	
@@ -135,7 +135,7 @@ def part_list_display():
 
 def cust_list_display():
 
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT DISTINCT Customer FROM tkb_inventory_fixed"
 	cur.execute(sql)
 	tmp = cur.fetchall()
@@ -143,7 +143,7 @@ def cust_list_display():
 	return tmp
 
 def emp_list_display():
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT Employee FROM tkb_employee ORDER BY %s %s" %('Employee','ASC')
 	#sql = "SELECT Employee FROM tkb_employee"
 	cur.execute(sql)
@@ -159,7 +159,7 @@ def test_display(request):
 	t=int(time.time())
 	u = t - 1800
 	global st, pt_ctr,nt, pt, dt, tst
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	
   
 	#sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
@@ -202,7 +202,7 @@ def test_display(request):
 def create_table_1(request):
 	# Create a Testing Table
 	
-	db, cursor = db_open()  
+	db, cursor = db_set(request)  
 	
 	cursor.execute("""DROP TABLE IF EXISTS tkb_schedule""")
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_schedule(Id INT PRIMARY KEY AUTO_INCREMENT,Date Date, Description CHAR(30), Job_Name CHAR(50), Shift CHAR(30), Position CHAR(30), Employee CHAR(30))""")
@@ -257,7 +257,7 @@ def robot_machine_update(request):
 	machine4 = request.session["machine4"]
 	part = request.session["part"]
 
-	db, cur = db_open() 	
+	db, cur = db_set(request) 	
 	cur.execute('''INSERT INTO tkb_robot_list(Robot, Machine1, Machine2, Machine3, Machine4,Part) VALUES(%s,%s,%s,%s,%s,%s)''', (robot, machine1, machine2, machine3, machine4,part))
 	db.commit()
 
@@ -267,7 +267,7 @@ def robot_machine_update(request):
 	return display_robot_machine(request)	
 
 def display_robot_machine(request):
-	db, cur = db_open()
+	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_robot_list" 
 	cur.execute(sql)
 	tmp = cur.fetchall()	

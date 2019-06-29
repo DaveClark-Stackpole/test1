@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from views_db import db_open
+from views_db import db_open, db_set
 from views_global_mods import machine_rates, Metric_OEE
 
 from time import strftime
@@ -218,7 +218,7 @@ def display2(request):
   #u = u - 28800
   
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   hql = "SELECT MIN(Id) FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   cursor.execute(hql)
   tmp = cursor.fetchall()
@@ -508,7 +508,7 @@ def create_table(request):
   # Select prodrptdbtest db 
   
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()  
+  db, cursor = db_set(request)  
   
 #  cursor.execute("""DROP TABLE IF EXISTS tkb_prodtrak""")
 #  cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_prodtrak(Id INT PRIMARY KEY AUTO_INCREMENT,pi_id INT(10), machine CHAR(30), part_timestamp INT(20), qty INT(2), pcount INT(20), downtime INT(20), cycletime INT(10), status VARCHAR(25))""")
@@ -541,7 +541,7 @@ def create_test_table(request):
   # Select prodrptdbtest db 
   
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()  
+  db, cursor = db_set(request)  
   cursor = db.cursor()
   cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_test(Id INT PRIMARY KEY AUTO_INCREMENT,message CHAR(30),stime INT(20),ftime INT(20),ctime INT(20))""")
   db.commit()
@@ -559,7 +559,7 @@ def create_test_table(request):
   # Alter a column name in a table 
 def alter_table_name(request):  
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   cursor.execute("""ALTER TABLE tkb_prodtrak RENAME COLUMN pcount to perpetual_counter""")
   db.commit() 
   return render(request,'done.html')
@@ -567,7 +567,7 @@ def alter_table_name(request):
   
 def db_write(request):
   # Select prodrptdb db located in views_db
-  db, cursor = db_open() 
+  db, cursor = db_set(request) 
   
   first = "Dave"
   last = "Clark"
@@ -824,7 +824,7 @@ def production_report(request):
 	end_tuple = time.localtime(end_stamp)	
 
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	
 	for i in range(0, 4):
 	
@@ -1006,7 +1006,7 @@ def display_time(request):
   #u = u - 28800
 
   # Select prodrptdb db located in views_db
-  db, cursor = db_open()
+  db, cursor = db_set(request)
   
   #sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
   sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d'" %(u,t)
@@ -1201,7 +1201,7 @@ def display_time(request):
 	  return render(request,"gf6input_fixed.html",{'list':nlist,'GList':gr_list,'S':temp,'BrkA':brk1,'BrkB':brk2})	  
 	  
 def fix_time(request):
-	db, cursor = db_open()
+	db, cursor = db_set(request)
 	a = 2268996
 	b = 2287243
 	data = []

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from trakberry.forms import tech_closeForm, tech_loginForm, tech_searchForm
-from views_db import db_open
+from views_db import db_open, db_set
 from views_supervisor import supervisor_tech_call
 import MySQLdb
 import time
@@ -45,7 +45,7 @@ def retrieve(request):
   	t = 1459508400
   		
 	# Select prodrptdb db located in views_db
-	db, cursor = db_open()
+	db, cursor = db_set(request)
   
 	#sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d'" %(u)
 	sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d' and machine = '%d'" %(u,t,machine)
