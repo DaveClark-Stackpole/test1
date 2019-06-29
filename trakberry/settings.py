@@ -122,6 +122,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
+# The below section will try and import the local database first but if it can't find it will use server
 try:
     from local_settings import *
 except ImportError:

@@ -50,6 +50,7 @@ def barcode_initial(request):
 
 def barcode_input(request):
     db, cur = db_set(request)
+    # the above call makes the below call unnecessary now.  
     #request.session["local_toggle"]="/trakberry"
   
     part = request.session["barcode_part"]
@@ -118,6 +119,9 @@ def barcode_check(request):
     part = request.session["barcode_part"]
     if len(bar1) >29:
       return render(request,"barcode_warning.html")
+    if len(bar1) < 8:
+      return render(request,"barcode_warning.html")
+
     part = part + 1
     cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (bar1,stamp,part))
     db.commit()
