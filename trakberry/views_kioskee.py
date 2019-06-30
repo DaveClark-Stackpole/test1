@@ -1529,12 +1529,13 @@ def kiosk_hourly_entry(request):
 
 	request.session["clock"] = tmp3
 
-	# Below will set hrs , shift and date to current one using 30min past hour as flip point
-	hrs, shift2, current_first = vacation_set_current77()
+	# Below will set hrs to the one we need for entry
+	am, ay, ad, ah, aa  = vacation_set_current77()
+	#hh = request.session["boooob"]
 
-	# hrs = int(tmp2[6])
-	# hrs = hrs + 1
-	# hrs = ah
+	hrs = int(tmp2[6])
+	hrs = hrs + 1
+	hrs = ah
 
 
 	# if hrs > 8:
@@ -1549,7 +1550,6 @@ def kiosk_hourly_entry(request):
 	#h = request.session["bugbug"]
 
 	request.session["shift"] = tmp2[5]
-	request.session["shift"] = shift2
 #	if kiosk_hourly_shift=="4D":
 #		request.session["shift"] = "Day"
 #	elif kiosk_hourly_shift == "3N":
@@ -1558,6 +1558,8 @@ def kiosk_hourly_entry(request):
 #		request.session["shift"] = "Day"
 #	elif kiosk_hourly_shift == "5A":
 #		request.session["shift"] = "Aft"
+
+
 	db.close()
 
 

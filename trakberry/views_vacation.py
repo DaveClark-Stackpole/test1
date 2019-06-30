@@ -39,6 +39,9 @@ def vacation_temp():
 #	Change host , username , password and db to suit 
 #	x=t.strftime('%Y-%m-%d')
 	return t
+def vacation_temp_v2():
+	t = datetime.datetime.now() + datetime.timedelta(days=1)
+	return t
 
 def vacation_set_current():
 
@@ -73,17 +76,58 @@ def vacation_set_current2():
 		
 	return current_first
 
-def vacation_set_current7():  # Use this one to set Kiosk Date properly
+def vacation_set_current77():  # This one sets hour to current one needed for whiteboard 30min past flips
+	t = vacation_temp()
+	tt = vacation_temp_v2()
+	month_st = t.month
+	year_st = t.year
+	day_st = t.day
+	hour_st = t.hour
+	min_st = t.minute
+	hour_st = 15
+	min_st = 45
 
+	if int(min_st) > 30:
+		hour_st = int(hour_st) + 1
+		if hour_st == 24:
+			hour_st = 0
+			month_st = tt.month
+			year_st = tt.year
+			day_st = tt.day
+
+	if int(hour_st) ==23:
+		hrs = int(hour_st) - 15
+		shift = "Aft"
+	if int(hour_st) <= 7:
+		hrs = int(hour_st) + 1
+		shift = "Mid"
+	if int(hour_st) >7 and int(hour_st) <=15:
+		shift = "Day"
+		hrs = int(hour_st) - 7
+	if int(hour_st) >15: 
+		hrs = int(hour_st) - 15
+		shift = "Aft"
+
+	if int(month_st)<10:
+		current_first = str(year_st) + "-" + "0" + str(month_st) 
+	else:
+		current_first = str(year_st) + "-" + str(month_st) 	
+	if int(day_st)<10:
+		current_first = current_first + "-" + "0" + str(day_st)
+	else:
+		current_first = current_first + "-" + str(day_st)
+
+	return hrs, shift, current_first
+
+
+def vacation_set_current7():  # Use this one to set Kiosk Date properly
 	t = vacation_temp()
 	month_st = t.month
 	year_st = t.year
 	day_st = t.day
 	day_st = day_st
 	hour_st = t.hour
-
-
-
+	
 	if int(hour_st) >=23 or int(hour_st) <7:
 		shift1 = "Mid"
 		hour_calc = 22
