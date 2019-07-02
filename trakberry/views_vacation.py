@@ -84,8 +84,8 @@ def vacation_set_current77():  # This one sets hour to current one needed for wh
 	day_st = t.day
 	hour_st = t.hour
 	min_st = t.minute
-	hour_st = 15
-	min_st = 45
+	# hour_st = 15
+	# min_st = 45
 
 	if int(min_st) > 30:
 		hour_st = int(hour_st) + 1
