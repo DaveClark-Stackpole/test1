@@ -83,7 +83,7 @@ def test_array(request):
 
 def machine_list_display():
 	global st, nt, pt
-	db, cur = db_set(request)
+	db, cur = db_open()
 	sql = "SELECT * FROM tkb_robot_list"
 	cur.execute(sql)
 	tmp = cur.fetchall()
