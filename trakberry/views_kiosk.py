@@ -1480,14 +1480,7 @@ def kiosk_hourly_entry(request):
 		kiosk_hourly_target = 1
 		shift_target = 1
 		shift_actual = 1
-
-		
-		#h = request.session["bugbug"]
-
 		shift_time = "None"
-
-		
-
 		sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
