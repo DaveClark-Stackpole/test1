@@ -1917,7 +1917,7 @@ def email_hour_check():
 	if hour >= h:
 		ch = 1
 
-		db, cursor = db_set(request)  
+		db, cursor = db_open()  
 		try:
 			sql = "SELECT sent FROM tkb_email_conf where date='%s'" %(current_date)
 			cursor.execute(sql)
