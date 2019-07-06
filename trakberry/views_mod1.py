@@ -38,7 +38,7 @@ def time_output():
 
 def kiosk_lastpart_find(asset):
 	try:
-		db, cur = db_set(request)  
+		db, cur = db_open()
 		a1sql = "SELECT MAX(id)  FROM sc_production1 WHERE asset_num = '%s'" %(asset) 
 		cur.execute(a1sql)
 		tp3 = cur.fetchall()

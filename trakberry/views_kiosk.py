@@ -146,6 +146,14 @@ def kiosk_production(request):
 			
 			
 		db, cur = db_set(request)
+
+		sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
+		cur.execute(sql)
+		tmp2 = cur.fetchall()
+		tmp1 = tmp2[0]
+		ppp = tmp1[4]
+		prt1 = kiosk_lastpart_find (tmp1[4])
+
 		try:
 			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
 			cur.execute(sql)
