@@ -19,12 +19,21 @@ def db_open():
   		tmp2 = cursor.fetchall()
 		return db, cursor
 	except:
-		db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
-		cursor = db.cursor()
-		sql = "SELECT * from testtest" 
-  		cursor.execute(sql)
-  		tmp2 = cursor.fetchall()
-		return db, cursor
+		try:
+			db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
+			cursor = db.cursor()
+			sql = "SELECT * from testtest" 
+  			cursor.execute(sql)
+  			tmp2 = cursor.fetchall()
+			return db, cursor
+		except:
+			db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="benny6868",db='prodrptdb')
+			cursor = db.cursor()
+			sql = "SELECT * from testtest" 
+  			cursor.execute(sql)
+  			tmp2 = cursor.fetchall()
+			return db, cursor
+
 
 def db_set(request):
 	try:
@@ -36,13 +45,23 @@ def db_set(request):
 		request.session["local_toggle"]="/trakberry"
 		return db, cursor
 	except:
-		db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
-		cursor = db.cursor()
-		sql = "SELECT * from testtest" 
-  		cursor.execute(sql)
-  		tmp2 = cursor.fetchall()
-		request.session["local_toggle"]=""
-		return db, cursor
+		try:
+			db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="password",db='prodrptdb')
+			cursor = db.cursor()
+			sql = "SELECT * from testtest" 
+  			cursor.execute(sql)
+  			tmp2 = cursor.fetchall()
+			request.session["local_toggle"]=""
+			return db, cursor
+		except:
+			db = MySQLdb.connect(host="127.0.0.1",user="root",passwd="benny6868",db='prodrptdb')
+			cursor = db.cursor()
+			sql = "SELECT * from testtest" 
+  			cursor.execute(sql)
+  			tmp2 = cursor.fetchall()
+			request.session["local_toggle"]=""
+			return db, cursor
+
 
 	return
 
