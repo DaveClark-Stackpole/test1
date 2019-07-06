@@ -577,7 +577,6 @@ def manual_production_entry2(request):
 
 def kiosk_production_entry(request):
 	
-
 	current_first, shift  = vacation_set_current5()
 	#request.session["current_first"] = current_first
 	
@@ -673,13 +672,10 @@ def kiosk_production_entry(request):
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
 			ppm = kiosk_ppm[i]
-
 			clock_number = request.session["clock"]
-			
 			if i == 0 :
 				m = request.session["machine1"]
 				ct = request.session["cycletime1"]
-
 			elif i ==1:
 				m = request.session["machine2"]
 				ct = request.session["cycletime2"]
@@ -969,8 +965,8 @@ def kiosk_job_assign(request):
 	
 
 
-	sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
-	#sql = "SELECT asset FROM tkb_cycletime"
+	#sql = "SELECT left(Asset,4) FROM vw_asset_eam_lp"
+	sql = "SELECT asset FROM tkb_cycletime"
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	tmp2 = tmp
@@ -1360,6 +1356,10 @@ def kiosk_menu(request):
 	request.session["cycletime4"] = 0
 	request.session["cycletime5"] = 0
 	request.session["cycletime6"] = 0
+	try:
+		test1 = request.session["whiteboard_message"] 
+	except:
+		request.session["whiteboard_message"] = ""
 
 	if request.POST:
 		button_1 = request.POST
@@ -1477,6 +1477,17 @@ def kiosk_hourly_entry(request):
 		kiosk_hourly_dtmin = request.POST.get("dtmin")
 		kiosk_hourly_dtreason = request.POST.get("dtreason")
 		
+		# Store the data in request variables so we can reroute
+		request.session["kiosk_hourly_pcell"] = kiosk_hourly_pcell
+		request.session["kiosk_hourly_clock"] = kiosk_hourly_clock
+		request.session["kiosk_hourly_date"] = kiosk_hourly_date
+		request.session["kiosk_hourly_shift"] = kiosk_hourly_shift
+		request.session["kiosk_hourly_hour"] = kiosk_hourly_hour
+		request.session["kiosk_hourly_qty"] = kiosk_hourly_qty
+		request.session["kiosk_hourly_dtcode"] = kiosk_hourly_dtcode
+		request.session["kiosk_hourly_dtmin"] = kiosk_hourly_dtmin
+		request.session["kiosk_hourly_dtreasonq"] = kiosk_hourly_dtreason
+
 		kiosk_hourly_target = 1
 		shift_target = 1
 		shift_actual = 1
@@ -1484,8 +1495,36 @@ def kiosk_hourly_entry(request):
 		sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
-		cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
-		db.commit()
+		stopp = "None"
+		hr_var = int(kiosk_hourly_hour) # Set current hour looking at
+		# try: # Check if there's an entry for this one already
+		# 	hr_check = hr_var
+		# 	sql = "SELECT * FROM sc_prod_hour WHERE p_cell = '%s' and p_date = '%s' and p_shift = '%s' and p_hour = '%s'" %(kiosk_hourly_pcell,kiosk_hourly_date,kiosk_hourly_shift,hr_check)
+  		# 	cur.execute(sql)
+  		# 	tmp2 = cur.fetchall()
+		# 	tmp3 = tmp2[0]
+		# 	stopp = "Duplicate"
+		# except:
+		# 	dummy = 1
+
+		try: # Check if there's earlier entries
+			hr_check = hr_var -1
+			sql = "SELECT * FROM sc_prod_hour WHERE p_cell = '%s' and p_date = '%s' and p_shift = '%s' and p_hour = '%s'" %(kiosk_hourly_pcell,kiosk_hourly_date,kiosk_hourly_shift,hr_check)
+  			cur.execute(sql)
+  			tmp2 = cur.fetchall()
+			tmp3 = tmp2[0]
+			stopp = "Earlier 1"
+		except:
+			dummy = 1
+
+		# y = request.session["dkdd"]
+		request.session["whiteboard_message"] = ""
+		try:
+			cur.execute('''INSERT INTO sc_prod_hour(p_cell,initial,p_date,p_shift,p_hour,hourly_actual,downtime_code,downtime_mins,downtime_reason) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_hourly_pcell,kiosk_hourly_clock,kiosk_hourly_date,kiosk_hourly_shift,kiosk_hourly_hour,kiosk_hourly_qty,kiosk_hourly_dtcode,kiosk_hourly_dtmin,kiosk_hourly_dtreason))
+			db.commit()
+		except:
+			dummy = 1
+			request.session["whiteboard_message"] = "duplicate"
 		db.close()
 
 	
@@ -1605,3 +1644,6 @@ def kiosk_initial_AB1V(request):
 	request.session["mgmt_login_password"] = 'boob'
 	request.session["mgmt_login_name"] = 'Dean'
 	return render(request, "done_update2.html")	
+
+def error_hourly_duplicate(request):
+	return render(request, "error_hourly_duplicate.html")	
