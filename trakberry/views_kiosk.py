@@ -173,9 +173,6 @@ def kiosk_production(request):
 			try:
 				pn_len = 3
 				request.session["variable1"] = int(tmp1[4])
-
-				
-
 				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(tmp1[4])
 				cur.execute(sql)
 				tmp = cur.fetchall()
@@ -672,6 +669,10 @@ def kiosk_production_entry(request):
 		sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
+		try:
+			checkA = request.session["oa_check"] 
+		except:
+			request.session["oa_check"] = ""
 		
 		for i in range(0,6):
 			job = kiosk_job[i]
