@@ -584,7 +584,20 @@ def kiosk_production_entry(request):
 	
 	current_first, shift  = vacation_set_current5()
 	#request.session["current_first"] = current_first
-	
+	try:
+		checkA = request.session["oa_check"] 
+	except:
+		request.session["oa_check"] = ""
+		a1 = "oa_part"
+		a2 = "oa_machine"
+		a3 = "oa_variable"
+		for a in range(1,7):
+			b1 = a1 + str(a)
+			b2 = a2 + str(a)
+			b3 = a3 + str(a)
+			request.session[b1] = ""
+			request.session[b2] = ""
+			request.session[b3] = ""
 	
 	kiosk_job = ['' for x in range(0)]
 	kiosk_part = ['' for x in range(0)]
@@ -669,10 +682,8 @@ def kiosk_production_entry(request):
 		sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
-		try:
-			checkA = request.session["oa_check"] 
-		except:
-			request.session["oa_check"] = ""
+		
+
 		
 		for i in range(0,6):
 			job = kiosk_job[i]
@@ -701,14 +712,18 @@ def kiosk_production_entry(request):
 				m = request.session["machine6"]
 				ct = request.session["cycletime6"]
 			
+			# Use try except to determine if there's a job for this loop
 			try:
 				dummy = len(job)
-				
+				write_variable = 1
+			except:
+				write_variable = 0
+			if write_variable == 1:
+
 #				if request.session["check1"] == 1:
 #					ppm = float(ppm)
 #					ct = (60 / ppm)
 #					return render(request, "kiosk/kiosk_test5.html",{'ppm':ct})
-
 				try:
 					ppm = float(ppm)
 					ct = (60 / ppm)
@@ -721,13 +736,47 @@ def kiosk_production_entry(request):
 					target1 = ((h * 60 * 60) / (ct))
 				except:
 					target1 = int(int(prod) / .85)
+				test_prod = prod
+				# Place the OA Check Code here **********************
+				
+				OA = int((int(test_prod) / float(target1)) * 100)
+				# return render(request,'kiosk/kiosk_test.html', {'OA':OA,'test_prod':test_prod,'target1':target1})	
+				if OA < 70:
+					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
+					if request.session["oa_check"] == "Fail":
+						request.session["oa_check"] = ""
+					else:
+						request.session["oa_check"] = "Fail"
+						request.session["OA_Curr"] = kiosk_date
+						request.session["OA_Shift"] = kiosk_shift
+						request.session["oa_prod1"] = kiosk_prod[0]
+						request.session["oa_dwn1"] = kiosk_dwn[0]
+						request.session["oa_prod2"] = kiosk_prod[1]
+						request.session["oa_dwn2"] = kiosk_dwn[1]
+						request.session["oa_prod3"] = kiosk_prod[2]
+						request.session["oa_dwn3"] = kiosk_dwn[2]
+						request.session["oa_prod4"] = kiosk_prod[3]
+						request.session["oa_dwn4"] = kiosk_dwn[3]
+						request.session["oa_prod5"] = kiosk_prod[4]
+						request.session["oa_dwn5"] = kiosk_dwn[4]
+						request.session["oa_prod6"] = kiosk_prod[5]
+						request.session["oa_dwn68"] = kiosk_dwn[5]
+						# All the stored data goes here
+						# Challenge lies with this being inside a loop and we want all the stored data
+						# from the tuple containing all data.   ie.  kiosk_job instead of kiosk_job[i] 
+						# I think we can still use request variables to store like kiosk_job and disect it 
+						# to individuals in the html page.
+
+						request.session["route_1"] = 'kiosk_production_entry'
+						return direction(request)
 
 
-					#target1 = (runtime1 * 60 * 60) / ct
-
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id))
-				# db.commit()
-			except:
+				# ***************************************************
+				
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
+				db.commit()
+			# except:
+			else:
 				dummy = 1
 		
 		TimeStamp = int(time.time())
@@ -737,6 +786,8 @@ def kiosk_production_entry(request):
 		db.commit()
 	
 		db.close()
+		OA = int((int(test_prod) / float(target1)) * 100) 
+
 	
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
 		if request.session["kiosk_menu_screen"] == 1:
@@ -759,6 +810,21 @@ def kiosk_production_entry(request):
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
 	db.close()
+	# Error Check to see if this is the 2nd time through with a warning on OA 
+	try:
+		checkA = request.session["oa_check"] 
+	except:
+		request.session["oa_check"] = ""
+		kiosk_defaults(request)
+
+	if request.session["oa_check"] == "Fail":
+		current_first = request.session["OA_Curr"]
+		shift = request.session["OA_Shift"]
+
+
+	else:
+		kiosk_defaults(request)
+
 
 
 	#return render(request, "kiosk/kiosk_test5.html")
@@ -769,7 +835,16 @@ def kiosk_production_entry(request):
 
 	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
 	
-
+def kiosk_defaults(request):
+	request.session["oa_check"] = ""
+	a1 = "oa_dwn"
+	a2 = "oa_prod"
+	for a in range(1,7):
+		b1 = a1 + str(a)
+		b2 = a2 + str(a)
+		request.session[b1] = 0
+		request.session[b2] = None
+	return
 
 def kiosk_help(request):
 	return render(request, "kiosk/kiosk_help.html")
@@ -1391,6 +1466,7 @@ def kiosk_menu(request):
 		if button_pressed == -2:
 			#request.session["route_1"] = 'kiosk'   #disable when ready to run
 			request.session["route_2"] = 2
+			kiosk_defaults(request)
 			request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
 			return direction(request)
 			
@@ -1656,3 +1732,15 @@ def kiosk_initial_AB1V(request):
 
 def error_hourly_duplicate(request):
 	return render(request, "error_hourly_duplicate.html")	
+def set_test1(request):
+	try:
+		dummy = request.session["switch_a1"] 
+	except:
+		request.session["switch_a1"] = -1
+	request.session["switch_a1"] = int(request.session["switch_a1"]) * -1
+	if request.session["switch_a1"] == 1:
+		request.session["route_a6"] = 1
+	else:
+		request.session["route_a6"] = 0
+	return render(request,"done_update2.html")
+
