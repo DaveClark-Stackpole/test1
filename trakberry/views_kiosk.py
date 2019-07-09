@@ -583,6 +583,7 @@ def manual_production_entry2(request):
 def kiosk_production_entry(request):
 	
 	current_first, shift  = vacation_set_current5()
+	msg1 = "Fail"
 	#request.session["current_first"] = current_first
 	try:
 		checkA = request.session["oa_check"] 
@@ -766,6 +767,7 @@ def kiosk_production_entry(request):
 						# from the tuple containing all data.   ie.  kiosk_job instead of kiosk_job[i] 
 						# I think we can still use request variables to store like kiosk_job and disect it 
 						# to individuals in the html page.
+						request.session["oa_problem"] = str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[0]) + ' down should be ' + str(int(target1*.7))
 
 						request.session["route_1"] = 'kiosk_production_entry'
 						return direction(request)
@@ -831,9 +833,9 @@ def kiosk_production_entry(request):
 
 	# Check if it's a CSD2 press .  If so go to kiosk_production_entryP where we use ppm otherwise kiosk_production_entry
 	if request.session["check1"] == 1:
-		return render(request, "kiosk/kiosk_production_entryP.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
+		return render(request, "kiosk/kiosk_production_entryP.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp,'Msg1':msg1})
 
-	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp})
+	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp,'Msg1':msg1})
 	
 def kiosk_defaults(request):
 	request.session["oa_check"] = ""
