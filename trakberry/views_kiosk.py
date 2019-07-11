@@ -683,6 +683,7 @@ def kiosk_production_entry(request):
 		xy = "_"
 		zy = 0
 		oa_check = 0
+		write_answer = 0
 		sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
@@ -751,43 +752,50 @@ def kiosk_production_entry(request):
 				if OA < 70:
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
 					oa_check = 1
-					if request.session["oa_check"] == "Fail":
-						request.session["oa_check"] = ""
-					else:
-						request.session["oa_check"] = "Fail"
-						request.session["OA_Curr"] = kiosk_date
-						request.session["OA_Shift"] = kiosk_shift
-						request.session["oa_prod1"] = kiosk_prod[0]
-						request.session["oa_dwn1"] = kiosk_dwn[0]
-						request.session["oa_prod2"] = kiosk_prod[1]
-						request.session["oa_dwn2"] = kiosk_dwn[1]
-						request.session["oa_prod3"] = kiosk_prod[2]
-						request.session["oa_dwn3"] = kiosk_dwn[2]
-						request.session["oa_prod4"] = kiosk_prod[3]
-						request.session["oa_dwn4"] = kiosk_dwn[3]
-						request.session["oa_prod5"] = kiosk_prod[4]
-						request.session["oa_dwn5"] = kiosk_dwn[4]
-						request.session["oa_prod6"] = kiosk_prod[5]
-						request.session["oa_dwn68"] = kiosk_dwn[5]
-						# All the stored data goes here
-						# Challenge lies with this being inside a loop and we want all the stored data
-						# from the tuple containing all data.   ie.  kiosk_job instead of kiosk_job[i] 
-						# I think we can still use request variables to store like kiosk_job and disect it 
-						# to individuals in the html page.
-						request.session["oa_problem"] = str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[0]) + ' down should be ' + str(int(target1*.7))
-
-						request.session["route_1"] = 'kiosk_production_entry'
-						return direction(request)
-
-
-				# ***************************************************
-				
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
-				db.commit()
-			# except:
+					request.session["oa_problem"] = str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[0]) + ' down should be ' + str(int(target1*.7))
+						# test = str.replace(test, '\n', '\r\n')
+						
 			else:
 				dummy = 1
 		if oa_check != 1:
+			write_answer = 1
+		else:
+			if request.session["oa_check"] == "Fail":
+				request.session["oa_check"] = ""
+				write_answer = 1
+			else:
+				request.session["oa_check"] = "Fail"
+				request.session["OA_Curr"] = kiosk_date
+				request.session["OA_Shift"] = kiosk_shift
+				a1 = "oa_dwn"
+				a2 = "oa_prod"
+				a3 = "oa_hrs"
+				for a in range(1,7):
+					b1 = a1 + str(a)
+					b2 = a2 + str(a)
+					b3 = a3 + str(a)
+					request.session[b1] = kiosk_dwn[(a-1)]
+					request.session[b2] = kiosk_prod[(a-1)]
+					request.session[b3] = kiosk_hrs[(a-1)]
+				
+				# request.session["oa_prod1"] = kiosk_prod[0]
+				# request.session["oa_dwn1"] = kiosk_dwn[0]
+				# request.session["oa_prod2"] = kiosk_prod[1]
+				# request.session["oa_dwn2"] = kiosk_dwn[1]
+				# request.session["oa_prod3"] = kiosk_prod[2]
+				# request.session["oa_dwn3"] = kiosk_dwn[2]
+				# request.session["oa_prod4"] = kiosk_prod[3]
+				# request.session["oa_dwn4"] = kiosk_dwn[3]
+				# request.session["oa_prod5"] = kiosk_prod[4]
+				# request.session["oa_dwn5"] = kiosk_dwn[4]
+				# request.session["oa_prod6"] = kiosk_prod[5]
+				# request.session["oa_dwn6"] = kiosk_dwn[5]
+				request.session["route_1"] = 'kiosk_production_entry'
+				return direction(request)
+
+
+		# OA = int((int(test_prod) / float(target1)) * 100) 
+		if wrie_answer == 1:
 			for i in range(0,6):
 				job = kiosk_job[i]
 				part = kiosk_part[i]
@@ -795,6 +803,9 @@ def kiosk_production_entry(request):
 				hrs = kiosk_hrs[i]
 				dwn = kiosk_dwn[i]
 				ppm = kiosk_ppm[i]
+				m = kiosk_machine[i]
+				target1 = kiosk_target[i]
+
 				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
 				db.commit()
 
@@ -804,9 +815,7 @@ def kiosk_production_entry(request):
 			cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,clock_number,TimeOut))
 			cur.execute(cql)
 			db.commit()
-	
 			db.close()
-		OA = int((int(test_prod) / float(target1)) * 100) 
 
 	
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
@@ -859,11 +868,14 @@ def kiosk_defaults(request):
 	request.session["oa_check"] = ""
 	a1 = "oa_dwn"
 	a2 = "oa_prod"
+	a3 = "oa_hrs"
 	for a in range(1,7):
 		b1 = a1 + str(a)
 		b2 = a2 + str(a)
+		b3 = a3 + str(a)
 		request.session[b1] = 0
 		request.session[b2] = None
+		request.session[b3] = 8
 	return
 
 def kiosk_help(request):
