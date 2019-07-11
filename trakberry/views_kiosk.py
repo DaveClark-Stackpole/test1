@@ -640,7 +640,7 @@ def kiosk_production_entry(request):
 		x_hrs = "hrs"
 		x_dwn = "dwn"
 		x_ppm = "ppm"
-		x_machine = "machine"
+
 		
 		kiosk_date = request.POST.get("date_en")
 		kiosk_shift = request.POST.get("shift")
@@ -653,14 +653,14 @@ def kiosk_production_entry(request):
 			x_hrs = x_hrs + str(i)
 			x_dwn = x_dwn + str(i)
 			x_ppm =x_ppm + str(i)
-			x_machine = x_machine + str(i)
+
 			kiosk_job.append(request.POST.get(x_job))
 			kiosk_part.append(request.POST.get(x_part))
 			kiosk_prod.append(request.POST.get(x_prod))
 			kiosk_hrs.append(request.POST.get(x_hrs))
 			kiosk_dwn.append(request.POST.get(x_dwn))
 			kiosk_ppm.append(request.POST.get(x_ppm))
-			kiosk_machine.append("")
+			
 			
 			
 			x_job = "job"
@@ -669,8 +669,8 @@ def kiosk_production_entry(request):
 			x_hrs = "hrs"
 			x_dwn = "dwn"
 			x_ppm = "ppm"
-			x_machine = "machine"
-			
+
+
 		shift_time = "None"
 		#except:
 		#	dummy = 1
@@ -702,6 +702,8 @@ def kiosk_production_entry(request):
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
 			ppm = kiosk_ppm[i]
+			target1 = 0
+			machine = ""
 			clock_number = request.session["clock"]
 			if i == 0 :
 				m = request.session["machine1"]
@@ -724,8 +726,10 @@ def kiosk_production_entry(request):
 			
 			# Use try except to determine if there's a job for this loop
 			try:
-				dummy = len(job)
-				write_variable = 1
+				if len(job) > 2:
+					write_variable = 1
+				else:
+					write_variable = 0
 			except:
 				write_variable = 0
 			if write_variable == 1:
@@ -751,7 +755,7 @@ def kiosk_production_entry(request):
 				
 				OA = int((int(test_prod) / float(target1)) * 100)
 				# return render(request,'kiosk/kiosk_test.html', {'OA':OA,'test_prod':test_prod,'target1':target1})	
-				kiosk_target.append(target1)
+				kiosk_target.append(int(target1))
 				kiosk_machine.append(m)
 
 				if OA < 70:
@@ -764,6 +768,8 @@ def kiosk_production_entry(request):
 						
 			else:
 				dummy = 1
+				kiosk_target.append(None)
+				kiosk_machine.append("")
 		if oa_check != 1:
 			write_answer = 1
 		else:
@@ -1762,6 +1768,16 @@ def kiosk_initial_AB1V(request):
 
 def error_hourly_duplicate(request):
 	return render(request, "error_hourly_duplicate.html")	
+
+def kiosk_fix55(request):
+	ts = 1562849834
+	ty = -1
+	db, cur = db_set(request)
+	cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE TimeStamp_Out ="%s"' % (ts,ty))
+	cur.execute(cql)
+	db.commit()
+	return render(request, "error_hourly_duplicate.html")	
+
 def set_test1(request):
 	try:
 		dummy = request.session["switch_a1"] 
