@@ -106,8 +106,8 @@
 		<div class="item2"><input style="font-size:23px;width:100px;height:60px;" value = {{request.session.oa_prod1}} name="prod1" type="number" autofocus></div>
 	{% endif %}
 	
-	<div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs1" type="text">
+	<div class="item2"> 
+		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = {{request.session.oa_hrs1}}  name="hrs1" type="text">
 			<option selected = "selected">8</option>
 			<option>1</option>
 			<option>2</option>
@@ -153,7 +153,7 @@
 
 	<div class="item2"><input style="font-size:23px;width:100px;height:60px;" value = {{request.session.oa_prod2}}  name="prod2" type="number"></div>
 	<div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs2" type="text">
+		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value =  {{request.session.oa_hrs2}} name="hrs2" type="text">
 			<option selected = "selected">8</option>
 			<option>1</option>
 			<option>1.5</option>
@@ -199,7 +199,7 @@
 	<!--   end of safegaurd test -->
 <div class="item2"><input style="font-size:23px;width:100px;height:60px;"  value = {{request.session.oa_prod3}}  name="prod3" type="number" autofocus></div>
 <div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs3" type="text">
+		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value =  {{request.session.oa_hrs3}} name="hrs3" type="text">
 			<option selected = "selected">8</option>
 			<option>1</option>
 			<option>1.5</option>
@@ -250,7 +250,7 @@
 	{% endif %}
 	
 	<div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs4" type="text">
+		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value =  {{request.session.oa_hrs4}} name="hrs4" type="text">
 			<option selected = "selected">8</option>
 			<option>1</option>
 			<option>1.5</option>
@@ -302,7 +302,7 @@
 	{% endif %}
 	
 	<div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs5" type="text">
+		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value =  {{request.session.oa_hrs5}} name="hrs5" type="text">
 			<option selected = "selected">8</option>
 			<option>1</option>
 			<option>1.5</option>
@@ -354,7 +354,7 @@
 	{% endif %}
 	
 	<div class="item2">
-		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value = 8 name="hrs6" type="text">
+		<select style="font-size:23px;width:100px;height:60px;text-align:center;"  value =  {{request.session.oa_hrs6}} name="hrs6" type="text">
 			<option selected = "selected">8</option>
 			<option>1</option>
 			<option>1.5</option>
@@ -390,7 +390,7 @@
 				  <h4 class="modal-title"><font color="#000000" size ="4"><mark>Low Production</font></mark></h4>
 				</div>
 				<div class="modal-body">
-				  <p><font color="#000000" size ="2"><b><u>Make sure data is correct!</u></b><br>
+				  <p><font color="#000000" size ="2"><b><u>Make sure count, hrs run and dtime are correct!</u></b><br>
 					{{request.session.oa_problem}}
 				  </font></p>
 				</div>

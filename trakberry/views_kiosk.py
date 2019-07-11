@@ -607,6 +607,7 @@ def kiosk_production_entry(request):
 	kiosk_dwn = ['' for x in range(0)]
 	kiosk_machine = ['' for x in range(0)]
 	kiosk_ppm = ['' for x in range(0)]
+	kiosk_target = ['' for x in range(0)]
 	
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
@@ -657,6 +658,7 @@ def kiosk_production_entry(request):
 			kiosk_dwn.append(request.POST.get(x_dwn))
 			kiosk_ppm.append(request.POST.get(x_ppm))
 			
+			
 			x_job = "job"
 			x_part = "part"
 			x_prod = "prod"
@@ -680,6 +682,7 @@ def kiosk_production_entry(request):
 		# Empty variables
 		xy = "_"
 		zy = 0
+		oa_check = 0
 		sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
@@ -742,8 +745,12 @@ def kiosk_production_entry(request):
 				
 				OA = int((int(test_prod) / float(target1)) * 100)
 				# return render(request,'kiosk/kiosk_test.html', {'OA':OA,'test_prod':test_prod,'target1':target1})	
+				kiosk_target.append(target1)
+				kiosk_machine.append(m)
+
 				if OA < 70:
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
+					oa_check = 1
 					if request.session["oa_check"] == "Fail":
 						request.session["oa_check"] = ""
 					else:
@@ -780,14 +787,25 @@ def kiosk_production_entry(request):
 			# except:
 			else:
 				dummy = 1
-		
-		TimeStamp = int(time.time())
-		TimeOut = - 1
-		cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,clock_number,TimeOut))
-		cur.execute(cql)
-		db.commit()
+		if oa_check != 1:
+			for i in range(0,6):
+				job = kiosk_job[i]
+				part = kiosk_part[i]
+				prod = kiosk_prod[i]
+				hrs = kiosk_hrs[i]
+				dwn = kiosk_dwn[i]
+				ppm = kiosk_ppm[i]
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
+				db.commit()
+
+
+			TimeStamp = int(time.time())
+			TimeOut = - 1
+			cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,clock_number,TimeOut))
+			cur.execute(cql)
+			db.commit()
 	
-		db.close()
+			db.close()
 		OA = int((int(test_prod) / float(target1)) * 100) 
 
 	
