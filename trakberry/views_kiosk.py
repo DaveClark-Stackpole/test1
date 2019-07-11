@@ -777,25 +777,10 @@ def kiosk_production_entry(request):
 					request.session[b1] = kiosk_dwn[(a-1)]
 					request.session[b2] = kiosk_prod[(a-1)]
 					request.session[b3] = kiosk_hrs[(a-1)]
-				
-				# request.session["oa_prod1"] = kiosk_prod[0]
-				# request.session["oa_dwn1"] = kiosk_dwn[0]
-				# request.session["oa_prod2"] = kiosk_prod[1]
-				# request.session["oa_dwn2"] = kiosk_dwn[1]
-				# request.session["oa_prod3"] = kiosk_prod[2]
-				# request.session["oa_dwn3"] = kiosk_dwn[2]
-				# request.session["oa_prod4"] = kiosk_prod[3]
-				# request.session["oa_dwn4"] = kiosk_dwn[3]
-				# request.session["oa_prod5"] = kiosk_prod[4]
-				# request.session["oa_dwn5"] = kiosk_dwn[4]
-				# request.session["oa_prod6"] = kiosk_prod[5]
-				# request.session["oa_dwn6"] = kiosk_dwn[5]
 				request.session["route_1"] = 'kiosk_production_entry'
 				return direction(request)
 
-
-		# OA = int((int(test_prod) / float(target1)) * 100) 
-		if wrie_answer == 1:
+		if write_answer == 1:
 			for i in range(0,6):
 				job = kiosk_job[i]
 				part = kiosk_part[i]
