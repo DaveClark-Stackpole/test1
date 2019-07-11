@@ -639,6 +639,7 @@ def kiosk_production_entry(request):
 		x_hrs = "hrs"
 		x_dwn = "dwn"
 		x_ppm = "ppm"
+		x_machine = "machine"
 		
 		kiosk_date = request.POST.get("date_en")
 		kiosk_shift = request.POST.get("shift")
@@ -651,12 +652,14 @@ def kiosk_production_entry(request):
 			x_hrs = x_hrs + str(i)
 			x_dwn = x_dwn + str(i)
 			x_ppm =x_ppm + str(i)
+			x_machine = x_machine + str(i)
 			kiosk_job.append(request.POST.get(x_job))
 			kiosk_part.append(request.POST.get(x_part))
 			kiosk_prod.append(request.POST.get(x_prod))
 			kiosk_hrs.append(request.POST.get(x_hrs))
 			kiosk_dwn.append(request.POST.get(x_dwn))
 			kiosk_ppm.append(request.POST.get(x_ppm))
+			kiosk_machine.append("")
 			
 			
 			x_job = "job"
@@ -665,6 +668,7 @@ def kiosk_production_entry(request):
 			x_hrs = "hrs"
 			x_dwn = "dwn"
 			x_ppm = "ppm"
+			x_machine = "machine"
 			
 		shift_time = "None"
 		#except:
@@ -783,16 +787,21 @@ def kiosk_production_entry(request):
 		if write_answer == 1:
 			for i in range(0,6):
 				job = kiosk_job[i]
-				part = kiosk_part[i]
-				prod = kiosk_prod[i]
-				hrs = kiosk_hrs[i]
-				dwn = kiosk_dwn[i]
-				ppm = kiosk_ppm[i]
-				m = kiosk_machine[i]
-				target1 = kiosk_target[i]
-
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
-				db.commit()
+				try:
+					dummy = len(job)
+					write_variable = 1
+				except:
+					write_variable = 0
+				if write_variable == 1:
+					part = kiosk_part[i]
+					prod = kiosk_prod[i]
+					hrs = kiosk_hrs[i]
+					dwn = kiosk_dwn[i]
+					ppm = kiosk_ppm[i]
+					m = kiosk_machine[i]
+					target1 = kiosk_target[i]
+					cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
+					db.commit()
 
 
 			TimeStamp = int(time.time())
