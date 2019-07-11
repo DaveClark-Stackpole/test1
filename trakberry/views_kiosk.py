@@ -756,7 +756,7 @@ def kiosk_production_entry(request):
 				if OA < 70:
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
 					oa_check = 1
-					request.session["oa_problem"] = str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[0]) + ' down should be ' + str(int(target1*.7))
+					request.session["oa_problem"] = request.session["oa_problem"] + str(job) + ":" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[0]) + ' down should be ' + str(int(target1*.7)) + "\r\n" 
 						# test = str.replace(test, '\n', '\r\n')
 						
 			else:
@@ -818,7 +818,7 @@ def kiosk_production_entry(request):
 		else:
 			request.session["route_1"] = 'kiosk_menu'
 		return direction(request)
-
+	#
 	else:
 		form = kiosk_dispForm3()
 	args = {}
