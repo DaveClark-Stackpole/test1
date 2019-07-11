@@ -588,6 +588,7 @@ def kiosk_production_entry(request):
 	try:
 		checkA = request.session["oa_check"] 
 	except:
+		request.session["oa_problem"] = ""
 		request.session["oa_check"] = ""
 		a1 = "oa_part"
 		a2 = "oa_machine"
@@ -756,7 +757,9 @@ def kiosk_production_entry(request):
 				if OA < 70:
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
 					oa_check = 1
-					request.session["oa_problem"] = request.session["oa_problem"] + str(job) + ":" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[0]) + ' down should be ' + str(int(target1*.7)) + "\r\n" 
+					oa_problem = request.session["oa_problem"]
+					oa_problem = oa_problem + "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target1*.7)) + "\n\r\n" 
+					request.session["oa_problem"] = oa_problem
 						# test = str.replace(test, '\n', '\r\n')
 						
 			else:
@@ -860,6 +863,7 @@ def kiosk_production_entry(request):
 	
 def kiosk_defaults(request):
 	request.session["oa_check"] = ""
+	request.session["oa_problem"] = ""
 	a1 = "oa_dwn"
 	a2 = "oa_prod"
 	a3 = "oa_hrs"
