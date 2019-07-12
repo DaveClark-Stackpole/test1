@@ -109,7 +109,7 @@ def kiosk_job(request):
 
 
 def kiosk_production(request):
-	
+
 	job = ['' for x in range(6)]
 	TimeOut = -1
 	request.session["machine1"] = "1"
@@ -152,7 +152,7 @@ def kiosk_production(request):
 		tmp2 = cur.fetchall()
 		tmp1 = tmp2[0]
 		ppp = tmp1[4]
-		prt1 = kiosk_lastpart_find (tmp1[4])
+		
 
 		try:
 			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
@@ -280,13 +280,11 @@ def kiosk_production(request):
 			
 			db.close()
 			
-			#return render(request, "kiosk/kiosk_test2.html")
+			# return render(request, "kiosk/kiosk_test2.html")
 			
 			request.session["clock"] = kiosk_clock
 			request.session["route_1"] = 'kiosk_production_entry'
 
-
-			#return render(request, "kiosk/kiosk_test3.html") 
 			return direction(request)
 	
 	
@@ -656,7 +654,10 @@ def kiosk_production_entry(request):
 
 			kiosk_job.append(request.POST.get(x_job))
 			kiosk_part.append(request.POST.get(x_part))
-			kiosk_prod.append(request.POST.get(x_prod))
+			temp_prod = request.POST.get(x_prod)
+			if temp_prod == None or temp_prod == "":
+				temp_prod = 0
+			kiosk_prod.append(temp_prod)
 			kiosk_hrs.append(request.POST.get(x_hrs))
 			kiosk_dwn.append(request.POST.get(x_dwn))
 			kiosk_ppm.append(request.POST.get(x_ppm))
@@ -753,7 +754,10 @@ def kiosk_production_entry(request):
 				test_prod = prod
 				# Place the OA Check Code here **********************
 				
-				OA = int((int(test_prod) / float(target1)) * 100)
+				if target1 > 0:
+					OA = int((int(test_prod) / float(target1)) * 100)
+				else:
+					OA = 0
 				# return render(request,'kiosk/kiosk_test.html', {'OA':OA,'test_prod':test_prod,'target1':target1})	
 				kiosk_target.append(int(target1))
 				kiosk_machine.append(m)
@@ -820,7 +824,9 @@ def kiosk_production_entry(request):
 			db.commit()
 			db.close()
 
-	
+		
+
+
 	#	Below will route to Kiosk Main if it's a joint ipad or kiosk if it's a lone one
 		if request.session["kiosk_menu_screen"] == 1:
 			request.session["route_1"] = 'kiosk_menu'
@@ -858,6 +864,18 @@ def kiosk_production_entry(request):
 		kiosk_defaults(request)
 
 
+	# # #  Debug End Point   ************************************
+	# debug_start = (request.session["debug_start"])
+	
+	# debug_end = (time.time())
+
+	
+
+	# request.session["debug_end"] = debug_end
+	# debug_time = debug_end - debug_start
+	# request.session["debug_time"] = debug_time
+	# return render(request,'kiosk/kiosk_test2.html')
+	# # *******************************************************
 
 	#return render(request, "kiosk/kiosk_test5.html")
 
@@ -1119,6 +1137,8 @@ def kiosk_error_assigned_clocknumber(request):
 
 def kiosk_job_assign_enter(request):
 	
+	request.session["debug_start"] = time.time()
+
 	db, cur = db_set(request)
 	
 	# Make the table if it's never been created
@@ -1134,7 +1154,7 @@ def kiosk_job_assign_enter(request):
 	kiosk_job6 = request.session["kiosk_job6"]
 	TimeOut = -1
 	
-	
+	  
 	
 	TimeStamp = int(time.time())
 	cur.execute('''INSERT INTO tkb_kiosk(Clock,Job1,Job2,Job3,Job4,Job5,Job6,TimeStamp_In,TimeStamp_Out) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (kiosk_clock,kiosk_job1,kiosk_job2,kiosk_job3,kiosk_job4,kiosk_job5,kiosk_job6,TimeStamp,TimeOut))
@@ -1144,6 +1164,7 @@ def kiosk_job_assign_enter(request):
 	
 	request.session["current_clock"] = kiosk_clock
 	request.session["route_1"] = 'kiosk_production' # enable when ready to run
+
 	return direction(request)
 			
 			
