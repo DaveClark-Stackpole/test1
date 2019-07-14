@@ -52,7 +52,7 @@ def kiosk_lastpart_find(asset):
 		db.close()
 	except:
 		part = ""
-	part = ""
+	# part = ""  # Use this if you want to test default part to blank
 	return part
 
 # Generic Templay kickout for mtemp (headers) and mgmt_table_call which calls the sql required matching headers count

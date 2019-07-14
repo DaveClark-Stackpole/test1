@@ -788,11 +788,13 @@ def kiosk_production_entry(request):
 			bounce = 1
 			request.session["error_title"] = "Low Production"
 			request.session["error_message"] = "Make sure that count, hrs run and downtime are correct!"
+			request.session["oa_problem2"] = request.session["oa_problem"]
 		if part_check == 1:
 			bounce = 2
 			request.session["error_title"] = "Error !"
 			request.session["error_message"] = "Must Have a Part for every Job !"
-			request.session["oa_problem"] = "Machine " + part_check_job + " has no part listed for it."
+			request.session["oa_problem2"] = "Machine " + part_check_job + " has no part listed for it."
+			request.session["oa_problem"] = ""
 
 		if part_check!=1 and oa_check != 1:
 			bounce = 0
@@ -912,8 +914,6 @@ def kiosk_production_entry(request):
 	if request.session["bounce"] > 0:
 		current_first = request.session["OA_Curr"]
 		shift = request.session["OA_Shift"]
-
-
 	else:
 		kiosk_defaults(request)
 

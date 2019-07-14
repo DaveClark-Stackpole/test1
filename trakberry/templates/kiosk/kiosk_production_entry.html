@@ -22,11 +22,13 @@
 <style>
 	{% if request.session.bounce = 1 %} 
 		.modal-body
-			{background-color: rgb(223, 233, 200);}
+			{background-color: rgb(252, 236, 149);}
 		.modal-header
-			{background-color: rgb(223, 233, 200);}
+		{background-color: rgb(252, 236, 149);}
 		.modal-footer
-			{background-color: rgb(223, 233, 200);}
+		{background-color: rgb(252, 236, 149);}
+
+}
 	{% elif request.session.bounce = 2 %}
 		.modal-body
 			{background-color: rgb(255, 172, 172);}
@@ -34,6 +36,11 @@
 			{background-color: rgb(255, 172, 172);}
 		.modal-footer
 			{background-color: rgb(255, 172, 172);}
+			.modal {
+ 
+    border-radius: 25px; 
+}
+
 	{% endif %}
 </style>
 
@@ -401,14 +408,14 @@
           <!-- Modal -->
 		  <div class="modal fade" id="myModal" role="dialog">
 			<div class="modal-dialog modal-sm">
-			  <div class="modal-content">
+			  <div class="modal-content" >
 				<div class="modal-header">
 				  <button type="button" class="close" data-dismiss="modal">&times;</button>
-				  <h4 class="modal-title"><font color="#000000" size ="4"><mark>{{request.session.error_title}}</font></mark></h4>
+				  <h4 class="modal-title"><mark><font color="#000000" size ="4">&nbsp;&nbsp;{{request.session.error_title}}&nbsp;&nbsp;</font></mark></h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body" >
 				  <font color="#000000" size ="2"><p align="left"><b><u>{{request.session.error_message}}</u></b><br><br>
-					{{request.session.oa_problem}}</p>
+					{{request.session.oa_problem2}}</p>
 				  </font>
 				</div>
 				<div class="modal-footer">
