@@ -52,6 +52,7 @@ def kiosk_lastpart_find(asset):
 		db.close()
 	except:
 		part = ""
+	part = ""
 	return part
 
 # Generic Templay kickout for mtemp (headers) and mgmt_table_call which calls the sql required matching headers count

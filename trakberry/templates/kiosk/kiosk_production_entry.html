@@ -12,7 +12,7 @@
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 	
-	{% if request.session.oa_check = Msg1 %} 
+	{% if request.session.bounce > 0 %} 
 	<script type="text/javascript">
 	  $(document).ready(function(){
 		  $("#myModal").modal('show');

@@ -762,7 +762,7 @@ def kiosk_production_entry(request):
 				# return render(request,'kiosk/kiosk_test.html', {'OA':OA,'test_prod':test_prod,'target1':target1})	
 				kiosk_target.append(int(target1))
 				kiosk_machine.append(m)
-
+				
 				if OA < 70:
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
 					oa_check = 1
@@ -772,23 +772,29 @@ def kiosk_production_entry(request):
 						# test = str.replace(test, '\n', '\r\n')
 
 				if len(part) < 2:
-					part_check = 1						
+					part_check = 1	
+					part_check_job = job
+			
+								
 			else:
 				dummy = 1
 				kiosk_target.append(None)
 				kiosk_machine.append("")
 		
 		# Set bounce level
+		# yyy = request.session["srgg"]	
 		request.session["bounce"] = 0
 		if oa_check == 1: 
 			bounce = 1
 			request.session["error_title"] = "Low Production"
 			request.session["error_message"] = "Make sure that count, hrs run and downtime are correct!"
-		elif part_check == 1:
+		if part_check == 1:
 			bounce = 2
 			request.session["error_title"] = "Error !"
 			request.session["error_message"] = "Must Have a Part for every Job !"
-		else:
+			request.session["oa_problem"] = "Machine " + part_check_job + " has no part listed for it."
+
+		if part_check!=1 and oa_check != 1:
 			bounce = 0
 			write_answer = 1
 		
@@ -798,19 +804,27 @@ def kiosk_production_entry(request):
 			bounce = 0
 		if bounce > 0:
 			request.session["bounce"] = bounce
-			request.session["oa_check"] = "Fail"
+			if bounce == 2:
+				request.session["oa_check"] = ""
+			else:
+				request.session["oa_check"] = "Fail"
 			request.session["OA_Curr"] = kiosk_date
 			request.session["OA_Shift"] = kiosk_shift
 			a1 = "oa_dwn"
 			a2 = "oa_prod"
 			a3 = "oa_hrs"
+			a4 = "part"
 			for a in range(1,7):
 				b1 = a1 + str(a)
 				b2 = a2 + str(a)
 				b3 = a3 + str(a)
+				b4 = a4 + str(a)
 				request.session[b1] = kiosk_dwn[(a-1)]
 				request.session[b2] = kiosk_prod[(a-1)]
 				request.session[b3] = kiosk_hrs[(a-1)]
+				request.session[b4] = kiosk_part[(a-1)]
+			# yyy = request.session["srgg"]	
+
 			request.session["route_1"] = 'kiosk_production_entry'
 			return direction(request)
 
@@ -836,7 +850,7 @@ def kiosk_production_entry(request):
 		# 			request.session[b3] = kiosk_hrs[(a-1)]
 		# 		request.session["route_1"] = 'kiosk_production_entry'
 		# 		return direction(request)
-
+		
 		if write_answer == 1:
 			for i in range(0,6):
 				job = kiosk_job[i]
@@ -895,7 +909,7 @@ def kiosk_production_entry(request):
 		request.session["oa_check"] = ""
 		kiosk_defaults(request)
 
-	if request.session["oa_check"] == "Fail":
+	if request.session["bounce"] > 0:
 		current_first = request.session["OA_Curr"]
 		shift = request.session["OA_Shift"]
 
@@ -1203,6 +1217,7 @@ def kiosk_job_assign_enter(request):
 	
 	
 	request.session["current_clock"] = kiosk_clock
+	request.session["bounce"] = 0
 	request.session["route_1"] = 'kiosk_production' # enable when ready to run
 
 	return direction(request)
