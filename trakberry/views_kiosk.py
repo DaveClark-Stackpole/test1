@@ -689,6 +689,7 @@ def kiosk_production_entry(request):
 		xy = "_"
 		zy = 0
 		oa_check = 0
+		part_check = 0
 		write_answer = 0
 		sheet_id = 'kiosk'
 
@@ -769,33 +770,72 @@ def kiosk_production_entry(request):
 					oa_problem = oa_problem + "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target1*.7)) + "\n\r\n" 
 					request.session["oa_problem"] = oa_problem
 						# test = str.replace(test, '\n', '\r\n')
-						
+
+				if len(part) < 2:
+					part_check = 1						
 			else:
 				dummy = 1
 				kiosk_target.append(None)
 				kiosk_machine.append("")
-		if oa_check != 1:
-			write_answer = 1
+		
+		# Set bounce level
+		request.session["bounce"] = 0
+		if oa_check == 1: 
+			bounce = 1
+			request.session["error_title"] = "Low Production"
+			request.session["error_message"] = "Make sure that count, hrs run and downtime are correct!"
+		elif part_check == 1:
+			bounce = 2
+			request.session["error_title"] = "Error !"
+			request.session["error_message"] = "Must Have a Part for every Job !"
 		else:
-			if request.session["oa_check"] == "Fail":
-				request.session["oa_check"] = ""
-				write_answer = 1
-			else:
-				request.session["oa_check"] = "Fail"
-				request.session["OA_Curr"] = kiosk_date
-				request.session["OA_Shift"] = kiosk_shift
-				a1 = "oa_dwn"
-				a2 = "oa_prod"
-				a3 = "oa_hrs"
-				for a in range(1,7):
-					b1 = a1 + str(a)
-					b2 = a2 + str(a)
-					b3 = a3 + str(a)
-					request.session[b1] = kiosk_dwn[(a-1)]
-					request.session[b2] = kiosk_prod[(a-1)]
-					request.session[b3] = kiosk_hrs[(a-1)]
-				request.session["route_1"] = 'kiosk_production_entry'
-				return direction(request)
+			bounce = 0
+			write_answer = 1
+		
+		if bounce == 1 and request.session["oa_check"] == "Fail":
+			request.session["oa_check"] = ""
+			write_answer = 1
+			bounce = 0
+		if bounce > 0:
+			request.session["bounce"] = bounce
+			request.session["oa_check"] = "Fail"
+			request.session["OA_Curr"] = kiosk_date
+			request.session["OA_Shift"] = kiosk_shift
+			a1 = "oa_dwn"
+			a2 = "oa_prod"
+			a3 = "oa_hrs"
+			for a in range(1,7):
+				b1 = a1 + str(a)
+				b2 = a2 + str(a)
+				b3 = a3 + str(a)
+				request.session[b1] = kiosk_dwn[(a-1)]
+				request.session[b2] = kiosk_prod[(a-1)]
+				request.session[b3] = kiosk_hrs[(a-1)]
+			request.session["route_1"] = 'kiosk_production_entry'
+			return direction(request)
+
+		# if oa_check != 1:
+		# 	write_answer = 1
+		# else:
+		# 	if request.session["oa_check"] == "Fail":
+		# 		request.session["oa_check"] = ""
+		# 		write_answer = 1
+		# 	else:
+		# 		request.session["oa_check"] = "Fail"
+		# 		request.session["OA_Curr"] = kiosk_date
+		# 		request.session["OA_Shift"] = kiosk_shift
+		# 		a1 = "oa_dwn"
+		# 		a2 = "oa_prod"
+		# 		a3 = "oa_hrs"
+		# 		for a in range(1,7):
+		# 			b1 = a1 + str(a)
+		# 			b2 = a2 + str(a)
+		# 			b3 = a3 + str(a)
+		# 			request.session[b1] = kiosk_dwn[(a-1)]
+		# 			request.session[b2] = kiosk_prod[(a-1)]
+		# 			request.session[b3] = kiosk_hrs[(a-1)]
+		# 		request.session["route_1"] = 'kiosk_production_entry'
+		# 		return direction(request)
 
 		if write_answer == 1:
 			for i in range(0,6):
@@ -1800,14 +1840,21 @@ def kiosk_fix55(request):
 	return render(request, "error_hourly_duplicate.html")	
 
 def set_test1(request):
+	d = 0
 	try:
-		dummy = request.session["switch_a1"] 
+		d = 1
+		dummy = request.session["route_a6"] 
 	except:
-		request.session["switch_a1"] = -1
-	request.session["switch_a1"] = int(request.session["switch_a1"]) * -1
-	if request.session["switch_a1"] == 1:
+		d = 2
 		request.session["route_a6"] = 1
-	else:
-		request.session["route_a6"] = 0
+
+
+	x = int(request.session["route_a6"])
+	x = x + 1
+	y = (x % 3) + 1
+	request.session["route_a6"] = y
+
+	# re = request.session["jjek"]
+
 	return render(request,"done_update2.html")
 

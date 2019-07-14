@@ -7,7 +7,7 @@
 
 {% block grid %}
 	<link rel="stylesheet" href="/static/style_1/grid_kiosk_job_production.css?{{TCUR}}">
-	<link rel="stylesheet" href="/static/style_1/grid_kiosk_job_production_pop.css?{{TCUR}}">
+	<link rel="stylesheet" href="/static/style_1/kiosk_error1.css?{{TCUR}}">
 	<script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
@@ -19,8 +19,25 @@
 	  });
 	</script>
 	{% endif %}
-	
-	
+<style>
+	{% if request.session.bounce = 1 %} 
+		.modal-body
+			{background-color: rgb(223, 233, 200);}
+		.modal-header
+			{background-color: rgb(223, 233, 200);}
+		.modal-footer
+			{background-color: rgb(223, 233, 200);}
+	{% elif request.session.bounce = 2 %}
+		.modal-body
+			{background-color: rgb(255, 172, 172);}
+		.modal-header
+			{background-color: rgb(255, 172, 172);}
+		.modal-footer
+			{background-color: rgb(255, 172, 172);}
+	{% endif %}
+</style>
+
+
 {% endblock %}
 
 
@@ -387,10 +404,10 @@
 			  <div class="modal-content">
 				<div class="modal-header">
 				  <button type="button" class="close" data-dismiss="modal">&times;</button>
-				  <h4 class="modal-title"><font color="#000000" size ="4"><mark>Low Production</font></mark></h4>
+				  <h4 class="modal-title"><font color="#000000" size ="4"><mark>{{request.session.error_title}}</font></mark></h4>
 				</div>
 				<div class="modal-body">
-				  <font color="#000000" size ="2"><p align="left"><b><u>Make sure that count, hrs run and downtime are correct!</u></b><br><br>
+				  <font color="#000000" size ="2"><p align="left"><b><u>{{request.session.error_message}}</u></b><br><br>
 					{{request.session.oa_problem}}</p>
 				  </font>
 				</div>

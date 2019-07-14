@@ -89,13 +89,32 @@
     width: 70%;
   }
 }
+
+{% if request.session.route_a6 = 2 %} 
+.modal-body
+{background-color: rgb(231, 142, 142);}
+.modal-header
+{background-color: rgb(231, 142, 142);}
+.modal-footer
+{background-color:  rgb(231, 142, 142);}
+
+{% elif request.session.route_a6 = 3%}
+.modal-body
+{background-color: rgb(230, 231, 142);}
+.modal-header
+{background-color: rgb(230, 231, 142);}
+.modal-footer
+{background-color:  rgb(230, 231, 142);}
+
+{% endif %}
+
 </style>
 
 <script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 
-{% if request.session.route_a6 = 1 %} 
+{% if request.session.route_a6 > 1 %} 
 <script type="text/javascript">
   $(document).ready(function(){
       $("#myModal").modal('show');
