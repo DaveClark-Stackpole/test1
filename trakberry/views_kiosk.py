@@ -1856,7 +1856,7 @@ def kiosk_fix55(request):
 def kiosk_fix44(request):
 	db, cur = db_set(request)
 	ml = 4
-	id1 = 476459
+	id1 = 475199
 
 	s1 = "SELECT * From sc_production1 WHERE length(partno) < '%s' and id > '%d'" %(ml,id1)
 	# s1 = "SELECT MAX(id)  FROM sc_prod_hour WHERE p_cell = '%s'" %(p_cell) 
