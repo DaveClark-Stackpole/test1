@@ -152,7 +152,6 @@ def kiosk_production(request):
 		tmp2 = cur.fetchall()
 		tmp1 = tmp2[0]
 		ppp = tmp1[4]
-		
 
 		try:
 			sql = "SELECT * FROM tkb_kiosk WHERE Clock = '%s' and TimeStamp_Out = '%s'" %(kiosk_clock,TimeOut)
@@ -1853,6 +1852,41 @@ def kiosk_fix55(request):
 	cur.execute(cql)
 	db.commit()
 	return render(request, "error_hourly_duplicate.html")	
+
+def kiosk_fix44(request):
+	db, cur = db_set(request)
+	ml = 4
+	id1 = 476459
+
+	s1 = "SELECT * From sc_production1 WHERE length(partno) < '%s' and id > '%d'" %(ml,id1)
+	# s1 = "SELECT MAX(id)  FROM sc_prod_hour WHERE p_cell = '%s'" %(p_cell) 
+	cur.execute(s1)
+	tmp = cur.fetchall()
+	
+
+	for i in tmp:
+		machine1 = i[1]
+		id2 = i[0]
+		prt1 = kiosk_lastpart_find (machine1)
+		cql = ('update sc_production1 SET partno = "%s" WHERE id ="%d"' % (prt1,id2))
+		cur.execute(cql)
+		db.commit()
+	db.close()
+
+
+
+	# request.session["tmp6"] = tmp
+	# tmp3 = tmp2[0]
+
+	# s2 = "SELECT * From sc_prod_hour WHERE id = '%s'" %(tmp3) 
+	# cur.execute(s2)
+	# tmp = cur.fetchall()
+	# tmp2 = tmp[0]
+	# tmp3 = tmp2[2]
+	# uu = request.session["ddss"]
+
+
+	return render(request, "kiosk/kiosk_test5.html",{'tmp1':tmp})	
 
 def set_test1(request):
 	d = 0
