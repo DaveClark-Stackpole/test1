@@ -311,14 +311,14 @@ def target_fix1(request):
 
 	db, cur = db_set(request)  
 	pr = '27'
-	pid = 476921
+	pid = 475154
 	sql = "Select * From sc_production1 where id = '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	ccct = 0
 
 	for i in tmp:
-		#  try:
+		 try:
 			asset = i[1]
 			hrs = i[12]
 			id1 = i[0]
@@ -337,8 +337,8 @@ def target_fix1(request):
 			ccct = ccct + 1
 			rr = request.session["dslkjlk"]
 
-		#  except:
-		#  	dummy = 1
+		 except:
+		 	dummy = 1
 #		if ccct > 0:
 #	uu = request.session['kkeee']
 		
