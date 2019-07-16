@@ -311,17 +311,16 @@ def target_fix1(request):
 
 	db, cur = db_set(request)  
 	pr = '27'
-	pid = 476678
-
-	sql = "Select * From sc_production1 where id = '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
+	pid = 475154
+	sql = "Select * From sc_production1 where id >= '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	ccct = 0
 
 	for i in tmp:
-		try:
+		 try:
 			asset = i[1]
-			hrs = i[15]
+			hrs = i[14]
 			id1 = i[0]
 			s1ql = "Select * from tkb_cycletime where asset = '%s' " % (asset)
 			cur.execute(s1ql)
@@ -337,8 +336,8 @@ def target_fix1(request):
 			db.commit()
 			ccct = ccct + 1
 
-		except:
-			dummy = 1
+		 except:
+		 	dummy = 1
 #		if ccct > 0:
 #	uu = request.session['kkeee']
 		
