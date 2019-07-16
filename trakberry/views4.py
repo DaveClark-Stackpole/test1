@@ -335,8 +335,6 @@ def target_fix1(request):
 			cur.execute(cql)
 			db.commit()
 			ccct = ccct + 1
-			rr = request.session["dslkjlk"]
-
 		 except:
 		 	dummy = 1
 #		if ccct > 0:
