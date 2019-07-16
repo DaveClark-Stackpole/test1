@@ -744,18 +744,20 @@ def kiosk_production_entry(request):
 					ct = (60 / ppm)
 				except:
 					dummy = 1
-
+				h = float(hrs)
+				hh = (h * 60 * 60) - (int(dwn) * 60)
 				try:
 					ct = float(ct)
-					h = float(hrs)
 					target1 = ((h * 60 * 60) / (ct))
+					target2 = (hh / (ct))
 				except:
 					target1 = int(int(prod) / .85)
+					target2 = target1
 				test_prod = prod
 				# Place the OA Check Code here **********************
 				
-				if target1 > 0:
-					OA = int((int(test_prod) / float(target1)) * 100)
+				if target2 > 0:
+					OA = int((int(test_prod) / float(target2)) * 100)
 				else:
 					OA = 0
 				# return render(request,'kiosk/kiosk_test.html', {'OA':OA,'test_prod':test_prod,'target1':target1})	
@@ -766,7 +768,7 @@ def kiosk_production_entry(request):
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
 					oa_check = 1
 					oa_problem = request.session["oa_problem"]
-					oa_problem = oa_problem + "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target1*.7)) + "\n\r\n" 
+					oa_problem = oa_problem + "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target2*.7)) + "\n\r\n" 
 					request.session["oa_problem"] = oa_problem
 						# test = str.replace(test, '\n', '\r\n')
 
