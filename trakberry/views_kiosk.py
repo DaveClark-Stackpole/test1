@@ -599,6 +599,7 @@ def kiosk_production_entry(request):
 			request.session[b3] = ""
 	
 	kiosk_job = ['' for x in range(0)]
+	oa_prob = ['' for x in range(0)]
 	kiosk_part = ['' for x in range(0)]
 	kiosk_prod = ['' for x in range(0)]
 	kiosk_hrs = ['' for x in range(0)]
@@ -767,9 +768,10 @@ def kiosk_production_entry(request):
 				if OA < 70:
 					# return render(request,'kiosk/kiosk_test.html', {'OA':OA})	
 					oa_check = 1
-					oa_problem = request.session["oa_problem"]
-					oa_problem = oa_problem + "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target2*.7)) + "\n\r\n" 
-					request.session["oa_problem"] = oa_problem
+					# oa_problem = request.session["oa_problem"]
+					oa_problem =  "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target2*.7)) 
+					oa_prob.append(oa_problem)
+					# request.session["oa_problem"] = oa_problem
 						# test = str.replace(test, '\n', '\r\n')
 
 				if len(part) < 2:
@@ -782,6 +784,7 @@ def kiosk_production_entry(request):
 				kiosk_target.append(None)
 				kiosk_machine.append("")
 		
+		request.session["oa_problem"] = oa_prob
 		# Set bounce level
 		# yyy = request.session["srgg"]	
 		request.session["bounce"] = 0
@@ -933,12 +936,15 @@ def kiosk_production_entry(request):
 	# # *******************************************************
 
 	#return render(request, "kiosk/kiosk_test5.html")
-
+	try:
+		oa_prob = request.session["oa_problem"]
+	except:
+		oa_prob = ""
 	# Check if it's a CSD2 press .  If so go to kiosk_production_entryP where we use ppm otherwise kiosk_production_entry
 	if request.session["check1"] == 1:
-		return render(request, "kiosk/kiosk_production_entryP.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp,'Msg1':msg1})
+		return render(request, "kiosk/kiosk_production_entryP.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp,'Msg1':msg1,'oa_problem':oa_prob})
 
-	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp,'Msg1':msg1})
+	return render(request, "kiosk/kiosk_production_entry.html",{'args':args,'TCUR':tcur,'Curr':current_first, 'Shift':shift,'Parts':tmp,'Msg1':msg1,'oa_problem':oa_prob})
 	
 def kiosk_defaults(request):
 	request.session["oa_check"] = ""
