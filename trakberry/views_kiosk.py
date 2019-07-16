@@ -800,6 +800,10 @@ def kiosk_production_entry(request):
 			request.session["oa_problem2"] = "Machine " + part_check_job + " has no part listed for it."
 			request.session["oa_problem"] = ""
 
+		if request.session["check1"] == 1:  # bypass the presses
+			bounce = 0
+			write_answer = 1
+
 		if part_check!=1 and oa_check != 1:
 			bounce = 0
 			write_answer = 1
