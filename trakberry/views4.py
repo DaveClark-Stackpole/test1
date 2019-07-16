@@ -310,10 +310,10 @@ def scantest(request):
 def target_fix1(request):
 
 	db, cur = db_set(request)  
-	pr = '16'
-	pid = 476600
+	pr = '27'
+	pid = 476678
 
-	sql = "Select * From sc_production1 where id > '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
+	sql = "Select * From sc_production1 where id = '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	ccct = 0
@@ -321,7 +321,7 @@ def target_fix1(request):
 	for i in tmp:
 		try:
 			asset = i[1]
-			hrs = i[12]
+			hrs = i[15]
 			id1 = i[0]
 			s1ql = "Select * from tkb_cycletime where asset = '%s' " % (asset)
 			cur.execute(s1ql)
