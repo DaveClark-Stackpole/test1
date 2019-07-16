@@ -310,8 +310,8 @@ def scantest(request):
 def target_fix1(request):
 
 	db, cur = db_set(request)  
-	pr = '27'
-	pid = 450277
+	pr = '16'
+	pid = 476600
 
 	sql = "Select * From sc_production1 where id > '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
 	cur.execute(sql)
