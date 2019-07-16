@@ -320,7 +320,7 @@ def target_fix1(request):
 	for i in tmp:
 		#  try:
 			asset = i[1]
-			hrs = i[14]
+			hrs = i[12]
 			id1 = i[0]
 			s1ql = "Select * from tkb_cycletime where asset = '%s' " % (asset)
 			cur.execute(s1ql)
