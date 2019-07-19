@@ -1898,6 +1898,10 @@ def vacation_calander_init_2018(month_st):
 	#return render(request,'test4323.html')
 	return days,cctr,mnth
 	
+
+def check_email_problem(request):
+	email_hour_check()
+	return render(request, "kiosk/kiosk_test6.html")
 	
 # Below is Code to Email Tech Reports Based on the Supervisor Refreshing at a certain Time
 def email_hour_check():
@@ -1933,7 +1937,8 @@ def email_hour_check():
 			
 		if sent == 0:
 			checking = 1
-			cursor.execute('''INSERT INTO tkb_email_conf(date,checking,sent) VALUES(%s,%s,%s)''', (current_date,checking,checking))
+			employee = 1
+			cursor.execute('''INSERT INTO tkb_email_conf(date,checking,sent,employee) VALUES(%s,%s,%s,%s)''', (current_date,checking,checking,employee))
 			db.commit()
 			
 		
@@ -1974,7 +1979,8 @@ def tech_report_email():
 	m_ctr = 0
 	subjectA = []
 	
-	db, cursor = db_set(request)  
+	# db, cursor = db_set(request)
+	db, cursor = db_open()
 	tql = "SELECT * FROM tkb_techs"
 	cursor.execute(tql)
 	tmpA = cursor.fetchall()
@@ -2004,7 +2010,9 @@ def tech_report_email():
 		
 		
 		# Add name to email list
-		toaddrs = ["ttobey@stackpole.com","dmilne@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com","kfrey@stackpole.com","ghundt@stackpole.com","dpeachy@stackpole.com"]
+		# toaddrs = ["dclark@stackpole.com"]
+
+		toaddrs = ["dclark@stackpole.com","ttobey@stackpole.com","dmilne@stackpole.com","jbarker@stackpole.com","tkuepfer@stackpole.com","lvaters@stackpole.com","pwilson@stackpole.com","mle@stackpole.com","pbui@stackpole.com","ssmith@stackpole.com","sherman@stackpole.com","nkleingeltink@stackpole.com","kbaker@stackpole.com","jpankratz@stackpole.com","kfaubert@stackpole.com","kfrey@stackpole.com","ghundt@stackpole.com","dpeachy@stackpole.com"]
 		#toaddrs = ["dclark@stackpole.com"]
 		fromaddr = 'stackpole@stackpole.com'
 		frname = 'Dave'
@@ -2030,6 +2038,7 @@ def tech_report_email():
 			dtemp_t = time.mktime(dtemp.timetuple())
 			# assign d_diff to difference in unix
 			d_dif = dtemp_t - dt_t
+			# kkd= request.session["sskk"]
 			if d_dif < 86400:
 				message = message + '[' + dtt[:16]+'] ' + x[0] + ' - ' + x[1] + ' --- ' + x[8] + "\r\n\r\n"
 				m_ctr = m_ctr + 1

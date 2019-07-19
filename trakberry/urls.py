@@ -63,6 +63,7 @@ from views_supervisor import supervisor_display, supervisor_tech_call,supervisor
 from views_supervisor import vacation_display_jump, supervisor_edit, sup_close, employee_vac_enter, vacation_display
 from views_supervisor import vacation_display_increment, vacation_display_decrement, vacation_edit, vacation_delete, sup_message_reply1,sup_message_reply0
 from views_supervisor import employee_vac_enter_init, employee_vac_enter_init2, vacation_month_fix, vacation_display_initial, resetcheck,sup_message
+from views_supervisor import check_email_problem
 # ***********************************************************************************************************************************************************
 
 
@@ -215,7 +216,8 @@ urlpatterns = [
 	
 	url(r'^graph_gf6/get/(?P<index>\w{0,50})/$', graph_gf6),
 	
-	
+	url(r'^check_email_problem/', check_email_problem),
+
 	#url(r'^graph_gf6/get/(?P<index>\d+)/$', graph_gf6),
 	
 	url(r'^graph749/', graph749),
