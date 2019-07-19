@@ -691,7 +691,10 @@ def kiosk_production_entry(request):
 		oa_check = 0
 		part_check = 0
 		write_answer = 0
-		sheet_id = 'kiosk'
+		try:
+			sheet_id = request.session["kiosk_type"]
+		except:
+			sheet_id = 'kiosk'
 
 		db, cur = db_set(request)
 		
@@ -1540,6 +1543,7 @@ def kiosk_menu(request):
 	db, cursor = db_set(request)  
 	db.close()
 
+
 	
 	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
 
@@ -1864,6 +1868,12 @@ def kiosk_fix55(request):
 	cur.execute(cql)
 	db.commit()
 	return render(request, "error_hourly_duplicate.html")	
+
+def kiosk_manual(request):
+	request.session["kiosk_type"] = "manual"
+	request.session["route_1"] = 'kiosk_menu'
+	return direction(request)
+
 
 def kiosk_fix44(request):
 	db, cur = db_set(request)

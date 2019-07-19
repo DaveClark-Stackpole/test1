@@ -90,7 +90,7 @@ from views_inventory import push_button, inventory_type_entry, inventory_entry, 
 from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave,kiosk_error_badjobnumber,kiosk_error_badclocknumber,kiosk_error_assigned_clocknumber
 from views_kiosk import kiosk_production, kiosk_production_entry,flex_test,manual_production_entry,manual_production_entry2
 from views_kiosk import entry_recent, manual_cycletime_table, tenr_fix2, tenr_fix3,kiosk_hourly_entry,kiosk_initial_9HP,kiosk_initial_6L_Output
-from views_kiosk import kiosk_initial_GF9,kiosk_initial_6L_IN,kiosk_initial_AB1V, kiosk_sub_menu
+from views_kiosk import kiosk_initial_GF9,kiosk_initial_6L_IN,kiosk_initial_AB1V, kiosk_sub_menu, kiosk_manual
 
 
 # ***********************************************************************************************************************************************************
@@ -381,6 +381,7 @@ urlpatterns = [
 	url(r'^tenr1/', tenr1),
 	url(r'^kiosk_fix55/', kiosk_fix55),
 	url(r'^kiosk_fix44/', kiosk_fix44),
+	url(r'^kiosk_manual/', kiosk_manual),
 
 	url(r'^tenr2/', tenr2),
 	url(r'^trilobe/', trilobe),
