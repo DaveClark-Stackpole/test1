@@ -46,6 +46,7 @@ from views_test import layer_retrieve,sup_mess, test_scrap1
 from views_test_email import email1, done_email_1
 from views_testing import clear_login
 from views_test import create_scrap_table, test_scrap_production
+from test_test import table_mod1
 # ***********************************************************************************************************************************************************
 
 
@@ -357,6 +358,7 @@ urlpatterns = [
 	url(r'^test_scrap1/', test_scrap1),
 	url(r'^excel_test/', excel_test),
 	url(r'^manpower_update/', manpower_update),
+	url(r'^table_mod1/', table_mod1),
 #	url(r'^hour_check/', hour_check),
 
 	

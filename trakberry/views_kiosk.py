@@ -21,7 +21,7 @@ from views_routes import direction
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open, db_set
-from views_mod1 import kiosk_lastpart_find
+from views_mod1 import kiosk_lastpart_find, kiosk_email_initial
 from datetime import datetime
 
 # *********************************************************************************************************
@@ -1540,6 +1540,7 @@ def kiosk_sub_menu(request):
 	
 		
 def kiosk_menu(request):
+	kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
 	db, cursor = db_set(request)  
 	db.close()
 

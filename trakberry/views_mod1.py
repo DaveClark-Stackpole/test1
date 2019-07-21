@@ -338,6 +338,31 @@ def mgmt_display_insert(request,index):
 	args['form'] = form  
 	return render(request,'mgmt_display_edit.html', {'tmp':tmp3})	
 
+def kiosk_email_initial(request):
+  	# Below will test for a variable and if it doesn't exist then make the column with a value assigned
+  	db, cursor = db_set(request)
+	x = 5
+ 	try:
+  		sql = "SELECT low_production FROM sc_production1 where id = '%d'" % (x)
+  		cursor.execute(sql)
+ 		tmp = cursor.fetchall()
+  	except:
+		cursor.execute("Alter Table sc_production1 ADD low_production INT Default 0")
+    	db.commit()
+	try:
+		sql = "SELECT manual_sent FROM sc_production1 where id = '%d'" % (x)
+		cursor.execute(sql)
+		tmp = cursor.fetchall()
+	except:
+		cursor.execute("Alter Table sc_production1 ADD manual_sent INT Default 1")
+    	db.commit()
+  # cursor.execute("Alter Table sc_production DROP Column low_production")  # Drop a Column
+  # db.commit()
+  # # cursor.execute("Alter Table tkb_test1 ADD Third Char(30) DEFAULT NULL")  # Add a Column
+  # cursor.execute("Alter Table tkb_test1 ADD Third Boolean Default 0")
+  # db.commit()
+  	db.close()
+  	return render(request,'done_test.html')	
 
 
 
