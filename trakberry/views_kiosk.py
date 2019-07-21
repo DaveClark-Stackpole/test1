@@ -780,7 +780,7 @@ def kiosk_production_entry(request):
 					oa_problem =  "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target2*.7)) 
 					oa_prob.append(oa_problem)
 					low_production_variable = 2
-					
+                    
 					
 					# request.session["oa_problem"] = oa_problem
 						# test = str.replace(test, '\n', '\r\n')
