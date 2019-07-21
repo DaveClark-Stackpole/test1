@@ -361,8 +361,8 @@ def kiosk_email_initial(request):
   # # cursor.execute("Alter Table tkb_test1 ADD Third Char(30) DEFAULT NULL")  # Add a Column
   # cursor.execute("Alter Table tkb_test1 ADD Third Boolean Default 0")
   # db.commit()
-  	db.close()
-  	return render(request,'done_test.html')	
+  	# db.close()
+  	return db, cursor
 
 
 

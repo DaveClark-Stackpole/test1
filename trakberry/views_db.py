@@ -35,7 +35,7 @@ def db_open():
 			return db, cursor
 
 
-def db_set(request):
+def db_set(request):  # Module to set DB settings to the one that works.  Whether local or Server
 	try:
 		db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
 		cursor = db.cursor()
@@ -61,8 +61,6 @@ def db_set(request):
   			tmp2 = cursor.fetchall()
 			request.session["local_toggle"]=""
 			return db, cursor
-
-
 	return
 
 def select_test(request):

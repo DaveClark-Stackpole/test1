@@ -607,6 +607,7 @@ def kiosk_production_entry(request):
 	kiosk_machine = ['' for x in range(0)]
 	kiosk_ppm = ['' for x in range(0)]
 	kiosk_target = ['' for x in range(0)]
+	kiosk_low_production = [0 for x in range(0)]
 	
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
@@ -664,6 +665,7 @@ def kiosk_production_entry(request):
 			
 			
 			
+			
 			x_job = "job"
 			x_part = "part"
 			x_prod = "prod"
@@ -696,7 +698,9 @@ def kiosk_production_entry(request):
 		except:
 			sheet_id = 'kiosk'
 
-		db, cur = db_set(request)
+		db, cur = kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
+		# db, cur = db_set(request)
+
 		
 
 		
@@ -707,6 +711,7 @@ def kiosk_production_entry(request):
 			hrs = kiosk_hrs[i]
 			dwn = kiosk_dwn[i]
 			ppm = kiosk_ppm[i]
+			low_production_variable = 0
 			target1 = 0
 			machine = ""
 			clock_number = request.session["clock"]
@@ -774,6 +779,9 @@ def kiosk_production_entry(request):
 					# oa_problem = request.session["oa_problem"]
 					oa_problem =  "(" + str(job) + "):" + str(test_prod) + ' for ' + str(hrs) + 'hrs and ' + str(kiosk_dwn[(i)]) + ' down should be ' + str(int(target2*.7)) 
 					oa_prob.append(oa_problem)
+					low_production_variable = 2
+					
+					
 					# request.session["oa_problem"] = oa_problem
 						# test = str.replace(test, '\n', '\r\n')
 
@@ -786,6 +794,8 @@ def kiosk_production_entry(request):
 				dummy = 1
 				kiosk_target.append(None)
 				kiosk_machine.append("")
+
+			kiosk_low_production.append(low_production_variable) # It will be either 0 or 2 at this point
 		
 		request.session["oa_problem"] = oa_prob
 		# Set bounce level
@@ -867,6 +877,7 @@ def kiosk_production_entry(request):
 		if write_answer == 1:
 			for i in range(0,6):
 				job = kiosk_job[i]
+				low_production = kiosk_low_production[i]
 				try:
 					dummy = len(job)
 					write_variable = 1
@@ -880,7 +891,11 @@ def kiosk_production_entry(request):
 					ppm = kiosk_ppm[i]
 					m = kiosk_machine[i]
 					target1 = kiosk_target[i]
-					cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy))
+					if sheet_id == 'manual':  # Set the variable to determine if we had to enter manually so we can email 
+						manual_sent = 0
+					else:
+						manual_sent = 1
+					cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated,low_production,manual_sent) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy,low_production,manual_sent))
 					db.commit()
 
 
@@ -1540,27 +1555,8 @@ def kiosk_sub_menu(request):
 	
 		
 def kiosk_menu(request):
-	kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
-	db, cursor = db_set(request)  
+	db, cursor = db_set(request) # This just sets the local link and DB 
 	db.close()
-
-
-	
-	# comment out below line to run local otherwise setting local switch to 0 keeps it on the network
-
-	# try:
-	# 	local_switch = int(request.session["local_switch"])
-	# 	if local_switch == 1:
-	# 		request.session["local_toggle"] = ""
-	# 	else:
-	# 		request.session["local_toggle"] = "/trakberry"
-	# except:
-	# 	request.session["local_toggle"] = "/trakberry"
-
-	# #Make this /trakberry for server
-	# request.session["local_toggle"] = "/trakberry"
-
-
 	request.session["kiosk_menu_screen"] = 2
 	request.session["cycletime1"] = 0
 	request.session["cycletime2"] = 0
@@ -1872,6 +1868,10 @@ def kiosk_fix55(request):
 
 def kiosk_manual(request):
 	request.session["kiosk_type"] = "manual"
+	request.session["route_1"] = 'kiosk_menu'
+	return direction(request)
+def kiosk_kiosk(request):
+	request.session["kiosk_type"] = "kiosk"
 	request.session["route_1"] = 'kiosk_menu'
 	return direction(request)
 
