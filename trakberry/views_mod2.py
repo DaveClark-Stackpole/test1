@@ -10,9 +10,11 @@ import time
 from django.core.context_processors import csrf
 import datetime as dt 
 from views_vacation import vacation_temp, vacation_set_current7, vacation_set_current6, vacation_set_current5
+import smtplib
+from smtplib import SMTP
 
 def hrly_display(request):   # This will return a tuple with hourly prod summary on last hour for each p_cell
-    email_hour_check2(request)
+    
     hourly = ['' for x in range(0)]
     hourly_var = ['' for x in range(0)]
     ert = ['' for x in range(0)]
@@ -23,21 +25,14 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
     green_block = '#62c12e'
     yellow_block = '#faff2b'
     grey_block = '#a5a4a4'
-	
-	# Set the toggle for Net/Local
- #   try:
-	#    if request.session["local_switch"] == 1:
-     #              request.session["local_toggle"] = ""
-    #else:
-#			request.session["local_toggle"] = "/trakberry"
-#	except:
-#		request.session["local_toggle"] = "/trakberry"
-		
-
     hhh = 3
+    
+
+    # email_hour_check2(request)
+
+
 
     current_first, shift1, shift2, shift3, hour_curr  = vacation_set_current7()
-
     db, cur = db_set(request)  
     s1 = "SELECT p_cell FROM sc_prod_hr_target"  # Set the p_cell value we'll use to iterate through for each cell
     cur.execute(s1)
@@ -110,12 +105,6 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
                 lst.extend((c2,d2,c1,d1,d3,new_line,tmp[4]))
                 mst=tuple(lst)
                 xx.append(mst)
-
-#                yyt = vacation_set_current6(tmp[4])
-#                xx.append(yyt)
-
-
-
                 row_ctr = row_ctr + 1
 
         except:
@@ -133,82 +122,99 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
     # This is where you return the value 'hourly' which has all the data needed in tuple form
     return render(request,'production/hrly_display.html', {'tmpp':xx})	
 
+
+def butter(request):
+    email_hour_check2(request)
+    return render(request,'done_test.html')
+
 def email_hour_check2(request):
+
     # Define Variables
     production_check = 2
     manual_check = 0
+    db, cursor = db_set(request)
 
-    db, cursor = kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
-    sql = "SELECT * FROM sc_production1 where manual_sent='%d'" %(manual_check)
+    # db, cursor = kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
+
+    sql = "SELECT * FROM sc_production1 where manual_sent = '%d'" %(manual_check)
     cursor.execute(sql)
     tmp = cursor.fetchall()
     tmp2 = tmp[0]
+    email_manual1(tmp)
+    # try:
+    #     sql = "SELECT * FROM sc_production1 where manual_sent = '%d'" %(manual_check)
+    #     cursor.execute(sql)
+    #     tmp = cursor.fetchall()
+    #     tmp2 = tmp[0]
+    #     email_manual1(tmp)
+
+
+    # except:
+    #     dummy = 1
+
+        # Send to Email Manual Entries out
+    try:
+        sql = "SELECT * FROM sc_production1 where low_production = '%d'" %(production_check)
+        cursor.execute(sql)
+        tmp = cursor.fetchall()
+        tmp2 = tmp[0]
+        # email_lowprod1(request,tmp)
+
+    except:
+        dummy = 1
+        # Send to Email Production Low out
+
+
     
     db.close()
     return 
 
-#     h = 6
-# 	h2 = 13
-# 	m = 40
-# 	ch = 0
-# 	send_email = 0
-# 	t=int(time.time())
-# 	tm = time.localtime(t)
-# 	mn = tm[4]
-# 	hour = tm[3]
-# 	current_date = find_current_date()
-# 	#hour = 9
-# 	if hour >= h:
-# 		ch = 1
+def email_manual1(tmp):
 
-# 		db, cursor = db_open()  
-# 		try:
-# 			sql = "SELECT sent FROM tkb_email_conf where date='%s'" %(current_date)
-# 			cursor.execute(sql)
-# 			tmp = cursor.fetchall()
-# 			tmp2 = tmp[0]
+    message_subject = 'Missed Kiosk Entries' 
+    message = ""
+    toaddrs = ["dclark@stackpole.com"]
+    fromaddr = 'stackpolePMDS@stackpole.com'
+    frname = 'Dave'
+    server = SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login('StackpolePMDS@gmail.com', 'stacktest6161')
+    # message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
+    
+	#message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
+    message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
+    for x in tmp:
+        a1 = str(int(x[9]))
+        a2 = str(x[1])
+        a3 = str(int(x[4]))
+        a4 = str(x[3])
+        b = "\r\n\r\n"
+        message = message + a1 + a2 + a3 + a4 + b
+        # message = message + x[8] + " " + x[1] + " " + x[4] + ":" + x[3] + " " + "\r\n\r\n"
+        m_ctr = 4
+			# assign job date and time to dt
+			# dt = x[7]
+			# dtt = str(x[7])
+			# dt_t = time.mktime(dt.timetuple())
+			# # assign current date and time to dtemp
+			# dtemp = vacation_temp()
+			# dtemp_t = time.mktime(dtemp.timetuple())
+			# # assign d_diff to difference in unix
+			# d_dif = dtemp_t - dt_t
+			# # kkd= request.session["sskk"]
+			# if d_dif < 86400:
+			# 	message = message + '[' + dtt[:16]+'] ' + x[0] + ' - ' + x[1] + ' --- ' + x[8] + "\r\n\r\n"
+			# 	m_ctr = m_ctr + 1
+			# # retrieve left first character of login_name only
+			# name_temp1 = name[:1]
+			# # retrieve last name of login name only 
+			# name_temp2 = name.split(" ",1)[1]
 
-# 			try:
-# 				sent = tmp2[0]
-# 			except:
-# 				sent = 0
-# 		except:
-# 			sent = 0
-			
-# 		if sent == 0:
-# 			checking = 1
-# 			employee = 1
-# 			cursor.execute('''INSERT INTO tkb_email_conf(date,checking,sent,employee) VALUES(%s,%s,%s,%s)''', (current_date,checking,checking,employee))
-# 			db.commit()
-			
-		
-			
-# #			Email Reports from techs
-# 			tech_report_email()
-		
-# 		#elif hour >=h2:
-# 		#	try:
-# 		#		tql = "SELECT employee FROM tkb_email_conf where date='%s'" %(current_date)
-# 		#		cursor.execute(tql)
-# 		#		tmp3 = cursor.fetchall()
-# 		#		tmp4 = tmp3[0]
-# 		#		try:
-# 		#			ssent = tmp4[0]
-# 		#		except:
-# 		#			ssent = ''
-# 		#	except:
-# 		#		ssent = ''
-# 		#	if ssent != 'y':
-# 		#		checking = 1
-# 		#		echecking = 'y'
-# 		#		cursor.execute('''INSERT INTO tkb_email_conf(date,checking,employee) VALUES(%s,%s,%s)''', (current_date,checking,echecking))
-# 		#		db.commit()
-# 		#		
-# 		#		tech_report_email()
-# 		else:
-# 			return
-			
-		
+	if m_ctr > 0:
+		server.sendmail(fromaddr, toaddrs, message)
+	server.quit()
 
-
+    return
 

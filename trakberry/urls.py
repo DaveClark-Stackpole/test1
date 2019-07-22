@@ -108,7 +108,7 @@ from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_ho
 from views4 import ios_test, IsDone, NotDone, target_fix1, medium_production, multidrop, scantest
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
-from views_mod2 import hrly_display
+from views_mod2 import hrly_display, butter
 from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset
 
 
@@ -437,6 +437,7 @@ urlpatterns = [
 
 	# **************  Mod2 Section ***************************************
 	url(r'^hrly_display/', hrly_display),
+    url(r'^butter/', butter),
 
 	# *************  Barcode *********************************************
 	url(r'^barcode_input/', barcode_input),
