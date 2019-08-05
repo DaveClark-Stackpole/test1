@@ -132,89 +132,107 @@ def email_hour_check2(request):
     # Define Variables
     production_check = 2
     manual_check = 0
+    manual_set = 1
+    production_set = 1
+    reason1 = "Missed Kiosk Entries"
+    reason2 = "Low Production"
     db, cursor = db_set(request)
-
     # db, cursor = kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
-
-    sql = "SELECT * FROM sc_production1 where manual_sent = '%d'" %(manual_check)
-    cursor.execute(sql)
-    tmp = cursor.fetchall()
-    tmp2 = tmp[0]
-    email_manual1(tmp)
-    # try:
-    #     sql = "SELECT * FROM sc_production1 where manual_sent = '%d'" %(manual_check)
-    #     cursor.execute(sql)
-    #     tmp = cursor.fetchall()
-    #     tmp2 = tmp[0]
-    #     email_manual1(tmp)
-
-
-    # except:
-    #     dummy = 1
-
-        # Send to Email Manual Entries out
+    # sql = "SELECT * FROM sc_production1 where low_production = '%d'" %(production_check)
+    # cursor.execute(sql)
+    # tmp = cursor.fetchall()
+    # tmp2 = tmp[0]
+    # email_manual1(tmp,reason1)
     try:
-        sql = "SELECT * FROM sc_production1 where low_production = '%d'" %(production_check)
+        zql = "SELECT * FROM sc_production1 where low_production = '%d'" %(production_check)
+        cursor.execute(zql)
+        zmp = cursor.fetchall()
+        tmp2 = zmp[0]
+        email_manual1(zmp,reason2)
+        zql = ('update sc_production1 SET low_production = "%d" WHERE low_production = "%d"' % (production_set, production_check))
+        cursor.execute(zql)
+        db.commit()
+    except:
+        dummy = 0
+    try:
+        sql = "SELECT * FROM sc_production1 where manual_sent = '%d'" %(manual_check)
         cursor.execute(sql)
         tmp = cursor.fetchall()
         tmp2 = tmp[0]
-        # email_lowprod1(request,tmp)
-
+        email_manual1(tmp,reason1)
+        sql = ('update sc_production1 SET manual_sent = "%d" WHERE manual_sent = "%d"' % (manual_set, manual_check))
+        cursor.execute(sql)
+        db.commit()
     except:
-        dummy = 1
-        # Send to Email Production Low out
+        dummy = 0
 
-
-    
     db.close()
     return 
 
-def email_manual1(tmp):
-
-    message_subject = 'Missed Kiosk Entries' 
+def email_manual1(tmp,reason):
+    db, cursor = db_open()
+    b = "\r\n"
+    ctr = 0
+    message_subject = reason
     message = ""
     toaddrs = ["dclark@stackpole.com"]
-    fromaddr = 'stackpolePMDS@stackpole.com'
+    fromaddr = 'stackpole@stackpole.com'
     frname = 'Dave'
     server = SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
     server.ehlo()
     server.login('StackpolePMDS@gmail.com', 'stacktest6161')
-    # message = "From: %s\r\n" % frname + "To: %s\r\n" % toaddrs + "Subject: %s\r\n" % message_subject + "\r\n" 
-    
-	#message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
+    message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
     message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
+    # message = message + "Name" + " || " + "Job" + " || " + "Count" + " || " + "Target" + " || " + "Date          " + " || " + "Shift" + b + b
+    # message = message + " --------------------------------------------------------------------------------" + b
+    # message = message + str(tmp)
+    # h = 6 / 0
     for x in tmp:
-        a1 = str(int(x[9]))
-        a2 = str(x[1])
-        a3 = str(int(x[4]))
-        a4 = str(x[3])
-        b = "\r\n\r\n"
-        message = message + a1 + a2 + a3 + a4 + b
+        nm = (str(x[9]))
+        # nm = int(nm)
+        try:
+            zql = "SELECT * FROM tkb_users where Clock = '%s'" %(nm)
+            cursor.execute(zql)
+            zmp = cursor.fetchall()
+            zzmp = zmp[0]
+            nm = zzmp[2]
+        except:
+            nm = "Unknown"
+
+
+        a1 = "Name:"+nm
+        a2 = "Job:"+str(x[1])
+        a3 = "Count:"+str(x[4])
+        a4 = "Target:"+str(x[13])
+        a5 = "Date:"+str(x[10])
+        a6 = "Shift:"+str(x[11])
+
+        # a1 = string_make(str(x[9]),7)
+        # a2 = str(x[1])
+        # a3 = string_make(str(x[4]),7)
+        # a4 = string_make(str(x[13]),8)
+        # a5 = str(x[10])
+        # a6 = str(x[11])
+        # a7 = str(ctr)
+        ctr = ctr + 1
+        b = "\r\n"
+        message = message + a1 + "  " + a2 + "  " + a3 + "  " +  a4 + "  " +  a5 + "  " +  a6  + b
         # message = message + x[8] + " " + x[1] + " " + x[4] + ":" + x[3] + " " + "\r\n\r\n"
         m_ctr = 4
-			# assign job date and time to dt
-			# dt = x[7]
-			# dtt = str(x[7])
-			# dt_t = time.mktime(dt.timetuple())
-			# # assign current date and time to dtemp
-			# dtemp = vacation_temp()
-			# dtemp_t = time.mktime(dtemp.timetuple())
-			# # assign d_diff to difference in unix
-			# d_dif = dtemp_t - dt_t
-			# # kkd= request.session["sskk"]
-			# if d_dif < 86400:
-			# 	message = message + '[' + dtt[:16]+'] ' + x[0] + ' - ' + x[1] + ' --- ' + x[8] + "\r\n\r\n"
-			# 	m_ctr = m_ctr + 1
-			# # retrieve left first character of login_name only
-			# name_temp1 = name[:1]
-			# # retrieve last name of login name only 
-			# name_temp2 = name.split(" ",1)[1]
 
-	if m_ctr > 0:
-		server.sendmail(fromaddr, toaddrs, message)
-	server.quit()
-
+    server.sendmail(fromaddr, toaddrs, message)
+    server.quit()
+    db.close()
     return
+
+def string_make(x,n):
+    while True:
+        if len(x) >= n:
+            break
+        x = x + " "
+    return x
+
+    
 
