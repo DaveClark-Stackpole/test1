@@ -130,10 +130,12 @@ def butter(request):
 def email_hour_check2(request):
 
     h1 = 7
-    h2 = 20
+    h2 = 15
     h3 = 23
+    h4 = 17
     m1 = 15
     m2 = 30
+    m3 = 45
     ch = 0
     t=int(time.time())
     tm = time.localtime(t)
@@ -147,6 +149,9 @@ def email_hour_check2(request):
             ch = 1
     if hour == h3:
         if mn > m1 and mn < m2:
+            ch = 1
+    if hour == h4:
+        if mn > m2 and mn < m3:
             ch = 1
     
     if ch != 1:
