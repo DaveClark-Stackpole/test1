@@ -698,8 +698,8 @@ def kiosk_production_entry(request):
 		except:
 			sheet_id = 'kiosk'
 
-		db, cur = kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
-		# db, cur = db_set(request)
+		# db, cur = kiosk_email_initial(request) # This Check will ensure the new columns are in and if not will add them
+		db, cur = db_set(request)
 
 		
 
