@@ -117,9 +117,9 @@ def barcode_check(request):
       dummy = 1
 
     part = request.session["barcode_part"]
-    if len(bar1) >29:
+    if len(bar1) >23:
       return render(request,"barcode_warning.html")
-    if len(bar1) < 8:
+    if len(bar1) < 21:
       return render(request,"barcode_warning.html")
 
     part = part + 1
