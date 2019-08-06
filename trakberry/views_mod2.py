@@ -246,7 +246,7 @@ def email_manual1(tmp,reason):
         # a7 = str(ctr)
         ctr = ctr + 1
         b = "\r\n"
-        message = message + a1 + "  " + a2 + "  " + a3 + "  " +  a4 + "  " +  a5 + "  " +  a6  + b
+        message = message + a1 + "  " + a2 + "  " + a3 + "  " +  a4 + "  " +  a5 + "  " +  a6  + b + b
         # message = message + x[8] + " " + x[1] + " " + x[4] + ":" + x[3] + " " + "\r\n\r\n"
         m_ctr = 4
 
