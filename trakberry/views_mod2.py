@@ -28,7 +28,7 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
     hhh = 3
     
 
-    # email_hour_check2(request)
+    email_hour_check2(request)
 
 
 
@@ -129,6 +129,29 @@ def butter(request):
 
 def email_hour_check2(request):
 
+    h1 = 7
+    h2 = 20
+    h3 = 23
+    m1 = 15
+    m2 = 30
+    ch = 0
+    t=int(time.time())
+    tm = time.localtime(t)
+    mn = tm[4]
+    hour = tm[3]
+    if hour == h1:
+        if mn > m1 and mn < m2:
+            ch = 1
+    if hour == h2:
+        if mn > m1 and mn < m2:
+            ch = 1
+    if hour == h3:
+        if mn > m1 and mn < m2:
+            ch = 1
+    
+    if ch != 1:
+        return
+
     # Define Variables
     production_check = 2
     manual_check = 0
@@ -199,7 +222,7 @@ def email_manual1(tmp,reason):
             zzmp = zmp[0]
             nm = zzmp[2]
         except:
-            nm = "Unknown"
+            nm = "Clock " + str(x[9])
 
 
         a1 = "Name:"+nm
