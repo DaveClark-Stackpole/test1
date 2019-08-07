@@ -172,7 +172,7 @@ def kiosk_production(request):
 			try:
 				pn_len = 3
 				request.session["variable1"] = int(tmp1[4])
-				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(tmp1[4])
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' and part = '%s'" %(tmp1[4],prt1)
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
@@ -189,7 +189,7 @@ def kiosk_production(request):
 				if len(tmp1[4])<2:
 					request.session["variable1"] = 99
 			try:
-				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s'" %(int(tmp1[5]))
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' and part = '%s'" %(int(tmp1[5]),prt2)
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
@@ -743,11 +743,17 @@ def kiosk_production_entry(request):
 			except:
 				write_variable = 0
 			if write_variable == 1:
+				try:
+					# db, cur = db_set(request)
+					uql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' and part = '%s'" %(job,part)
+					cur.execute(uql)
+					ymp = cur.fetchall()
+					ymp2 = ymp[0]
+					ct = ymp2[4]
+					# db.close()
+				except:
+					dummy = 7
 
-#				if request.session["check1"] == 1:
-#					ppm = float(ppm)
-#					ct = (60 / ppm)
-#					return render(request, "kiosk/kiosk_test5.html",{'ppm':ct})
 				try:
 					ppm = float(ppm)
 					ct = (60 / ppm)
@@ -895,6 +901,7 @@ def kiosk_production_entry(request):
 						manual_sent = 0
 					else:
 						manual_sent = 1
+					# y = y / 0
 					cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated,low_production,manual_sent) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy,low_production,manual_sent))
 					db.commit()
 
