@@ -96,6 +96,14 @@ def barcode_check(request):
     bar1 = request.session["barcode"]
     bar1=str(bar1)
     stamp = time.time()
+    part = request.session["barcode_part"]
+    h = len(bar1)
+    if len(bar1) >23:
+      return render(request,"barcode_warning.html")
+    if len(bar1) < 21:
+      return render(request,"barcode_warning.html")
+  
+
     db, cur = db_set(request)
  #   try:
     
@@ -116,11 +124,8 @@ def barcode_check(request):
     except:
       dummy = 1
 
-    part = request.session["barcode_part"]
-    if len(bar1) >23:
-      return render(request,"barcode_warning.html")
-    if len(bar1) < 21:
-      return render(request,"barcode_warning.html")
+    
+    
 
     part = part + 1
     cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (bar1,stamp,part))
