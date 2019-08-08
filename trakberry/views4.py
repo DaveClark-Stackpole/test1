@@ -176,7 +176,8 @@ def medium_production(request):
 			asset1 = ii[1]
 			tuple1 = ['' for x in range(0)]
 			shifthrs1=8
-			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and shift_hours_length = '%d' ORDER BY id DESC limit 35" %(asset1,shifthrs1) 
+			iid = 451262
+			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC limit 65" %(asset1,shifthrs1,iid) 
 			cur.execute(bql)
 			tmp3 = cur.fetchall()
 			for i in tmp3:
