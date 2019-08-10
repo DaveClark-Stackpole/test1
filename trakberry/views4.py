@@ -165,7 +165,15 @@ def medium_production2(request):
 	return render(request, "kiosk/kiosk_test7.html",{'tmp':lst})
 	
 def medium_production(request):
+	# db, cur = medium_initial(request)
 	db, cur = db_set(request)
+
+	cur.execute("""DROP TABLE IF EXISTS tkb_couldbe""")
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_couldbe LIKE tkb_cycletime""")
+	cur.execute('''INSERT tkb_couldbe Select * From tkb_cycletime''')
+	cur.execute("Alter Table tkb_couldbe ADD medium Char(30)")
+	db.commit()
+
 	sql = "Select * From tkb_couldbe"
 	cur.execute(sql)
 	tmp4 = cur.fetchall()
@@ -174,10 +182,13 @@ def medium_production(request):
 		tot = 0
 		try:
 			asset1 = ii[1]
+			part = ii[2]
 			tuple1 = ['' for x in range(0)]
 			shifthrs1=8
-			iid = 451262
-			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC limit 65" %(asset1,shifthrs1,iid) 
+			iid = 40000
+			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and partno = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC limit 35" %(asset1,part,shifthrs1,iid) 
+			# bql = "Select actual_produced From sc_production1 where asset_num = '%s' and partno = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC" %(asset1,part,shifthrs1,iid) 
+
 			cur.execute(bql)
 			tmp3 = cur.fetchall()
 			for i in tmp3:
@@ -185,24 +196,33 @@ def medium_production(request):
 			lst = list(tuple1)
 			lst2 = median(lst)
 			tot = int(lst2)
-
-			cql = ("""update tkb_couldbe SET actual = %s WHERE asset1 = %s""" % (tot,asset1))
+			tot = str(tot)
+			cql = ('update tkb_couldbe SET medium = "%s" WHERE asset = "%s" and part = "%s"' % (tot,asset1,part))
 			cur.execute(cql)
 			db.commit()
-			if asset1 == '603':
-				request.session["lst2"] = lst
 
 		except:
 			dummy = 1
 		
-	
-
 		#rr = request.session["pumpkin"]
-
-				
 	db.close()
-	return render(request, "kiosk/kiosk_test7.html",{'tmp':lst})
 	
+	return render(request, "kiosk/kiosk_test7.html")
+
+def medium_initial(request):
+  	# Below will test for a variable and if it doesn't exist then make the column with a value assigned
+  	db, cursor = db_set(request)
+	x = 5
+ 	try:
+  		sql = "SELECT part FROM tkb_couldbe where id = '%d'" % (x)
+  		cursor.execute(sql)
+ 		tmp = cursor.fetchall()
+  	except:
+		cursor.execute("Alter Table tkb_couldbe ADD part Char")
+    	db.commit()
+  	return db, cursor
+
+
 def IsDone(request):
 	id1 = 1
 	name1 = '"Dave"'
