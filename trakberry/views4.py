@@ -168,6 +168,22 @@ def medium_production(request):
 	# db, cur = medium_initial(request)
 	db, cur = db_set(request)
 
+	# bql = "Select max(id) From sc_production1"
+	# cur.execute(bql)
+	# tmp3 = cur.fetchall()
+	# tmp4 = tmp3[0]
+	# max_id = int(tmp4[0])
+
+	# bql = "Select createdtime from sc_production1 where id = '%s'" % (max_id)
+	# cur.execute(bql)
+	# tmp3 = cur.fetchall()
+	# tmp4 = tmp3[0]
+	# last_date = tmp4[0]
+	# m = last_date.month
+
+
+	# h = 9/0
+
 	cur.execute("""DROP TABLE IF EXISTS tkb_couldbe""")
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_couldbe LIKE tkb_cycletime""")
 	cur.execute('''INSERT tkb_couldbe Select * From tkb_cycletime''')
@@ -185,10 +201,8 @@ def medium_production(request):
 			part = ii[2]
 			tuple1 = ['' for x in range(0)]
 			shifthrs1=8
-			iid = 40000
+			iid = 473329
 			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and partno = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC limit 35" %(asset1,part,shifthrs1,iid) 
-			# bql = "Select actual_produced From sc_production1 where asset_num = '%s' and partno = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC" %(asset1,part,shifthrs1,iid) 
-
 			cur.execute(bql)
 			tmp3 = cur.fetchall()
 			for i in tmp3:

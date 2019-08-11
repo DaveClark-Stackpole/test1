@@ -12,7 +12,7 @@ import smtplib
 from smtplib import SMTP
 import xlrd
 #import pandas
-from views_vacation import vacation_temp, vacation_set_current, vacation_set_current2, vacation_set_current4
+from views_vacation import vacation_temp, vacation_set_current, vacation_set_current2,vacation_set_current6, vacation_set_current4
 
 
 #  Testing View for Excel Reading
@@ -24,9 +24,9 @@ def excel_test(request):
 	
 #	Change to directory where imported inventory.xlsm is located
 #		Use this for local testing
-#	label_link = '/home/trackberry/file/import1/Inventory/importedxls/'
+	label_link = 'c:/Projects/'
 #		Use this one for actual server
-	label_link = '/home/file/import1/Inventory/importedxls'
+	# label_link = '/home/file/import1/Inventory/importedxls'
 	
 	sheet = 'inventory.xlsx'
 	sheet_name = 'Sheet1'
@@ -40,15 +40,22 @@ def excel_test(request):
 	# First variable is ROW 
 	# Second variable is COLUMN
 	
-	tot = 246
-	toc = 35
+	tot = 28
+	toc = 1
+
 	tdate = tot+1
 	jj = 1
+	kk = 1
 
-	a = [[] for x in range(600)]
-	b = [[] for y in range(600)]
-	for i in range(205,tot):
-		for ii in range(0,17):
+	a = [[] for x in range(1900)]
+	b = [[] for y in range(1900)]
+	d = [[] for z in range(1900)]
+	for i in range(toc,tot):
+		x = str(working.cell(i,0).value)
+		# b[kk].append(x)
+		# kk = kk + 1
+		
+		for ii in range(1,39):
 			#x = working.cell(i,ii).value
 			#if x > 0 and x < 10000000:
 			#	x = int(x)
@@ -57,26 +64,42 @@ def excel_test(request):
 			#	if len(str(x)) < 5:
 			#		x = 0
 			#	else:
-			if len(str(working.cell(i,ii).value)) > 5:
+			dummy = 1
+			# if len(str(working.cell(i,ii).value)) > 5:
+			if dummy == 1:
 				#x = str(working.cell(i,ii).value) + "(" + str(working.cell(204,ii).value) + ")"
-				x = str(working.cell(i,ii).value) 
-				y = str(working.cell(204,ii).value) 
+				y = str(working.cell(i,ii).value) 
+				if len(y) < 1:
+					y = 0
+				else:
+					y = float(y)
+					y = int(y)
+				# y = str(working.cell(0,ii).value) 
 				
-				z = x + "(" + y + ")"
+				# z = x + "(" + y + ")"
 				a[jj].append(x)
 				b[jj].append(y)
+				d[jj].append(ii)
 				jj = jj + 1
 	#a = working.cell(1,0).value
 	# Date
-	c = working.cell(24,0).value
+	c = working.cell(41,0).value
+	# # yy = 9/0
 	excel_date = int(c)
-	
-	dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date - 2)
+	dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date)
+	ddt = vacation_set_current6(dt)
+
+	# t = 9/0
+	# excel_date = int(c)
+	# dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date - 2)
+
 
 	#tt = vacation_temp()
 
+	e = zip(a,b,d)
 
-	#return render(request,"test4.html",{'Date':dt,'A':a,'B':b})
+
+	return render(request,"test4.html",{'D':ddt,'A':e})
 	
 	
 	#adate = working.cell(tdate,1).value
@@ -194,12 +217,6 @@ def excel_test(request):
 #					ch = 1
 	except:
 
-		
-		
-		
-		
-		
-		
 		return render(request,"test5_error.html")
 	
 	if ch == 1:
@@ -207,30 +224,15 @@ def excel_test(request):
 	elif ch == 0:
 		return render(request,"test5_match.html")
 	
-	
-	
-	
-	
-	
-
-
-
 	db.close()
-		
-			
-	
-	
-	
 	return render(request,"test5.html",{'a':a,'b':current_first})
  
 def inventory_initial():
 
 	# create inventory table if one doesn't exist
 	db, cursor = db_set(request)  
-	
 #	Use below line to recreate the table format
 	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
-
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_manpower(Id INT PRIMARY KEY AUTO_INCREMENT,Employee CHAR(80), Shift CHAR(80))""")
 	db.commit()
 	db.close()
@@ -240,10 +242,8 @@ def manpower_initial():
 
 	# create inventory table if one doesn't exist
 	db, cursor = db_set(request)  
-	
 #	Use below line to recreate the table format
 	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
-
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_manpower(Id INT PRIMARY KEY AUTO_INCREMENT,Employee CHAR(80), Shift CHAR(80),Trained CHAR(160))""")
 	db.commit()
 	db.close()
