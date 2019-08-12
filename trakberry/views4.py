@@ -198,12 +198,24 @@ def medium_production(request):
 	for ii in tmp4:
 		ctr = 0
 		tot = 0
+
 		try:
 			asset1 = ii[1]
 			part = ii[2]
 			tuple1 = ['' for x in range(0)]
 			shifthrs1=8
 			iid = 473329
+
+			cql = "Select cycletime from tkb_cycletime where asset = '%s' and part = '%s'" % (asset1,part)
+			cur.execute(cql)
+			tmp3 = cur.fetchall()
+			tmp4 = tmp3[0]
+			ctime = tmp4[0]
+			ctime = float(ctime)
+			trg = 28800 / ctime
+
+			
+
 			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and partno = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC limit 35" %(asset1,part,shifthrs1,iid) 
 			cur.execute(bql)
 			tmp3 = cur.fetchall()
@@ -213,7 +225,18 @@ def medium_production(request):
 			lst2 = median(lst)
 			tot = int(lst2)
 			tot = str(tot)
+			trg = int(trg)
+
+			per = int(tot) / trg
+			# per = per * 100
+
 			cql = ('update tkb_couldbe SET medium = "%s" WHERE asset = "%s" and part = "%s"' % (tot,asset1,part))
+			cur.execute(cql)
+			db.commit()
+			cql = ('update tkb_couldbe SET target = "%s" WHERE asset = "%s" and part = "%s"' % (trg,asset1,part))
+			cur.execute(cql)
+			db.commit()
+			cql = ('update tkb_couldbe SET percent = "%s" WHERE asset = "%s" and part = "%s"' % (per,asset1,part))
 			cur.execute(cql)
 			db.commit()
 
