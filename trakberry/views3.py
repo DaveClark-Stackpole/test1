@@ -44,7 +44,7 @@ def excel_test(request):
 	toc = 1
 
 	tdate = tot+1
-	jj = 1
+	jj = 0
 	kk = 1
 
 	a = [[] for x in range(1900)]
@@ -65,8 +65,9 @@ def excel_test(request):
 			#		x = 0
 			#	else:
 			dummy = 1
+			yy = len(x)
 			# if len(str(working.cell(i,ii).value)) > 5:
-			if dummy == 1:
+			if len(x) > 3:
 				#x = str(working.cell(i,ii).value) + "(" + str(working.cell(204,ii).value) + ")"
 				y = str(working.cell(i,ii).value) 
 				if len(y) < 1:
@@ -97,6 +98,28 @@ def excel_test(request):
 	#tt = vacation_temp()
 
 	e = zip(a,b,d)
+	inventory_initial(request)
+	db, cur = db_set(request)
+	ctr = 0
+	for i in e:
+		p = ''.join(i[0])
+		try:
+			q = int("".join(map(str,i[1])))
+			c = int("".join(map(str,i[2])))
+		except:
+			q = 0
+			c = 0
+		ctr = ctr + 1
+		# if ctr > 3:
+		# 	lenp = len(p)
+		# 	x = 9/0
+		if len(p)>1:
+
+			cur.execute('''INSERT INTO tkb_inventory(Date,Part,Qty,Category) VALUES(%s,%s,%s,%s)''', (ddt,p,q,c))
+			db.commit()
+
+	db.close()
+
 
 
 	return render(request,"test4.html",{'D':ddt,'A':e})
@@ -134,9 +157,10 @@ def excel_test(request):
 	#b = 35
 	
 #	Only uncomment below line to re do table completely	
-	inventory_initial()
+# inventory_initial()
+
 #	Select today as the date to put in for entry
-	current_first = vacation_set_current4(dt)
+	# current_first = vacation_set_current4(dt)
 	
 	db, cur = db_set(request)
 #  Below Section will insert a as a new entry
@@ -153,7 +177,7 @@ def excel_test(request):
 		y = str(a[i][0])
 		#y = "a"
 		yy = str(b[i][0])
-		cur.execute('''INSERT INTO tkb_manpower(Employee,Shift) VALUES(%s,%s)''', (y,yy))
+		cur.execute('''INSERT INTO tkb_inventory(Employee,Shift) VALUES(%s,%s)''', (y,yy))
 		db.commit()
 	request.session["test_excel"] = "Added New One"
 
@@ -227,16 +251,17 @@ def excel_test(request):
 	db.close()
 	return render(request,"test5.html",{'a':a,'b':current_first})
  
-def inventory_initial():
+def inventory_initial(request):
 
 	# create inventory table if one doesn't exist
 	db, cursor = db_set(request)  
 #	Use below line to recreate the table format
-	cursor.execute("""DROP TABLE IF EXISTS tkb_manpower""")
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_manpower(Id INT PRIMARY KEY AUTO_INCREMENT,Employee CHAR(80), Shift CHAR(80))""")
+	cursor.execute("""DROP TABLE IF EXISTS tkb_inventory""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_inventory(Id INT PRIMARY KEY AUTO_INCREMENT,Date Date,Part Char(80),Qty Int(20), Category Int(10))""")
 	db.commit()
 	db.close()
 	return
+
 	
 def manpower_initial():
 
