@@ -188,6 +188,8 @@ def medium_production(request):
 	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_couldbe LIKE tkb_cycletime""")
 	cur.execute('''INSERT tkb_couldbe Select * From tkb_cycletime''')
 	cur.execute("Alter Table tkb_couldbe ADD medium Char(30)")
+	cur.execute("Alter Table tkb_couldbe ADD target int(30)")
+	cur.execute("Alter Table tkb_couldbe ADD percent decimal(10)")
 	db.commit()
 
 	sql = "Select * From tkb_couldbe"
