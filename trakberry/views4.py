@@ -206,16 +206,17 @@ def medium_production(request):
 			shifthrs1=8
 			iid = 473329
 
-			cql = "Select cycletime from tkb_cycletime where asset = '%s' and part = '%s'" % (asset1,part)
-			cur.execute(cql)
-			tmp3 = cur.fetchall()
-			tmp4 = tmp3[0]
-			ctime = tmp4[0]
-			ctime = float(ctime)
-			trg = 28800 / ctime
-
-			
-
+			try:
+				cql = "Select cycletime from tkb_cycletime where asset = '%s' and part = '%s'" % (asset1,part)
+				cur.execute(cql)
+				tmp3 = cur.fetchall()
+				tmp4 = tmp3[0]
+				ctime = tmp4[0]
+				ctime = float(ctime)
+				trg = 28800 / ctime
+			except:
+				trg = 10000
+				
 			bql = "Select actual_produced From sc_production1 where asset_num = '%s' and partno = '%s' and shift_hours_length = '%d' and id > '%d' ORDER BY id DESC limit 35" %(asset1,part,shifthrs1,iid) 
 			cur.execute(bql)
 			tmp3 = cur.fetchall()
