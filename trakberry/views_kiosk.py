@@ -204,6 +204,7 @@ def kiosk_production(request):
 			except:
 				request.session["part2"] = -1
 				request.session["machine2"] = "XX"
+				request.session["variable2"] = int(tmp1[5])
 				if len(tmp1[5]) < 2:
 					request.session["variable2"] = 99
 			try:
