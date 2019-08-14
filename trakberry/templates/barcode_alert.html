@@ -1,6 +1,6 @@
 
-<!DOCTYPE html>
-<html>
+{% extends "kiosk/barcode_main.html" %}
+{% block content %}
 <body style="background-color:red;">
 
 
@@ -28,7 +28,7 @@ Current Time:{{request.session.now_time}}
 
 </font>
 </body>
-</html>
+{% endblock %}
 
 
 

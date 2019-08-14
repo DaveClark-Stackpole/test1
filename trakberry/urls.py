@@ -109,7 +109,7 @@ from views4 import ios_test, IsDone, NotDone, target_fix1, medium_production, mu
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
 from views_mod2 import hrly_display, butter
-from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset
+from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset, barcode_search, barcode_search_check
 
 
 # ***********************************************************************************************************************************************************
@@ -444,6 +444,8 @@ urlpatterns = [
 	url(r'^barcode_check/', barcode_check),
 	url(r'^barcode_initial/', barcode_initial),
 	url(r'^barcode_reset/', barcode_reset),
+	url(r'^barcode_search/', barcode_search),
+	url(r'^barcode_search_check/', barcode_search_check),
 
 	
 ]

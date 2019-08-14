@@ -85,11 +85,50 @@ def barcode_reset(request):
   max_stamp = tmp3[0]
   max_stamp = max_stamp + 1
 
-
-  cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (a,max_stamp,b))
+  skid = 1
+  cur.execute('''INSERT INTO barcode(asset_num,scrap,skid,part) VALUES(%s,%s,%s,%s)''', (a,max_stamp,skid,b))
   db.commit()
-  request.session["route_1"] = 'barcode_initial'
+  request.session["barcode_part"] = 0
+  request.session["route_1"] = 'barcode_input'
   return direction(request)
+
+def barcode_search(request):
+    if request.POST:
+        bc = request.POST.get("barcode")
+        request.session["barcode"] = bc
+        request.session["route_1"] = 'barcode_search_check'
+        return direction(request)
+    else:
+		form = kiosk_dispForm1()
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+    return render(request,"kiosk/barcode_search.html",{'args':args})
+
+def barcode_search_check(request):
+    bar1 = request.session["barcode"]
+    bar1=str(bar1)
+    stamp = time.time()
+    part = request.session["barcode_part"]
+    h = len(bar1)
+    db, cur = db_set(request)
+    mql = "SELECT * FROM barcode WHERE asset_num = '%s'" %(bar1)
+    cur.execute(mql)
+    tmp2 = cur.fetchall()
+    try:
+      tmp3=tmp2[0]
+      tmp4=tmp3[0]
+      timestamp = tmp3[2]
+      dd = vacation_1(stamp)
+      d = vacation_1(timestamp)
+      request.session["alert_time"] = d
+      request.session["now_time"] = dd
+      request.session["diff_time"] = int(stamp - timestamp)
+      return render(request,"barcode_search_found.html")
+
+    except:
+      dummy = 5
+    return render(request,"barcode_search_clear.html")
 
 
 def barcode_check(request):
@@ -98,9 +137,9 @@ def barcode_check(request):
     stamp = time.time()
     part = request.session["barcode_part"]
     h = len(bar1)
-    if len(bar1) >23:
+    if len(bar1) >11:
       return render(request,"barcode_warning.html")
-    if len(bar1) < 21:
+    if len(bar1) < 2:
       return render(request,"barcode_warning.html")
   
 
@@ -124,11 +163,9 @@ def barcode_check(request):
     except:
       dummy = 1
 
-    
-    
-
     part = part + 1
-    cur.execute('''INSERT INTO barcode(asset_num,scrap,part) VALUES(%s,%s,%s)''', (bar1,stamp,part))
+    skid = 1
+    cur.execute('''INSERT INTO barcode(asset_num,scrap,skid,part) VALUES(%s,%s,%s,%s)''', (bar1,stamp,skid,part))
     db.commit()
     
     request.session["bar1"] = bar1
@@ -144,6 +181,8 @@ def barcode_check(request):
     if part_num == "5399" and part == 40:
       return render(request,"barcode_complete.html")
     if part_num == "5404" and part == 120:
+      return render(request,"barcode_complete.html")
+    if part_num == "3333" and part == 9:
       return render(request,"barcode_complete.html")
 
 
