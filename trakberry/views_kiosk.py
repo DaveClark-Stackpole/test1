@@ -189,13 +189,13 @@ def kiosk_production(request):
 				if len(tmp1[4])<2:
 					request.session["variable1"] = 99
 			try:
-				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' and part = '%s'" %(int(tmp1[5]),prt2)
+				request.session["variable2"] = int(tmp1[5])
+				sql = "SELECT * FROM tkb_cycletime WHERE asset = '%s' and part = '%s'" %(tmp1[5],prt2)
 				cur.execute(sql)
 				tmp = cur.fetchall()
 				tmpp = tmp[0]
 				request.session["part2"] = prt2
 				request.session["machine2"] = tmpp[5]
-				request.session["variable2"] = int(tmp1[5])
 				try:
 					request.session["cycletime2"] = str(tmpp[4])
 				except:
