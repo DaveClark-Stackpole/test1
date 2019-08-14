@@ -137,9 +137,9 @@ def barcode_check(request):
     stamp = time.time()
     part = request.session["barcode_part"]
     h = len(bar1)
-    if len(bar1) >11:
+    if len(bar1) >25:
       return render(request,"barcode_warning.html")
-    if len(bar1) < 2:
+    if len(bar1) < 22:
       return render(request,"barcode_warning.html")
   
 
