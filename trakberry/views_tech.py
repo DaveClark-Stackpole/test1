@@ -178,7 +178,7 @@ def tech(request):
 	c = ["tech","Jim Barker"]
 	j = "tech"
 	jj = "Tech"
-	a1 = "Kevin Bisch"
+	a1 = "Dave McLaren"
 	a2 = "Muoi Le"
 	a3 = "Jim Barker"
 	a4 = "Scott Smith"
