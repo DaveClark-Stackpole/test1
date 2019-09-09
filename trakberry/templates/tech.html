@@ -166,15 +166,15 @@
 				
                 
 				
-				<li><a href="/trakberry/tech_recent"><span class="glyphicon glyphicon-folder-open"></span> Recent History</a></li>
-				<li><a href="/trakberry/tech_map"><span class="glyphicon glyphicon-sunglasses"></span> Map</a></li>
-				<li><a href="/trakberry/tech_message"><span class="glyphicon glyphicon-sunglasses"></span> Messaging</a></li>
+				<li><a href="{{request.session.local_toggle}}/tech_recent"><span class="glyphicon glyphicon-folder-open"></span> Recent History</a></li>
+				<li><a href="{{request.session.local_toggle}}/tech_map"><span class="glyphicon glyphicon-sunglasses"></span> Map</a></li>
+				<li><a href="{{request.session.local_toggle}}/tech_message"><span class="glyphicon glyphicon-sunglasses"></span> Messaging</a></li>
 
 			</ul>	
 			
 			<ul class="nav navbar-nav navbar-right">	
 			<li><font color="#ffffff" size ="2">Welcome: <u>{{request.session.login_tech}}</u></li>
-			<li><a href="/trakberry/tech_logout" style="color:#47889E"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+			<li><a href="{{request.session.local_toggle}}/tech_logout" style="color:#47889E"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 							
             </ul>
 			
@@ -208,11 +208,11 @@
           <p><font color="#000000" size ="2">{{M.4}}<br></font></p>
         </div>
         <div class="modal-footer">
-			<a href="/trakberry/tech_message_reply1">
+			<a href="{{request.session.local_toggle}}/tech_message_reply1">
 					<button>Reply</button>
 			</a>  
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="/trakberry/tech_message_close">
+			<a href="{{request.session.local_toggle}}/tech_message_close">
 					<button>Close</button>
 			</a> 
 
@@ -252,7 +252,7 @@
 		
 		<div class="col-sm-8" style="background-color: #EBEBEB;border-radius:0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
 		
-		<center><a href="/trakberry/jcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
+		<center><a href="{{request.session.local_toggle}}/jcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
 		</div>
 
 	</div>	
@@ -260,10 +260,10 @@
 		
 
 		<div class="col-sm-4" style="background-color: #A1D490;border-radius: 0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-		<center><a href="/trakberry/jclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
+		<center><a href="{{request.session.local_toggle}}/jclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
 		</div>
 		<div class="col-sm-4" style="background-color: #7Fd4F0;border-radius: 0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-		<center><a href="/trakberry/jpass/get/{{ i.2 }}" style="color: black">Pass Off</b></a></center>
+		<center><a href="{{request.session.local_toggle}}/jpass/get/{{ i.2 }}" style="color: black">Pass Off</b></a></center>
 		</div>
 	</div>		
 <br>
