@@ -180,8 +180,10 @@ def barcode_check(request):
 
     if part_short == "BB":
       part_num == "5214"
+      request.session["barcode_part_number"] = "5214"
     if part_short == "CB":
       part_num == "3214"
+      request.session["barcode_part_number"] = "3214"
     if part_num == "5214" and part == 280:
       return render(request,"barcode_complete.html")
     if part_num == "3214" and part == 280:
