@@ -64,6 +64,7 @@ def barcode_input(request):
         bc1 = request.POST.get("barcode")
         request.session["barcode"] = bc1
         request.session["barcode_part_number"] = bc1[-4:]
+        request.session["barcode_part_short"] = bc1[-2:]
         request.session["route_1"] = 'barcode_check'
         return direction(request)
     else:
@@ -137,7 +138,7 @@ def barcode_check(request):
     stamp = time.time()
     part = request.session["barcode_part"]
     h = len(bar1)
-    if len(bar1) >25:
+    if len(bar1) >30:
       return render(request,"barcode_warning.html")
     if len(bar1) < 22:
       return render(request,"barcode_warning.html")
@@ -175,8 +176,22 @@ def barcode_check(request):
     db.close()
 
     part_num = request.session["barcode_part_number"]
+    part_short = request.session["barcode_part_short"]
+
+    if part_short == "BB":
+      part_num == "5214"
+    if part_short == "CB":
+      part_num == "3214"
+    if part_num == "5214" and part == 280:
+      return render(request,"barcode_complete.html")
+    if part_num == "3214" and part == 280:
+      return render(request,"barcode_complete.html")
 
     if part_num == "5401" and part == 144:
+      return render(request,"barcode_complete.html")
+    if part_num == "3124" and part == 280:
+      return render(request,"barcode_complete.html")
+    if part_num == "5124" and part == 280:
       return render(request,"barcode_complete.html")
     if part_num == "5399" and part == 40:
       return render(request,"barcode_complete.html")
