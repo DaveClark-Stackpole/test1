@@ -371,9 +371,12 @@ def scantest(request):
 def target_fix1(request):
 
 	db, cur = db_set(request)  
+
 	pr = '27'
-	pid = 476418
-	sql = "Select * From sc_production1 where id >= '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
+	pr2 = "50-0455"
+	pid = 508908
+	sql = "Select * From sc_production1 where id >= '%d' and partno = '%s' " %(pid,pr2) # Get latest entry for p_cell
+	#sql = "Select * From sc_production1 where id >= '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
 	cur.execute(sql)
 	tmp = cur.fetchall()
 	ccct = 0
@@ -381,18 +384,24 @@ def target_fix1(request):
 	for i in tmp:
 		 try:
 			asset = i[1]
+			part1 = i[3]
 			hrs = i[12]
 			id1 = i[0]
-			s1ql = "Select * from tkb_cycletime where asset = '%s' " % (asset)
+
+			s1ql = "Select * from tkb_cycletime where asset = '%s'  and part = '%s'" % (asset,part1)
 			cur.execute(s1ql)
 			tmp2 = cur.fetchall()
 			tmp3 = tmp2[0]
 			tmp4 = tmp3[4]
+			machine1 = tmp3[5]
 			ct = str(tmp4)
 			ct = float(ct)
 			h = float(hrs)
 			target1 = ((h * 60 * 60) / (ct))
 			cql = ('update sc_production1 SET target = "%s" WHERE id ="%s"' % (target1,id1))
+			cur.execute(cql)
+			db.commit()
+			cql = ('update sc_production1 SET machine = "%s" WHERE id ="%s"' % (machine1,id1))
 			cur.execute(cql)
 			db.commit()
 			ccct = ccct + 1
@@ -401,6 +410,5 @@ def target_fix1(request):
 #		if ccct > 0:
 #	uu = request.session['kkeee']
 		
-
 
 	return render(request, "kiosk/kiosk_test6.html",{'tmp':tmp})

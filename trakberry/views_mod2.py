@@ -203,7 +203,9 @@ def email_manual1(tmp,reason):
     ctr = 0
     message_subject = reason
     message = ""
-    toaddrs = ["sbrownlee@stackpole.com,jmcmaster@stackpole.com","dmiller@stackpole.com","dclark@stackpole.com","sherman@stackpole.com","pmurphy@stackpole.com","ghundt@stackpole.com","kfrey@stackpole.com","asmith@stackpole.com","smcmahon@stackpole.com","mclarke@stackpole.com","gharvey@stackpole.com","rstanley@stackpole.com","nkleingeltink@stackpole.com"]
+    #toaddrs = ["sbrownlee@stackpole.com,jmcmaster@stackpole.com","dmiller@stackpole.com","dclark@stackpole.com","sherman@stackpole.com","pmurphy@stackpole.com","ghundt@stackpole.com","kfrey@stackpole.com","asmith@stackpole.com","smcmahon@stackpole.com","mclarke@stackpole.com","gharvey@stackpole.com","rstanley@stackpole.com","nkleingeltink@stackpole.com"]
+    toaddrs = ["dclark@stackpole.com"]
+    
     fromaddr = 'stackpole@stackpole.com'
     frname = 'Dave'
     server = SMTP('smtp.gmail.com', 587)
