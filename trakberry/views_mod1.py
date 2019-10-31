@@ -94,15 +94,26 @@ def mgmt_display(request):
 #		db.close()
 #		direction_id = 1
 #	min_id = 456638
-	xx5v = 1508
+	x5 = '1508'
+	xx5='asset_num'
+	zz = ['' for y in range(0)]
+	z = ['' for y in range(0)]
+
+	z.append(xx5)
+	z.append(xx5)
+	z.append(xx5)
+	zz.append(x5)
+	zz.append(x5)
+	zz.append(x5)
+
 #	s2 = s2 + id_name + ') FROM '+ request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20"
 	if direction_id == 1:
-		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s and z10=%s  and z11=%s  and z12=%s  and z13=%s  and z14=%s  and z15=%s  and z16=%s  and z17=%s  and z18=%s  and z19=%s  and z20=%s  and z21=%s ORDER BY xx4 DESC limit 20""")%(min_id,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21)
+		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s and wxy=%s ORDER BY xx4 DESC limit 20""")%(min_id,zz[0])
 	else:	
 		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 ASC limit 20""")%(min_id)
 
 	# This part is a test part
-	s1 = ("""SELECT xx1 FROM xx2 where xx3<%s xxy ORDER BY xx4 DESC limit 20""")%(min_id)
+	# s1 = ("""SELECT xx1 FROM xx2 where xx3<%s xxy ORDER BY xx4 DESC limit 20""")%(min_id)
 	
 
 	index = s1.find('xx1')
@@ -115,6 +126,14 @@ def mgmt_display(request):
 	s1 = s1[:index] + id_name + s1[index+3:]
 
 
+	index = s1.find('wxy')
+	s1 = s1[:index] + z[0] + s1[index+3:]
+	# index = s1.find('z02')
+	# s1 = s1[:index] + z[1] + s1[index+3:]
+	# index = s1.find('z03')
+	# s1 = s1[:index] + z[2] + s1[index+3:]
+
+
 	# first test
 	# index = s1.find('xx5')
 	# s1 = s1[:index-4] + s1[index+6:]
@@ -122,7 +141,7 @@ def mgmt_display(request):
 	# s1 = s1[:index-1] + s1[index+4:]
 
 
-
+	jj = request.session["dlkjlk"]
 #	Below Error check for end of or start of table.  Refresh to start if it is.
 	return render(request,'kiosk/kiosk_test2.html', {'tmp':s1})
 
