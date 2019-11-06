@@ -94,9 +94,13 @@ def mgmt_display(request):
 #		db.close()
 #		direction_id = 1
 #	min_id = 456638
-	x5 = '1508'
+	x5 = '1507'
 	x6 = '1502'
 	x7 = '1507'
+	x8 = '1507'
+	x9 = '1507'
+	x10 = '1507'
+	x11 = '1507'
 	xx5='asset_num'
 	zz = ['' for y in range(0)]
 	z = ['' for y in range(0)]
@@ -104,15 +108,27 @@ def mgmt_display(request):
 	z.append(xx5)
 	z.append(xx5)
 	z.append(xx5)
+	z.append(xx5)
+	z.append(xx5)
+	z.append(xx5)
+	z.append(xx5)
 	zz.append(x5)
 	zz.append(x6)
-	zz.append(x6)
+	zz.append(x7)
+	zz.append(x8)
+	zz.append(x9)
+	zz.append(x10)
+	zz.append(x11)
 
 #	s2 = s2 + id_name + ') FROM '+ request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20"
+	# Template that will include filtering in every column
 	if direction_id == 1:
-		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s AND ww1=%s OR ww2=%s OR ww3=%s ORDER BY xx4 DESC limit 20""")%(min_id,zz[0],zz[1],zz[2])
-	else:	
-		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 ASC limit 20""")%(min_id)
+		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s AND w10=%s OR w11=%s OR w12=%s OR w13=%s OR w14=%s OR w15=%s OR w16=%s ORDER BY xx4 DESC limit 20""")%(min_id,zz[0],zz[1],zz[2],zz[3],zz[4],zz[5],zz[6])
+	else:
+		# uu = request.session["eee"]
+		# s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 ASC limit 20""")%(min_id)
+		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s AND w10=%s OR w11=%s OR w12=%s OR w13=%s OR w14=%s OR w15=%s OR w16=%s ORDER BY xx4 ASC limit 20""")%(min_id,zz[0],zz[1],zz[2],zz[3],zz[4],zz[5],zz[6])
+
 
 	# This part is a test part
 	# s1 = ("""SELECT xx1 FROM xx2 where xx3<%s xxy ORDER BY xx4 DESC limit 20""")%(min_id)
@@ -127,8 +143,9 @@ def mgmt_display(request):
 	index = s1.find('xx4')
 	s1 = s1[:index] + id_name + s1[index+3:]
 
-	for a in range(1,4):
-		a_var = 'ww' + str(a)
+	for a in range(1,8):
+		b = a + 9
+		a_var = 'w' + str(b)
 		index = s1.find(a_var)
 		s1 = s1[:index] + z[(a-1)] + s1[index+3:]
 
@@ -188,7 +205,7 @@ def mgmt_display(request):
 			last_id = tmp1
 
 #	if cctr == 8:
-#		jjj = request.session['bike']
+	# jjj = request.session['biker']
 	request.session['ending_id'] = last_id
 	request.session['starting_id'] = min_id
 	
@@ -198,6 +215,7 @@ def mgmt_display_next(request):
 	
 	request.session['direction_id'] = 1
  	request.session['starting_id'] = request.session['ending_id']
+
 	return mgmt_display(request)
 
 def mgmt_display_prev(request):
