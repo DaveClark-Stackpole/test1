@@ -95,13 +95,13 @@ def mgmt_display(request):
 #		direction_id = 1
 #	min_id = 456638
 	x5 = '1507'
-	x6 = '1502'
-	x7 = '1507'
-	x8 = '1507'
-	x9 = '1507'
-	x10 = '1507'
-	x11 = '1507'
-	xx5='asset_num'
+	x6 = x5
+	x7 = x5
+	x8 = x5
+	x9 = x5
+	x10 = x5
+	x11 = x5
+	xx5='i'
 	zz = ['' for y in range(0)]
 	z = ['' for y in range(0)]
 
@@ -111,7 +111,7 @@ def mgmt_display(request):
 	z.append(xx5)
 	z.append(xx5)
 	z.append(xx5)
-	z.append(xx5)
+	z.append(xx5)	
 	zz.append(x5)
 	zz.append(x6)
 	zz.append(x7)
@@ -123,11 +123,12 @@ def mgmt_display(request):
 #	s2 = s2 + id_name + ') FROM '+ request.session["mgmt_table_name"] + " ORDER BY "+id_name+" DESC limit 20"
 	# Template that will include filtering in every column
 	if direction_id == 1:
-		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s AND w10=%s OR w11=%s OR w12=%s OR w13=%s OR w14=%s OR w15=%s OR w16=%s ORDER BY xx4 DESC limit 20""")%(min_id,zz[0],zz[1],zz[2],zz[3],zz[4],zz[5],zz[6])
+		s1 = ("""SELECT xx1 FROM xx2 where xx3<%s ORDER BY xx4 DESC limit 20""")%(min_id)
+		# s1 = ("""SELECT xx1 FROM xx2 where xx3<%s AND w10=%s OR w11=%s OR w12=%s OR w13=%s OR w14=%s OR w15=%s OR w16=%s ORDER BY xx4 DESC limit 20""")%(min_id,zz[0],zz[1],zz[2],zz[3],zz[4],zz[5],zz[6])
 	else:
 		# uu = request.session["eee"]
-		# s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 ASC limit 20""")%(min_id)
-		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s AND w10=%s OR w11=%s OR w12=%s OR w13=%s OR w14=%s OR w15=%s OR w16=%s ORDER BY xx4 ASC limit 20""")%(min_id,zz[0],zz[1],zz[2],zz[3],zz[4],zz[5],zz[6])
+		s1 = ("""SELECT xx1 FROM xx2 where xx3>%s ORDER BY xx4 ASC limit 20""")%(min_id)
+		# s1 = ("""SELECT xx1 FROM xx2 where xx3>%s AND w10=%s OR w11=%s OR w12=%s OR w13=%s OR w14=%s OR w15=%s OR w16=%s ORDER BY xx4 ASC limit 20""")%(min_id,zz[0],zz[1],zz[2],zz[3],zz[4],zz[5],zz[6])
 
 
 	# This part is a test part
@@ -143,11 +144,13 @@ def mgmt_display(request):
 	index = s1.find('xx4')
 	s1 = s1[:index] + id_name + s1[index+3:]
 
-	for a in range(1,8):
-		b = a + 9
-		a_var = 'w' + str(b)
-		index = s1.find(a_var)
-		s1 = s1[:index] + z[(a-1)] + s1[index+3:]
+
+# Uncomment below block to put filtering trial back in play
+	# for a in range(1,8):
+	# 	b = a + 9
+	# 	a_var = 'w' + str(b)
+	# 	index = s1.find(a_var)
+	# 	s1 = s1[:index] + z[(a-1)] + s1[index+3:]
 
 
 
