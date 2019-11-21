@@ -373,8 +373,8 @@ def target_fix1(request):
 	db, cur = db_set(request)  
 
 	pr = '27'
-	pr2 = "50-3214"
-	pid = 454200
+	pr2 = "50-5404"
+	pid = 452784
 	sql = "Select * From sc_production1 where id >= '%d' and partno = '%s' " %(pid,pr2) # Get latest entry for p_cell
 	#sql = "Select * From sc_production1 where id >= '%d' and LEFT(asset_num,2) != '%s' " %(pid,pr) # Get latest entry for p_cell
 	cur.execute(sql)
