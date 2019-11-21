@@ -106,7 +106,7 @@ from views_kiosk import set_test1, kiosk_fix55, kiosk_fix44
 from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit, mgmt_production, mgmt_display_edit, mgmt_cycletime
 
 from views4 import ios_test, IsDone, NotDone, target_fix1, medium_production, multidrop, scantest, target_fix1
-from views4 import target_fix_5401, target_fix_5404, target_fix_5399, target_fix_5214, target_fix_3214
+# from views4 import target_fix_5401, target_fix_5404, target_fix_5399, target_fix_5214, target_fix_3214
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
 from views_mod2 import hrly_display, butter
