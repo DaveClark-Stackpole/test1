@@ -761,6 +761,14 @@ def kiosk_production_entry(request):
 				except:
 					dummy = 1
 				h = float(hrs)
+
+				# Fix to make sure someone didn't put a null amount in for downtime.  If so then make it 0
+				try:
+					test1 = int(dwn)
+				except:
+					dwn = 0
+				# End of Fix
+				
 				hh = (h * 60 * 60) - (int(dwn) * 60)
 				try:
 					ct = float(ct)
