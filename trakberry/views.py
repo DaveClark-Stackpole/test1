@@ -43,7 +43,7 @@ def eup(x):
 		nt.append(str(x[2]))
 		h = 1
 		st.append(str(h))
-		jj = request.session["43"]
+
 		# st.append(str(x[5]))
 
 def mup(x):
@@ -221,6 +221,11 @@ def display_AB1V(request):
   # Set u to the epoch time for the beginning of the shift of current day.  Either 23, 7 or 15	
   u = t - (((cur_hour-shift_start)*60*60)+(tm[4]*60)+tm[5])
 
+
+
+
+  u = 1575027098    # TEMPORARY VALUE
+
   
   #ik = 1130000
   #u = u - 28800
@@ -286,21 +291,10 @@ def display_AB1V(request):
 	pt = []
 	dt = []
 
-	# for x in tmp:
-	# 	m = fup(x)
-	# 	n = machine_list[y]
-	# 	yy = request.session["dsd"]
-
 	# Make gup look for > 0 so we can force a number in there to alter that count
-	[eup(x) for x in tmp if fup(x) == machine_list[y] and gup(x) > 0]
+	[eup(x) for x in tmp if fup(x) == machine_list[y]]
 	count[y] = sum(int(i) for i in st)
-	yy = request.session["dsd"]
-	# TEST
-	#if machine_list[y] == '1506':
-	#	return render(request, "test8.html", {'A': count[y],'B': y, 'C': machine_list[y],'D':st})
-	
-	
-	
+
 	# ****** Graph Variables Code ---place in gr_list   ***************************************************************
 	kk=int((t-u)/60)
 	if machine_list[y] == request.session["machine_chart"]:
@@ -333,9 +327,13 @@ def display_AB1V(request):
 		diff_time[y]="%d:%02d:%02d" % (h,m,s)
 	except:
 		diff_time[y]= "0"
-		
-	[mup(x) for x in tmp if fup(x) == machine_list[y]]
-	down_time[y] = sum(int(i) for i in dt)	
+	
+	# # old downtime calculation.   Need a new one to figure out
+	# [mup(x) for x in tmp if fup(x) == machine_list[y]]
+	# down_time[y] = sum(int(i) for i in dt)
+
+	down_time[y] = 0
+
 #	if machine_list[y]=='614':
 #		return render(request,"test5.html",{'MC':machine_list[y],'DT':down_time[y]})
 		
@@ -353,23 +351,9 @@ def display_AB1V(request):
 	MOEE = Metric_OEE(t, u, down_time[y], count[y], machine_rate[y])
 	OA [ y ] = MOEE				
 	if MOEE > 0 :
-		#MOEE = int (MOEE*10)
-		#MOEE = float(MOEE / 10)
-		#MOEE = str ( MOEE ) 
-		#TOEE = MOEE[:2] + '.' + MOEE[1:]
-		#MOEE = MOEE[:2] + '.' + MOEE[1:] + '%' 
 		OEE [ y ] = str ( MOEE ) + "%"
-		#MOEE = int (MOEE * 1000)
-		#MOEE = str ( MOEE ) 
-		#MOEE = MOEE[:2] + '.' + MOEE[1:] + '%' 
-		#OEE [ y ] = MOEE
 	else:
 		OEE [ y ] = '00.0%'
-				
-#	OEE [ y ] = Metric_OEE(t,u,down_time[y],count[y],machine_rate[y])
-	#OEE [ y ] = int(OEE[y]*10000)/float(100)
-	#OEE [ y ] = "("+str(OEE[y])+"%" + ")"
-
 
 	# Determine idle time
 	if (diff[y]>cycle[y]):
@@ -378,14 +362,6 @@ def display_AB1V(request):
 		idle = 0
 	# *****************************************************
 
-		
-#	try:
-#		m, s = divmod(down_time[y],60)
-#		h, m = divmod(m, 60)
-#		down_time[y] ="%d:%02d:%02d" % (h,m,s)
-#	except:
-#		down_time[y] = 0
-		
 	try:
 		request.session["details_gf6op30"]
 	except:
@@ -435,6 +411,8 @@ def display_AB1V(request):
  
 		
   request.session["track_start"] = t
+
+  
   tg = " green 30%"
   th = " yellow 31%"
   request.session["test_grad"] = tg
