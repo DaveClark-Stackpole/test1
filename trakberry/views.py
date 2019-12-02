@@ -162,7 +162,7 @@ def display_AB1V(request):
   gx[0], gx[1], gx[2], gx[3], gx[4], gx[5], gx[6], gx[7], gx[8], gx[9], gx[10]= "0%", "15%", "18%", "23%", "30%", "40%", "43%", "47%", "50%", "60%", "100%"   
   
   rate = float(7)
-  machine_list = ['5399','996','995','989','5404','998','1515','1501','995','996','997','998']
+  machine_list = ['5399','5404','5401','989','998','998','998','999','995','996','997','998']
   graph_link = ['/trakberry/graph677/','/trakberry/graph748/','/trakberry/graph749/','/trakberry/graph750/','/trakberry/graph615/','/trakberry/graph614/','/trakberry/graph629/','/trakberry/graph620/','/trakberry/graph574/','/trakberry/graph755/','/trakberry/graph756/','/trakberry/graph686/']
   mc2 = ['756','686','574','755']
   mc3 = ['629','620','615','614']
@@ -224,7 +224,7 @@ def display_AB1V(request):
 
 
 
-  u = 1575027098    # TEMPORARY VALUE
+#   u = 1575027098    # TEMPORARY VALUE
 
   
   #ik = 1130000
@@ -422,7 +422,7 @@ def display_AB1V(request):
   #list = zip(machine_list,info,red,yellow,green,mc2,mc3,gry,graph_link,count)
   list = zip(machine_list,info,red,yellow,green,gry,graph_link,count)
   for y in range(0, 12):
-		if y < 4:
+		if y == 0:
 			a1[y] = machine_list[y]
 			a2[y] = info[y]
 			a3[y] = red[y]
@@ -438,7 +438,7 @@ def display_AB1V(request):
 				Actr = Actr + 1
 			#aoa = aoa + OEE[y]
 			
-		if y >3 and y<6:
+		if y == 1:
 			b1[y-4] = machine_list[y]
 			b2[y-4] = info[y]
 			b3[y-4] = red[y]
@@ -453,7 +453,7 @@ def display_AB1V(request):
 			if OA [ y ] > 5:
 				Bctr = Bctr + 1
 			
-		if y >5 and y <8:
+		if y == 2:
 			c1[y-6] = machine_list[y]
 			c2[y-6] = info[y]
 			c3[y-6] = red[y]
