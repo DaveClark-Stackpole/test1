@@ -91,7 +91,10 @@ function drawCurveTypes() {
 <body>
 
 <!-- Menu Bar -->
-<div class="navbar navbar-light navbar-fixed-top" style="background-color: #DFDFDF;border-width: thin;border-color: black;" role="navigation">
+<!-- <div class="navbar navbar-light navbar-fixed-top" style="background-color: #DFDFDF;border-width: thin;border-color: black;" role="navigation"> -->
+	<div class="navbar navbar-default navbar-fixed-top" style="background-color:rgb(248, 228, 186);border-color: rgb(26, 24, 11);border-width:1px" role="navigation">
+
+
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -99,15 +102,19 @@ function drawCurveTypes() {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/trakberry/" style="position:absolute;left:0px;top:-10px;"><img src="/static/media/stack.jpg"  height="40" width="170"></a>
+			</button>
+			<a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;">
+                <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">
+			</a>
+			<!-- test -->
+            <!-- <a class="navbar-brand" href="/trakberry/" style="position:absolute;left:0px;top:-10px;"><img src="/static/media/stack.jpg"  height="40" width="170"></a> -->
         </div>
         <div class="collapse navbar-collapse">
             
             <ul class="nav navbar-nav">
 				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 
-				<li><a href="{{request.session.local_toggle}}/main" style="color:black;"><span class="glyphicon glyphicon-eye-open"></span>Main Program</a></li>
+				<li><a href="#" style="color:black;"><span class="glyphicon glyphicon-eye-open"></span>Main Program</a></li>
 				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 
 				<!-- Choice if Tracking is on or not for Menu Item -->
@@ -117,8 +124,8 @@ function drawCurveTypes() {
 					<li><a href="{{request.session.local_toggle}}/details_track" style="color:black;background-color: #54E143;">Start Tracking</a></li>
 				{% endif %}
 				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-
-				<li><a href="{{request.session.local_toggle}}/reports_day" style="color:black;"><span class="glyphicon glyphicon-th"></span>Daily Reports</a></li>
+				<li><a href="#" style="color:black;"><span class="glyphicon glyphicon-th"></span>Daily Reports</a></li>
+				<!-- <li><a href="{{request.session.local_toggle}}/reports_day" style="color:black;"><span class="glyphicon glyphicon-th"></span>Daily Reports</a></li> -->
 				<!-- End Choice -->
 
 
