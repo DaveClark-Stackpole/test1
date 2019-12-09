@@ -160,7 +160,6 @@ def medium_production2(request):
 	request.session["lst2"] = lst2
 	request.session["Asset"] = asset1
 
-
 	db.close()
 	return render(request, "kiosk/kiosk_test7.html",{'tmp':lst})
 	
@@ -204,7 +203,7 @@ def medium_production(request):
 			part = ii[2]
 			tuple1 = ['' for x in range(0)]
 			shifthrs1=8
-			iid = 496309
+			iid = 522211
 
 			try:
 				cql = "Select cycletime from tkb_cycletime where asset = '%s' and part = '%s'" % (asset1,part)

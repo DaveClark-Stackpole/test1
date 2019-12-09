@@ -153,7 +153,18 @@ function drawCurveTypes() {
 </th></tr></table>
 <table style="width:80%;margin-left:10%;">
 	
-<tr><th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>50-5399<font style="font-size:80%;"> ({{totalA}}pcs )</center></font></th>
+<tr>
+	
+	
+	<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>50-5399<font style="font-size:80%;"> ({{totalA}}pcs )</center></font>
+
+
+
+</th>
+
+
+
+
 <th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>50-5401<font style="font-size:80%;"> ({{totalC}}pcs) </th>
 	<th bgcolor="#B7CCB6"><center><font style="font-size:126%;"><b>50-5404<font style="font-size:80%;"> ({{totalB}}pcs) </th>
 </tr>
@@ -243,17 +254,16 @@ function drawCurveTypes() {
 
 <br><br><br>
 <center>
-<!-- <table style="width:70%;margin-left:10%;">
+<table style="width:70%;margin-left:10%;">
 <tr><th style="font-size: 130%;">
 <center>*********    Cliick the Count Box to view the graph of production vs time    *************</center>
 
 <br><br>
-<a href="{{request.session.local_toggle}}/graph_gf6/get/{{index.0.0}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/{{index.0.0}}', 'newwindow', 'width=1400, height=600'); return false;">
-		
+<a href="{{request.session.local_toggle}}/graph_gf6/get/{{5399}}" onclick="window.open('{{request.session.local_toggle}}/graph_gf6/get/5399', 'newwindow', 'width=1400, height=600'); return false;">	
 	<button style="text-align: left;width:100%;height:100%;font-size: 120%;color: #000000;
 		border-style: solid;border-color:#A1A1A1;border-radius: 0px;background-color:green;
 		background-image: linear-gradient(0deg, {{index.4}},{{index.2}},{{index.3}});
-		"/><b><center><br><br><br>
+		"/><b><center></a><br><br><br>
 	<br><font style="font-size:150%;"><b> {{index.7}}pcs<br> OAq: {{index.24}}</font></center> <br><br><br>
 
 
@@ -262,7 +272,7 @@ function drawCurveTypes() {
 {{i}}<br>
 {% endfor %} 
 <br>*************************************************************************************************************************<br>
-{% endfor %} -->
+{% endfor %}
 </th></tr></table>
 </center>
 
