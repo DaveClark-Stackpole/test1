@@ -47,6 +47,7 @@ from views_test_email import email1, done_email_1
 from views_testing import clear_login
 from views_test import create_scrap_table, test_scrap_production
 from test_test import table_mod1
+from view_test1 import test_mac
 # ***********************************************************************************************************************************************************
 
 
@@ -111,6 +112,7 @@ from views_mod1 import mgmt_display_next,mgmt_display_prev
 
 from views_mod2 import hrly_display, butter
 from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset, barcode_search, barcode_search_check
+
 
 
 # ***********************************************************************************************************************************************************
@@ -365,6 +367,7 @@ urlpatterns = [
 	url(r'^excel_test/', excel_test),
 	url(r'^manpower_update/', manpower_update),
 	url(r'^table_mod1/', table_mod1),
+	url(r'^test_mac/', test_mac),
 #	url(r'^hour_check/', hour_check),
 
 	
