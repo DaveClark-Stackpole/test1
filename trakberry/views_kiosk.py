@@ -60,6 +60,7 @@ def kiosk(request):
 		if button_pressed == -1:
 			#request.session["route_1"] = 'kiosk' # disable when ready to run
 			request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
+			
 			return direction(request)
 			
 		if button_pressed == -2:
@@ -1616,7 +1617,8 @@ def kiosk_menu(request):
 			#request.session["route_1"] = 'kiosk'   #disable when ready to run
 			request.session["route_2"] = 2
 			kiosk_defaults(request)
-			request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
+			# request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
+			request.session["route_1"] = 'kiosk_name' # enable when ready to run
 			return direction(request)
 			
 
