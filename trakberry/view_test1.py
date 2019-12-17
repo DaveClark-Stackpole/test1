@@ -14,7 +14,6 @@ import MySQLdb
 import uuid
 
 def test_mac(request):
-    request.session["Mac_Address"] = (hex(uuid.getnode()))
     return render(request,'done_test8.html')
 
 
