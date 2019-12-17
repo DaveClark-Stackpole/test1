@@ -558,7 +558,11 @@ def manual_production_entry2(request):
 				zy = 0
 				
 				dummy = len(job)
-				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,mch,zy,zy,zy,zy,zy,xy))
+				try:
+					kiosk_id = request.session["kiosk_id"]
+				except:
+					kiosk_id = "Unknown Kiosk"
+				cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,kiosk_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,mch,zy,zy,zy,zy,zy,xy,kiosk_id))
 				db.commit()
 			except:
 				dummy = 1
@@ -617,6 +621,7 @@ def kiosk_production_entry(request):
 			if kiosk_button1 == -1:
 				TimeStamp = int(time.time())
 				TimeOut = - 1
+				
 				try:
 					db, cur = db_set(request)
 					cql = ('update tkb_kiosk SET TimeStamp_Out = "%s" WHERE Clock ="%s" and TimeStamp_Out = "%s"' % (TimeStamp,kiosk_clock,TimeOut))
@@ -910,8 +915,12 @@ def kiosk_production_entry(request):
 						manual_sent = 0
 					else:
 						manual_sent = 1
+					try:
+						kiosk_id = request.session["kiosk_id"]
+					except:
+						kiosk_id = "Unknown Kiosk"
 					# y = y / 0
-					cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated,low_production,manual_sent) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy,low_production,manual_sent))
+					cur.execute('''INSERT INTO sc_production1(asset_num,partno,actual_produced,shift_hours_length,down_time,comments,shift,pdate,machine,scrap,More_than_2_percent,total,target,planned_downtime_min_forshift,sheet_id,Updated,low_production,manual_sent,kiosk_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (job,part,prod,hrs,dwn,clock_number,shift_time,kiosk_date,m,zy,zy,zy,target1,zy,sheet_id,zy,low_production,manual_sent,kiosk_id))
 					db.commit()
 
 

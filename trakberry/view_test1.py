@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.template import loader
 from django.template import RequestContext
 from django.shortcuts import render
-
+from trakberry.forms import login_Form
 from django.http import HttpResponse
 from views_db import db_open, db_set
 from django.http import HttpResponseRedirect
@@ -13,8 +13,18 @@ import MySQLdb
 
 import uuid
 
-def test_mac(request):
-    return render(request,'done_test8.html')
+def kiosk_name(request):
+    if request.POST:
+        kiosk_id = request.POST.get("kiosk_id")
+        request.session["kiosk_id"] = kiosk_id
+        return render(request,'done_test8.html')
+    else:
+        form = login_Form()
+    args = {}
+    args.update(csrf(request))
+    args['form'] = login_Form
+    return render(request,'kiosk_id.html', args)	
+
 
 
 
