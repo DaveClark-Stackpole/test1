@@ -47,7 +47,7 @@ from views_test_email import email1, done_email_1
 from views_testing import clear_login
 from views_test import create_scrap_table, test_scrap_production
 from test_test import table_mod1
-from view_test1 import kiosk_name
+from view_test1 import kiosk_name,update_column
 # ***********************************************************************************************************************************************************
 
 
@@ -368,6 +368,7 @@ urlpatterns = [
 	url(r'^manpower_update/', manpower_update),
 	url(r'^table_mod1/', table_mod1),
 	url(r'^kiosk_name/', kiosk_name),
+	url(r'^update_column/', update_column),
 #	url(r'^hour_check/', hour_check),
 
 	
