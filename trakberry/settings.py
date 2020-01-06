@@ -89,15 +89,15 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #    }
 #}  
 
-# DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql', 
-#             'NAME': 'prodrptdb',                      
-#             'USER': 'stuser',                      
-#             'HOST': '10.4.1.224', 
-#             'PASSWORD':'stp383', 
-#         }
-#          }
+ DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.mysql', 
+             'NAME': 'prodrptdb',                      
+             'USER': 'stuser',                      
+             'HOST': '10.4.1.224', 
+             'PASSWORD':'stp383', 
+         }
+          }
 
 # DATABASES = {
 #         'default': {
@@ -110,16 +110,16 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #          }
 #       }
 
-DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-	        'NAME': 'prodrptdb',
-		    'USER': 'root',
-		    'PASSWORD':'benny6868',
-		    'HOST': '127.0.0.1',
-		    'PORT': '',
-         }
-      }
+#DATABASES = {
+ #       'default': {
+ #           'ENGINE': 'django.db.backends.mysql',
+#	        'NAME': 'prodrptdb',
+#		    'USER': 'root',
+#		    'PASSWORD':'benny6868',
+#		    'HOST': '127.0.0.1',
+#		    'PORT': '',
+ #        }
+  #    }
 
 
 # Internationalization
