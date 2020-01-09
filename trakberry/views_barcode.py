@@ -141,10 +141,13 @@ def barcode_check(request):
     if len(bar1) >24:
       return render(request,"barcode_warning.html")
     if len(bar1) <22:
-      return render(request,"barcode_warning.html")
+      if len(bar1) != 16:
+        return render(request,"barcode_warning.html")
   
 
     db, cur = db_set(request)
+    if len(bar1) == 16:
+      request.session["barcode_part_number"] = '9341'
  #   try:
     
     mql = "SELECT * FROM barcode WHERE asset_num = '%s'" %(bar1)
@@ -199,7 +202,8 @@ def barcode_check(request):
       return render(request,"barcode_complete.html")
     if part_num == "5404" and part == 120:
       return render(request,"barcode_complete.html")
-    if part_num == "3333" and part == 9:
+    if part_num == "9341" and part == 112:
+      
       return render(request,"barcode_complete.html")
 
 

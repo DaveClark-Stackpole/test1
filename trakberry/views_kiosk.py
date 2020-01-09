@@ -134,6 +134,9 @@ def kiosk_production(request):
 		request.session["variable5"] = ""
 		request.session["variable6"] = ""
 
+
+
+
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button2"))
 			if kiosk_button1 == -2:
@@ -168,6 +171,7 @@ def kiosk_production(request):
 			prt4 = kiosk_lastpart_find (tmp1[7])
 			prt5 = kiosk_lastpart_find (tmp1[8])
 			prt6 = kiosk_lastpart_find (tmp1[9])
+
 			# ***************************************************************************************
 
 			try:
@@ -291,7 +295,6 @@ def kiosk_production(request):
 	
 		except:	
 			#Problem is above
-
 			request.session["route_1"] = 'kiosk_menu'
 			return direction(request)
 	
