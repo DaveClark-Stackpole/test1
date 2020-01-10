@@ -28,7 +28,7 @@ import json
 def barcode_initial_10R(request):
 
   request.session["barcode_skid"] = 1
-  request.session["barcode_part"] = '9341'
+  request.session["barcode_part_number"] = '9341'
 
   request.session["route_1"] = 'barcode_input_10R'
   return direction(request)
@@ -57,21 +57,18 @@ def barcode_check_10R(request):
     stamp = time.time()
     part = request.session["barcode_part"]
     h = len(bar1)
-    if len(bar1) != 16:
-      return render(request,"barcode_warning_10R.html")
-  
-
-
-    request.session["barcode_part_number"] = '9341'
-    
-    request.session["bar1"] = bar1
-    
-    request.session["barcode_part"] = part
-
-    return render(request,"barcode_ok_10R.html")
-    
-
-
+    if len(bar1) == 16:
+      request.session["barcode_part_number"] ='GM 9341'
+      request.session["bar1"] = bar1
+      request.session["barcode_part"] = part
+      return render(request,"barcode_ok_10R.html")
+    elif len(bar1) == 29:
+      request.session["barcode_part_number"] ='FORD 9341'
+      request.session["bar1"] = bar1
+      request.session["barcode_part"] = part
+      return render(request,"barcode_ok_10R.html")
+    request.session["barcode_part_number"] ='UNKNOWN'
+    return render(request,"barcode_warning_10R.html")
 
 
 def barcode_initial(request):
