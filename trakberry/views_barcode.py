@@ -25,6 +25,54 @@ from views_mod1 import kiosk_lastpart_find
 from datetime import datetime
 import json
 
+def barcode_initial_10R(request):
+
+  request.session["barcode_skid"] = 1
+  request.session["barcode_part"] = '9341'
+
+  request.session["route_1"] = 'barcode_input_10R'
+  return direction(request)
+
+def barcode_input_10R(request):
+
+    part = request.session["barcode_part"]
+
+    if request.POST:
+        bc1 = request.POST.get("barcode")
+        request.session["barcode"] = bc1
+        request.session["barcode_part_number"] = bc1[-4:]
+
+        request.session["route_1"] = 'barcode_check_10R'
+        return direction(request)
+    else:
+		form = kiosk_dispForm1()
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+    return render(request,"kiosk/barcode_input_10R.html",{'args':args})
+
+def barcode_check_10R(request):
+    bar1 = request.session["barcode"]
+    bar1=str(bar1)
+    stamp = time.time()
+    part = request.session["barcode_part"]
+    h = len(bar1)
+    if len(bar1) != 16:
+      return render(request,"barcode_warning_10R.html")
+  
+
+
+    request.session["barcode_part_number"] = '9341'
+    
+    request.session["bar1"] = bar1
+    
+    request.session["barcode_part"] = part
+
+    return render(request,"barcode_ok_10R.html")
+    
+
+
+
 
 def barcode_initial(request):
   db_set(request)
