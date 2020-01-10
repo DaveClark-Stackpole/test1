@@ -36,6 +36,7 @@ def barcode_initial_10R(request):
 def barcode_input_10R(request):
 
     part = request.session["barcode_part"]
+    pn = request.session["barcode_part_number"]
 
     if request.POST:
         bc1 = request.POST.get("barcode")
@@ -49,6 +50,10 @@ def barcode_input_10R(request):
     args = {}
     args.update(csrf(request))
     args['form'] = form
+    if pn == 'GM 9341':
+      return render(request,"kiosk/barcode_input_10R_GM.html",{'args':args})
+    elif pn == 'FORD 9341':
+      return render(request,"kiosk/barcode_input_10R_FORD.html",{'args':args})
     return render(request,"kiosk/barcode_input_10R.html",{'args':args})
 
 def barcode_check_10R(request):
@@ -61,12 +66,12 @@ def barcode_check_10R(request):
       request.session["barcode_part_number"] ='GM 9341'
       request.session["bar1"] = bar1
       request.session["barcode_part"] = part
-      return render(request,"barcode_ok_10R.html")
+      return render(request,"barcode_ok_10R_GM.html")
     elif len(bar1) == 29:
       request.session["barcode_part_number"] ='FORD 9341'
       request.session["bar1"] = bar1
       request.session["barcode_part"] = part
-      return render(request,"barcode_ok_10R.html")
+      return render(request,"barcode_ok_10R_FORD.html")
     request.session["barcode_part_number"] ='UNKNOWN'
     return render(request,"barcode_warning_10R.html")
 
