@@ -189,7 +189,7 @@ def kiosk_production(request):
 					request.session["cycletime1"] = 0
 
 			except:
-				request.session["part1"] = -1
+				request.session["part1"] = "None"
 				request.session["machine1"] = "XX"
 				if len(tmp1[4])<2:
 					request.session["variable1"] = 99
@@ -207,7 +207,7 @@ def kiosk_production(request):
 					request.session["cycletime2"] = 0
 	
 			except:
-				request.session["part2"] = -1
+				request.session["part2"] = "None"
 				request.session["machine2"] = "XX"
 				# request.session["variable2"] = int(tmp1[5])
 				if len(tmp1[5]) < 2:
@@ -225,7 +225,7 @@ def kiosk_production(request):
 				except:
 					request.session["cycletime3"] = 0
 			except:
-				request.session["part3"] = -1
+				request.session["part3"] = "None"
 				request.session["machine3"] = "XX"
 				if len(tmp1[6]) < 2:
 					request.session["variable3"] = 99
@@ -243,7 +243,7 @@ def kiosk_production(request):
 				except:
 					request.session["cycletime4"] = 0
 			except:
-				request.session["part4"] = -1
+				request.session["part4"] = "None"
 				request.session["machine4"] = "XX"
 				if len(tmp1[7]) < 2:
 					request.session["variable4"] = 99
@@ -260,7 +260,7 @@ def kiosk_production(request):
 				except:
 					request.session["cycletime5"] = 0
 			except:
-				request.session["part5"] = -1
+				request.session["part5"] = "None"
 				request.session["machine5"] = "XX"
 				if len(tmp1[8]) < 2:
 					request.session["variable5"] = 99
@@ -277,7 +277,7 @@ def kiosk_production(request):
 				except:
 					request.session["cycletime6"] = 0
 			except:
-				request.session["part6"] = -1
+				request.session["part6"] = "None"
 				request.session["machine6"] = "XX"
 				if len(tmp1[9]) < 2:
 					request.session["variable6"] = 99
