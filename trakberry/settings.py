@@ -112,15 +112,15 @@ DATABASES = {
 
 # DATABASES = {
 
-#        'default': {
-#            'ENGINE': 'django.db.backends.mysql',
-# 	        'NAME': 'prodrptdb',
-# 		    'USER': 'root',
-# 		    'PASSWORD':'benny6868',
-# 		    'HOST': '127.0.0.1',
-# 		    'PORT': '',
-#         }
-#      }
+       # 'default': {
+           # 'ENGINE': 'django.db.backends.mysql',
+	        # 'NAME': 'prodrptdb',
+		    # 'USER': 'root',
+		    # 'PASSWORD':'benny6868',
+		    # 'HOST': '127.0.0.1',
+		    # 'PORT': '',
+        # }
+     # }
 
 
 # Internationalization
