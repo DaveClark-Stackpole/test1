@@ -225,7 +225,7 @@ def tech(request):
 		elif temp_pr =="E":
 			tp = 5
 		else:
-			tp = int(temp_pr)
+			tp = float(temp_pr)
 
 		
 		job.append(tmp2[0])
