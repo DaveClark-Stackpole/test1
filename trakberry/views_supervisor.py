@@ -175,7 +175,15 @@ def supervisor_display(request):
 		
 	for i in range(0, ctr-1):
 		for ii in range(i+1, ctr):
-			if (priority[ii]) < (priority[i]):
+			try:
+				pr2 = float(priority[ii])
+			except:
+				pr2 = 97
+			try:
+				pr1 = float(priority[i])
+			except:
+				pr1 = 97
+			if pr2 < pr1:
 				jjob = job[i]
 				job[i] = job[ii]
 				job[ii] = jjob
@@ -437,6 +445,7 @@ def supervisor_down(request):
 		
 		# Select prodrptdb db located in views_db
 		db, cur = db_set(request)
+		priority = str(priority)
 		cur.execute('''INSERT INTO pr_downtime1(machinenum,problem,priority,whoisonit,called4helptime) VALUES(%s,%s,%s,%s,%s)''', (machinenum,problem,priority,whoisonit,t))
 		db.commit()
 		db.close()

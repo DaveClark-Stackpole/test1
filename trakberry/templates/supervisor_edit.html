@@ -6,16 +6,20 @@
 <table style="width:40%;margin-left:10%;">
 <tr><th bgcolor="#B6D6E0"><center>
 <font color="#000000" size ="4">Machine Down<br>
-<input style="font-size:14px;width:270px;height:30px;" name="machine" type="textarea" value="{{request.session.machinenum}}">
+<input style="font-size:14px;width:320px;height:30px;" name="machine" type="textarea" value="{{request.session.machinenum}}">
 </th></tr>
 <tr><th bgcolor="#B6D6E0"><center>
 <font color="#000000" size ="4">Reason<br>
-<input style="font-size:14px;width:270px;height:30px;" name="reason" type="textarea" value="{{request.session.problem}}">
+<input style="font-size:14px;width:320px;height:30px;" name="reason" type="textarea" value="{{request.session.problem}}">
 </th></tr>
 
 <tr><th bgcolor="#B6D6E0"><center>
 <font color="#000000" size ="4">Priority<br>
-<select style="font-size:14px;width:270px;height:30px;" name="priority">
+
+<input style="font-size:14px;width:320px;height:30px;"name="priority" type="number" value="99">
+
+
+<!-- <select style="font-size:14px;width:270px;height:30px;" name="priority">
 <option selected="selected">
 {{request.session.priority}}
 </option>
@@ -23,7 +27,10 @@
 <option value="B">B</option>
 <option value="C">C</option>
 <option value="D">D</option>
-<option value="E">E</option></select>
+<option value="E">E</option></select> -->
+
+
+
 </th></tr>
 <tr><th bgcolor="#B6D6E0"><center>
 <button style="text-align: left;width:220px;height:30px;font-size: 18px;border-style: solid;border-color:#A1A1A1;border-radius: 10px;background-color:#A6FA89;" type="submit" name="one" value="-3" /><center><b>Update</b></center></button>
