@@ -111,7 +111,7 @@ from views4 import target_fix_5401, target_fix_5404, target_fix_5399, target_fix
 from views_mod1 import mgmt_display_next,mgmt_display_prev
 
 from views_mod2 import hrly_display, butter
-from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset, barcode_search, barcode_search_check
+from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset, barcode_search, barcode_search_check, barcode_verify, barcode_verify_check
 from views_barcode import barcode_check_10R,barcode_input_10R,barcode_initial_10R
 
 
@@ -457,6 +457,8 @@ urlpatterns = [
 	url(r'^barcode_reset/', barcode_reset),
 	url(r'^barcode_search/', barcode_search),
 	url(r'^barcode_search_check/', barcode_search_check),
+	url(r'^barcode_verify/', barcode_verify),
+	url(r'^barcode_verify_check/', barcode_verify_check),
 	url(r'^barcode_input_10R/', barcode_input_10R),
 	url(r'^barcode_check_10R/', barcode_check_10R),
 	url(r'^barcode_initial_10R/', barcode_initial_10R),
