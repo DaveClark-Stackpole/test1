@@ -248,7 +248,7 @@ def barcode_check(request):
       return render(request,"barcode_complete.html")
     if part_num == "5214" and part == 280:
       return render(request,"barcode_complete.html")
-    if part_num == "5399" and part == 40:
+    if part_num == "8670" and part == 40:
       return render(request,"barcode_complete.html")
     if part_num == "5404" and part == 120:
       return render(request,"barcode_complete.html")
