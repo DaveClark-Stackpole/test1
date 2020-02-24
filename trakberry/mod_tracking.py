@@ -179,6 +179,8 @@ def select_datetime(request):
 # Module to obtain graphdata for a current tracking machine and send it to display on a graph	
 def graph_gf6(request, index):
 	global dt
+
+
 	
 	request.session["machine_graph"] = index
 
@@ -202,11 +204,17 @@ def graph_gf6(request, index):
 	u = t - (((cur_hour-shift_start)*60*60)+(tm[4]*60)+tm[5])
 
 	db, cursor = db_set(request)
-	sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d' and machine = '%s'" %(u,t,m)
+
+	sql = "SELECT * FROM barcode where scrap >= '%d' and scrap< '%d' and right(asset_num,4) = '%s'" %(u,t,m)
+
+	# sql = "SELECT * FROM tkb_prodtrak where part_timestamp >= '%d' and part_timestamp< '%d' and machine = '%s'" %(u,t,m)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()	
 	
+
+
 	mrr = machine_rate / float(60)
+
 
 	dt = []
 	[mup(x) for x in tmp if fup(x) == m]
@@ -214,6 +222,9 @@ def graph_gf6(request, index):
 	
 	
 	mrr = (machine_rate*(28800-down_time))/float(28800)
+
+	mrr = 26
+
 	gr_list, brk1, brk2, multiplier  = Graph_Data(t,u,m,tmp,mrr)
 	
 	# Test Return value
@@ -339,6 +350,9 @@ def Graph_Data(t,u,machine,tmp,multiplier):
 	by = [0 for x in range(tm_sh)]
 	ay = [0 for x in range(tm_sh)]
 	cy = [0 for x in range(tm_sh)]
+
+	
+
 	for ab in range(0,tm_sh):
 
 		px[ab] =u + (cc*60)
@@ -349,6 +363,10 @@ def Graph_Data(t,u,machine,tmp,multiplier):
 		tst = []
 		[tup(x) for x in tmp if fup(x) == machine and nup(x) < yy]
 		by[ab] = sum(int(i) for i in tst)
+
+		rrr = request.session["eeeew"]
+
+		
 		ay[ab] = int(cr)
 		cy[ab] = int(cm)
 		

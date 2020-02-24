@@ -342,3 +342,54 @@ def message_create(request):
 	db.close()
 	return render(request,'done_test.html')
 
+def duplicate_1(request):
+
+	# distinquish vacation entries that have different months
+	db, cursor = db_set(request)  
+	
+	cursor.execute("""DROP TABLE IF EXISTS duplicates""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS duplicates LIKE barcode""")
+
+	var1 = "5401"
+	var2 = "8670"
+	s1 = "0"
+	
+
+	# mql = "SELECT * FROM barcode WHERE left(asset_num,length(asset_num)-4) = '%s'" %(bar3)
+
+	mql = "SELECT * FROM barcode WHERE right(asset_num,4) = '%s' or right(asset_num,4) = '%s'" %(var1,var2)
+	cursor.execute(mql)
+	tmp2 = cursor.fetchall()
+	# dd = request.session["kkk"]
+	# cursor.execute('''INSERT INTO barcode(asset_num,scrap,skid,part) VALUES(%s,%s,%s,%s)''', (i[1],i[2],i[3],i[3])) 
+
+	for i in tmp2:
+		cursor.execute('''INSERT INTO barcode(asset_num,scrap,skid,part) VALUES(%s,%s,%s,%s)''', (i[1],i[2],i[3],i[3]))
+		db.commit()
+
+	# db.commit()
+
+    # kk = request.session["bbummy"]
+
+    
+    # try:
+    #  tmp3=tmp2[0]
+    #  tmp4=tmp3[0]
+    #  timestamp = tmp3[2]
+    #  dd = vacation_1(stamp)
+    #  d = vacation_1(timestamp)
+    #  request.session["alert_time"] = d
+    #  request.session["now_time"] = dd
+    #  request.session["diff_time"] = int(stamp - timestamp)
+    #  return render(request,"barcode_alert.html")
+
+    # except:
+    #   dummy = 1
+
+
+	
+	# #cursor.execute('''INSERT vacation_purge Select * From vacation_backup2 where month_start != month_end ''')
+
+	# db.commit()
+	db.close()
+	return render(request,'done_test.html')
