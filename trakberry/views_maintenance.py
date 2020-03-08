@@ -19,6 +19,9 @@ import time
 from django.core.context_processors import csrf
 
 
+def maint_manpower():
+	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Jacobs","Steven Niu"]
+	return maint
 
 def hour_check():
 	# obtain current date from different module to avoid datetime style conflict
@@ -325,6 +328,7 @@ def maint_call(request, index):
     
 	tec = request.session["login_maint"]
 	nm = []
+	maint = maint_manpower
 
 	# Select prodrptdb db located in views_db
 	db, cur = db_set(request)  
@@ -342,7 +346,7 @@ def maint_call(request, index):
 			if add_job == 1:
 				break
 				
-
+	ljss = request.session["jjlsl"]
 	if tmp3 != 'Electrician' and tmp3 != 'Millwright':
 		t = tmp3 + " | " + tec
 
