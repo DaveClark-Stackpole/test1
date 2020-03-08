@@ -102,15 +102,14 @@
 {% block refresh %}
 
 {% if request.session.refresh_maint != 3 %}
-<meta http-equiv="refresh" content="8; url=/trakberry/maint" />
+<meta http-equiv="refresh" content="8; url={{request.session.local_toggle}}/maint"/>
 
 {% endif %}
-
 
 {% endblock %}
 {% if request.session.refresh_maint == 1 %}
 
-<meta http-equiv="refresh" content="0; url=/trakberry/maint" />
+<meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint" />
 {% endif %}
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -131,18 +130,18 @@
 				<ul class="nav navbar-nav">
 			
 					<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-					<li><a href="/trakberry/maint"><span class="glyphicon glyphicon-home"></span> Main</a></li>
+					<li><a href="{{request.session.local_toggle}}/maint"><span class="glyphicon glyphicon-home"></span> Main</a></li>
 				
 					<li><a href="#"><span class="glyphicon glyphicon-fire"></span>Add Call</a></li>
 
-					<li><a href="/trakberry/maint_job_history"><span class="glyphicon glyphicon-folder-open"></span> Job History</a></li>
-					<li><a href="/trakberry/maint_map"><span class="glyphicon glyphicon-sunglasses"></span> Map</a></li>
+					<li><a href="{{request.session.local_toggle}}/maint_job_history"><span class="glyphicon glyphicon-folder-open"></span> Job History</a></li>
+					<li><a href="{{request.session.local_toggle}}/maint_map"><span class="glyphicon glyphicon-sunglasses"></span> Map</a></li>
 				
 				</ul>	
 			{% endif %}
 			<ul class="nav navbar-nav navbar-right">	
 			<li><font color="#ffffff" size ="2">Welcome: <u>{{request.session.login_maint}}</u></li>
-			<li><a href="/trakberry/maint_logout" style="color:#47889E"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+			<li><a href="{{request.session.local_toggle}}/maint_logout" style="color:#47889E"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 							
             </ul>
 			
@@ -170,11 +169,11 @@
 		</div>	
 		<div class="row">
 			<div class="col-sm-4" style="background-color: #F98E51;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-				<center><a href="/trakberry/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
+				<center><a href="{{request.session.local_toggle}}/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
 			</div>
 
 			<div class="col-sm-4" style="background-color: #FFE8DA;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-			<center><a href="/trakberry/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
+			<center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
 			</div>
 		</div>
 		
@@ -182,23 +181,23 @@
 	
 {% elif i.3 == E %}
     <div class="row">
-		<div class="col-sm-8" style="background-color: #1BB9F9;border-radius: 0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="4" border="1">{{i.0}}</div>
+		<div class="col-sm-8" style="background-color: rgb(216, 213, 173);border-radius: 0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="4" border="1">{{i.0}}</div>
 		
 
 	</div>	
     <div class="row">
 		
-		<div class="col-sm-8" style="background-color: #1BB9F9;border-radius: 0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="4" border="1">{{ i.1}}</div>
+		<div class="col-sm-8" style="background-color: rgb(216, 213, 173);border-radius: 0px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="4" border="1">{{ i.1}}</div>
 		
 	</div>	
     <div class="row">
 		
-		<div class="col-sm-4" style="background-color: #1BB9F9;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
+		<div class="col-sm-4" style="background-color: rgb(216, 213, 173);border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
 		
-		<center><a href="/trakberry/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
+		<center><a href="{{request.session.local_toggle}}/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
 		</div>
-		<div class="col-sm-4" style="background-color: #C8EFFE;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-		<center><a href="/trakberry/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
+		<div class="col-sm-4" style="background-color: rgb(252, 244, 136);border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
+		<center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
 		</div>
 		
 	</div>
@@ -218,10 +217,10 @@
 		
 		<div class="col-sm-4" style="background-color: #999999;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
 		
-		<center><a href="/trakberry/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
+		<center><a href="{{request.session.local_toggle}}/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
 		</div>
 		<div class="col-sm-4" style="background-color: #DCDCDC;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-		<center><a href="/trakberry/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
+		<center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
 		</div>
 		
 	</div>

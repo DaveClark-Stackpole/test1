@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from trakberry.forms import maint_closeForm, maint_loginForm, maint_searchForm, tech_loginForm, sup_downForm
 from views_db import db_open, db_set
 from views_mod1 import find_current_date
+from views_mod2 import seperate_string
 from views_email import e_test
 from views_vacation import vacation_temp, vacation_set_current, vacation_set_current2
 from views_supervisor import supervisor_tech_call
@@ -105,6 +106,10 @@ def maint(request):
 	smp2=[]
 	mach_cnt = []
 	tch = []
+	nm = []
+	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Jacobs","Steven Niu"]
+
+
 
 	# Select prodrptdb db located in views_db
 	db, cursor = db_set(request)   
@@ -119,7 +124,7 @@ def maint(request):
 	j = "electrician"
 	jj = "millwright"
 	a1 = "Chris Dufton"
-	a2 = "Rich Clifford"
+	a2 = "Rich Clifford | Wes Guest"
 	a3 = "Wes Guest"
 	a4 = "Gike Maspar"
 	a5 = "Jeff Jacobs"
@@ -129,15 +134,25 @@ def maint(request):
 	a9 =  "-------"
 	a10 = "-------"
 	
-	d1 = '2015-05-01'
-	d2 = '2015-07-01'
-	sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
-
+	sqlT = "Select * From pr_downtime1 where closed IS NULL"
 	cursor.execute(sqlT)
 	tmp = cursor.fetchall()
+
+
+
+	
+
+
+	# d1 = '2015-05-01'
+	# d2 = '2015-07-01'
+	# sqlT = "SELECT * FROM pr_downtime1 where closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s' OR closed IS NULL AND whoisonit = '%s'" %(j,jj,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+
+	# cursor.execute(sqlT)
+	# tmp = cursor.fetchall()
 	
 	ctr = 0
 	for x in tmp:
+		add_job = 0   # Determines if we add this job to list to display
 		tmp2 = (tmp[ctr])
 		temp_pr = tmp2[3]
 		if temp_pr == "A":
@@ -155,18 +170,38 @@ def maint(request):
 		elif temp_pr =="E":
 			tp = 5
 		
-		job.append(tmp2[0])
-		prob.append(tmp2[1])
-		priority.append(tp)
-		id.append(tmp2[11])
+		
 		tmp3 = tmp2[4]
 		if tmp3 == "Electrician":
-			tmp3 = "Need Electrician"
+			tmp3 = "Maintenance"
+			add_job = 1
 		if tmp3 == "Millwright":
-			tmp3 = "Need Millwright"	
-		tch.append(tmp3)
-		ctr = ctr + 1
-		
+			tmp3 = "Maintenance"	
+			add_job = 1
+
+		nm = seperate_string(tmp2[4])
+
+		for h1 in nm:
+			for h2 in maint:
+				if h1[0] == h2[0]:
+					add_job = 1
+					break 
+			if add_job == 1:
+				break
+
+
+
+		# Do this if we need to assign to display tuple
+		if add_job == 1:
+			job.append(tmp2[0])  # Assign machine to job
+			prob.append(tmp2[1]) # Assign problem to prob
+			priority.append(int(tmp2[3]))  #Assign priority number to priority
+			id.append(tmp2[11])  # Assign idnumber to id
+			tch.append(tmp3)   # Assign Name to tch
+			ctr = ctr + 1
+
+
+
 	for i in range(0, ctr-1):
 		for ii in range(i+1, ctr):
 			if int(priority[ii]) < int(priority[i]):
@@ -261,7 +296,7 @@ def maint(request):
 	# ********************************************************************************************************
 	
 	M = 'Need Millwright'
-	E = 'Need Electrician'
+	E = 'Maintenance'
 	
 	return render(request,"maint.html",{'L':list,'N':n,'M':M,'E':E})
 
@@ -289,6 +324,7 @@ def tech_message_reply1(request):
 def maint_call(request, index):	
     
 	tec = request.session["login_maint"]
+	nm = []
 
 	# Select prodrptdb db located in views_db
 	db, cur = db_set(request)  
@@ -296,9 +332,25 @@ def maint_call(request, index):
 	cur.execute(sql1)
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
+	tmp3 = tmp2[0]
+	nm = seperate_string(tmp2[4])
+	for h1 in nm:
+			for h2 in maint:
+				if h1[0] == h2[0]:
+					add_job = 1
+					break 
+			if add_job == 1:
+				break
+				
+
+	if tmp3 != 'Electrician' and tmp3 != 'Millwright':
+		t = tmp3 + " | " + tec
+
+	else:
+		t = tec
+
 	
-	
-	sql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (tec,index))
+	sql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (t,index))
 	cur.execute(sql)
 	db.commit()
 	db.close()

@@ -111,13 +111,13 @@ def tech(request):
 
 	# Check if it's local running or not and if not then force the path as /trakberry
 	# Run switch_net to set it back to network or switch_local for local use
-	try:
-		if request.session["local_switch"] == 1:
-			request.session["local_toggle"] = ""
-		else:
-			request.session["local_toggle"] = "/trakberry"
-	except:
-		request.session["local_toggle"] = "/trakberry"
+	# try:
+	# 	if request.session["local_switch"] == 1:
+	# 		request.session["local_toggle"] = ""
+	# 	else:
+	# 		request.session["local_toggle"] = "/trakberry"
+	# except:
+	# 	request.session["local_toggle"] = "/trakberry"
 	# ******************************************************************************
 	
 	
@@ -230,7 +230,7 @@ def tech(request):
 		
 		job.append(tmp2[0])
 		prob.append(tmp2[1])
-		priority.append(tp)
+		priority.append(int(tmp2[3]))
 		id.append(tmp2[11])
 		tmp3 = tmp2[4]
 		if tmp3 == "tech":

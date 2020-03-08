@@ -444,12 +444,15 @@ def supervisor_down(request):
 		t = vacation_temp()
 		
 		# Select prodrptdb db located in views_db
+
+		var1 = no_duplicate(priority)
+		priority = str(var1)
+
 		db, cur = db_set(request)
-		priority = str(priority)
 		cur.execute('''INSERT INTO pr_downtime1(machinenum,problem,priority,whoisonit,called4helptime) VALUES(%s,%s,%s,%s,%s)''', (machinenum,problem,priority,whoisonit,t))
 		db.commit()
 		db.close()
-		
+
 		return done(request)
 		
 	else:
@@ -472,11 +475,32 @@ def supervisor_down(request):
 	
 	#return render(request,"test6.html",{'list':rlist})
 	#request.session["login_tech"] = "none"
-	return render(request,'supervisor_down.html', {'List':rlist,'args':args})	
+	return render(request,'supervisor_down.html', {'List':rlist,'args':args})
 
+def no_duplicate(priority):
+	db, cur = db_open()
+	var1 = int(priority)
+	while True:
+		priority = str(var1)
+		try:
+			wql = "SELECT * FROM pr_downtime1 WHERE closed IS NULL and priority = '%s'" %(priority)
+			cur.execute(wql)
+			mp = cur.fetchall()
+			mpp = mp[0]
+			mcp = mpp[0]
+			var1 = var1 + 1
+			if var1 == 100:
+				var1 = 1
+		except:
+	 		break
+	db.close()	
+	return var1
 
 # Module to edit entry	
 def supervisor_edit(request):	
+
+	
+
 	index = request.session["index"]
 	# Select prodrptdb db located in views_db
 	db, cursor = db_set(request)
@@ -487,6 +511,27 @@ def supervisor_edit(request):
 	request.session["machinenum"] = tmp2[0]
 	request.session["problem"] = tmp2[1]
 	request.session["priority"] = tmp2[3]
+
+	nm = []
+	tx = tmp2[4]
+	if (tx.find("|"))>0:
+		while True:
+			len_tx = len(tx)
+			ty = list(tx)
+			ta = tx.find("|")
+			ta = ta - 1
+			lft = tx[:ta]
+			nm.append(lft)
+			ta = ta + 3
+			ta_right = len_tx - ta
+			tx = tx[-ta_right:]
+			len_tx = len(tx)
+
+			if (tx.find("|"))<0:
+				break
+		nm.append(tx)
+	rrrr = request.session["owpwo"]
+
 	db.close()	
 	
 	if request.POST:
@@ -498,6 +543,25 @@ def supervisor_edit(request):
 		
 		a = request.POST
 		b=int(a.get("one"))
+		
+		var1 = no_duplicate(priority)
+		priority = str(var1)
+
+		rrrr = request.session["owpwo"]
+
+
+		if (tx.find("|"))>0:
+			rrrr = request.session["owpwo"]
+			#return render(request,'test_temp2.html', {'variable':tx})	
+			#request.session["test_comment"] = tx
+			#return out(request)
+			ty = list(tx)
+			ta = tx.find("'")
+			#tb = tx.rfind("'")
+			ty[ta] = ""
+			#ty[tb] = "'"
+			tc = "".join(ty)
+
 		
 		db, cursor = db_set(request)
 		cur = db.cursor()

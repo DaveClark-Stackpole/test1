@@ -264,5 +264,26 @@ def string_make(x,n):
         x = x + " "
     return x
 
+
+
+def seperate_string(tx):
+    nm = []
+    if (tx.find("|"))>0:
+        while True:
+            len_tx = len(tx)
+            ty = list(tx)
+            ta = tx.find("|")
+            ta = ta - 1
+            lft = tx[:ta]
+            nm.append(lft)
+            ta = ta + 3
+            ta_right = len_tx - ta
+            tx = tx[-ta_right:]
+            len_tx = len(tx)
+            if (tx.find("|"))<0:
+                break
+    nm.append(tx)
+    return nm
+
     
 
