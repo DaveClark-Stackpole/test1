@@ -530,7 +530,7 @@ def supervisor_edit(request):
 			if (tx.find("|"))<0:
 				break
 		nm.append(tx)
-	rrrr = request.session["owpwo"]
+
 
 	db.close()	
 	
@@ -547,11 +547,11 @@ def supervisor_edit(request):
 		var1 = no_duplicate(priority)
 		priority = str(var1)
 
-		rrrr = request.session["owpwo"]
+
 
 
 		if (tx.find("|"))>0:
-			rrrr = request.session["owpwo"]
+
 			#return render(request,'test_temp2.html', {'variable':tx})	
 			#request.session["test_comment"] = tx
 			#return out(request)
