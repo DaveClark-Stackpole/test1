@@ -20,7 +20,7 @@ from django.core.context_processors import csrf
 
 
 def maint_manpower():
-	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Jacobs","Steven Niu"]
+	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Saunders","Steven Niu","Jeff Jacobs"]
 	return maint
 
 def hour_check():
@@ -154,32 +154,38 @@ def maint(request):
 	# tmp = cursor.fetchall()
 	
 	ctr = 0
+	ctr2 = 0
 	for x in tmp:
+
 		add_job = 0   # Determines if we add this job to list to display
-		tmp2 = (tmp[ctr])
+		tmp2 = (tmp[ctr2])
 		temp_pr = tmp2[3]
-		if temp_pr == "A":
-			tp = 1
-		elif temp_pr =="c":
-			tp = 3
-		elif temp_pr =="b" :
-			tp = 2
-		elif temp_pr =="B" :
-			tp = 2
-		elif temp_pr =="C" :
-			tp = 3
-		elif temp_pr =="D"	:
-			tp = 4
-		elif temp_pr =="E":
-			tp = 5
+		# if temp_pr == "A":
+		# 	tp = 1
+		# elif temp_pr =="c":
+		# 	tp = 3
+		# elif temp_pr =="b" :
+		# 	tp = 2
+		# elif temp_pr =="B" :
+		# 	tp = 2
+		# elif temp_pr =="C" :
+		# 	tp = 3
+		# elif temp_pr =="D"	:
+		# 	tp = 4
+		# elif temp_pr =="E":
+		# 	tp = 5
 		
 		
 		tmp3 = tmp2[4]
+
 		if tmp3 == "Electrician":
+			
 			tmp3 = "Maintenance"
+			# kkkk = request.session["opopop"]
 			add_job = 1
 		if tmp3 == "Millwright":
-			tmp3 = "Maintenance"	
+			tmp3 = "Maintenance"
+			# kkkk = request.session["opopop"]	
 			add_job = 1
 
 		nm = seperate_string(tmp2[4])
@@ -191,9 +197,6 @@ def maint(request):
 					break 
 			if add_job == 1:
 				break
-
-
-
 		# Do this if we need to assign to display tuple
 		if add_job == 1:
 			job.append(tmp2[0])  # Assign machine to job
@@ -202,7 +205,7 @@ def maint(request):
 			id.append(tmp2[11])  # Assign idnumber to id
 			tch.append(tmp3)   # Assign Name to tch
 			ctr = ctr + 1
-
+		ctr2 = ctr2 + 1
 
 
 	for i in range(0, ctr-1):
@@ -328,7 +331,8 @@ def maint_call(request, index):
     
 	tec = request.session["login_maint"]
 	nm = []
-	maint = maint_manpower
+	nm2 = []
+	# maint = maint_manpower()
 
 	# Select prodrptdb db located in views_db
 	db, cur = db_set(request)  
@@ -337,23 +341,42 @@ def maint_call(request, index):
 	tmp = cur.fetchall()
 	tmp2 = tmp[0]
 	tmp3 = tmp2[0]
-	nm = seperate_string(tmp2[4])
-	for h1 in nm:
-			for h2 in maint:
-				if h1[0] == h2[0]:
-					add_job = 1
-					break 
-			if add_job == 1:
-				break
-				
-	ljss = request.session["jjlsl"]
+	
 	if tmp3 != 'Electrician' and tmp3 != 'Millwright':
-		t = tmp3 + " | " + tec
+		# t = ''
+		# t = tmp3 + " | " + tec
+		nm = seperate_string(tmp3)
+		add_job = 0
+		match1 = 0
+		for h1 in nm:
+			if h1 == tec:
+				match1 = 1
+			if h1 != tec:
+				# t = t + h1 + " | "
+				nm2.append(h1)
+				add_job = 1
+
+
+		# stoppp = request.session["stop_here1"]
+		if match1 == 0:
+			add_job = 0
+		if add_job == 1:
+			t = ''
+			for h2 in nm2:
+				t = t + h2 + " | "
+			t = t[:-3]
+		else:
+			if tmp3 == tec:
+				t = 'Electrician'
+			else:
+				t = tmp3 + " | " + tec
+		
+		# stoppp = request.session["stop_here1"]
 
 	else:
 		t = tec
+		
 
-	
 	sql =( 'update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' % (t,index))
 	cur.execute(sql)
 	db.commit()
@@ -382,7 +405,8 @@ def maint_close(request, index):
 	return maint(request)
 		
 def maint_logout(request):	
-
+	Maint_Manpower = []
+	Maint_Manpower = maint_manpower()
 	if request.POST:
         			
 		tec = request.POST.get("user")
@@ -402,7 +426,8 @@ def maint_logout(request):
 	args['form'] = form
 	request.session["login_maint"] = "none"
 	request.session["login_maint_check"] = 0
-	return render(request,'maint_login.html', args)	
+	return render(request,'maint_login.html',{'args':args,'MList':Maint_Manpower})	
+
 	
 def maint_pass(request, index):	
 	

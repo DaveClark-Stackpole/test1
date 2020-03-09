@@ -38,13 +38,10 @@
 
 <b><u>Tech Name</b></u>&nbsp;
 <select name ="user">
-<option value="Rich Clifford">Rich Clifford</option>
-<option value="Wes Guest">Wes Guest</option>
-<option value="Jeff Jacobs">Jeff Jacobs</option>
-<option value="Gike Maspar">Gike Maspar</option>
-<option value="Shawn Gilbert">Shawn Gilbert</option>
-<option value="Chris Dufton">Chris Dufton</option>
-<option value="Steven Niu">Steven Niu</option>
+
+{% for i in MList %}
+<option value="{{ i }}">{{ i }}</option>
+{% endfor %}
 </select>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
