@@ -69,7 +69,10 @@ def kiosk(request):
 			return direction(request)
 			
 		if button_pressed == -3:
-			return kiosk_help(request)
+			request.session["route_1"] = 'hrly_display' # enable when ready to run
+
+			t = 1/0
+			return direction(request)
 		if button_pressed == -4:
 			return kiosk_scrap(request)
 			
@@ -1624,6 +1627,16 @@ def kiosk_menu(request):
 			kiosk_defaults(request)
 			request.session["route_1"] = 'kiosk_job_assign' # enable when ready to run
 			# request.session["route_1"] = 'kiosk_name' # enable when ready to run
+			return direction(request)
+
+		if button_pressed == -3:
+			request.session["route_3"] = 8
+			request.session["route_1"] = 'https://docs.google.com/forms/d/e/1FAIpQLSdAFYCp_JoKk6XHp5FmTd0pE4WbXJcowZDrFc-_mYHSwhZXgQ/viewform' # enable when ready to run
+			return direction(request)
+
+		if button_pressed == -4:
+			request.session["route_3"] = 9
+			request.session["route_1"] = 'hrly_display' # enable when ready to run
 			return direction(request)
 			
 

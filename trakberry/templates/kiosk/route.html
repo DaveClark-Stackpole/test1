@@ -2,11 +2,19 @@
 <html>
 <body>
 
-{% if request.session.route_1 =  3 %}}
-<!--
-<meta http-equiv="refresh" content="0; url=http://pmdsdata.stackpole.ca/prodhour-10r-op30/index.php?-action=new&-table=sc_prod_hour" />
--->
+
+
+{% if request.session.route_3 =  8 %}}
+<meta http-equiv="refresh" content="0; url=https://docs.google.com/forms/d/e/1FAIpQLSdAFYCp_JoKk6XHp5FmTd0pE4WbXJcowZDrFc-_mYHSwhZXgQ/viewform" />
+
+{% elif request.session.route_3 =  9 %}}
+
+<meta http-equiv="refresh" content="0; url=https://docs.google.com/forms/d/e/1FAIpQLSeuhEEunC1RWbt5_ChuA5dUUl-rNGEg0uFkLUENWfG4mVC9jA/viewform" />
+
+{% elif request.session.route_1 =  3 %}}
+
 <meta http-equiv="refresh" content="0;  url={{request.session.local_toggle}}/kiosk_hourly_entry" />
+
 {% else %}
 <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/{{request.session.route_1}}" />
 {% endif %}
