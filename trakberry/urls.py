@@ -23,7 +23,7 @@ from django.contrib import admin
 from views2 import main_login, main_login_form, main, main_logout, switch_local, switch_net, main_test_init, main_login_password_lost_form
 from views_machinery import machinery
 from views_testing import test_display, form_robot_machine_enter, display_robot_machine, machine_list_display, toggletest, test668,create_table_1,test_datalist
-from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_history2, tech_recent, tech_recent2, tech_map, tech_tech_call, reset_call_route,tech_email_test,tech_message, modal_test
+from views_tech import tech, job_call, job_close, tech_logout, job_pass, tech_history, tech_history2, tech_recent, tech_recent2, tech_map, t1_call, reset_call_route,tech_email_test,tech_message, modal_test
 from views_tech import tech_message_close,tech_message_reply1, tech_report_email, email_hour_check,tech_name_update
 #from views_tech import hour_check
 from views_transfer import transfer
@@ -262,7 +262,7 @@ urlpatterns = [
 	
 	url(r'^tech_recent/', tech_recent),
 	url(r'^tech_recent2/', tech_recent2),
-	url(r'^tech_tech_call/', tech_tech_call),
+	url(r'^t1_call/', t1_call),
     url(r'^tech_map/', tech_map),
     url(r'^tech_message/', tech_message),	
 	url(r'^tech_report_email/', tech_report_email),

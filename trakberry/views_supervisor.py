@@ -380,7 +380,7 @@ def sup_d(request):
 	
 def supervisor_tech_call(request):
 	request.session["whoisonit"] = 'tech'
-	
+
 	return supervisor_down(request)
 
 def supervisor_elec_call(request):
@@ -392,6 +392,7 @@ def supervisor_maint_call(request):
 	return supervisor_down(request)	
 	
 def supervisor_down(request):	
+	
 
 	if request.POST:
         			
@@ -475,6 +476,7 @@ def supervisor_down(request):
 	
 	#return render(request,"test6.html",{'list':rlist})
 	#request.session["login_tech"] = "none"
+	
 	return render(request,'supervisor_down.html', {'List':rlist,'args':args})
 
 def no_duplicate(priority):

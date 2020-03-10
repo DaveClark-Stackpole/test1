@@ -352,9 +352,7 @@ def tech(request):
 		request.session["refresh_tech"] = 3
 	# ********************************************************************************************************
 	
-	
 	tcur=int(time.time())
-	
 	
 	return render(request,"tech.html",{'L':list,'cnt':cnt,'M':tmp4,'N':n,'Z':Z,'TCUR':tcur})
 
@@ -608,9 +606,11 @@ def tech_history2(request):
 	args['form'] = form
 	return render(request,'tech_search2.html', args)		
 
-def tech_tech_call(request):
+def t1_call(request):
 	request.session["call_route"] = 'tech'
 	request.session["url_route"] = 'tech.html'
+
+
 	return supervisor_tech_call(request)
 						  
 

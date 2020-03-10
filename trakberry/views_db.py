@@ -36,6 +36,7 @@ def db_open():
 
 
 def db_set(request):  # Module to set DB settings to the one that works.  Whether local or Server
+
 	try:
 		db = MySQLdb.connect(host="127.0.0.1",user="dg417",passwd="dg",db='prodrptdb')
 		cursor = db.cursor()
