@@ -1618,10 +1618,12 @@ def kiosk_menu(request):
 
 			#request.session["route_1"] = 'kiosk' # disable when ready to run
 			request.session["route_2"] = 2
+			request.session["route_3"] = 1
 			request.session["route_1"] = 3 # enable when ready to run
 			return direction(request)
 			
 		if button_pressed == -2:
+			request.session["route_3"] = 2
 			#request.session["route_1"] = 'kiosk'   #disable when ready to run
 			request.session["route_2"] = 2
 			kiosk_defaults(request)
@@ -1630,14 +1632,11 @@ def kiosk_menu(request):
 			return direction(request)
 
 		if button_pressed == -3:
-			request.session["route_3"] = 8
-			request.session["route_1"] = 'https://docs.google.com/forms/d/e/1FAIpQLSdAFYCp_JoKk6XHp5FmTd0pE4WbXJcowZDrFc-_mYHSwhZXgQ/viewform' # enable when ready to run
-			return direction(request)
+			return render(request, "kiosk/route_1.html")
+
 
 		if button_pressed == -4:
-			request.session["route_3"] = 9
-			request.session["route_1"] = 'hrly_display' # enable when ready to run
-			return direction(request)
+			return render(request, "kiosk/route_2.html")
 			
 
 	else:
@@ -1647,6 +1646,7 @@ def kiosk_menu(request):
 	args['form'] = form
 
 	return render(request,"kiosk/kiosk_menu.html",{'args':args})
+
 
 def ab1v_manpower(request):
 
