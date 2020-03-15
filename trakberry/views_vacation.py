@@ -308,14 +308,14 @@ def vacation_purge(request):
 	# distinquish vacation entries that have different months
 	db, cursor = db_set(request)  
 	
-	#cursor.execute("""DROP TABLE IF EXISTS vacation_purge""")
-	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation_purge LIKE vacation_backup2""")
+	# cursor.execute("""DROP TABLE IF EXISTS tkb_tech_list""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_list LIKE tkb_tech_list""")
 	
 	
 	#cursor.execute('''INSERT vacation_purge Select * From vacation_backup2 where month_start != month_end ''')
 
-	#db.commit()
-	#db.close()
+	db.commit()
+	db.close()
 	return render(request,'done_test.html')
 	
 def vacation_purge_delete(request):

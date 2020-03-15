@@ -20,6 +20,13 @@ from django.core.context_processors import csrf
 
 
 def maint_manpower():
+
+	db, cursor = db_set(request) 
+	sql = "SELECT checking FROM tkb_email_conf where date='%s'" %(current_date)
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	tmp2 = tmp[0]
+
 	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Saunders","Steven Niu","Jeff Jacobs"]
 	return maint
 
@@ -406,7 +413,7 @@ def maint_close(request, index):
 		
 def maint_logout(request):	
 	Maint_Manpower = []
-	Maint_Manpower = maint_manpower()
+	Maint_Manpower = maint_manpower(request)
 	if request.POST:
         			
 		tec = request.POST.get("user")
