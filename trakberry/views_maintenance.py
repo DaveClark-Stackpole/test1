@@ -19,7 +19,7 @@ import time
 from django.core.context_processors import csrf
 
 
-# Sets manpower for dropdowns and such 
+# Sets manpower for dropdowns and 
 def maint_manpower():
 
 	db, cursor = db_set(request) 
