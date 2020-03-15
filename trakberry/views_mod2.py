@@ -289,9 +289,9 @@ def create_new_table(request):
     # create a blank tkb_maint_list table with format similar to tkb_tech_list
     db, cursor = db_set(request)
     cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_list LIKE tkb_tech_list""")
-	db.commit()
-	db.close()
-	return 
+    db.commit()
+    db.close()
+    return 
 
     
 
