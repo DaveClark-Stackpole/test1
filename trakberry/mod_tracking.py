@@ -15,7 +15,7 @@ from django.core.context_processors import csrf
 # Updated June 10,2015
 
 # Module to simulate Machine Inputs for M/C  677 , 748 , 749 , 750
-
+# Test
 
 def fup(x):
 	return x[2]
