@@ -318,6 +318,8 @@ def vacation_purge(request):
 	db.commit()
 	db.close()
 	return render(request,'done_test.html')
+
+
 	
 def vacation_purge_delete(request):
 
