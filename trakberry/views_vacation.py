@@ -294,6 +294,7 @@ def vacation_restore(request):
 
 	# backup Vacation Table
 	db, cursor = db_set(request)  
+	# Add something
 	
 	#cursor.execute("""DROP TABLE IF EXISTS vacation""")
 	#cursor.execute("""CREATE TABLE IF NOT EXISTS vacation LIKE vacation_backup""")
