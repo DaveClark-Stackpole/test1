@@ -481,20 +481,38 @@ def supervisor_down(request):
 
 def no_duplicate(priority):
 	db, cur = db_open()
+
+
+
+	# var1 = int(priority)
+	# while True:
+	# 	priority = str(var1)
+	# 	try:
+	# 		wql = "SELECT * FROM pr_downtime1 WHERE closed IS NULL and priority = '%s'" %(priority)
+	# 		cur.execute(wql)
+	# 		mp = cur.fetchall()
+	# 		mpp = mp[0]
+	# 		mcp = mpp[0]
+	# 		var1 = var1 + 1
+	# 		if var1 == 100:
+	# 			var1 = 1
+	# 	except:
+	#  		break
+
 	var1 = int(priority)
-	while True:
-		priority = str(var1)
-		try:
-			wql = "SELECT * FROM pr_downtime1 WHERE closed IS NULL and priority = '%s'" %(priority)
-			cur.execute(wql)
-			mp = cur.fetchall()
-			mpp = mp[0]
-			mcp = mpp[0]
-			var1 = var1 + 1
-			if var1 == 100:
-				var1 = 1
-		except:
-	 		break
+	add1 = 0
+	wql = "SELECT * FROM pr_downtime1 WHERE closed IS NULL"
+	cur.execute(wql)
+	mp = cur.fetchall()
+	for x in mp:
+		tt = int(x[3])
+		id1 = x[11]
+		if tt == var1:
+			add1 = 1
+		tt = tt + add1
+		pql =( 'update pr_downtime1 SET priority="%s" WHERE idnumber="%s"' % (tt,id1))
+		cur.execute(pql)
+		db.commit()
 	db.close()	
 	return var1
 

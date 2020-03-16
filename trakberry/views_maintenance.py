@@ -20,15 +20,17 @@ from django.core.context_processors import csrf
 
 
 # Sets manpower for dropdowns and 
-def maint_manpower():
+def maint_manpower(request):
 
-	db, cursor = db_set(request) 
-	sql = "SELECT checking FROM tkb_email_conf where date='%s'" %(current_date)
-	cursor.execute(sql)
-	tmp = cursor.fetchall()
-	tmp2 = tmp[0]
+	# db, cursor = db_set(request) 
+	# sql = "SELECT checking FROM tkb_email_conf where date='%s'" %(current_date)
+	# cursor.execute(sql)
+	# tmp = cursor.fetchall()
+	# tmp2 = tmp[0]
 
-	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Saunders","Steven Niu","Jeff Jacobs"]
+	# maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Saunders","Steven Niu","Jeff Jacobs"]
+	maint = ['Allan Meunier','Andrew McArthur','Arnold Olszewski','Brad Haase','Brian Willert','Bruce Riehl','Chris Meidlinger','Curtis Mitchell','Dale Robinson','David Selvey','Dorin Tumac','Doug Huard','Dusko Farkic','Gary Tune','George Stamas','Greg Mroczek','Harold Kuepfer','Jeff Jacobs','Jeff Saunders','Jeremy Arthur','Jim Green','John Reissner','Kevin Faubert','Lyuben Shivarov','Matthew Kuttschrutter','Michael Cella','Milos Nikolic','Mladen Stosic','Peter Nguyen','Richard Clifford','Robin Melville','Royce Laycox','Shawn Gilbert','Steven Niu','Terry Higgs','Wesley Guest']
+
 	return maint
 
 def hour_check():
