@@ -9,8 +9,8 @@
 html, body {height: 100%;width: 100%;padding: 0;margin: 0;}
 
 
-#full-screen-background-image {z-index: -999;min-height: 110%; min-width: 100%;width: 100%;height: 110%;position: fixed;top: 0;  left: 0;}
-	.banner2_bg{position:absolute;background-color: #000000;opacity: 0.8;filter:alpha(opacity=80);width:auto; height:auto;z-index:-440;	border-radius: 25px;;}
+/* #full-screen-background-image {z-index: -999;min-height: 110%; min-width: 100%;width: 100%;height: 110%;position: fixed;top: 0;  left: 0;} */
+.banner2_bg{position:absolute;background-color: #000000;opacity: 0.8;filter:alpha(opacity=80);width:auto; height:auto;z-index:-440;	border-radius: 25px;;}
 	
 	{% block style1 %}
 .banner1_bg{position:absolute;background-color: #000000;opacity: 0.8;filter:alpha(opacity=80);width:auto; height:auto;z-index:-440;	border-radius: 25px;}
@@ -96,20 +96,21 @@ html, body {height: 100%;width: 100%;padding: 0;margin: 0;}
 
 	
 }
-<!-- 
-@media print{
-	body{background: none;color: #fff;}
+
+/* @media print{
+	body{background: none;color: rgb(255, 254, 254);}
 	#full-screen-background-image {display: none;}
 	#print {display: none;}
 	#title {display: none;}
 
 
-	}
-	--> 
+	} */
+ 
 
 
 {% block styleA %}
 {% endblock %}	
+
 </style>
 
 
@@ -187,8 +188,8 @@ function goBack() {
 	</head>
 	
 
+<body style="background-color:#009CC4;">
 
-<body>
 
 {% block refresh %}
 {% endblock %}
@@ -423,7 +424,7 @@ function goBack() {
 
 <font color=#000000 >
 {% block background %}
-<img alt="full screen background image" src="/static/media/b1.jpg?{{TCUR}}" id="full-screen-background-image"/>
+<!-- <img alt="full screen background image" src="/static/media/b1.jpg?{{TCUR}}" id="full-screen-background-image"/> -->
 
 
 

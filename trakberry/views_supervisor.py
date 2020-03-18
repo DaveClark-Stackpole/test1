@@ -501,9 +501,14 @@ def no_duplicate(priority):
 
 	var1 = int(priority)
 	add1 = 0
-	wql = "SELECT * FROM pr_downtime1 WHERE closed IS NULL"
+	wql = "SELECT * FROM pr_downtime1 WHERE closed IS NULL ORDER BY CONVERT(priority,SIGNED INTEGER) ASC" 
+
+	# sql = "SELECT * FROM pr_downtime1 where LEFT(machinenum,3) = '%s' ORDER BY called4helptime DESC limit 20" %(machine)
+
+
 	cur.execute(wql)
 	mp = cur.fetchall()
+
 	for x in mp:
 		tt = int(x[3])
 		id1 = x[11]
