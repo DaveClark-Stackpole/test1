@@ -19,6 +19,17 @@ from trakberry.views_vacation import vacation_temp, vacation_set_current, vacati
 #import datetime as dt 
 from django.core.context_processors import csrf
 
+def tech_manpower(request):
+
+	db, cursor = db_set(request) 
+	sql = "SELECT * FROM tkb_techs ORDER BY tech ASC" 
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	# tmp2 = tmp[0]
+
+	db.close()
+	return tmp
+
 def out(request):
 	#request.session["test"] = 78
 	return render(request, "out.html")
@@ -615,6 +626,9 @@ def t1_call(request):
 						  
 
 def tech_message(request):	
+	Tech_Manpower = []
+	Tech_Manpower = tech_manpower(request)
+
 	A = 'Chris Strutton'
 	db, cur = db_set(request)
 	sql = "SELECT * FROM tkb_tech_list"
@@ -644,11 +658,13 @@ def tech_message(request):
 		
 	else:
 		form = tech_message_Form()
+	
+
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
-	
-	return render(request,'tech_message_form.html', {'List':tmp,'A':A,'args':args})	
+
+	return render(request,'tech_message_form.html', {'List':tmp,'A':A,'TList':Tech_Manpower,'args':args})	
 
 def tech_message_reply2(request):	
 	db, cur = db_set(request)

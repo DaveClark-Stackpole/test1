@@ -19,8 +19,21 @@
 <font color="#000000" size ="4">Send To <br>
 
 
+
+
+
+
+
+
 <select name ="name">
-<option value="Jim Barker">Jim Barker</option>
+
+{% for i in TList %}
+<option value="{{ i.1 }}">{{ i.1 }}</option>
+{% endfor %}
+</select>
+
+
+<!-- <option value="Jim Barker">Jim Barker</option>
 <option value="Rick Wurm">Rick Wurm</option>
 <option value="Scott Smith">Scott Smith</option>
 <option value="Muoi Le">Muoi Le</option>
@@ -34,7 +47,7 @@
 <option value="Mayank Gehlot">Mayank Gehlot</option>
 <option value="Dave Clark">Dave Clark</option>
 <option value="Scott McMahon">Scott McMahon</option>
-</select>
+</select> -->
 
 
 
