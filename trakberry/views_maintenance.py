@@ -22,16 +22,16 @@ from django.core.context_processors import csrf
 # Sets manpower for dropdowns and 
 def maint_manpower(request):
 
-	# db, cursor = db_set(request) 
-	# sql = "SELECT checking FROM tkb_email_conf where date='%s'" %(current_date)
-	# cursor.execute(sql)
-	# tmp = cursor.fetchall()
-	# tmp2 = tmp[0]
-
-	# maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Saunders","Steven Niu","Jeff Jacobs"]
-	maint = ['Allan Meunier','Andrew McArthur','Arnold Olszewski','Brad Haase','Brian Willert','Bruce Riehl','Chris Meidlinger','Curtis Mitchell','Dale Robinson','David Selvey','Dorin Tumac','Doug Huard','Dusko Farkic','Gary Tune','George Stamas','Greg Mroczek','Harold Kuepfer','Jeff Jacobs','Jeff Saunders','Jeremy Arthur','Jim Green','John Reissner','Kevin Faubert','Lyuben Shivarov','Matthew Kuttschrutter','Michael Cella','Milos Nikolic','Mladen Stosic','Peter Nguyen','Richard Clifford','Robin Melville','Royce Laycox','Shawn Gilbert','Steven Niu','Terry Higgs','Wesley Guest']
-
-	return maint
+	db, cursor = db_set(request)  
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_list LIKE tkb_tech_list""")
+	db.commit()
+	sql = "SELECT Tech FROM tkb_maint_list"
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	tmp2 = list(tmp)
+	# maint = ['Allan Meunier','Andrew McArthur','Arnold Olszewski','Brad Haase','Brian Willert','Bruce Riehl','Chris Meidlinger','Curtis Mitchell','Dale Robinson','David Selvey','Dorin Tumac','Doug Huard','Dusko Farkic','Gary Tune','George Stamas','Greg Mroczek','Harold Kuepfer','Jeff Jacobs','Jeff Saunders','Jeremy Arthur','Jim Green','John Reissner','Kevin Faubert','Lyuben Shivarov','Matthew Kuttschrutter','Michael Cella','Milos Nikolic','Mladen Stosic','Peter Nguyen','Richard Clifford','Robin Melville','Royce Laycox','Shawn Gilbert','Steven Niu','Terry Higgs','Wesley Guest']
+	db.close()
+	return tmp
 
 def hour_check():
 	# obtain current date from different module to avoid datetime style conflict
@@ -417,6 +417,7 @@ def maint_close(request, index):
 def maint_logout(request):	
 	Maint_Manpower = []
 	Maint_Manpower = maint_manpower(request)
+
 	if request.POST:
         			
 		tec = request.POST.get("user")
