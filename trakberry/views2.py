@@ -267,7 +267,7 @@ def main_login_form(request):
 		return main(request)
 		
 	elif 'button2' in request.POST:
-		
+		request.session["password_lost_route1"] = "main_log.html"
 		return render(request,'login/reroute_lost_password.html')
 
 	else:
@@ -319,10 +319,10 @@ def main_password_lost_email(request):
 
 	db, cur = db_set(request)
 	# Create the table if it does not exist
-	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users_passwords(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
 	# Check password to match name.  If no record of name then divert to except and reroute to create new password
 	try:
-		sql = "SELECT * FROM tkb_users where user_name = '%s'"%(user_name)
+		sql = "SELECT * FROM tkb_users_passwords where user_name = '%s'"%(user_name)
 		cur.execute(sql)
 		tmp = cur.fetchall()
 		tmp2 = tmp[0]

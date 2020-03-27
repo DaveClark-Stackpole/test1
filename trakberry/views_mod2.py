@@ -212,7 +212,7 @@ def email_manual1(tmp,reason):
     server.ehlo()
     server.starttls()
     server.ehlo()
-    server.login('StackpolePMDS@gmail.com', 'stacktest6161')
+    server.login('StackpolePMDS@gmail.com', 'stacktest6060')
     message = "From: %s\r\n" % frname + "To: %s\r\n" % ', '.join(toaddrs) + "Subject: %s\r\n" % message_subject + "\r\n" 
     message = message + message_subject + "\r\n\r\n" + "\r\n\r\n"
     # message = message + "Name" + " || " + "Job" + " || " + "Count" + " || " + "Target" + " || " + "Date          " + " || " + "Shift" + b + b

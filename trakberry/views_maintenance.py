@@ -27,6 +27,9 @@ def maint_mgmt_login_form(request):
 
 	Maint_Mgmt_Manpower = []
 	Maint_Mgmt_Manpower = maint_mgmt_manpower(request)
+	request.session["maint_mgmt_login_name"] = ""
+	request.session["maint_mgmt_login_password"] = ""
+	request.session["maint_mgmt_login_password_check"] = 'False'
 
 #	if request.POST:
 	if 'button1' in request.POST:
@@ -44,7 +47,7 @@ def maint_mgmt_login_form(request):
 		return maint_mgmt(request)
 		
 	elif 'button2' in request.POST:
-		
+		request.session["password_lost_route1"] = "maint_mgmt.html"
 		return render(request,'login/reroute_lost_password.html')
 
 	else:

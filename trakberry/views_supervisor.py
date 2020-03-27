@@ -2122,7 +2122,7 @@ def tech_report_email():
 		server.ehlo()
 		server.starttls()
 		server.ehlo()
-		server.login('StackpolePMDS@gmail.com', 'stacktest6161')
+		server.login('StackpolePMDS@gmail.com', 'stacktest6060')
 	
 	
 	
