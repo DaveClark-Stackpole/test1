@@ -156,6 +156,7 @@
 <div class="container"><br>
 
 <br><br>
+{% if request.session.login_maint_check %}
 
 
 {% for i in L %}
@@ -217,6 +218,11 @@
 <br>
 {% endfor %}
 </div>
+
+{% else %}
+    <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_logout" />
+{% endif %}
+
 {% endblock %}
 
 

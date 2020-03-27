@@ -19,13 +19,63 @@ import time
 from django.core.context_processors import csrf
 
 
-# Sets manpower for dropdowns and 
+def maint_mgmt(request):
+	return render(request, "maint_mgmt.html")
+
+# Login for Maintenance Manager App
+def maint_mgmt_login_form(request):	
+
+	Maint_Mgmt_Manpower = []
+	Maint_Mgmt_Manpower = maint_mgmt_manpower(request)
+
+#	if request.POST:
+	if 'button1' in request.POST:
+
+		login_name = request.POST.get("login_name")
+		login_password = request.POST.get("login_password")
+
+		# if len(login_name) < 5:
+		# 	login_password = 'wrong'
+
+		request.session["maint_mgmt_login_name"] = login_name
+		request.session["maint_mgmt_login_password"] = login_password
+		request.session["maint_mgmt_login_password_check"] = 'True'
+
+		return maint_mgmt(request)
+		
+	elif 'button2' in request.POST:
+		
+		return render(request,'login/reroute_lost_password.html')
+
+	else:
+		form = tech_loginForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	request.session["maint_mgmt_login_name"] = ""
+	request.session["maint_mgmt_login_password"] = ""
+
+
+	return render(request,'maint_mgmt_login_form.html', {'args':args,'MList':Maint_Mgmt_Manpower})	
+
 def maint_manpower(request):
 
 	db, cursor = db_set(request)  
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_list LIKE tkb_tech_list""")
 	db.commit()
 	sql = "SELECT Tech FROM tkb_maint_list"
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	tmp2 = list(tmp)
+	# maint = ['Allan Meunier','Andrew McArthur','Arnold Olszewski','Brad Haase','Brian Willert','Bruce Riehl','Chris Meidlinger','Curtis Mitchell','Dale Robinson','David Selvey','Dorin Tumac','Doug Huard','Dusko Farkic','Gary Tune','George Stamas','Greg Mroczek','Harold Kuepfer','Jeff Jacobs','Jeff Saunders','Jeremy Arthur','Jim Green','John Reissner','Kevin Faubert','Lyuben Shivarov','Matthew Kuttschrutter','Michael Cella','Milos Nikolic','Mladen Stosic','Peter Nguyen','Richard Clifford','Robin Melville','Royce Laycox','Shawn Gilbert','Steven Niu','Terry Higgs','Wesley Guest']
+	db.close()
+	return tmp
+
+def maint_mgmt_manpower(request):
+	db, cursor = db_set(request)  
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_mgmt_list LIKE tkb_tech_list""")
+	db.commit()
+	sql = "SELECT Tech FROM tkb_maint_mgmt_list"
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
 	tmp2 = list(tmp)
@@ -413,10 +463,25 @@ def maint_close(request, index):
 			
 	
 	return maint(request)
+
+def maint_names(request):
+	Maint_Manpower = []
+	Maint_Manpower = maint_manpower(request)
+	if request.POST:
+		name1 = request.POST.get('tech')
+		return maint_names_reload(request)
+	else:
+		form=toggletest_Form
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	return render(request,"maint_names_form.html",{'Maint_Manpower':Maint_Manpower,'args':args})
+
 		
 def maint_logout(request):	
 	Maint_Manpower = []
 	Maint_Manpower = maint_manpower(request)
+
 
 	if request.POST:
         			

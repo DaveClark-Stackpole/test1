@@ -103,16 +103,12 @@
   <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
   
 </head>
-
-<body>
-
-<img alt="full screen background image" src="/static/media/mgmt.jpeg?{{TCUR}}" id="full-screen-background-image"/>
+<body style="background-color:rgb(171, 173, 151);"></body>
 
 
 
 
-
-<div class="navbar navbar-default navbar-fixed-top" style="background-color:rgb(248, 228, 186);border-color: rgb(26, 24, 11);border-width:1px" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top" style="background-color:rgb(248, 252, 215);border-color: rgb(26, 24, 11);border-width:1px" role="navigation">
 
     <div class="container">
         <div class="navbar-header">
@@ -133,7 +129,7 @@
 			
             <ul class="nav navbar-nav">
                 
-                {% if request.session.mgmt_login_password = 'bort' %}
+                {% if request.session.maint_mgmt_login_password_check = 'True' %}
                 <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
                 <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 				<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
@@ -167,8 +163,8 @@
 			        </ul>	
 			
 			         <ul class="nav navbar-nav navbar-right">	
-			         <li><font size ="2" style="color:rgb(100, 100, 100)">Welcome: <b>{{request.session.mgmt_login_name}}</b></li>
-                     <li><a href="{{request.session.local_toggle}}/mgmt_logout" style="color:rgb(100, 100, 100)"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+			         <li><font size ="2" style="color:rgb(100, 100, 100)">Welcome: <b>{{request.session.maint_mgmt_login_name}}</b></li>
+                     <li><a href="{{request.session.local_toggle}}/maint_mgmt_logout" style="color:rgb(100, 100, 100)"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 
                     {% endif %}
 
@@ -180,13 +176,14 @@
 <br><br>
 <br><br><br>
 
-
+{% block close %}
 
 {% block content %}
-    {% if request.session.mgmt_login_password != 'bort' %}
-        <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/mgmt_login_form" />
+    {% if request.session.maint_mgmt_login_password_check != 'True' %}
+        <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_mgmt_login_form" />
     {% endif %}
 
 {% endblock %}
 
+{% endblock %}
 </body></html>

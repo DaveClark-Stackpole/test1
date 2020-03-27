@@ -81,7 +81,8 @@ from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,sch
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Maintenance App Section ********************************************************************************************
-from views_maintenance import maint, maint_call, maint_pass, maint_close, maint_logout, maint_job_history, maint_map, maint_call_call
+from views_maintenance import maint_mgmt,maint, maint_call, maint_pass, maint_close, maint_logout, maint_job_history, maint_map, maint_call_call
+from views_maintenance import maint_mgmt_login_form
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Inventory Section ********************************************************************************************
@@ -270,6 +271,8 @@ urlpatterns = [
 	url(r'^main_password_update/', main_password_update),
 	
 	# **************  Maintenance Section ***************************************
+	url(r'^maint_mgmt/', maint_mgmt),
+	url(r'^maint_mgmt_login_form/', maint_mgmt_login_form),
 	url(r'^maint/', maint),
 	url(r'^maint_map/', maint_map),
 	url(r'^mcall/get/(?P<index>\d+)/$', maint_call),
