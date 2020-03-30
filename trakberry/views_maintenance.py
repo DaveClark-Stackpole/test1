@@ -20,6 +20,7 @@ from django.core.context_processors import csrf
 
 
 def maint_mgmt(request):
+
 	request.session["main_screen_color"] = "#abad97"  # Color of Background in APP
 	request.session["main_menu_color"] = "#f8fcd7"    # Color of Menu Bar in APP
 
@@ -29,6 +30,7 @@ def maint_mgmt(request):
 def maint_mgmt_login_form(request):	
 
 	Maint_Mgmt_Manpower = []
+	request.session["login_department"] = 'Maintenance Manager'
 	Maint_Mgmt_Manpower = maint_mgmt_manpower(request)
 	request.session["maint_mgmt_login_name"] = ""
 	request.session["maint_mgmt_login_password"] = ""
@@ -37,15 +39,21 @@ def maint_mgmt_login_form(request):
 #	if request.POST:
 	if 'button1' in request.POST:
 
-		login_name = request.POST.get("login_name")
-		login_password = request.POST.get("login_password")
+		request.session["login_name"] = request.POST.get("login_name")
+		request.session["login_password"] = request.POST.get("login_password")
+		request.session["login_password_check"] = ''
+		login_password_check(request)
+		check = request.session["login_password_check"]
 
 		# if len(login_name) < 5:
 		# 	login_password = 'wrong'
+		if check != 'false':
+			request.session["maint_mgmt_login_name"] = request.session["login_name"]
+			request.session["maint_mgmt_login_password"] = request.session["login_password"]
+			request.session["maint_mgmt_login_password_check"] = 'True'
+		else:
+			request.session["maint_mgmt_login_password_check"] = 'False'
 
-		request.session["maint_mgmt_login_name"] = login_name
-		request.session["maint_mgmt_login_password"] = login_password
-		request.session["maint_mgmt_login_password_check"] = 'True'
 
 		return maint_mgmt(request)
 		
@@ -78,16 +86,35 @@ def maint_manpower(request):
 	return tmp
 
 def maint_mgmt_manpower(request):
+
 	db, cursor = db_set(request)  
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_mgmt_list LIKE tkb_tech_list""")
+	dep = request.session['login_department']
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50))""")
 	db.commit()
-	sql = "SELECT Tech FROM tkb_maint_mgmt_list"
+	sql = "SELECT * FROM tkb_logins WHERE department = '%s' ORDER BY user_name ASC" %(dep)  # Select only those in the department  (dep)
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
 	tmp2 = list(tmp)
-	# maint = ['Allan Meunier','Andrew McArthur','Arnold Olszewski','Brad Haase','Brian Willert','Bruce Riehl','Chris Meidlinger','Curtis Mitchell','Dale Robinson','David Selvey','Dorin Tumac','Doug Huard','Dusko Farkic','Gary Tune','George Stamas','Greg Mroczek','Harold Kuepfer','Jeff Jacobs','Jeff Saunders','Jeremy Arthur','Jim Green','John Reissner','Kevin Faubert','Lyuben Shivarov','Matthew Kuttschrutter','Michael Cella','Milos Nikolic','Mladen Stosic','Peter Nguyen','Richard Clifford','Robin Melville','Royce Laycox','Shawn Gilbert','Steven Niu','Terry Higgs','Wesley Guest']
 	db.close()
 	return tmp
+
+def login_password_check(request):
+	db, cursor = db_set(request)
+	user_name = request.session["login_name"]
+	user_pwd = request.session["login_password"]
+	user_dep = request.session["login_department"]
+	pwd_check = 'false'
+	try:
+		sql = "SELECT * FROM tkb_logins WHERE user_name = '%s' and password = '%s' and department ='%s'" % (user_name, user_pwd,user_dep)
+		cursor.execute(sql)
+		tmp = cursor.fetchall()
+		tmp2 = tmp[0]
+		pwd_check = 'true'
+	except:
+		pwd_check = 'false'
+
+	request.session["login_password_check"] = pwd_check
+	return
 
 def hour_check():
 	# obtain current date from different module to avoid datetime style conflict
@@ -487,7 +514,6 @@ def maint_names(request):
 def maint_logout(request):	
 	Maint_Manpower = []
 	Maint_Manpower = maint_manpower(request)
-
 
 	if request.POST:
         			
