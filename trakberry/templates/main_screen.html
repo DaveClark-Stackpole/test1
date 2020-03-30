@@ -1,0 +1,60 @@
+
+<html>
+<head>
+<style type="text/css">
+    #full-screen-background-image {z-index: -999;min-height: 110%; min-width: 100%;width: 100%;height: 110%;position: fixed;top: ;  left: 0;}
+</style>
+  <title>Main APP</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+  <script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body style="background-color:{{request.session.main_screen_color}};"></body>
+<div class="navbar navbar-default navbar-fixed-top" style="background-color:{{request.session.main_menu_color}};border-color: rgb(26, 24, 11);border-width:1px" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;">
+                <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">   <!-- This is the top left icon -->
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!-- This is the indicator to not display menu if not logged in -->
+                {% if request.session.main_login_department = request.session.login_department %}
+                <!-- {% if request.session.maint_mgmt_login_password_check = 'True' %}   -->
+                
+                <!-- This is where the Menu Bar Goes.   It will be contained in the call to the App Page-->
+                {% block menu %}
+                {% endblock %}
+
+                {% endif %}
+
+            </ul>	
+        </div>
+    </div>
+</div>
+<br><br>
+<br><br><br>
+
+
+{% block content %}
+        <!-- {% if request.session.maint_mgmt_login_password_check != 'True' %} -->
+        {% if request.session.main_login_department != request.session.login_department %}
+            <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_mgmt_login_form" />
+        {% endif %}
+
+        <!-- Add Content for Main Page Here -->
+
+{% endblock %}
+ 
+</body></html>

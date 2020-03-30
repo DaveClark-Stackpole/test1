@@ -20,6 +20,9 @@ from django.core.context_processors import csrf
 
 
 def maint_mgmt(request):
+	request.session["main_screen_color"] = "#abad97"  # Color of Background in APP
+	request.session["main_menu_color"] = "#f8fcd7"    # Color of Menu Bar in APP
+
 	return render(request, "maint_mgmt.html")
 
 # Login for Maintenance Manager App

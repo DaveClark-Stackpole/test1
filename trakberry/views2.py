@@ -319,10 +319,10 @@ def main_password_lost_email(request):
 
 	db, cur = db_set(request)
 	# Create the table if it does not exist
-	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_users_passwords(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), active INT(2))""")
+	cur.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50))""")
 	# Check password to match name.  If no record of name then divert to except and reroute to create new password
 	try:
-		sql = "SELECT * FROM tkb_users_passwords where user_name = '%s'"%(user_name)
+		sql = "SELECT * FROM tkb_logins where user_name = '%s'"%(user_name)
 		cur.execute(sql)
 		tmp = cur.fetchall()
 		tmp2 = tmp[0]
@@ -388,26 +388,29 @@ def main_password_update(request):
 	request.session["login_password"] = ""
 	return render(request,'main_password_update_form.html', {'login_name':login_name,'args':args})
 
-# Updates the Password of the current user
+# Updates the Password of the current user in current department
 def login_password_update(request):
-	login_name = request.session["login_name"]
-	login_password = request.session["login_password"]
-	db, cur =db_open()
+	db, cur = db_set(request)
 	try:
-		sql = "SELECT password FROM tkb_users where name = '%s'"%(login_name)
+		login_name = request.session["login_name"]
+		login_password = request.session["login_password"]
+		login_department = request.session["login_department"]
+	except:
+		dummy = 1  # Do Nothing
+	try:
+		sql = "SELECT password FROM tkb_logins where name = '%s'"%(login_name)
 		cur.execute(sql)
 		tmp = cur.fetchall()
 		tmp2 = tmp[0]
-		
-		tql = ('update tkb_users SET password="%s" WHERE name="%s"' % (login_password,login_name))
+	
+		tql = ('update tkb_login SET password="%s" WHERE user_name="%s" and department="%s"' % (login_password,login_name,login_department))
 		cur.execute(tql)
 		db.commit()
-		
 	except:
-		cur.execute ('''INSERT INTO tkb_users(user_name,password) VALUES(%s,%s)''',(login_name,login_password))
-		db.commit()
-
-		
+		dummy = 1  # Do nothing
+		# cur.execute ('''INSERT INTO tkb_login(user_name,password,department) VALUES(%s,%s)''',(login_name,login_password))
+		# db.commit()
+	db.close()
 	return
 
 def main_A(request):
