@@ -34,7 +34,7 @@ def maint_mgmt(request):
 	cursor.execute(SQ_Sup)
 	tmp = cursor.fetchall()
 	db.close()
-	uuu = request.session["maint_mgmt_login_password_check"]
+
 	if wildcard == 1:
 		ch1 = request.session["maint_mgmt_login_password_check"]
 		# t=9/0
