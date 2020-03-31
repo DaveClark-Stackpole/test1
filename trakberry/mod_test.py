@@ -4,6 +4,10 @@ from django.http import HttpResponseRedirect
 import MySQLdb
 import time
 
+def wildcard_test(request):
+  request.session["wildcard1"] = 0
+  return render(request,"done_test.html")
+
 
 # Updated July 12,2015
 # Module to run test variables

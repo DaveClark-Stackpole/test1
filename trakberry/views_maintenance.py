@@ -23,8 +23,41 @@ def maint_mgmt(request):
 
 	request.session["main_screen_color"] = "#abad97"  # Color of Background in APP
 	request.session["main_menu_color"] = "#f8fcd7"    # Color of Menu Bar in APP
+	request.session["main_body_color"] = "#EBF0CB"
+	request.session["main_body_menu_color"] = "#D2D2D2"
 
-	return render(request, "maint_mgmt.html")
+	wildcard = int(request.session["wildcard1"])
+	
+	whoisonit = 'tech'
+	db, cursor = db_set(request)  
+	SQ_Sup = "SELECT * FROM pr_downtime1 where closed IS NULL and whoisonit != '%s'" % (whoisonit) 
+	cursor.execute(SQ_Sup)
+	tmp = cursor.fetchall()
+	db.close()
+	uuu = request.session["maint_mgmt_login_password_check"]
+	if wildcard == 1:
+		ch1 = request.session["maint_mgmt_login_password_check"]
+		# t=9/0
+
+	if request.POST:
+		selected1 = request.POST
+		try:
+			selected2 = int(selected1.get("one"))
+		except:
+			return maint_mgmt(request)
+		request.session["index"] = selected2
+		return render(request, "maint_edit.html")
+		# return done_edit(request)
+	else:
+		form = sup_downForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+
+
+	return render(request, "maint_mgmt.html",{'index':tmp,'args':args})
+
+
 
 # Login for Maintenance Manager App
 def maint_mgmt_login_form(request):	
@@ -44,7 +77,9 @@ def maint_mgmt_login_form(request):
 		request.session["login_password_check"] = ''
 		login_password_check(request)
 		check = request.session["login_password_check"]
+		request.session["maint_mgmt_login_password_check"]
 
+	
 		# if len(login_name) < 5:
 		# 	login_password = 'wrong'
 		if check != 'false':
@@ -54,8 +89,11 @@ def maint_mgmt_login_form(request):
 		else:
 			request.session["maint_mgmt_login_password_check"] = 'False'
 
+		ch2 = request.session["maint_mgmt_login_password_check"]
+		request.session["wildcard1"] = 1
+	
+		return render(request,'redirect_maint_mgmt.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
-		return maint_mgmt(request)
 		
 	elif 'button2' in request.POST:
 		request.session["password_lost_route1"] = "maint_mgmt.html"
@@ -73,7 +111,6 @@ def maint_mgmt_login_form(request):
 	return render(request,'maint_mgmt_login_form.html', {'args':args,'MList':Maint_Mgmt_Manpower})	
 
 def maint_manpower(request):
-
 	db, cursor = db_set(request)  
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_list LIKE tkb_tech_list""")
 	db.commit()
@@ -84,6 +121,103 @@ def maint_manpower(request):
 	# maint = ['Allan Meunier','Andrew McArthur','Arnold Olszewski','Brad Haase','Brian Willert','Bruce Riehl','Chris Meidlinger','Curtis Mitchell','Dale Robinson','David Selvey','Dorin Tumac','Doug Huard','Dusko Farkic','Gary Tune','George Stamas','Greg Mroczek','Harold Kuepfer','Jeff Jacobs','Jeff Saunders','Jeremy Arthur','Jim Green','John Reissner','Kevin Faubert','Lyuben Shivarov','Matthew Kuttschrutter','Michael Cella','Milos Nikolic','Mladen Stosic','Peter Nguyen','Richard Clifford','Robin Melville','Royce Laycox','Shawn Gilbert','Steven Niu','Terry Higgs','Wesley Guest']
 	db.close()
 	return tmp
+
+# Module to edit entry	
+def maintenance_edit(request):	
+	index = request.session["index"]
+	# Select prodrptdb db located in views_db
+	db, cursor = db_set(request)
+	SQ_Sup = "SELECT * FROM pr_downtime1 where idnumber='%s'" %(index)
+	cursor.execute(SQ_Sup)
+	tmp = cursor.fetchall()
+	tmp2=tmp[0]
+	request.session["machinenum"] = tmp2[0]
+	request.session["problem"] = tmp2[1]
+	request.session["priority"] = tmp2[3]
+
+	nm = []
+	tx = tmp2[4]
+	if (tx.find("|"))>0:
+		while True:
+			len_tx = len(tx)
+			ty = list(tx)
+			ta = tx.find("|")
+			ta = ta - 1
+			lft = tx[:ta]
+			nm.append(lft)
+			ta = ta + 3
+			ta_right = len_tx - ta
+			tx = tx[-ta_right:]
+			len_tx = len(tx)
+
+			if (tx.find("|"))<0:
+				break
+		nm.append(tx)
+
+
+	db.close()	
+	
+	if request.POST:
+        			
+		machinenum = request.POST.get("machine")
+		problem = request.POST.get("reason")
+		priority = request.POST.get("priority")
+		whoisonit = 'tech'
+		
+		a = request.POST
+		b=int(a.get("one"))
+		
+		var1 = no_duplicate(priority)
+		priority = str(var1)
+
+
+
+
+		if (tx.find("|"))>0:
+			ty = list(tx)
+			ta = tx.find("'")
+			#tb = tx.rfind("'")
+			ty[ta] = ""
+			#ty[tb] = "'"
+			tc = "".join(ty)
+
+		db, cursor = db_set(request)
+		cur = db.cursor()
+		
+		if b==-3:
+			mql =( 'update pr_downtime1 SET machinenum="%s" WHERE idnumber="%s"' % (machinenum,index))
+			cur.execute(mql)
+			db.commit()
+			tql =( 'update pr_downtime1 SET problem="%s" WHERE idnumber="%s"' % (problem,index))
+			cur.execute(tql)
+			db.commit()
+			uql =( 'update pr_downtime1 SET priority="%s" WHERE idnumber="%s"' % (priority,index))
+			cur.execute(uql)
+			db.commit()
+			db.close()
+
+		if b==-2:
+			tc = "Troubleshooting"
+			request.session["tech_comment"] = tc
+			t = vacation_temp()
+			sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
+			cur.execute(sql)
+			db.commit()
+			tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
+			cur.execute(tql)
+			db.commit()
+			db.close()
+
+		if b==-1:
+			return done_sup_close(request)
+
+		return done(request)
+	else:	
+		form = sup_downForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	return render(request,'maintenance_edit.html', args)	
 
 def maint_mgmt_manpower(request):
 

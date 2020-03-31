@@ -49,6 +49,7 @@ from views_testing import clear_login
 from views_test import create_scrap_table, test_scrap_production
 from test_test import table_mod1
 from view_test1 import kiosk_name,update_column
+from mod_test import wildcard_test
 # ***********************************************************************************************************************************************************
 
 
@@ -82,7 +83,7 @@ from views_scheduler import schedule_set2b,schedule_set3,schedule_reset_data,sch
 
 # *******************************************  Maintenance App Section ********************************************************************************************
 from views_maintenance import maint_mgmt,maint, maint_call, maint_pass, maint_close, maint_logout, maint_job_history, maint_map, maint_call_call
-from views_maintenance import maint_mgmt_login_form
+from views_maintenance import maint_mgmt_login_form, maintenance_edit
 # ***********************************************************************************************************************************************************
 
 # *******************************************  Inventory Section ********************************************************************************************
@@ -115,8 +116,6 @@ from views_mod1 import mgmt_display_next,mgmt_display_prev
 from views_mod2 import hrly_display, butter
 from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset, barcode_search, barcode_search_check, barcode_verify, barcode_verify_check
 from views_barcode import barcode_check_10R,barcode_input_10R,barcode_initial_10R
-
-
 
 # ***********************************************************************************************************************************************************
 
@@ -272,6 +271,7 @@ urlpatterns = [
 	
 	# **************  Maintenance Section ***************************************
 	url(r'^maint_mgmt/', maint_mgmt),
+	url(r'^maintenance_edit/', maintenance_edit),
 	url(r'^maint_mgmt_login_form/', maint_mgmt_login_form),
 	url(r'^maint/', maint),
 	url(r'^maint_map/', maint_map),
@@ -324,6 +324,7 @@ urlpatterns = [
 	# ************************************************************************
 	
 	# **************  Testing Section ***************************************
+	url(r'^wildcard_test/', wildcard_test),  
 	url(r'^main_test_init/', main_test_init),   
 	url(r'^email_test_1/', email_test_1),
 	url(r'^email_test_2/', email_test_2),
