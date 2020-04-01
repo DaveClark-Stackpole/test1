@@ -16,18 +16,27 @@
 </th></tr>
 
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
-<font color="#000000" size ="3"  style="margin-left:5%;">Priority<br>
+<font color="#000000" size ="3"  style="margin-left:5%;">Manpower<br>
+<!-- <input style="font-size:14px;width:320px;height:30px;margin-left:5%;" type="textarea" value="{{request.session.manpower}}" readonly> -->
 
-<input style="font-size:12px;width:320px;height:30px;margin-left:5%;"name="priority" type="number" value="{{request.session.priority}}">
 
-
+<select style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="manpower" onchange="this.form.submit()">
+    <option selected = "selected">{{request.session.manpower}}</option>
+    {% for i in MList %}
+    <option value="{{ i.0 }}">{{ i.0 }}</option>
+    {% endfor %}
+</select>
 
 </th></tr>
-<tr><th bgcolor="{{request.session.main_body_color}}"><br>
-<button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-3" /><center><b>Update</b></center></button>
+<tr><th bgcolor="{{request.session.main_body_color}}"><br><br>
+<button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
+    border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-3" />
+    <center><b>Update</b></center></button>
 
 
-<button style="text-align: left;width:120px;height:30px;font-size: 18px;border-style: solid;border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-2" /><center><b>Close</b></center></button>
+<button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
+    border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-2" />
+    <center><b>Close</b></center></button>
 
 </th></tr>
 </table>

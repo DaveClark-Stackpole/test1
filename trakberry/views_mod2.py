@@ -264,8 +264,6 @@ def string_make(x,n):
         x = x + " "
     return x
 
-
-
 def seperate_string(tx):
     nm = []
     if (tx.find("|"))>0:
@@ -284,6 +282,39 @@ def seperate_string(tx):
                 break
     nm.append(tx)
     return nm
+
+# Takes total string and name to add.   Either adds name or deletes it if it's in
+def generate_string(tmp3,tec):  
+    nm = []
+    nm2 = []
+    if tmp3 != 'Electrician' and tmp3 != 'Millwright':
+		nm = seperate_string(tmp3)
+		add_job = 0
+		match1 = 0
+		for h1 in nm:
+			if h1 == tec:
+				match1 = 1
+			if h1 != tec:
+				nm2.append(h1)
+				add_job = 1
+
+		if match1 == 0:
+			add_job = 0
+		if add_job == 1:
+			t = ''
+			for h2 in nm2:
+				t = t + h2 + " | "
+			t = t[:-3]
+		else:
+			if tmp3 == tec:
+				t = 'Electrician'
+			else:
+				t = tmp3 + " | " + tec
+    else:
+		t = tec
+
+    return t
+
 
 def create_new_table(request):
     # create a blank tkb_maint_list table with format similar to tkb_tech_list
