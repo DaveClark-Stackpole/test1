@@ -828,9 +828,10 @@ def kiosk_production_entry(request):
 		# Set bounce level
 		# yyy = request.session["srgg"]	
 		request.session["bounce"] = 0
+
 		if oa_check == 1: 
 			# bounce = 1
-			bounce = 0 #  bypass error display for now
+			bounce = 1 #  bypass error display for now
 			write_answer = 1
 			request.session["error_title"] = "Low Production"
 			request.session["error_message"] = "Make sure that count, hrs run and downtime are correct!"

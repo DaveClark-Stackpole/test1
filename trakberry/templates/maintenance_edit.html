@@ -1,5 +1,43 @@
 {% extends "maint_mgmt.html" %}
 
+{% block grid %}
+
+{% if request.session.bounce > 0 %} 
+	<script type="text/javascript">
+	  $(document).ready(function(){
+		  $("#myModal").modal('show');
+	  });
+	</script>
+{% endif %}
+
+<style>
+	{% if request.session.bounce = 1 %} 
+		.modal-body
+			{background-color: rgb(252, 236, 149);}
+		.modal-header
+		{background-color: rgb(252, 236, 149);}
+		.modal-footer
+		{background-color: rgb(252, 236, 149);}
+
+}
+	{% elif request.session.bounce = 2 %}
+		.modal-body
+			{background-color: rgb(255, 172, 172);}
+		.modal-header
+			{background-color: rgb(255, 172, 172);}
+		.modal-footer
+			{background-color: rgb(255, 172, 172);}
+			.modal {
+ 
+    border-radius: 25px; 
+}
+
+	{% endif %}
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
 <form action="" method="post">{% csrf_token %}
@@ -42,7 +80,35 @@
 </table>
 </form>
 
+<!-- Modal For Are you sure to Close -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><mark><font color="#000000" size ="6">&nbsp;&nbsp;You Want to Close?&nbsp;&nbsp;</font></mark></h4>
+        </div>
+        <div class="modal-body" >
+          <font color="#000000" size ="5">
+              <p align="left">
+                  <b><u>Are you sure</u></b><br><br>
 
+        </p>
+          </font>
+        </div>
+        <div class="modal-footer">
+          <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <!-- <button type="button" class="btn btn-primary" onclick="window.location.href = 'http://www.tsn.ca';">Save changes</button> -->
+
+              <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maintenance_close';">Yes</button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_mgmt';">No</button>
+                <!-- <button type ="button" class="close" data-dismiss="modal">OK</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 

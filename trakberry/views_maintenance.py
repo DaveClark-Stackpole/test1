@@ -26,6 +26,7 @@ def maint_mgmt(request):
 	request.session["main_menu_color"] = "#f8fcd7"    # Color of Menu Bar in APP
 	request.session["main_body_color"] = "#EBF0CB"
 	request.session["main_body_menu_color"] = "#D2D2D2"
+	request.session["bounce"] = 0
 
 	wildcard = int(request.session["wildcard1"])
 	
@@ -181,7 +182,7 @@ def maintenance_edit(request):
 		db, cursor = db_set(request)
 		cur = db.cursor()
 
-		if b==-4:
+		if b==-4:  # Route to update maintenance manpower but keep editing
 			mql =( 'update pr_downtime1 SET machinenum="%s" WHERE idnumber="%s"' % (machinenum,index))
 			cur.execute(mql)
 			db.commit()
@@ -195,7 +196,7 @@ def maintenance_edit(request):
 			return render(request,'redirect_maint_edit.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
 		
-		if b==-3:
+		if b==-3:  # Route to Update item and back to main
 			mql =( 'update pr_downtime1 SET machinenum="%s" WHERE idnumber="%s"' % (machinenum,index))
 			cur.execute(mql)
 			db.commit()
@@ -206,27 +207,12 @@ def maintenance_edit(request):
 			return render(request,'redirect_maint_mgmt.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
 
-		if b==-2:
-			tc = "Troubleshooting"
-			request.session["tech_comment"] = tc
-			t = vacation_temp()
-			sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
-			cur.execute(sql)
-			db.commit()
-			tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
-			cur.execute(tql)
-			db.commit()
-			db.close()
-			return render(request,'redirect_maint_mgmt.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
+		if b==-2:   # Route to bounce and check if we are really going to close this item
+			request.session["bounce"] = 1
+			return render(request,'redirect_maint_edit.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
-		if b==-1:
-			dummy = 3
-			return done_sup_close(request)
+		return render(request,'redirect_maint_mgmt.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 		
-	
-
-
-		return done(request)
 	else:	
 		form = sup_downForm()
 	args = {}
@@ -235,6 +221,20 @@ def maintenance_edit(request):
 
 	return render(request,'maintenance_edit.html',{'args':args,'MList':Maint_Manpower})	
 
+def maintenance_close(request):
+	index = request.session["index"]
+	tc = "Maintenance Closed"
+	t = vacation_temp()
+	db, cursor = db_set(request)
+	cur = db.cursor()
+	sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
+	cur.execute(sql)
+	db.commit()
+	tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
+	cur.execute(tql)
+	db.commit()
+	db.close()
+	return render(request,'redirect_maint_mgmt.html')
 
 def login_password_check(request):
 	db, cursor = db_set(request)
