@@ -15,11 +15,11 @@
 		.modal-body
 			{background-color: rgb(252, 236, 149);}
 		.modal-header
-		{background-color: rgb(252, 236, 149);}
+		{background-color: rgb(214, 201, 125);}
 		.modal-footer
 		{background-color: rgb(252, 236, 149);}
-
-}
+    .modal 
+    {border-radius: 25px; }
 	{% elif request.session.bounce = 2 %}
 		.modal-body
 			{background-color: rgb(255, 172, 172);}
@@ -70,12 +70,12 @@
 <button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
     border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-3" />
     <center><b>Update</b></center></button>
-
-
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
     border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-2" />
-    <center><b>Close</b></center></button>
-
+    <center><b>Close Issue</b></center></button>
+    <br><br>
 </th></tr>
 </table>
 </form>
@@ -86,25 +86,28 @@
       <div class="modal-content" >
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title"><mark><font color="#000000" size ="6">&nbsp;&nbsp;You Want to Close?&nbsp;&nbsp;</font></mark></h4>
+          <h4 class="modal-title"><mark><font color="#000000" size ="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Warning
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></mark></h4>
         </div>
         <div class="modal-body" >
-          <font color="#000000" size ="5">
+          <font color="#000000" size ="4">
               <p align="left">
-                  <b><u>Are you sure</u></b><br><br>
-
+                  <b>You are about to close <br> this item out.</b><br><br>
+                  &nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maintenance_close';">OK</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_mgmt';">Cancel</button>
         </p>
           </font>
         </div>
         <div class="modal-footer">
+          <p align="left">
           <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <!-- <button type="button" class="btn btn-primary" onclick="window.location.href = 'http://www.tsn.ca';">Save changes</button> -->
+        </p>    
 
-              <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maintenance_close';">Yes</button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_mgmt';">No</button>
-                <!-- <button type ="button" class="close" data-dismiss="modal">OK</button> -->
         </div>
       </div>
     </div>

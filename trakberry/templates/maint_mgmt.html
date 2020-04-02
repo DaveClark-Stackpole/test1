@@ -15,10 +15,22 @@
         </th></tr>
 
         {% for i in index %}
-        <tr><th bgcolor="{{request.session.main_body_color}}" colspan="4" style="font-size: 80%;">
-        <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;border-color:{{request.session.main_body_color}};border-radius: 0px;background-color:{{request.session.main_body_color}};"
+
+        {% if i.4 = 'Electrician' %}
+            <tr><th bgcolor="{{request.session.main_body_color}}" colspan="4" style="font-size: 80%;">
+            <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;
+            border-color:rgb(235,240,203);border-radius: 0px;background-color: rgb(235,240,203);"
             type="submit" name="one" value="{{i.11}}" /><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></button>
-        </th></tr>
+            </th></tr>
+        {% else %}
+            <tr><th bgcolor="{{request.session.main_body_color}}" colspan="4" style="font-size: 80%;">
+            <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;
+            border-color:rgb(204, 208, 173);border-radius: 0px;background-color:rgb(204,208,173);"
+            type="submit" name="one" value="{{i.11}}" /><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></button>
+            </th></tr>
+        {% endif %}
+
+
         {% endfor %}
 
 {% endif %}

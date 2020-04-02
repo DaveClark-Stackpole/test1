@@ -223,7 +223,7 @@ def maintenance_edit(request):
 
 def maintenance_close(request):
 	index = request.session["index"]
-	tc = "Maintenance Closed"
+	tc = "Closed by Maintenance Mgr"
 	t = vacation_temp()
 	db, cursor = db_set(request)
 	cur = db.cursor()
@@ -314,7 +314,15 @@ def tech_email_test(request):
 	return render(request, "email_downtime_cycle.html")
 		
 def maint(request):
-	request.session["refresh_maint"] = 0
+	# Initialize Request Sessions if they don't exist
+	try:
+		request.session["bounce2_switch"]
+	except:
+		request.session["bounce2_switch"] = 0
+	try:
+		request.session["bounce2"] 
+	except:
+		request.session["bounce2"] = 0
 	try:
 		request.session["login_maint"] 
 	except:
@@ -323,6 +331,22 @@ def maint(request):
 		request.session["maint_ctr"] 
 	except:
 		request.session["maint_ctr"] = 0
+
+
+	b = request.session["bounce2"]
+	bs = request.session["bounce2_switch"]
+	# t=8/0
+	# Check to see if Complete button was clicked
+	if request.session["bounce2_switch"] == 1:
+		request.session["bounce2"] = 1
+		request.session["bounce2_switch"] = 0
+		a1 = request.session["bounce2"]
+		a2 = request.session["bounce2_switch"]
+
+	elif request.session["bounce2_switch"] == 0:
+		request.session["bounce2"] = 0
+  
+
   
 	request.session["refresh_maint"] = 0
   # initialize current time and set 'u' to shift start time
@@ -537,6 +561,10 @@ def maint(request):
 	
 	return render(request,"maint.html",{'L':list,'N':n,'M':M,'E':E})
 
+def maint_close_item(request):
+	request.session["bounce2_switch"] = 1
+	return render(request,"redirect_maint.html")
+
 def tech_message_close(request):
 	request.session["refresh_tech"] = 0
 	I = request.session["message_id"]
@@ -577,7 +605,7 @@ def maint_call(request, index):
 	return maint(request)
 
 def maint_close(request, index):	
-	
+	index=request.session["index"]
 
 	# Select prodrptdb db located in views_db
 	db, cur = db_set(request)  
@@ -593,8 +621,8 @@ def maint_close(request, index):
 	db.commit()
 	db.close()
 			
-	
-	return maint(request)
+	return render(request,'redirect_maint.html')
+	# return maint(request)
 
 def maint_names(request):
 	Maint_Manpower = []
@@ -634,6 +662,8 @@ def maint_logout(request):
 	args['form'] = form
 	request.session["login_maint"] = "none"
 	request.session["login_maint_check"] = 0
+	request.session["bounce2"] = 0
+	request.session["bounce2_switch"] = 0
 	return render(request,'maint_login.html',{'args':args,'MList':Maint_Manpower})	
 
 	

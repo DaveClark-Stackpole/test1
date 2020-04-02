@@ -87,8 +87,28 @@
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 
 
+{% if request.session.bounce2 == 1 %} 
+    <script type="text/javascript">
+	    $(document).ready(function(){
+	    $("#myModal").modal('show');
+	    });
+	</script>
+{% endif %}
 
+<style>
+    {% if request.session.bounce2 == 1 %} 
+    
 
+        .modal-body
+        {background-color: rgb(188, 210, 248);}
+        .modal-header
+        {background-color: rgb(140, 156, 184);}
+        .modal-footer
+        {background-color: rgb(188, 210, 248);}
+        .modal 
+        {border-radius: 25px; }
+    {% endif %}
+</style>
 
 </head>
 
@@ -101,16 +121,18 @@
 
 {% block refresh %}
 
-{% if request.session.refresh_maint != 3 %}
+
+<!-- {% if request.session.refresh_maint != 3 %}
 <meta http-equiv="refresh" content="8; url={{request.session.local_toggle}}/maint"/>
 
-{% endif %}
+{% endif %} -->
 
 {% endblock %}
 {% if request.session.refresh_maint == 1 %}
 
 <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint" />
 {% endif %}
+
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -121,7 +143,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-			<font color="#ffffff" size ="3"><b>Maint App</b></b></font>
+			<font color="#ffffff" size ="3"><b>({{request.session.bounce2}})Maint App</b></b></font>
 			<img src="{{request.session.login_image}}"  style="border-radius: 25px;" height="60" width="70">
             <a class="navbar-brand" href="#" style="position:absolute;left:0px;top:-10px;"></a>
         </div>
@@ -189,7 +211,8 @@
 		<center><a href="{{request.session.local_toggle}}/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
 		</div>
 		<div class="col-sm-4" style="background-color: rgb(252, 244, 136);border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-		<center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
+        <!-- <center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center> -->
+        <center><a href="{{request.session.local_toggle}}/maint_close_item" style="color: black">Complete</b></a></center>
 		</div>
 		
 	</div>
@@ -206,7 +229,8 @@
 		<center><a href="{{request.session.local_toggle}}/mcall/get/{{ i.2 }}" style="color: black">{{i.3}}</b></center></a>
 		</div>
 		<div class="col-sm-4" style="background-color: #DCDCDC;border-radius: 25px;border-style: solid;border-width: 1px;border-color: #000000;height:30px;"><font color="#000000" size ="3" border="1"><b>
-		<center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center>
+        <!-- <center><a href="{{request.session.local_toggle}}/mclose/get/{{ i.2 }}" style="color: black">Complete</b></a></center> -->
+        <center><a href="{{request.session.local_toggle}}/maint_close_item" style="color: black">Complete</b></a></center>
 		</div>
 		
 	</div>
@@ -223,7 +247,43 @@
     <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_logout" />
 {% endif %}
 
+
+<!-- Modal For Are you sure to Close -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><mark><font color="#000000" size ="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Warning
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></mark></h4>
+        </div>
+        <div class="modal-body" >
+          <font color="#000000" size ="4">
+              <p align="left">
+                  <b>You are about to close <br> this item out.</b><br><br>
+                  &nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mclose/get/{{ i.2 }}';">OK</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint';">Cancel</button>
+        </p>
+          </font>
+        </div>
+        <div class="modal-footer">
+          <p align="left">
+          <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">
+        </p>    
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 {% endblock %}
+
 
 
 </body></html>
