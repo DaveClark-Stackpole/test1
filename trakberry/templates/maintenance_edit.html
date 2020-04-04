@@ -40,9 +40,10 @@
 
 {% block content %}
 
+{% block frame1 %}
 <form action="" method="post">{% csrf_token %}
 
-    </table>
+
 <table style="width:25%;margin-left:2%;">
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
 <font color="#000000" size ="3" style="margin-left:5%;">Machine Down<br>
@@ -71,7 +72,7 @@
     border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-3" />
     <center><b>Update</b></center></button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
     border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-2" />
     <center><b>Close Issue</b></center></button>
@@ -79,7 +80,7 @@
 </th></tr>
 </table>
 </form>
-
+{% endblock %}
 <!-- Modal For Are you sure to Close -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog modal-sm">
@@ -94,11 +95,11 @@
           <font color="#000000" size ="4">
               <p align="left">
                   <b>You are about to close <br> this item out.</b><br><br>
-                  &nbsp;&nbsp;&nbsp;
+                  &nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
                   type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maintenance_close';">OK</button>
-                  &nbsp;&nbsp;&nbsp;
-                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;" 
                   type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_mgmt';">Cancel</button>
         </p>
           </font>

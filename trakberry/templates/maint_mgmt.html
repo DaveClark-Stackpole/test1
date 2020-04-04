@@ -1,38 +1,48 @@
 {% extends "maint_mgmt_main.html" %}
+
+
 {% block content %}
 
-{% if request.session.maint_mgmt_login_password_check != 'True' %}
-<!-- if request.session.main_login_department != request.session.login_department -->
+<!-- {% if request.session.maint_mgmt_login_password_check != 'True' %}
 <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_mgmt_login_form" />
 
 {% else %}
-<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/maint_mgmt" />
-<form action="" method="post">{% csrf_token %}
+<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/maint_mgmt" /> -->
 
-    <table style="width:40%;margin-left:2%;">
-        <tr><th colspan="4" bgcolor="{{request.session.main_body_menu_color}}" style="font-size: 160%;">
-            <center><u><font color="#000000">Maintenance Jobs</u></center>
-        </th></tr>
-
+<div class ="mainset"></div>
+{% block frame1 %}
+    <form action="" method="post">{% csrf_token %}
+        <div class="frame1"  bgcolor="{{request.session.main_body_menu_color}}">
+            <div class="head1">
+                    <center><u><b><font color="#000000" style="font-size: 160%;">Maintenance Jobs</u></b></center>
+            </div>
         {% for i in index %}
 
         {% if i.4 = 'Electrician' %}
-            <tr><th bgcolor="{{request.session.main_body_color}}" colspan="4" style="font-size: 80%;">
-            <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;
-            border-color:rgb(235,240,203);border-radius: 0px;background-color: rgb(235,240,203);"
-            type="submit" name="one" value="{{i.11}}" /><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></button>
-            </th></tr>
+            <div class="body1">
+            <button style="text-align: left;width:100%;font-size: 60%;border:0px solid rgb(0, 0, 0);
+            background-color: rgb(235,240,203);border:none;outline:none;"
+            type="submit" name="one" value="{{i.11}}" /><b><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></b></button>
+            </div>
         {% else %}
-            <tr><th bgcolor="{{request.session.main_body_color}}" colspan="4" style="font-size: 80%;">
-            <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;
-            border-color:rgb(204, 208, 173);border-radius: 0px;background-color:rgb(204,208,173);"
-            type="submit" name="one" value="{{i.11}}" /><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></button>
-            </th></tr>
+            <div class="body1">
+            <button style="text-align: left;width:100%;font-size: 60%;border:0px solid rgb(0, 0, 0);
+            background-color:rgb(204,208,173);border:none;outline:none;"
+            type="submit" name="one" value="{{i.11}}" /><b><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></</button>
+            </div>
         {% endif %}
-
-
         {% endfor %}
+        </div>
+    
+    </form>
+{% endblock %}
 
-{% endif %}
+    <div class="frame2"  bgcolor="{{request.session.main_body_menu_color}}">
+        <div class="head2"><b><font color="#000000" style="font-size: 90%;">Manpower</font></b></div>
+    </div>
+
+
+</div>
+<!-- {% endif %} -->
 {% endblock %}
 

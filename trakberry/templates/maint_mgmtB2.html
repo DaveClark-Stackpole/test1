@@ -1,0 +1,38 @@
+{% extends "maint_mgmt_main.html" %}
+{% block content %}
+
+<!-- {% if request.session.maint_mgmt_login_password_check != 'True' %}
+<meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_mgmt_login_form" />
+
+{% else %}
+<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/maint_mgmt" /> -->
+
+<form action="" method="post">{% csrf_token %}
+
+        <div class="frame1"  bgcolor="{{request.session.main_body_menu_color}}">
+            <div class="head1">
+            <center><u><font color="#000000" style="font-size: 160%;">Maintenance Jobs</u></center>
+            <br>
+        </div>
+        {% for i in index %}
+
+        {% if i.4 = 'Electrician' %}
+            <div class="body1">
+            <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;
+            border-color:rgb(235,240,203);border-radius: 0px;background-color: rgb(235,240,203);"
+            type="submit" name="one" value="{{i.11}}" /><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></button>
+            </div>
+        {% else %}
+            <div class="body1">
+            <button style="text-align: left;width:100%;font-size: 100%;border-style: solid;
+            border-color:rgb(204, 208, 173);border-radius: 0px;background-color:rgb(204,208,173);"
+            type="submit" name="one" value="{{i.11}}" /><font color="#000000">[{{i.4}}] {{i.0}}:{{i.1}}</font></button>
+            </div>
+        {% endif %}
+
+
+        {% endfor %}
+        </div>
+<!-- {% endif %} -->
+{% endblock %}
+

@@ -116,7 +116,7 @@ def maint_mgmt_login_form(request):
 def maint_mgmt_manpower(request):
 	db, cursor = db_set(request)  
 	dep = request.session['login_department']
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50))""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50)), active BOOLEAN""")
 	db.commit()
 	sql = "SELECT * FROM tkb_logins WHERE department = '%s' ORDER BY user_name ASC" %(dep)  # Select only those in the department  (dep)
 	cursor.execute(sql)
@@ -128,7 +128,7 @@ def maint_mgmt_manpower(request):
 def maint_manpower(request):
 	db, cursor = db_set(request)  
 	dep = request.session['login_department']
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50))""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50)),active BOOLEAN""")
 	# cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_maint_list LIKE tkb_tech_list""")
 	db.commit()
 	sql = "SELECT user_name FROM tkb_logins WHERE department = '%s' ORDER BY user_name ASC" %(dep)  # Select only those in the department  (dep)
@@ -562,7 +562,18 @@ def maint(request):
 	return render(request,"maint.html",{'L':list,'N':n,'M':M,'E':E})
 
 def maint_close_item(request):
-	request.session["bounce2_switch"] = 1
+	index=request.session["index"]
+	db, cur = db_set(request)  		
+	tc = "Closed by Maintenance"
+	request.session["tech_comment"] = tc
+	t = vacation_temp()
+	sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
+	cur.execute(sql)
+	db.commit()
+	tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
+	cur.execute(tql)
+	db.commit()
+	db.close()
 	return render(request,"redirect_maint.html")
 
 def tech_message_close(request):
@@ -604,25 +615,10 @@ def maint_call(request, index):
 
 	return maint(request)
 
-def maint_close(request, index):	
-	index=request.session["index"]
-
-	# Select prodrptdb db located in views_db
-	db, cur = db_set(request)  
-		
-	tc = "Closed by Maintenance"
-	request.session["tech_comment"] = tc
-	t = vacation_temp()
-	sql =( 'update pr_downtime1 SET remedy="%s" WHERE idnumber="%s"' % (tc,index))
-	cur.execute(sql)
-	db.commit()
-	tql =( 'update pr_downtime1 SET completedtime="%s" WHERE idnumber="%s"' % (t,index))
-	cur.execute(tql)
-	db.commit()
-	db.close()
-			
-	return render(request,'redirect_maint.html')
-	# return maint(request)
+def maint_close(request, index):
+	request.session["index"] = index
+	request.session["bounce2_switch"] = 1
+	return render(request,"redirect_maint.html")
 
 def maint_names(request):
 	Maint_Manpower = []
