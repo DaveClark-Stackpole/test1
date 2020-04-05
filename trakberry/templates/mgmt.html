@@ -101,6 +101,7 @@
   <script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
   <script src="/static/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/style1/div_maint_mgr1.css">
   
 </head>
 
@@ -141,28 +142,33 @@
 
                     <li><a href="{{request.session.local_toggle}}/mgmt"><span class="glyphicon glyphicon-home"></span> Main</a></li>
                     <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+
                     <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-stats"></span> Production<b class="caret"></b></a>
                          <ul class="dropdown-menu multi-level"  style="background-color:rgb(245, 237, 219)" >
                             <li><a href="#">Production Reports</a></li>
-                         
                              <li class="divider"   style="background-color:rgb(192, 178, 178)" ></li> 
                             <li><a href="{{request.session.local_toggle}}/mgmt_production">Production Entries</a></li>
                             <li><a href="{{request.session.local_toggle}}/mgmt_production_hourly">Hourly Entries</a></li>
                             <li><a href="{{request.session.local_toggle}}/mgmt_cycletime">Cycle Times</a></li>
-                         
                         </ul>
-        
                      </li>
-
 			    	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 
 
-				    <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Assets</a></li>
-				
-                
-			    	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-			    	<li><a href="#"><span class="glyphicon glyphicon-folder-open"></span> Manpower</a></li>
+				    <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Assets</a></li>	
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Manpower</a></li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 
+                    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-lock"></span> Administration<b class="caret"></b></a>
+                        <ul class="dropdown-menu multi-level"  style="background-color:rgb(245, 237, 219)" >
+                           <li><a href="{{request.session.local_toggle}}/mgmt_production">Users Logins</a></li>
+                           <li><a href="{{request.session.local_toggle}}/mgmt_production_hourly">Hourly Entries</a></li>
+                           <li><a href="{{request.session.local_toggle}}/mgmt_cycletime">Cycle Times</a></li>
+                       </ul>
+                    </li>
+                   <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 
 			        </ul>	
 			

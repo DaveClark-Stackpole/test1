@@ -36,3 +36,23 @@ def multi_name_breakdown(n):
                 break
         nm.append(tx)
     return nm
+
+
+def index_template(request, index):
+	page1 = request.session["page_edit"]
+	request.session["current_index"] = index
+	db, cur = db_set(request)
+	if page1 == 'user login':
+		sql1 = "SELECT * FROM tkb_logins where Id='%s'" % (index)
+		cur.execute(sql1)
+		tmp = cur.fetchall()
+		tmp2 = tmp[0]
+		tmp3 = tmp2[0]
+		t = generate_string(tmp3, tec)
+
+		sql = ('update pr_downtime1 SET whoisonit="%s" WHERE idnumber="%s"' %(t, index))
+		cur.execute(sql)
+		db.commit()
+	db.close()
+
+	return maint(request)
