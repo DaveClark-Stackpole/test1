@@ -6,6 +6,7 @@ import time
 
 def wildcard_test(request):
   request.session["wildcard1"] = 0
+  # request.session["maint_mgmt_login_password_check"] = "True"
   return render(request,"done_test.html")
 
 
