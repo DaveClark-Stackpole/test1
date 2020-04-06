@@ -19,6 +19,7 @@ from views_routes import direction
 from time import mktime
 from datetime import datetime, date
 from views_db import db_open, db_set
+from views_production import mgmt_users_logins_edit
 from datetime import datetime 
 
 def hyphon_fix(tx):
@@ -62,8 +63,9 @@ def index_template(request, index):
 		sql1 = "SELECT * FROM tkb_logins where Id='%s'" % (index)
 		cur.execute(sql1)
 		tmp = cur.fetchall()
-        h = tmp[0]
-        y=9/0
+		tmp2 = tmp[0]
+		request.session["current_tmp"] = tmp2
+		mgmt_users_logins_edit(request)
 
 
 	db.close()

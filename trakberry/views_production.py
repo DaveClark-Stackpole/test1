@@ -27,6 +27,7 @@ from datetime import datetime
 # *********************************************************************************************************
 
 def mgmt(request):
+	request.session["bounce"] = 0
 	return render(request, "mgmt.html")
 
 # Reset the password so it logs out
@@ -225,7 +226,7 @@ def mgmt_users_logins(request):
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50),active1 INT(10) default 0)""")
 	db.commit()
 
-	sql = "SELECT * FROM tkb_logins" 
+	sql = "SELECT * FROM tkb_logins order by department ASC, user_name ASC" 
 	cursor.execute(sql)
 	tmp = cursor.fetchall()
 
@@ -233,6 +234,74 @@ def mgmt_users_logins(request):
 
 	return render(request, "production/mgmt_users_logins.html",{'tmp':tmp})
 
+def mgmt_users_logins_edit(request):
+	tmp = request.session["current_tmp"]
+	p = request.session["page_edit"]
+	index = request.session["current_index"]
+	r=4/0
 
 
+
+	if request.POST:
+		user_name = request.POST.get("user_name")
+		password = request.POST.get("password")
+		department = request.POST.get("department")
+
+		a = request.POST
+		try:
+			b = int(a.get("one"))
+		except:
+			b = -4
+		db, cursor = db_set(request)
+		cur = db.cursor()
+
+		if b == 3:
+			mql =( 'update tkb_logins SET user_name="%s" WHERE Id="%s"' % (user_name,index))
+			cur.execute(mql)
+			db.commit()
+			mql =( 'update tkb_logins SET password="%s" WHERE Id="%s"' % (password,index))
+			cur.execute(mql)
+			db.commit()
+			mql =( 'update tkb_logins SET department="%s" WHERE Id="%s"' % (department,index))
+			cur.execute(mql)
+			db.commit()
+			db.close()
+			return render(request,'production/redirect_mgmt_users_logins.html')
+		if b == 2:
+			request.session["user_logins1"] = user_name
+			request.session["password"] = password
+			request.session["department"] = department
+			request.session["bounce"] = 1
+			return render(request,'production/redirect_mgmt_users_logins.html')
+	else:
+		form = sup_downForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	return render(request, "production/mgmt_users_logins_edit.html",{'args':args,'tmp':tmp})
+
+
+def mgmt_users_logins_update(request):
+	index = request.session["index"]
+	user_name = request.session["user_logins1"]
+	password = request.session["password"]
+	department = request.session["department"] 
+
+
+	db, cursor = db_set(request)
+	cur = db.cursor()
+
+	mql =( 'update tkb_logins SET user_name="%s" WHERE Id="%s"' % (user_name,index))
+	cur.execute(mql)
+	db.commit()
+	mql =( 'update tkb_logins SET password="%s" WHERE Id="%s"' % (password,index))
+	cur.execute(mql)
+	db.commit()
+	mql =( 'update tkb_logins SET department="%s" WHERE Id="%s"' % (department,index))
+	cur.execute(mql)
+	db.commit()
+
+	request.session["bounce"] = 0
+	db.close()
+	return render(request,'production/redirect_mgmt_users_logins.html')
 

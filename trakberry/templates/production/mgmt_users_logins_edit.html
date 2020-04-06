@@ -1,0 +1,122 @@
+{% extends "mgmt.html" %}
+
+{% block grid %}
+
+{% if request.session.bounce > 0 %} 
+	<script type="text/javascript">
+	  $(document).ready(function(){
+		  $("#myModal").modal('show');
+	  });
+	</script>
+{% endif %}
+
+<style>
+	{% if request.session.bounce = 1 %} 
+		.modal-body
+			{background-color: rgb(252, 236, 149);}
+		.modal-header
+		{background-color: rgb(214, 201, 125);}
+		.modal-footer
+		{background-color: rgb(252, 236, 149);}
+    .modal 
+    {border-radius: 25px; }
+	{% elif request.session.bounce = 2 %}
+		.modal-body
+			{background-color: rgb(255, 172, 172);}
+		.modal-header
+			{background-color: rgb(255, 172, 172);}
+		.modal-footer
+			{background-color: rgb(255, 172, 172);}
+			.modal {
+ 
+    border-radius: 25px; 
+}
+
+	{% endif %}
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+{% block frame1 %}
+<form action="" method="post">{% csrf_token %}
+
+
+
+<tr><th bgcolor="{{request.session.main_body_color}}"><br>
+<font color="#000000" size ="3" style="margin-left:5%;">Machine Down<br>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="machine" type="textarea" value="{{request.session.machinenum}}">
+</th></tr>
+<tr><th bgcolor="{{request.session.main_body_color}}"><br>
+<font color="#000000" size ="3" style="margin-left:5%;">Reason<br>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="reason" type="textarea" value="{{request.session.problem}}">
+</th></tr>
+
+<tr><th bgcolor="{{request.session.main_body_color}}"><br>
+<font color="#000000" size ="3"  style="margin-left:5%;">Manpower<br>
+<!-- <input style="font-size:14px;width:320px;height:30px;margin-left:5%;" type="textarea" value="{{request.session.manpower}}" readonly> -->
+
+
+<select style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="manpower" onchange="this.form.submit()">
+    <option selected = "selected">{{request.session.manpower}}</option>
+    {% for i in MList %}
+    <option value="{{ i.0 }}">{{ i.0 }}</option>
+    {% endfor %}
+</select>
+
+</th></tr>
+<tr><th bgcolor="{{request.session.main_body_color}}"><br><br>
+<button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
+    border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-3" />
+    <center><b>Update</b></center></button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
+    border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-2" />
+    <center><b>Close Issue</b></center></button>
+    <br><br>
+</th></tr>
+</table>
+</form>
+{% endblock %}
+
+
+<!-- Modal For Are you sure to Close -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><mark><font color="#000000" size ="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Warning
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></mark></h4>
+        </div>
+        <div class="modal-body" >
+          <font color="#000000" size ="4">
+              <p align="left">
+                  <b>You are about to make changes <br> to this file.</b><br><br>
+                  &nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_login';">OK</button>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_logins';">Cancel</button>
+        </p>
+          </font>
+        </div>
+        <div class="modal-footer">
+          <p align="left">
+          <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">
+        </p>    
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock %}
