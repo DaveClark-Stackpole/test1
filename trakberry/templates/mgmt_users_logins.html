@@ -1,0 +1,23 @@
+{% extends "mgmt.html" %}
+
+{% block content %}
+<div class ="mainset">
+    <div class="frame1"  bgcolor="{{request.session.main_body_menu_color}}">
+        <div class="head1">
+            <center><u><b><font color="#000000" style="font-size: 160%;">User Logins</u></b></center>
+        </div>
+        {% for i in tmp %}
+        <div class="body1">
+            <button  style="text-align: left;width:100%;font-size: 60%;border:0px solid rgb(0, 0, 0);
+            background-color: rgb(235,240,203);border:none;outline:none;"
+            type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_mgmt';">
+            {{i}}
+            </button>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

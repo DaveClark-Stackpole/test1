@@ -219,4 +219,20 @@ def mgmt_production_hourly_edit(request, index):
 
 # ***********************************************************************************************************************************
 
+def mgmt_users_logins(request):
+	db, cursor = db_set(request)
+	request.session["page_edit"] = "user login"
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50),active1 INT(10) default 0)""")
+	db.commit()
+
+	sql = "SELECT * FROM tkb_logins" 
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+
+	db.close()
+
+	return render(request, "production/mgmt_users_logins.html",{'tmp':tmp})
+
+
+
 

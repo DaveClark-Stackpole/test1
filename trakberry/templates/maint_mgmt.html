@@ -9,7 +9,7 @@
 {% else %}
 <!-- <meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/maint_mgmt" /> -->
 
-<div class ="mainset"></div>
+<div class ="mainset">
 {% block frame1 %}
     <form action="" method="post">{% csrf_token %}
         <div class="frame1"  bgcolor="{{request.session.main_body_menu_color}}">

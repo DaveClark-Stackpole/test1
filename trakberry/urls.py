@@ -108,10 +108,13 @@ from views_kiosk import set_test1, kiosk_fix55, kiosk_fix44
 # ***********************************************************************************************************************************************************
 # *******************************************  Management Section ********************************************************************************************
 from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit, mgmt_production, mgmt_display_edit, mgmt_cycletime
+from views_production import mgmt_users_logins
 
 from views4 import ios_test, IsDone, NotDone, target_fix1, medium_production, multidrop, scantest, target_fix1
 from views4 import target_fix_5401, target_fix_5404, target_fix_5399, target_fix_5214, target_fix_3214
 from views_mod1 import mgmt_display_next,mgmt_display_prev
+
+from mod1 import index_template
 
 from views_mod2 import hrly_display, butter
 from views_barcode import barcode_check, barcode_input, barcode_initial, barcode_reset, barcode_search, barcode_search_check, barcode_verify, barcode_verify_check
@@ -431,6 +434,7 @@ urlpatterns = [
 
 		# **************  Management Section ***************************************
 	url(r'^mgmt/', mgmt),
+	url(r'^mgmt_users_logins/', mgmt_users_logins),
 	url(r'^mgmt_login_form/', mgmt_login_form),
 	url(r'^mgmt_logout/', mgmt_logout),
 	url(r'^mgmt_production_hourly/', mgmt_production_hourly),
@@ -443,6 +447,9 @@ urlpatterns = [
 
 	# ************************************************************************
 
+		# **************  Mod1 Section ***************************************
+	url(r'^index_template/get/(?P<index>\d+)/$', index_template),
+	# ************************************************************************
 
 	# Retrieve Data from ADMIN views for testing
 	url(r'^retrieve/', retrieve),
