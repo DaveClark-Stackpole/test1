@@ -2,7 +2,7 @@
 
 {% block grid %}
 
-{% if request.session.bounce > 0 %} 
+{% if request.session.bounce = 1 %} 
 	<script type="text/javascript">
 	  $(document).ready(function(){
 		  $("#myModal").modal('show');
@@ -41,30 +41,31 @@
 {% block content %}
 
 {% block frame1 %}
+<div class ="mainset">
+<div class="frame12"  bgcolor="{{request.session.main_body_menu_color}}">
+
 <form action="" method="post">{% csrf_token %}
 
-
-
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
-<font color="#000000" size ="3" style="margin-left:5%;">Machine Down<br>
-<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="machine" type="textarea" value="{{request.session.machinenum}}">
+<font color="#000000" size ="3" style="margin-left:5%;"><b>User Name</b><br>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="user_name" type="textarea" value="{{request.session.user_logins1}}">
 </th></tr>
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
-<font color="#000000" size ="3" style="margin-left:5%;">Reason<br>
-<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="reason" type="textarea" value="{{request.session.problem}}">
+<font color="#000000" size ="3" style="margin-left:5%;"><b>Password</b><br>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="password" type="password" value="{{request.session.password}}">
 </th></tr>
 
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
-<font color="#000000" size ="3"  style="margin-left:5%;">Manpower<br>
-<!-- <input style="font-size:14px;width:320px;height:30px;margin-left:5%;" type="textarea" value="{{request.session.manpower}}" readonly> -->
+<font color="#000000" size ="3"  style="margin-left:5%;"><b>Department</b><br>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="department" type="textarea" value="{{request.session.department}}">
 
-
+<!-- 
 <select style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="manpower" onchange="this.form.submit()">
     <option selected = "selected">{{request.session.manpower}}</option>
     {% for i in MList %}
     <option value="{{ i.0 }}">{{ i.0 }}</option>
     {% endfor %}
-</select>
+</select> -->
 
 </th></tr>
 <tr><th bgcolor="{{request.session.main_body_color}}"><br><br>
@@ -75,11 +76,13 @@
 
 <button style="text-align: left;width:120px;margin-left:5%;height:30px;font-size: 18px;border-style: solid;
     border-color:#A1A1A1;border-radius: 10px;background-color:rgb(211, 208, 208);" type="submit" name="one" value="-2" />
-    <center><b>Close Issue</b></center></button>
+    <center><b>Cancel</b></center></button>
     <br><br>
 </th></tr>
 </table>
 </form>
+</div>
+</div>
 {% endblock %}
 
 
@@ -99,7 +102,7 @@
                   <b>You are about to make changes <br> to this file.</b><br><br>
                   &nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
-                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_login';">OK</button>
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_logins_update';">OK</button>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;" 
                   type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_logins';">Cancel</button>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from trakberry.forms import kiosk_dispForm1,kiosk_dispForm2,kiosk_dispForm3,kiosk_dispForm4, sup_downForm,login_Form
+from trakberry.forms import maint_closeForm, maint_loginForm, maint_searchForm, tech_loginForm, sup_downForm
 from trakberry.views import done
 from views2 import main_login_form
 from views_mod1 import find_current_date, mgmt_display, mgmt_display_edit
@@ -221,6 +222,7 @@ def mgmt_production_hourly_edit(request, index):
 # ***********************************************************************************************************************************
 
 def mgmt_users_logins(request):
+	request.session["bounce"] = 0
 	db, cursor = db_set(request)
 	request.session["page_edit"] = "user login"
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50),active1 INT(10) default 0)""")
@@ -235,11 +237,8 @@ def mgmt_users_logins(request):
 	return render(request, "production/mgmt_users_logins.html",{'tmp':tmp})
 
 def mgmt_users_logins_edit(request):
-	tmp = request.session["current_tmp"]
 	p = request.session["page_edit"]
 	index = request.session["current_index"]
-	r=4/0
-
 
 
 	if request.POST:
@@ -248,6 +247,7 @@ def mgmt_users_logins_edit(request):
 		department = request.POST.get("department")
 
 		a = request.POST
+		b = -4
 		try:
 			b = int(a.get("one"))
 		except:
@@ -255,38 +255,31 @@ def mgmt_users_logins_edit(request):
 		db, cursor = db_set(request)
 		cur = db.cursor()
 
-		if b == 3:
-			mql =( 'update tkb_logins SET user_name="%s" WHERE Id="%s"' % (user_name,index))
-			cur.execute(mql)
-			db.commit()
-			mql =( 'update tkb_logins SET password="%s" WHERE Id="%s"' % (password,index))
-			cur.execute(mql)
-			db.commit()
-			mql =( 'update tkb_logins SET department="%s" WHERE Id="%s"' % (department,index))
-			cur.execute(mql)
-			db.commit()
-			db.close()
-			return render(request,'production/redirect_mgmt_users_logins.html')
-		if b == 2:
+		if b == -3:  # Reroute to the Warning message 
+			request.session["bounce"] = 1
 			request.session["user_logins1"] = user_name
 			request.session["password"] = password
 			request.session["department"] = department
-			request.session["bounce"] = 1
-			return render(request,'production/redirect_mgmt_users_logins.html')
+			return render(request,'production/redirect_mgmt_users_logins_edit.html')
+
+		if b == -2:  # Cancel Entry and go back to logins list
+			request.session["bounce"] = 0
+
+		return render(request,'production/redirect_mgmt_users_logins.html')
+
 	else:
 		form = sup_downForm()
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
-	return render(request, "production/mgmt_users_logins_edit.html",{'args':args,'tmp':tmp})
+	return render(request, "production/mgmt_users_logins_edit.html",{'args':args})
 
 
 def mgmt_users_logins_update(request):
-	index = request.session["index"]
+	index = request.session["current_index"]
 	user_name = request.session["user_logins1"]
 	password = request.session["password"]
 	department = request.session["department"] 
-
 
 	db, cursor = db_set(request)
 	cur = db.cursor()

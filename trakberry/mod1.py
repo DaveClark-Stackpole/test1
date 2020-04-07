@@ -65,7 +65,14 @@ def index_template(request, index):
 		tmp = cur.fetchall()
 		tmp2 = tmp[0]
 		request.session["current_tmp"] = tmp2
-		mgmt_users_logins_edit(request)
+		request.session["user_logins1"] = tmp2[1]
+		request.session["password"] = tmp2[2]
+		request.session["department"] = tmp2[3]
+
+		return render(request,'production/redirect_mgmt_users_logins_edit.html')
+
+
+		y=8/0
 
 
 	db.close()
