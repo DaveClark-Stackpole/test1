@@ -13,11 +13,11 @@
 <style>
 	{% if request.session.bounce = 1 %} 
 		.modal-body
-			{background-color: rgb(252, 236, 149);}
+			{background-color: rgb(183, 252, 149);}
 		.modal-header
-		{background-color: rgb(214, 201, 125);}
+		{background-color: rgb(183, 252, 149);}
 		.modal-footer
-		{background-color: rgb(252, 236, 149);}
+		{background-color: rgb(183, 252, 149);}
     .modal 
     {border-radius: 25px; }
 	{% elif request.session.bounce = 2 %}
@@ -52,7 +52,7 @@
 </th></tr>
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
 <font color="#000000" size ="3" style="margin-left:5%;"><b>Password</b><br>
-<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" value="********" readonly>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="password" type="textarea"  value="{{request.session.password}}" readonly>
 </th></tr>
 
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
@@ -60,7 +60,6 @@
 
 <select style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="department">
 	<option selected = "selected">{{request.session.department}}</option>
-
 	<option value="Maintenance">Maintenance</option>
 	<option value="Maintenance Manager">Maintenance Manager</option>
 	<option value="Production">Production</option>
@@ -108,10 +107,10 @@
         <div class="modal-body" >
           <font color="#000000" size ="4">
               <p align="left">
-                  <b>You are about to make changes <br> to this file.</b><br><br>
+                  <b><p>You are about to add a new user.  Is this ok?</p></b><br><br>
                   &nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
-                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_logins_update';">OK</button>
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_logins_add_new';">OK</button>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;" 
                   type="button" onclick="window.location.href = '{{request.session.local_toggle}}/mgmt_users_logins';">Cancel</button>

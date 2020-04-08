@@ -4,7 +4,16 @@
 <div class ="mainset">
     <div class="frame1"  bgcolor="{{request.session.main_body_menu_color}}">
         <div class="head1">
-            <center><u><b><font color="#000000" style="font-size: 160%;">User Logins</u></b></center>
+						<center><u><b><font color="#000000" style="font-size: 160%;">User Logins</u></b> 
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<button  style="text-align:center;width:95px;font-size: 50%;height:20px;border-style: solid;
+							border-color:#A1A1A1;border-radius: 10px;background-color:rgb(201, 201, 201);margin-bottom: 5px;"
+							type="button" onclick="window.location.href = '{{request.session.local_toggle}}/index_template/get/0';">
+							<b>+ New User</b>
+						</button>
+
+
+						</center>
 				</div>
 				<div class="head2">
 					Login Name

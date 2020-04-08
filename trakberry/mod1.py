@@ -59,7 +59,15 @@ def index_template(request, index):
 	page1 = request.session["page_edit"]
 	request.session["current_index"] = index
 	db, cur = db_set(request)
+
 	if page1 == 'user login':
+		request.session["user_logins1"] = ""
+		request.session["password"] = "Stackpole1"
+		request.session["department"] = ""
+
+		if int(index) == 0:
+			return render(request,'production/redirect_mgmt_users_logins_add.html')
+
 		sql1 = "SELECT * FROM tkb_logins where Id='%s'" % (index)
 		cur.execute(sql1)
 		tmp = cur.fetchall()
@@ -68,12 +76,9 @@ def index_template(request, index):
 		request.session["user_logins1"] = tmp2[1]
 		request.session["password"] = tmp2[2]
 		request.session["department"] = tmp2[3]
+		a = request.session["user_logins1"]
 
 		return render(request,'production/redirect_mgmt_users_logins_edit.html')
-
-
-		y=8/0
-
 
 	db.close()
 

@@ -272,6 +272,10 @@ def mgmt_users_logins_edit(request):
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
+	a = request.session["user_logins1"]
+	b = request.session["bounce"]
+
+
 	return render(request, "production/mgmt_users_logins_edit.html",{'args':args})
 
 
@@ -298,3 +302,54 @@ def mgmt_users_logins_update(request):
 	db.close()
 	return render(request,'production/redirect_mgmt_users_logins.html')
 
+def mgmt_users_logins_add(request):
+	p = request.session["page_edit"]
+
+	if request.POST:
+		user_name = request.POST.get("user_name")
+		password = request.POST.get("password")
+		department = request.POST.get("department")
+
+		a = request.POST
+		b = -4
+		try:
+			b = int(a.get("one"))
+		except:
+			b = -4
+		db, cursor = db_set(request)
+		cur = db.cursor()
+
+		if b == -3:  # Reroute to the Warning message 
+			request.session["bounce"] = 1
+			request.session["user_logins1"] = user_name
+			request.session["password"] = password
+			request.session["department"] = department
+			return render(request,'production/redirect_mgmt_users_logins_add.html')
+
+		if b == -2:  # Cancel Entry and go back to logins list
+			request.session["bounce"] = 0
+
+		return render(request,'production/redirect_mgmt_users_logins.html')
+
+	else:
+		form = sup_downForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+
+	return render(request, "production/mgmt_users_logins_add.html",{'args':args})
+
+def mgmt_users_logins_add_new(request):
+	user_name = request.session["user_logins1"]
+	password = request.session["password"]
+	department = request.session["department"] 
+
+	db, cursor = db_set(request)
+	cur = db.cursor()
+
+	cur.execute('''INSERT INTO tkb_logins(user_name,password,department) VALUES(%s,%s,%s)''', (user_name,password,department))
+	db.commit()
+	db.close()
+
+	request.session["bounce"] = 0
+	return render(request,'production/redirect_mgmt_users_logins.html')

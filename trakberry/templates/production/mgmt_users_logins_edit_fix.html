@@ -52,21 +52,12 @@
 </th></tr>
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
 <font color="#000000" size ="3" style="margin-left:5%;"><b>Password</b><br>
-<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" value="********" readonly>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="password" type="password" value="{{request.session.password}}">
 </th></tr>
 
 <tr><th bgcolor="{{request.session.main_body_color}}"><br>
 <font color="#000000" size ="3"  style="margin-left:5%;"><b>Department</b><br>
-
-<select style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="department">
-	<option selected = "selected">{{request.session.department}}</option>
-
-	<option value="Maintenance">Maintenance</option>
-	<option value="Maintenance Manager">Maintenance Manager</option>
-	<option value="Production">Production</option>
-	<option value="Production Manager">Production Manager</option>
-
-</select>
+<input style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="department" type="textarea" value="{{request.session.department}}">
 
 <!-- 
 <select style="font-size:14px;width:320px;height:30px;margin-left:5%;" name="manpower" onchange="this.form.submit()">
