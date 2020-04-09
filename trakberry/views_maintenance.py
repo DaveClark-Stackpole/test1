@@ -36,8 +36,32 @@ def maint_mgmt(request):
 	SQ_Sup = "SELECT * FROM pr_downtime1 where closed IS NULL and whoisonit != '%s' and whoisonit != '%s' ORDER BY priority ASC" % (whoisonit1,whoisonit2) 
 	cursor.execute(SQ_Sup)
 	tmp = cursor.fetchall()
+
+	active1 = 1
+	SQ2 = "SELECT user_name FROM tkb_logins where active1 != '%d'" % (active1) 
+	cursor.execute(SQ2)
+	tmp4 = cursor.fetchall()
+
+
 	db.close()
 
+# Determine all names in the list of people assigned.  tmp3 
+	tmp2 = []
+	tmp3 = []
+	for i in tmp:
+		nm = multi_name_breakdown(i[4])
+		if len(nm) == 0:
+			tmp3.append(i[4])
+		else:
+			for ii in nm:
+				tmp3.append(ii)
+	
+	
+
+
+
+
+	
 	if wildcard == 1:
 		ch1 = request.session["maint_mgmt_login_password_check"]
 		# t=9/0
@@ -176,13 +200,13 @@ def maintenance_edit(request):
 			manpower = request.session["manpower"]
 		except:
 			manpower = generate_string(request.session["manpower"],manpower)
-			b=-4
+			b=-5
 
 		problem = hyphon_fix(problem)  # Send text to rid it of nasty hyphon glitches  :)
 		db, cursor = db_set(request)
 		cur = db.cursor()
 
-		if b==-4:  # Route to update maintenance manpower but keep editing
+		if b==-5:  # Route to update maintenance manpower but keep editing
 			mql =( 'update pr_downtime1 SET machinenum="%s" WHERE idnumber="%s"' % (machinenum,index))
 			cur.execute(mql)
 			db.commit()
@@ -195,7 +219,10 @@ def maintenance_edit(request):
 			db.close()
 			return render(request,'redirect_maint_edit.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
-		
+		if b==-4:  # Route to update maintenance manpower but keep editing
+			request.session["bounce"] = 0
+			return render(request,'redirect_maint_mgmt.html')
+
 		if b==-3:  # Route to Update item and back to main
 			mql =( 'update pr_downtime1 SET machinenum="%s" WHERE idnumber="%s"' % (machinenum,index))
 			cur.execute(mql)
@@ -365,12 +392,25 @@ def maint(request):
 	mach_cnt = []
 	tch = []
 	nm = []
-	maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Jacobs","Steven Niu"]
+	maint = []
+	# maint = ["Rich Clifford","Wes Guest","Shawn Gilbert","Jeff Jacobs","Steven Niu"]
 
 
+
+	
 
 	# Select prodrptdb db located in views_db
 	db, cursor = db_set(request)   
+	dep = "Maintenance"
+	sql = "SELECT user_name FROM tkb_logins WHERE department = '%s' ORDER BY user_name ASC" %(dep)  # Select only those in the department  (dep)
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	for i in tmp:
+		maint.append(i[0])
+	# maint = list(tmp)
+	# tmp2 = list(tmp)
+
+
 
 	#sqlA = "SELECT SUM(qty) FROM tkb_prodtrak where machine = '%s' AND time >= '%d'" %(machine_list[i], u)
 	  # Select the Qty of entries for selected machine table from the current shift only 
@@ -485,7 +525,7 @@ def maint(request):
 	else:
 		request.session["maint_alarm"] = "/media/clock.wav"
 		request.session["maint_ctr"] = ctr
-	list = zip(job,prob,id,tch,priority)
+	LList = zip(job,prob,id,tch,priority)
 	
 	db.close()
 	n = "none"
@@ -558,7 +598,7 @@ def maint(request):
 	M = 'Need Millwright'
 	E = 'Maintenance'
 	
-	return render(request,"maint.html",{'L':list,'N':n,'M':M,'E':E})
+	return render(request,"maint.html",{'L':LList,'N':n,'M':M,'E':E})
 
 def maint_close_item(request):
 	index=request.session["index"]
