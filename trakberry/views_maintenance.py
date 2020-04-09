@@ -37,17 +37,20 @@ def maint_mgmt(request):
 	cursor.execute(SQ_Sup)
 	tmp = cursor.fetchall()
 
-	active1 = 1
+	# Determine a list of names currently active
+	active1 = 0
 	SQ2 = "SELECT user_name FROM tkb_logins where active1 != '%d'" % (active1) 
 	cursor.execute(SQ2)
 	tmp4 = cursor.fetchall()
-
-
+	tmp4 = list(tmp4)
 	db.close()
 
-# Determine all names in the list of people assigned.  tmp3 
+# Determing a list of names currently assigned to jobs
 	tmp2 = []
 	tmp3 = []
+	on1 = []
+	off1 = []
+	t4 = []
 	for i in tmp:
 		nm = multi_name_breakdown(i[4])
 		if len(nm) == 0:
@@ -55,12 +58,23 @@ def maint_mgmt(request):
 		else:
 			for ii in nm:
 				tmp3.append(ii)
-	
-	
+
+	# need to compare tmp4 and tmp3 and put into two different appends.   on1 and off1 
+	for i in tmp4:
+		t4.append(i[0])
+		found1 = 0
+		for ii in tmp3:
+			if i[0] == ii:
+				found1 = 1
+				break
+		if found1 == 1:
+			on1.append(i[0])
+		else:
+			off1.append(i[0])
 
 
-
-
+	request.session["assigned"] = on1
+	request.session["not_assigned"] = off1
 	
 	if wildcard == 1:
 		ch1 = request.session["maint_mgmt_login_password_check"]

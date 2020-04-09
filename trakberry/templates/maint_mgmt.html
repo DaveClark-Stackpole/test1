@@ -40,11 +40,17 @@
     <div class="frame2"  bgcolor="{{request.session.main_body_menu_color}}">
 				<div class="head3"><b><font color="#000000" style="font-size: 60%;">Current Maintenance</font></b></div>
 				<div class="head4"><b><font color="#000000" style="font-size: 60%;">On Job</font></b></div>
+				{% for x in request.session.assigned %}
+				<div class="body3"><b><font color="#000000" style="font-size: 60%;">{{x}}</font></div>
+				<div class="body3a"><b><font color="#000000" style="font-size: 60%;">yes</font></b></div>
+				{% endfor %}
+				{% for x in request.session.not_assigned %}
+				<div class="body4"><b><font color="#000000" style="font-size: 60%;">{{x}}</font></div>
+				<div class="body4a"><b><font color="#000000" style="font-size: 60%;">no</font></div>
+				{% endfor %}	
 		</div>
 		
-		<div class="frame3"  bgcolor="{{request.session.main_body_menu_color}}">
-			<div class="head2"><b><font color="#000000" style="font-size: 70%;">Select</font></b></div>
-	</div>
+
 
 
 </div>
