@@ -37,55 +37,77 @@ def maint_mgmt(request):
 	cursor.execute(SQ_Sup)
 	tmp = cursor.fetchall()
 
-	# Determine a list of names currently active
-	active1 = 0
-	SQ2 = "SELECT user_name FROM tkb_logins where active1 != '%d'" % (active1) 
-	cursor.execute(SQ2)
-	tmp4 = cursor.fetchall()
-	tmp4 = list(tmp4)
+	if request.session["maint_mgmt_main_switch"] == 0:
+		# Determine a list of names currently active
+		active1 = 0
+		SQ2 = "SELECT user_name FROM tkb_logins where active1 != '%d'" % (active1) 
+		cursor.execute(SQ2)
+		tmp4 = cursor.fetchall()
+		tmp4 = list(tmp4)
+# 	Determing a list of names currently assigned to jobs
+		tmp2 = []
+		tmp3 = []
+		on1 = []
+		off1 = []
+		union1 = []
+		t4 = []
+		for i in tmp:
+			nm = multi_name_breakdown(i[4])
+			if len(nm) == 0:
+				tmp3.append(i[4])
+			else:
+				for ii in nm:
+					tmp3.append(ii)
+		# need to compare tmp4 and tmp3 and put into two different appends.   on1 and off1 
+		for i in tmp4:
+			t4.append(i[0])
+			found1 = 0
+			for ii in tmp3:
+				if i[0] == ii:
+					found1 = 1
+					break
+			if found1 == 1:
+				on1.append(i[0])
+			else:
+				off1.append(i[0])
+		request.session["assigned"] = on1
+		request.session["not_assigned"] = off1
+	
+	else:
+		dep1 = 'Maintenance'
+		SQ2 = "SELECT * FROM tkb_logins where department = '%s' order by active1 DESC, user_name ASC" % (dep1) 
+		cursor.execute(SQ2)
+		tmp4 = cursor.fetchall()
+		tmp4 = list(tmp4)
+		request.session["assigned"] = tmp4
+
+
 	db.close()
 
-# Determing a list of names currently assigned to jobs
-	tmp2 = []
-	tmp3 = []
-	on1 = []
-	off1 = []
-	t4 = []
-	for i in tmp:
-		nm = multi_name_breakdown(i[4])
-		if len(nm) == 0:
-			tmp3.append(i[4])
-		else:
-			for ii in nm:
-				tmp3.append(ii)
 
-	# need to compare tmp4 and tmp3 and put into two different appends.   on1 and off1 
-	for i in tmp4:
-		t4.append(i[0])
-		found1 = 0
-		for ii in tmp3:
-			if i[0] == ii:
-				found1 = 1
-				break
-		if found1 == 1:
-			on1.append(i[0])
-		else:
-			off1.append(i[0])
-
-
-	request.session["assigned"] = on1
-	request.session["not_assigned"] = off1
 	
 	if wildcard == 1:
 		ch1 = request.session["maint_mgmt_login_password_check"]
-		# t=9/0
+
 
 	if request.POST:
 		selected1 = request.POST
 		try:
 			selected2 = int(selected1.get("one"))
 		except:
-			return maint_mgmt(request)
+			selected2 = selected1.get("one")
+			if selected2 == 'choose1':
+				request.session["maint_mgmt_main_switch"] = 1
+			else:  # choose2 for now.  If we add more switches then use elif
+
+				# Place code here that takes in check boxes and rewrites to tkb_logins
+				# the new active1 amount for each user
+				# Then reroute back to maint_mgmt
+				
+				request.session["maint_mgmt_main_switch"] = 0
+
+			return render(request, "redirect_maint_mgmt.html")  # This will be it once we've determined switch
+
 		request.session["index"] = selected2
 		return render(request, "maint_edit.html")
 		# return done_edit(request)
@@ -95,10 +117,7 @@ def maint_mgmt(request):
 	args.update(csrf(request))
 	args['form'] = form
 
-
 	return render(request, "maint_mgmt.html",{'index':tmp,'args':args})
-
-
 
 # Login for Maintenance Manager App
 def maint_mgmt_login_form(request):	
@@ -109,6 +128,7 @@ def maint_mgmt_login_form(request):
 	request.session["maint_mgmt_login_name"] = ""
 	request.session["maint_mgmt_login_password"] = ""
 	request.session["maint_mgmt_login_password_check"] = 'False'
+	request.session["maint_mgmt_main_switch"] = 0
 
 #	if request.POST:
 	if 'button1' in request.POST:
