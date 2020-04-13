@@ -71,9 +71,12 @@ def kiosk(request):
 		if button_pressed == -3:
 			request.session["route_1"] = 'hrly_display' # enable when ready to run
 
-			t = 1/0
 			return direction(request)
 		if button_pressed == -4:
+			request.session["route_1"] = 'kiosk_help_button' # enable when ready to run
+			return direction(request)
+
+
 			return kiosk_scrap(request)
 			
 		# If no button pressed...Probably should never get here
@@ -1972,6 +1975,33 @@ def kiosk_help(request):
 	tmp2 = list(tmp)
 	db.close()
 	return tmp
+
+def kiosk_help_form(request):
+	tmp = kiosk_help(request)  # Retieve unclosed files and initialize table for kiosk_help
+	if request.POST:
+		help_employee = request.POST.get("help_employee")
+		help_supervisor = request.POST.get("help_supervisor")
+		try:
+			help_kiosk_id = request.session["kiosk_id"]
+		except:
+			help_kiosk_id = 'unknown'
+		t = vacation_temp()
+		db, cursor = db_set(request) 
+		cursor.execute('''INSERT INTO tkb_help(employee,supervisor,help_date,kiosk_id) VALUES(%s,%s,%s,%s)''', (help_employee,help_supervisor,t,help_kiosk_id))
+		db.commit()
+		db.close()
+
+		return render(request, "redirect_kiosk_help.html")
+		# return kiosk_help_send(request)
+
+	else:
+		form = kiosk_dispForm3()
+
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	return render(request, "kiosk_help_form.html",{'args':args})
+
 
 
 def set_test1(request):

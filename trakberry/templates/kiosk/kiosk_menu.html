@@ -22,13 +22,13 @@
 
 	
 	.button2 {
-  width: 50%;
-  height: 210px;
+  width: 20%;
+  height: 100px;
   text-align: center;
   cursor: pointer;
   outline: none;
   color: #000000;
-  background-color: rgb(255, 227, 174);
+  background-color: rgb(255, 200, 174);
   border: none;
   border-radius: 15px;
   box-shadow: 0 15px #999;
@@ -41,12 +41,10 @@
   box-shadow: 0 8px #666;
   transform: translateY(8px);
 }
+
+.frame1 {color:black;text-align:center;float:left;width:50%}
+.frame2 {color:black;text-align:center;float:left;width:100%}
 </style>
-
-
-
-
-
 
 </head>
 
@@ -68,13 +66,16 @@
 <br><br><br><br>
 
 <center>
-<div class="grid-container">
-	<div class="item1">
+
+	<div class="frame1">
 		<button class="button" type="submit" name="kiosk_button1" value="-1"><font size="6"><b>White Board<br>(Hourly Counts)</b></font></button>
 	</div>
-	<div class="item1">
+	<div class="frame1">
 		<button class="button" type="submit" name="kiosk_button1" value="-2"><font size="6"><b>Production Entry<br>(End of Shift)</b></font></button>
 	</div>
+	<!-- <div class="item2"></div><div class="item2"></div>
+	<div class="item2">
+		<button class="button2" type="submit" name="kiosk_button1" value="-4"><font size="6"><b>Help</b></font></button> -->
 
 	<!-- <div class="item1">
 		<button class="button2" type="submit" name="kiosk_button1" value="-3"><font size="6"><b>Safety Hazard <br>Reporting</b></font></button>
@@ -83,7 +84,9 @@
 		<button class="button2" type="submit" name="kiosk_button1" value="-4"><font size="6"><b>Jim's Mail</b></font></button>
 	</div> -->
 
-</div>
+	<div class="frame2"><br><br><br><br><br><br><br><br><br><br>
+		<button class="button2" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk_help_form';"><font size="6"><b>Help</b></font></button>
+	</div>
 </center>
 
 

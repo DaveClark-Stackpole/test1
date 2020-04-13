@@ -1,0 +1,64 @@
+{% extends "kiosk/kiosk.html" %}
+
+<!-- ********************************** -->
+<!-- ****   Kiosk_Help_Form.html   *** -->
+<!-- ********************************** -->
+
+{% block grid %}
+	<link rel="stylesheet" href="/static/style_1/grid_kiosk_job_assign.css">
+{% endblock %}
+
+{% block content %} 
+
+<form action="" method="post">{% csrf_token %}
+<center>
+<div class="grid-container">
+
+
+
+	<div class="item4">
+		<font color="#000000" size ="6" style="font-weight: 700;font-size:29px;"><u>Help</u></font>
+	</div>
+
+	<div class="item5">
+		<font color="#000000" size ="5" style="font-weight: 700;font-size:20px;"><u>Name</u></font>
+	</div>
+	<div class="item6">
+		<font color="#000000" size ="5" style="font-weight: 700;font-size:20px;"><u>Supervisor</u></font>
+	</div>
+
+	<div class="item5">
+		<input style="font-size:23px;width:190px;height:60px;" name="help_employee" type="textarea" autofocus >
+	</div>
+	<div class="item6">
+		<input style="font-size:23px;width:190px;height:60px;" name="help_supervisor" type="textarea" >
+	</div>
+	<div class="item1">
+		<input style="background-color: #AAA00A;border-radius: 10px;width:140px;height:60px;font-weight: 700;font-size:23px;align=left;" type="submit" value="Enter">
+	</div>
+</div>
+</center>
+</form>
+
+
+
+<!-- Below Script creates datalist structure for old browsers and Safari -->
+<script>
+$(document).ready(function () {
+	var nativedatalist = !!('list' in document.createElement('input')) && 
+		!!(document.createElement('datalist') && window.HTMLDataListElement);
+	
+	if (!nativedatalist) {
+		$('input[list]').each(function () {
+			var availableTags = $('#' + $(this).attr("list")).find('option').map(function () {
+				return this.value;
+			}).get();
+			$(this).autocomplete({ source: availableTags });
+		});
+	}
+});
+</script>
+
+
+{% endblock %}  <!-- End Main Block -->
+
