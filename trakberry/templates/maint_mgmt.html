@@ -42,22 +42,40 @@
 {% if request.session.maint_mgmt_main_switch = 1 %}
     <div class="frame2"  bgcolor="{{request.session.main_body_menu_color}}">
 				<div class="head5"><b><font color="#000000" style="font-size: 60%;">Edit Current Maintenance</font></b>
+					&nbsp;&nbsp;
+
 					<button style="text-align: left;font-size: 50%;border:0px solid rgb(0, 0, 0);
 					background-color:rgb(158, 158, 158);border-radius: 10px;border:none;outline:none;"
-					type="submit" name="one" value="choose2" /><b><font color="#000000">  back </font></button>
+					type="submit" name="one" value="choose2" /><b><font color="#000000">  OK </font></button>
+
+					&nbsp;&nbsp;&nbsp;&nbsp;
+
+					<button style="text-align: left;font-size: 50%;border:0px solid rgb(0, 0, 0);
+					background-color:rgb(158, 158, 158);border-radius: 10px;border:none;outline:none;"
+					type="submit" name="one" value="choose3" /><b><font color="#000000">  Clear All </font></button>
 				</div>
 
 				{% for x in request.session.assigned %}
 					{% if x.4 = 1 %}
 						<div class="body5">
-							<input type="checkbox" name="{{x.0}}" value="{{x.1}}" checked><b> <font color="#000000" style="font-size: 60%;">{{x.1}}</font></b>
+							<!-- <input type="checkbox" name="{{x.0}}" checked><b> <font color="#000000" style="font-size: 50%;">{{x.1}}</font></b> -->
+							<input checked data-toggle="toggle" data-on='{{x.1}}' data-off='{{x.1}}' data-onstyle="dark" type="checkbox" data-size="mini" 
+							data-width="100%" name="{{x.0}}">
 						</div>
 					{% else %}
 						<div class="body6">
-							<input type="checkbox" name="{{x.0}}" value="{{x.1}}"><b> <font color="#000000" style="font-size: 60%;">{{x.1}}</font></b>
+							<!-- <input type="checkbox" name="{{x.0}}"><b> <font color="#000000" style="font-size: 50%;">{{x.1}}</font></b> -->
+							<input data-toggle="toggle" data-on='{{x.1}}' data-off='{{x.1}}' data-onstyle="secondary" type="checkbox" data-size="mini" 
+							data-width="100%" name="{{x.0}}">
 						</div>
 					{% endif %}
 				{% endfor %}
+
+				
+
+
+
+
 
 
 

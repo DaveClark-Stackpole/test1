@@ -92,19 +92,47 @@ def maint_mgmt(request):
 
 	if request.POST:
 		selected1 = request.POST
+
+
 		try:
 			selected2 = int(selected1.get("one"))
 		except:
 			selected2 = selected1.get("one")
 			if selected2 == 'choose1':
 				request.session["maint_mgmt_main_switch"] = 1
-			else:  # choose2 for now.  If we add more switches then use elif
+			elif selected2 == 'choose2':
+				temp_list = request.session["assigned"]
+				temp_index =[]
+				temp_select = []
+				for w in temp_list:
+					d = request.POST.get(str(w[0]))
+					temp_index.append(w[0])
+					temp_select.append(d)
 
-				# Place code here that takes in check boxes and rewrites to tkb_logins
-				# the new active1 amount for each user
-				# Then reroute back to maint_mgmt
-				
+				temp_zip = zip(temp_index,temp_select)
+
+				db, cursor = db_set(request)
+				for w in temp_zip:
+					if w[1] == 'on':
+						w1 = 1
+					else:
+						w1 = 0
+					w2 = w[0]
+
+					pql =( 'update tkb_logins SET active1 ="%d" WHERE Id="%s"' % (w1,w2))
+					cursor.execute(pql)
+					db.commit()
 				request.session["maint_mgmt_main_switch"] = 0
+				db.close()
+			else:
+				db, cursor = db_set(request)
+				w1 = 0
+				dept = 'Maintenance'
+				pql =( 'update tkb_logins SET active1 ="%d" WHERE department="%s"' % (w1,dept))
+				cursor.execute(pql)
+				db.commit()
+				request.session["maint_mgmt_main_switch"] = 1
+				db.close()
 
 			return render(request, "redirect_maint_mgmt.html")  # This will be it once we've determined switch
 
