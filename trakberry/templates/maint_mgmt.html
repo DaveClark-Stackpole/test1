@@ -7,8 +7,9 @@
 <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/maint_mgmt_login_form" />
 
 {% else %}
-<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/maint_mgmt" />
-
+	{% if request.session.maint_mgmt_main_switch = 0 %}
+		<meta http-equiv="refresh" content="15; url={{request.session.local_toggle}}/maint_mgmt" />
+	{% endif %}
 <form action="" method="post">{% csrf_token %}
 
 <div class ="mainset">
