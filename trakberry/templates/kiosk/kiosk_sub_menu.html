@@ -45,10 +45,18 @@
 
 {% block content%}  <!-- Main Block -->
 <form action="" method="post">{% csrf_token %}
-<br><br><br><br>
+<br>
 
 <center>
 <table>
+	<tr><td></td><td></td><td>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button style="background-color: rgb(255, 217, 217);border-radius: 10px;width:100px;height:40px;margin-left:55%;margin-top:0%;" 
+		type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk';"><font size="4"><b>
+			&laquo;Back</b></font></button>
+	</td></tr>
+	<tr><td>&nbsp;</td></tr>
 	<tr><td>
 		<button class="button" type="submit" name="kiosk_button1" value="-1"><font size="6"><b>Trilobe</b></font></button>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

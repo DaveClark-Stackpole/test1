@@ -1097,7 +1097,6 @@ def kiosk_job_assign(request):
 			request.session["check1"] = 3
 			request.session["insp6"] = 3				
 
-		#return render(request, "kiosk/kiosk_test5.html",{'kiosk_job':kiosk_job1})
 
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button1"))
@@ -1109,8 +1108,10 @@ def kiosk_job_assign(request):
 		try:
 			kiosk_button1 = int(request.POST.get("kiosk_assign_button2"))
 			if kiosk_button1 == -2:
+				
 				if request.session["kiosk_menu_screen"] == 1:
 					request.session["route_1"] = 'kiosk'
+					
 				else:
 					request.session["route_1"] = 'kiosk_menu'
 				return direction(request)
@@ -1291,6 +1292,7 @@ def kiosk_job_assign_enter(request):
 #	return direction(request)
 
 def kiosk_job_leave(request):
+
 	if request.POST:
 		kiosk_clock = request.POST.get("clock")
 		
@@ -1956,6 +1958,21 @@ def kiosk_fix44(request):
 
 
 	return render(request, "kiosk/kiosk_test5.html",{'tmp1':tmp})	
+
+
+def kiosk_help(request):
+	db, cursor = db_set(request)  
+	closed1 = 0
+	dep = request.session['login_department']
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_help(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), supervisor CHAR(50), help_date date, closed INT(10) default 0)""")
+	db.commit()
+	sql = "SELECT * FROM tkb_help WHERE closed = '%d' ORDER BY help_date ASC" %(closed1)
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	tmp2 = list(tmp)
+	db.close()
+	return tmp
+
 
 def set_test1(request):
 	d = 0
