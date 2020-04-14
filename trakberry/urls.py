@@ -102,7 +102,7 @@ from views_kiosk import kiosk_help_form
 # ***********************************************************************************************************************************************************
 # *******************************************  Manpower Section ********************************************************************************************
 from views_kiosk import manpower_layout, tenr_fix,kiosk_menu,ab1v_manpower,tenr1,trilobe,tenr2, error_hourly_duplicate
-from views_kiosk import set_test1, kiosk_fix55, kiosk_fix44
+from views_kiosk import set_test1, kiosk_fix55, kiosk_fix44, kiosk_help_close
 
 # ***********************************************************************************************************************************************************
 
@@ -419,6 +419,7 @@ urlpatterns = [
 	url(r'^kiosk_initial_6L_IN/', kiosk_initial_6L_IN),
 	url(r'^kiosk_initial_GF9/', kiosk_initial_GF9),
 	url(r'^kiosk_initial_AB1V/', kiosk_initial_AB1V),
+	url(r'^kiosk_help_close/', kiosk_help_close),
 	url(r'^trilobe/', trilobe),
 	url(r'^manual_production_entry/', manual_production_entry),
 	url(r'^manual_production_entry2/', manual_production_entry2),

@@ -3,11 +3,33 @@
         <head>
         <!-- Test  -->
          <!-- Format for Background image -->
-        <style type="text/css">
-
-
+<style type="text/css">
 #full-screen-background-image {z-index: -999;min-height: 110%; min-width: 100%;width: 100%;height: 110%;position: fixed;top: ;  left: 0;}
 </style>
+
+<style type="text/css">
+	.frame1 {color:black;text-align:center;float:left;width:100%}
+	.frame2{color:black;text-align:center;background:rgb(253, 186, 186);float:left;width:100%;position:relative;left:5px;}
+	.frame3{color:black;text-align:center;background:rgb(42, 165, 83);float:left;width:25%;position:relative;left:10px;}
+	.frame4{color:black;text-align:center;background:rgb(165, 116, 42);float:left;width:15%}
+	.frame5{color:black;text-align:center;background:rgb(168, 168, 168);float:right;width:40%}
+	
+	.head1{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);background:rgb(226, 226, 226);width:100%}
+	.head2{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);background:rgb(255, 253, 241);width:100%}
+	.head3{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);float:left;background:rgb(226, 226, 226);width:80%;height: 30px;}
+	.head4{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);float:left;background:rgb(226, 226, 226);width:20%; height: 30px;padding: 7px;}
+	.head5{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);float:left;background:rgb(226, 226, 226);width:100%;height: 30px;}
+	.body1{color:black;text-align:left;width:100%}
+	.body2{color:black;text-align:center;background:rgb(206, 194, 143);border: .4px solid rgb(0, 0, 0);width:40%}
+	.body3{color:black;text-align:center;background:rgb(199, 187, 166);float:left;border: .4px solid rgb(0, 0, 0);width:80%}
+	.body4{color:black;text-align:center;background:rgb(240, 227, 203);float:left;border: .4px solid rgb(0, 0, 0);width:80%}
+	.body3a{color:black;text-align:center;background:rgb(199, 187, 166);float:left;border: .4px solid rgb(0, 0, 0);width:20%}
+	.body4a{color:black;text-align:center;background:rgb(240, 227, 203);float:left;border: .4px solid rgb(0, 0, 0);width:20%}
+	.body5{color:black;text-align:center;background:rgb(199, 187, 166);float:left;border: .4px solid rgb(0, 0, 0);position:relative;width:100%;}
+	.body6{color:black;text-align:center;background:rgb(240, 227, 203);float:left;border: .4px solid rgb(0, 0, 0);position:relative;width:100%;}
+	</style>
+
+
 </head>       
 
 
@@ -36,27 +58,41 @@ Shift Production
 
 <br><br>
 
-<meta http-equiv="refresh" content="60; url={{request.session.local_toggle}}/hrly_display" />
+<meta http-equiv="refresh" content="6; url={{request.session.local_toggle}}/hrly_display" />
 
 <center>
-<table>
-    <tr>
-{% for i in tmpp %}
-
-    <td style="background-image: linear-gradient({{i.20}});border-radius: 10px;width:290px;height:110px;font-weight: 700;font-size:18px;box-shadow: 5px 10px #686868;">
-        <center>{{i.1}} &nbsp;&nbsp; {{i.16}}%</center>   
-    <br><br>
-    <center>Last Hour: &nbsp;&nbsp; {{i.18}}%  </center> 
-    </td>
-{% if i.21 = 0 %}
-</tr><tr><td style="border-radius: 10px;width:200px;height:50px;font-weight: 700;font-size:18px;align=left;"></td></tr><tr>
-{% else %}
-<td style="border-radius: 10px;width:200px;height:50px;font-weight: 700;font-size:18px;align=left;"></td>
-
-    {% endif %}
-    {% endfor %}
-</tr>
-</table>
+	<div class="frame1">
+		<div class="body1">
+			<table>
+				<tr>
+					{% for i in tmpp %}
+						<td style="background-image: linear-gradient({{i.20}});border-radius: 10px;width:290px;height:110px;font-weight: 700;font-size:18px;box-shadow: 5px 10px #686868;">
+						<center>{{i.1}} &nbsp;&nbsp; {{i.16}}%</center>   
+						<br><br>
+						<center>Last Hour: &nbsp;&nbsp; {{i.18}}%  </center> 
+						</td>
+						{% if i.21 = 0 %}
+							</tr><tr><td style="border-radius: 10px;width:200px;height:50px;font-weight: 700;font-size:18px;align=left;"></td></tr><tr>
+						{% else %}
+							<td style="border-radius: 10px;width:200px;height:50px;font-weight: 700;font-size:18px;align=left;"></td>
+						{% endif %}
+					{% endfor %}
+				</tr>
+			</table>
+		</div>
+		{% if request.session.bounce_hrly_help = 1 %}
+		<div class="body2">
+			<b><font color="#000000" style="font-size: 100%;">
+			<!-- This section will hold the messages for Supervisors-->
+			
+					{% for j in request.session.bounce_hrly_help_info %}
+					** {{j.3}}, {{j.1}} needs help at {{j.2}} **<br>
+					{% endfor %}
+			
+		</font>
+		</div>
+		{% endif %}
+	</div>
 </center>
 <br><br><br>
 

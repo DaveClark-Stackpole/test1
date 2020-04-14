@@ -177,13 +177,13 @@ function goBack() {
 
   
    <!-- Use below query to determine if message should appear -->
-  {% if cnt = Z %} 
-  <script type="text/javascript">
-    $(document).ready(function(){
-        $("#myModal").modal('show');
-    });
-  </script>
-  {% endif %}
+	 {% if request.session.bounce_help > 0 %} 
+	 <script type="text/javascript">
+		 $(document).ready(function(){
+			 $("#myModal").modal('show');
+		 });
+	 </script>
+	 {% endif %}
   
 	</head>
 	

@@ -1976,11 +1976,32 @@ def kiosk_help(request):
 	db.close()
 	return tmp
 
+def kiosk_help_close(request):    # Close out kiosk help message
+	kiosk_help_index = int(request.session['bounce_help_index'])
+	kiosk_closed = 1
+	db, cursor = db_set(request)  
+	cql = ('update tkb_help SET closed = "%s" WHERE Id ="%d"' % (kiosk_closed, kiosk_help_index))
+	cursor.execute(cql)
+	db.commit()
+	db.close()
+	request.session['bounce_help'] = 0
+	return render(request, "redirect_supervisor.html")
+
 def kiosk_help_form(request):
+	# Hard Code Supervisors for now.   Will use a DB List eventually
+	supervisors = ['Karl Edwards','Andrew Smith','Scott McMahon','Gary Harvey','Pete Murphy','Raid Biram', 'Scott Brownlee','Ken Frey','Mike Clarke']
+	request.session['supervisor_list'] = supervisors
+	length_fail = 0
 	tmp = kiosk_help(request)  # Retieve unclosed files and initialize table for kiosk_help
 	if request.POST:
 		help_employee = request.POST.get("help_employee")
 		help_supervisor = request.POST.get("help_supervisor")
+
+		
+		if len(help_supervisor) < 3 :length_fail = 1
+		if len(help_employee) < 3 :length_fail = 1
+
+		if length_fail == 1 : return render(request, "redirect_kiosk_help.html")
 		try:
 			help_kiosk_id = request.session["kiosk_id"]
 		except:
@@ -1991,7 +2012,7 @@ def kiosk_help_form(request):
 		db.commit()
 		db.close()
 
-		return render(request, "redirect_kiosk_help.html")
+		return render(request, "redirect_kiosk.html")
 		# return kiosk_help_send(request)
 
 	else:

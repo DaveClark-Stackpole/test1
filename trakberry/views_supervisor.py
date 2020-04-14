@@ -263,7 +263,7 @@ def supervisor_display(request):
 		tmp4 = ''
 		request.session["sender_name"] = ''
 		request.session["message_id"] = 0
-	db.close()
+
 	Z_Value = 1
 	if cnt > 0 :
 		cnt = 1
@@ -275,6 +275,27 @@ def supervisor_display(request):
 #	tmp4 =''
 	Z_Value = 1
 	tcur=int(time.time())
+
+	# Help Button Display determination
+	help_closed = 0
+	help_supervisor = request.session['login_name']
+	try:
+		sql = "SELECT * FROM tkb_help WHERE supervisor = '%s' and closed = '%d' ORDER BY help_date ASC" %(help_supervisor,help_closed)
+		cur.execute(sql)
+		tmp2 = cur.fetchall()
+		tmp3 = tmp2[0]
+		request.session['bounce_help'] = 1
+		request.session['bounce_help_employee'] = tmp3[1]
+		request.session['bounce_help_location'] = tmp3[2]
+		request.session['bounce_help_index'] = tmp3[0]
+		request.session['refresh_sup'] = 3
+	except:
+		request.session['bounce_help'] = 0
+		request.session['refresh_sup'] = 0
+
+	db.close()
+
+
 
   # call up 'display.html' template and transfer appropriate variables.  
 	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})

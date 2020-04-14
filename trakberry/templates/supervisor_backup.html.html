@@ -1,7 +1,13 @@
 
 {% extends "main.html" %}
 
-
+{% if request.session.bounce_help > 0 %} 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#myModal").modal('show');
+	});
+</script>
+{% endif %}
 
 
 a.green:link {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
@@ -49,19 +55,19 @@ a.green:hover {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
 <!-- Modal For Help Request -->
 <div class="modal fade" id="myModal" role="dialog">
 	<div class="modal-dialog modal-sm">
-		<div class="modal-content"  style="background-color: rgb(183, 241, 255);"  >
+		<div class="modal-content" >
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" style="background-color: rgb(183, 241, 255);"><mark style="background-color: rgb(139, 190, 202);"><font color="#000000" size ="4">
-					&nbsp;	Message for {{request.session.login_name}}&nbsp;
-				</font></mark></h4>
+				<h4 class="modal-title"><mark><font color="#000000" size ="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Warning
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></mark></h4>
 			</div>
-			<div class="modal-body"  style="background-color: rgb(183, 241, 255);" >
+			<div class="modal-body" >
 				<font color="#000000" size ="4">
 						<p align="left">
-								<b>{{request.session.bounce_help_employee}} needs your help at {{request.session.bounce_help_location}}</b><br><br>
+								<b>You are about to close <br> this item out.</b><br><br>
 								&nbsp;
-								<button style="background-color: rgb(130, 176, 187);border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+								<button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
 								type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk_help_close';">OK</button>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 

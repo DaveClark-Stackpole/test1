@@ -110,14 +110,32 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
         except:
                 dummy = 1
 
-    db.close()
-
     current_first, shift1, shift2, shift3, hour_curr  = vacation_set_current7()
     request.session["variableA"] = current_first
     request.session["variableB"] = shift1
     request.session["variableC"] = shift2
     request.session["variableD"] = hourly_var
     request.session["variableE"] = hour_curr
+
+
+    help_closed = 0
+    help_supervisor = request.session['login_name']
+    try:
+      sql = "SELECT Id,employee,kiosk_id,supervisor FROM tkb_help WHERE closed = '%d'" %(help_closed)
+      cur.execute(sql)
+      tmp2 = cur.fetchall()
+      tmp3 = tmp2[0]
+      request.session['bounce_hrly_help'] = 1
+      request.session['bounce_hrly_help_info'] = tmp2
+
+      # request.session['refresh_sup'] = 3
+    except:
+      request.session['bounce_hrly_help'] = 0
+      # request.session['refresh_sup'] = 0
+
+    db.close()
+    a = request.session['bounce_hrly_help']
+    b = request.session['bounce_hrly_help_info']
 
     # This is where you return the value 'hourly' which has all the data needed in tuple form
     return render(request,'production/hrly_display.html', {'tmpp':xx})	
