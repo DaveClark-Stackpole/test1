@@ -32,6 +32,7 @@ def maint_mgmt(request):
 	
 	whoisonit1 = 'tech'
 	whoisonit2 = 'Engineering'
+	maint_login_check(request) #check if login table exists.   If not then create it
 	db, cursor = db_set(request)  
 	SQ_Sup = "SELECT * FROM pr_downtime1 where closed IS NULL and whoisonit != '%s' and whoisonit != '%s' ORDER BY priority ASC" % (whoisonit1,whoisonit2) 
 	cursor.execute(SQ_Sup)
@@ -210,6 +211,13 @@ def maint_mgmt_manpower(request):
 	tmp2 = list(tmp)
 	db.close()
 	return tmp
+
+def maint_login_check(request):
+	db, cursor = db_set(request) 
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_logins(Id INT PRIMARY KEY AUTO_INCREMENT,user_name CHAR(50), password CHAR(50), department CHAR(50),active1 INT(10) default 0)""")
+	db.commit()
+	db.close()
+	return
 
 def maint_manpower(request):
 	db, cursor = db_set(request)  
