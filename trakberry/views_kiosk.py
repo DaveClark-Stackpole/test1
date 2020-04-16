@@ -1966,7 +1966,6 @@ def kiosk_fix44(request):
 def kiosk_help(request):
 	db, cursor = db_set(request)  
 	closed1 = 0
-	dep = request.session['login_department']
 	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_help(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), supervisor CHAR(50), help_date date, closed INT(10) default 0)""")
 	db.commit()
 	sql = "SELECT * FROM tkb_help WHERE closed = '%d' ORDER BY help_date ASC" %(closed1)
