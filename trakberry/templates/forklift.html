@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style type="text/css">
+
+  <title>Forklift App</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+
+/* This will be a verification message for closing a job */
+{% if request.session.bounce3 == 1 %}  
+    <script type="text/javascript">
+	    $(document).ready(function(){
+	    $("#myModal").modal('show');
+	    });
+	</script>
+
+/* Color of the message box */
+	<style>
+		.modal-body{background-color: rgb(188, 210, 248);}
+		.modal-header{background-color: rgb(140, 156, 184);}
+		.modal-footer{background-color: rgb(188, 210, 248);}
+		.modal{border-radius: 25px; }
+	</style>
+{% endif %}
+
+<style>
+	#grad1 {height: 200px;
+		background-color: #D1D898; /* For browsers that do not support gradients */
+		background-image: linear-gradient(to bottom right, #D1D898, #565941); 
+		min-height: 110%; min-width: 100%;width: 100%;height: 110%;
+		position: fixed;top: ;  left: 0;/* Standard syntax (must be last) */
+	}
+</style>
+
+</head>
+
+<body>
+	<!-- The gradient div for the page -->
+	<div id="grad1"> 
+		{% block content %}
+			{% if request.session.refresh_forklift == 1 %}
+				<meta http-equiv="refresh" content="8; url={{request.session.local_toggle}}/forklift" />
+			{% endif %}
+			<br><br><br>
+			<div class="container">
+				<br><br><br>
+				{% if request.session.login_forklift_check %}
+				<!-- code placed here to display requests -->
+					{% for i in request.session.forklift_jobs %}
+						{{i.1}} needs forklift at {{i.3}}
+					{% endfor %}
+				{% else %}
+					<meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/forklift_login_form" />
+				{% endif %}
+			</div>
+		{% endblock %}
+	</div>
+
+
+<!-- Modal For Are you sure to Close -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><mark><font color="#000000" size ="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Warning
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></mark></h4>
+				</div>
+        <div class="modal-body" >
+          <font color="#000000" size ="4">
+              <p align="left">
+                  <b>You are about to close <br> this item out.</b><br><br>
+                  &nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_close_item';">OK</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint';">Cancel</button>
+        </p>
+          </font>
+        </div>
+        <div class="modal-footer">
+          <p align="left">
+          <img src="/static/media/JELogo.gif?{{TCUR}}"  style="border-radius: 25px;" height="40" width="150">
+        </p>    
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body></html>

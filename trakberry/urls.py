@@ -96,7 +96,7 @@ from views_kiosk import kiosk,kiosk_job,kiosk_job_assign, kiosk_job_leave,kiosk_
 from views_kiosk import kiosk_production, kiosk_production_entry,flex_test,manual_production_entry,manual_production_entry2
 from views_kiosk import entry_recent, manual_cycletime_table, tenr_fix2, tenr_fix3,kiosk_hourly_entry,kiosk_initial_9HP,kiosk_initial_6L_Output
 from views_kiosk import kiosk_initial_GF9,kiosk_initial_6L_IN,kiosk_initial_AB1V, kiosk_sub_menu, kiosk_manual, kiosk_kiosk
-from views_kiosk import kiosk_help_form
+from views_kiosk import kiosk_help_form, kiosk_forklift_form
 
 
 # ***********************************************************************************************************************************************************
@@ -107,6 +107,11 @@ from views_kiosk import set_test1, kiosk_fix55, kiosk_fix44, kiosk_help_close
 # ***********************************************************************************************************************************************************
 
 # ***********************************************************************************************************************************************************
+# *******************************************  Shipping Section ********************************************************************************************
+from views_shipping import forklift, forklift_login_form
+
+# ***********************************************************************************************************************************************************
+
 # *******************************************  Management Section ********************************************************************************************
 from views_production import mgmt,mgmt_login_form,mgmt_logout,mgmt_production_hourly,mgmt_production_hourly_edit, mgmt_production, mgmt_display_edit, mgmt_cycletime
 from views_production import mgmt_users_logins, mgmt_users_logins_edit, mgmt_users_logins_update, mgmt_users_logins_add, mgmt_users_logins_add_new
@@ -410,6 +415,7 @@ urlpatterns = [
 	url(r'^kiosk_kiosk/', kiosk_kiosk),
 
 	url(r'^kiosk_help_form/', kiosk_help_form),
+	url(r'^kiosk_forklift_form/', kiosk_forklift_form),
 
 
 	url(r'^tenr2/', tenr2),
@@ -436,6 +442,10 @@ urlpatterns = [
 
 	# ************************************************************************
 
+		# **************  Shipping Section ***************************************
+	url(r'^forklift/', forklift),
+	url(r'^forklift_login_form/', forklift_login_form),
+	# ************************************************************************
 
 		# **************  Management Section ***************************************
 	url(r'^mgmt/', mgmt),

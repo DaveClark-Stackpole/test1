@@ -121,7 +121,7 @@ def hrly_display(request):   # This will return a tuple with hourly prod summary
     help_closed = 0
     # help_supervisor = request.session['login_name']
     try:
-      sql = "SELECT Id,employee,kiosk_id,supervisor FROM tkb_help WHERE closed = '%d'" %(help_closed)
+      sql = "SELECT Id,employee,kiosk_id,supervisor,help_message FROM tkb_help WHERE closed = '%d'" %(help_closed)
       cur.execute(sql)
       tmp2 = cur.fetchall()
       tmp3 = tmp2[0]

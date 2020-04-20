@@ -59,7 +59,12 @@ a.green:hover {color: #FFFFFF;background-color: #315225;border-radius: 25px;}
 			<div class="modal-body"  style="background-color: rgb(183, 241, 255);" >
 				<font color="#000000" size ="4">
 						<p align="left">
-								<b>{{request.session.bounce_help_employee}} needs your help at {{request.session.bounce_help_location}}</b><br><br>
+								<b>{{request.session.bounce_help_employee}} needs your help at {{request.session.bounce_help_location}}<br>
+
+								{% if help_message_length > 3 %}
+									<br>Reason: {{request.session.bounce_help_message}}<br>
+								{% endif %}
+								<br>
 								&nbsp;
 								<button style="background-color: rgb(130, 176, 187);border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
 								type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk_help_close';">OK</button>

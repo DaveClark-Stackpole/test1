@@ -22,22 +22,22 @@
 
 	
 	.button2 {
-  width: 20%;
-  height: 100px;
+  width: 50%;
+  height: 210px;
   text-align: center;
   cursor: pointer;
   outline: none;
   color: #000000;
-  background-color: rgb(255, 200, 174);
+  background-color: rgb(231, 212, 161);
   border: none;
   border-radius: 15px;
   box-shadow: 0 15px #999;
 }
 
-.button2:hover {background-color: rgb(255, 209, 167)}
+.button2:hover {background-color: rgb(211, 193, 144)}
 
 .button2:active {
-  background-color: rgb(252, 185, 122);
+  background-color: rgb(211, 193, 144);
   box-shadow: 0 8px #666;
   transform: translateY(8px);
 }
@@ -84,9 +84,13 @@
 		<button class="button2" type="submit" name="kiosk_button1" value="-4"><font size="6"><b>Jim's Mail</b></font></button>
 	</div> -->
 
-	<div class="frame2"><br><br><br><br><br><br><br><br><br><br>
+	<div class="frame1"><br><br><br><br><br><br><br>
 		<button class="button2" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk_help_form';"><font size="6"><b>Help</b></font></button>
-	</div>
+		</div>
+		<div class="frame1"><br><br><br><br><br><br><br>
+			<button class="button2" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk_forklift_form';"><font size="6"><b>Call Forklift</b></font></button>
+		<br><br><br><br>	</div>
+
 </center>
 
 
