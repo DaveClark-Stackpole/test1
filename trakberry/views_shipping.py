@@ -26,7 +26,7 @@ def forklift_login_form(request):
 
 #	if request.POST:
 	if 'button1' in request.POST:
-		request.session["login_name"] = request.POST.get("login_name")
+		request.session["forklift_login_name"] = request.POST.get("login_name")
 		request.session["login_forklift_check"] = 1
 		return render(request,'redirect_forklift.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
@@ -36,7 +36,14 @@ def forklift_login_form(request):
 	args.update(csrf(request))
 	args['form'] = form
 	request.session["forlift_login_name"] = ""
+	request.session['forklift_names'] = forklift_manpower(request)
 	return render(request,'forklift_login_form.html', {'args':args})	
+
+def forklift_logout(request):
+	request.session["forklift_login_name"] = ''
+	request.session["login_forklift_check"] = 0
+	return render(request,'redirect_forklift.html')
+
 
 
 def forklift_manpower(request):
