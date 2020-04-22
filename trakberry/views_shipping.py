@@ -23,11 +23,13 @@ def forklift_login_form(request):
 	request.session["forklift_names"] = forklift_manpower(request)
 	request.session["forklift_login_name"] = ""
 	request.session["forklift_switch"] = 0
+	
 
 #	if request.POST:
 	if 'button1' in request.POST:
 		request.session["forklift_login_name"] = request.POST.get("login_name")
 		request.session["login_forklift_check"] = 1
+		request.session["refresh_forklift"] = 1
 		return render(request,'redirect_forklift.html')  # Need to bounce out to an html and redirect back into a module otherwise infinite loop
 
 	else:
@@ -42,9 +44,15 @@ def forklift_login_form(request):
 def forklift_logout(request):
 	request.session["forklift_login_name"] = ''
 	request.session["login_forklift_check"] = 0
+	request.session["refresh_forklift"] = 0
 	return render(request,'redirect_forklift.html')
 
-
+def forklift_table_check(request):
+	db, cursor = db_set(request)  
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_forklift(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), area CHAR(50), message CHAR(100), call_time datetime, received_time datetime, closed TINYINT(10) default NULL)""")
+	db.commit()
+	db.close()
+	return 
 
 def forklift_manpower(request):
 	db, cursor = db_set(request)  
@@ -60,6 +68,7 @@ def forklift_manpower(request):
 
 
 def forklift(request):
+	forklift_table_check(request)   #Check table exists
 	# Initialize Request Sessions if they don't exist
 	try:
 		request.session["bounce3"] 
@@ -86,9 +95,11 @@ def forklift(request):
 	if request.session["bounce3_switch"] == 1:
 		request.session["bounce3"] = 1
 		request.session["bounce3_switch"] = 0
+		request.session["refresh_forklift"] = 0
 	else:
 		request.session["bounce3"] = 0
 		request.session["refresh_forklift"] = 0
+		request.session["refresh_forklift"] = 1
 
 	db, cursor = db_set(request)   
 	sqlT = "Select Id,employee,kiosk_id,area,message,closed from tkb_forklift where closed IS NULL"
