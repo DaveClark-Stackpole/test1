@@ -108,7 +108,7 @@ from views_kiosk import set_test1, kiosk_fix55, kiosk_fix44, kiosk_help_close
 
 # ***********************************************************************************************************************************************************
 # *******************************************  Shipping Section ********************************************************************************************
-from views_shipping import forklift, forklift_login_form, forklift_logout
+from views_shipping import forklift, forklift_login_form, forklift_logout, forklift_close, forklift_close_item
 
 # ***********************************************************************************************************************************************************
 
@@ -446,6 +446,8 @@ urlpatterns = [
 	url(r'^forklift/', forklift),
 	url(r'^forklift_login_form/', forklift_login_form),
 	url(r'^forklift_logout/', forklift_logout),
+	url(r'^forklift_close/get/(?P<index>\d+)/$', forklift_close),
+	url(r'^forklift_close_item/', forklift_close_item),
 	# ************************************************************************
 
 		# **************  Management Section ***************************************

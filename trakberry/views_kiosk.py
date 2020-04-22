@@ -2025,7 +2025,7 @@ def kiosk_help_form(request):
 def kiosk_forklift(request):
 	db, cursor = db_set(request)  
 	closed1 = 0
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_forklift(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), area CHAR(50), message CHAR(100), call_time datetime, received_time datetime, closed TINYINT(10) default NULL)""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_forklift(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), area CHAR(50), message CHAR(100), call_time datetime, received_time datetime, closed TINYINT(10) default NULL,driver CHAR(100))""")
 	db.commit()
 	sql = "SELECT * FROM tkb_forklift WHERE closed = '%d' ORDER BY call_time ASC" %(closed1)
 	cursor.execute(sql)

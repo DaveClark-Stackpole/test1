@@ -49,7 +49,7 @@ def forklift_logout(request):
 
 def forklift_table_check(request):
 	db, cursor = db_set(request)  
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_forklift(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), area CHAR(50), message CHAR(100), call_time datetime, received_time datetime, closed TINYINT(10) default NULL)""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_forklift(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), area CHAR(50), message CHAR(100), call_time datetime, received_time datetime, closed TINYINT(10) default NULL,driver CHAR(100))""")
 	db.commit()
 	db.close()
 	return 
@@ -66,6 +66,29 @@ def forklift_manpower(request):
 	db.close()
 	return tmp
 
+def forklift_close(request,index):
+	request.session["forklift_index"] = index
+	request.session["bounce3_switch"] = 1
+	request.session["refresh_forklift"] = 0
+	return render(request,'redirect_forklift.html')
+
+def forklift_close_item(request):
+	index=request.session["forklift_index"]
+	driver = request.session["forklift_login_name"]
+	db, cur = db_set(request)  		
+	t = vacation_temp()
+	tc = 1
+	sql =( 'update tkb_forklift SET closed="%s" WHERE Id="%s"' % (tc,index))
+	cur.execute(sql)
+	db.commit()
+	tql =( 'update tkb_forklift SET received_time="%s" WHERE Id="%s"' % (t,index))
+	cur.execute(tql)
+	db.commit()
+	tql =( 'update tkb_forklift SET driver="%s" WHERE Id="%s"' % (driver,index))
+	cur.execute(tql)
+	db.commit()
+	db.close()
+	return render(request,"redirect_forklift.html")
 
 def forklift(request):
 	forklift_table_check(request)   #Check table exists
@@ -96,9 +119,9 @@ def forklift(request):
 		request.session["bounce3"] = 1
 		request.session["bounce3_switch"] = 0
 		request.session["refresh_forklift"] = 0
+	
 	else:
 		request.session["bounce3"] = 0
-		request.session["refresh_forklift"] = 0
 		request.session["refresh_forklift"] = 1
 
 	db, cursor = db_set(request)   

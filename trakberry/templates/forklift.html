@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- tttteeessst  -->
-<style type="text/css">
-
   <title>Forklift App</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	
-
-/* This will be a verification message for closing a job */
+  <script src="/static/bootstrap/js/1.11.3/jquery.min.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+<!-- /* This will be a verification message for closing a job */ -->
 {% if request.session.bounce3 == 1 %}  
+
     <script type="text/javascript">
 	    $(document).ready(function(){
 	    $("#myModal").modal('show');
 	    });
 	</script>
+<style>
 
-/* Color of the message box */
-	<style>
-		.modal-body{background-color: rgb(188, 210, 248);}
-		.modal-header{background-color: rgb(140, 156, 184);}
-		.modal-footer{background-color: rgb(188, 210, 248);}
-		.modal{border-radius: 25px; }
+        .modal-body
+        {background-color: rgb(197, 197, 197);}
+        .modal-header
+        {background-color: rgb(126, 126, 126);}
+        .modal-footer
+        {background-color: rgb(197, 197, 197);}
+        .modal 
+        {border-radius: 25px; }
 
-{% endif %}
 </style>
+{% endif %}
 
 <style>
 	#grad1 {height: 200px;
@@ -126,7 +127,7 @@
 					{% for i in request.session.forklift_jobs %}
 						<button style="background-color: rgb(179,197,217);border-radius: 10px;width:700px;
 							height:33px;font-weight: 500;font-size:14px;align=left;"type="button" 
-							onclick="window.location.href = '{{request.session.local_toggle}}/mcall/get/{{ i.0}}';">
+							onclick="window.location.href = '{{request.session.local_toggle}}/forklift_close/get/{{i.0}}';">
 							{{i.1}} at {{i.3}}.   {{i.4}}
 						</button>
 						<br><br>
@@ -155,10 +156,10 @@
                   <b>You are about to close <br> this item out.</b><br><br>
                   &nbsp;&nbsp;&nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
-                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint_close_item';">OK</button>
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/forklift_close_item';">OK</button>
                   &nbsp;&nbsp;&nbsp;
                   <button style="background-color: #AAAAAA;border-radius: 10px;width:62px;height:33px;font-weight: 500;font-size:14px;align=left;" 
-                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/maint';">Cancel</button>
+                  type="button" onclick="window.location.href = '{{request.session.local_toggle}}/forklift';">Cancel</button>
         </p>
           </font>
         </div>
