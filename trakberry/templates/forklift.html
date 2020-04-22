@@ -98,7 +98,7 @@
 
 								
 
-										<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+										<li>&nbsp;&nbsp;</li>
 
 
 						<li><a href="#"><span class="glyphicon glyphicon-home"></span>Welcome: <b>{{request.session.forklift_login_name}}</a></b></li>
@@ -125,7 +125,7 @@
 				{% if request.session.login_forklift_check %}
 				<!-- code placed here to display requests -->
 					{% for i in request.session.forklift_jobs %}
-						<button style="background-color: rgb(179,197,217);border-radius: 10px;width:700px;
+						<button style="background-color: rgb(179,197,217);border-radius: 10px;width:80%;
 							height:33px;font-weight: 500;font-size:14px;align=left;"type="button" 
 							onclick="window.location.href = '{{request.session.local_toggle}}/forklift_close/get/{{i.0}}';">
 							{{i.1}} at {{i.3}}.   {{i.4}}
