@@ -2007,7 +2007,7 @@ def kiosk_help_form(request):
 		help_message = request.POST.get("help_message")
 
 		if len(help_supervisor) < 3 :length_fail = 1
-		if len(help_employee) < 3 :length_fail = 1
+		if len(help_employee) < 1 :length_fail = 1
 
 		if length_fail == 1 : return render(request, "redirect_kiosk_help.html")
 		try:
