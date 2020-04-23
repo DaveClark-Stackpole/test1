@@ -288,10 +288,13 @@ def supervisor_display(request):
 		request.session['bounce_help_employee'] = tmp3[1]
 		request.session['bounce_help_location'] = tmp3[2]
 		request.session['bounce_help_index'] = tmp3[0]
+		request.session['bounce_help_message'] = tmp3[4]
+		help_message_length = int(len(tmp3[4]))
 		request.session['refresh_sup'] = 3
 	except:
 		request.session['bounce_help'] = 0
 		request.session['refresh_sup'] = 0
+		help_message_length = 0
 
 	db.close()
 
@@ -299,7 +302,7 @@ def supervisor_display(request):
 
   # call up 'display.html' template and transfer appropriate variables.  
 	#return render(request,"test3.html",{'total':tmp4,'Z':Z_Value,'})
-	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'M':tmp4,'Z':Z_Value,'TCUR':tcur,'args':args})
+	return render(request,"supervisor.html",{'L':list,'N':n,'cnt':cnt,'help_message_length':help_message_length,'M':tmp4,'Z':Z_Value,'TCUR':tcur,'args':args})
 
 def sup_message(request):	
 	A = 'Chris Strutton'

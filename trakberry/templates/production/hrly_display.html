@@ -86,7 +86,7 @@ Shift Production
 			<!-- This section will hold the messages for Supervisors-->
 			
 					{% for j in request.session.bounce_hrly_help_info %}
-					** {{j.3}}, {{j.1}} needs help at {{j.2}} **<br>
+					** {{j.3}}, {{j.1}} needs help at {{j.2}}.  Message: {{j.4}}**<br>
 					{% endfor %}
 			
 		</font>

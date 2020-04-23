@@ -1,0 +1,38 @@
+{% extends "forklift.html" %}
+{% block tables2 %}
+        <!-- <link rel='stylesheet' href='/static/style_1/table1.css'> -->
+{% endblock %}
+
+
+{% block content %}
+
+<font color="#000000" size ="3">
+
+<div class="container"><br><br><br>
+    <div class="row">
+		<div class="col-sm-2"></div>
+		<div class="col-sm-6">
+<form action="" method="post">{% csrf_token %}
+<table>
+	<tr><td colspan="2" style="font-size:25px;"><b><u><center>LOG IN </center></b></u></td><tr>
+		<tr><td>&nbsp;&nbsp;&nbsp;</td></tr>
+		<tr><td><b><u>Login Name</b></u>&nbsp;&nbsp;&nbsp;</td><td>
+	<select style="font-size:14px;width:320px;height:30px;" name="login_name" >
+{% for i in request.session.forklift_names %}
+<option value="{{i.0}}">{{i.0}}</option>
+{% endfor %}
+</select>
+</td><td colspan="2" ><center>&nbsp;&nbsp;&nbsp;&nbsp;
+	<input style="background-color: #999999;border-radius: 10px;height:30px;" type="submit" name="button1" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+</center></td></tr>
+
+</table>
+</form>
+</div>
+<div class="col-sm-2"></div>
+	</div>	
+</div>
+</font>
+
+
+{% endblock %}

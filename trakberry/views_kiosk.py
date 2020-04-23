@@ -1966,7 +1966,7 @@ def kiosk_fix44(request):
 def kiosk_help(request):
 	db, cursor = db_set(request)  
 	closed1 = 0
-	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_help(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), supervisor CHAR(50), help_date date, closed INT(10) default 0)""")
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_help(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), supervisor CHAR(50), help_message CHAR(100), help_date datetime, closed INT(10) default 0)""")
 	db.commit()
 	sql = "SELECT * FROM tkb_help WHERE closed = '%d' ORDER BY help_date ASC" %(closed1)
 	cursor.execute(sql)
@@ -1995,8 +1995,8 @@ def kiosk_help_form(request):
 	if request.POST:
 		help_employee = request.POST.get("help_employee")
 		help_supervisor = request.POST.get("help_supervisor")
+		help_message = request.POST.get("help_message")
 
-		
 		if len(help_supervisor) < 3 :length_fail = 1
 		if len(help_employee) < 3 :length_fail = 1
 
@@ -2007,7 +2007,7 @@ def kiosk_help_form(request):
 			help_kiosk_id = 'unknown'
 		t = vacation_temp()
 		db, cursor = db_set(request) 
-		cursor.execute('''INSERT INTO tkb_help(employee,supervisor,help_date,kiosk_id) VALUES(%s,%s,%s,%s)''', (help_employee,help_supervisor,t,help_kiosk_id))
+		cursor.execute('''INSERT INTO tkb_help(employee,supervisor,help_date,kiosk_id,help_message) VALUES(%s,%s,%s,%s,%s)''', (help_employee,help_supervisor,t,help_kiosk_id,help_message))
 		db.commit()
 		db.close()
 
@@ -2022,7 +2022,50 @@ def kiosk_help_form(request):
 	args['form'] = form  
 	return render(request, "kiosk_help_form.html",{'args':args})
 
+def kiosk_forklift(request):
+	db, cursor = db_set(request)  
+	closed1 = 0
+	cursor.execute("""CREATE TABLE IF NOT EXISTS tkb_forklift(Id INT PRIMARY KEY AUTO_INCREMENT,employee CHAR(50), kiosk_id CHAR(50), area CHAR(50), message CHAR(100), call_time datetime, received_time datetime, closed TINYINT(10) default NULL,driver CHAR(100))""")
+	db.commit()
+	sql = "SELECT * FROM tkb_forklift WHERE closed = '%d' ORDER BY call_time ASC" %(closed1)
+	cursor.execute(sql)
+	tmp = cursor.fetchall()
+	tmp2 = list(tmp)
+	db.close()
+	return tmp
 
+def kiosk_forklift_form(request):
+	length_fail = 0
+	tmp = kiosk_forklift(request)  # Retieve unclosed files and initialize table for kiosk_help
+	if request.POST:
+		forklift_employee = request.POST.get("forklift_employee")
+		forklift_area = request.POST.get("forklift_area")
+		forklift_message = request.POST.get("forklift_message")
+
+		if len(forklift_employee) < 3 :length_fail = 1
+		if len(forklift_area) < 3 :length_fail = 1
+
+		if length_fail == 1 : return render(request, "redirect_kiosk_help.html")
+		try:
+			forklift_kiosk_id = request.session["kiosk_id"]
+		except:
+			forklift_kiosk_id = 'unknown'
+		t = vacation_temp()
+		db, cursor = db_set(request) 
+		cursor.execute('''INSERT INTO tkb_forklift(employee,kiosk_id,area,message,call_time) VALUES(%s,%s,%s,%s,%s)''', (forklift_employee,forklift_kiosk_id,forklift_area,forklift_message,t))
+		db.commit()
+		db.close()
+
+		return render(request, "redirect_kiosk.html")
+		# return kiosk_help_send(request)
+
+	else:
+		form = kiosk_dispForm3()
+
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form  
+	return render(request, "kiosk_forklift_form.html",{'args':args})
 
 def set_test1(request):
 	d = 0
