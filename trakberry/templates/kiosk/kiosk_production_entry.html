@@ -12,13 +12,19 @@
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 	
-	{% if request.session.bounce > 0 %} 
+
+	<!-- Forget about the error messages for now until we are more efficient
+		  Definately add at a later date   -->
+
+	<!-- {% if request.session.bounce > 0 %} 
 	<script type="text/javascript">
 	  $(document).ready(function(){
 		  $("#myModal").modal('show');
 	  });
 	</script>
-	{% endif %}
+	{% endif %} -->
+
+
 <style>
 	{% if request.session.bounce = 1 %} 
 		.modal-body
@@ -430,7 +436,7 @@
 					  <!-- <button type="button" class="btn btn-primary" onclick="window.location.href = 'http://www.tsn.ca';">Save changes</button> -->
 
 
-					  <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" onclick="window.location.href = 'http://www.tsn.ca';">Yes</button>
+					  <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" onclick="window.location.href = '{{request.session.local_toggle}}/kiosk_menu';">Yes</button>
 					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					  <button style="background-color: #AAAAAA;border-radius: 10px;width:60px;height:30px;font-weight: 500;font-size:16px;align=left;" type="button" data-dismiss="modal">Cancel</button>
 						<!-- <button type ="button" class="close" data-dismiss="modal">OK</button> -->

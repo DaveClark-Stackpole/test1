@@ -834,7 +834,7 @@ def kiosk_production_entry(request):
 
 		if oa_check == 1: 
 			# bounce = 1
-			bounce = 1 #  bypass error display for now
+			bounce = 0 #  bypass error display for now
 			write_answer = 1
 			request.session["error_title"] = "Low Production"
 			request.session["error_message"] = "Make sure that count, hrs run and downtime are correct!"
@@ -1612,7 +1612,7 @@ def kiosk_menu(request):
 	if request.POST:
 		button_1 = request.POST
 		button_pressed =int(button_1.get("kiosk_button1"))
-		if button_pressed == -1:
+		if button_pressed == -1:  # This is the button for the white board
 			try:
 				y = request.session["dddd"]
 				#request.session["pcell"]
@@ -1628,7 +1628,7 @@ def kiosk_menu(request):
 			request.session["route_1"] = 3 # enable when ready to run
 			return direction(request)
 			
-		if button_pressed == -2:
+		if button_pressed == -2:  # This is the button for the Production Entry
 			request.session["route_3"] = 2
 			#request.session["route_1"] = 'kiosk'   #disable when ready to run
 			request.session["route_2"] = 2
@@ -1736,6 +1736,15 @@ def kiosk_hourly_entry(request):
 		kiosk_hourly_dtcode = request.POST.get("dtcode")
 		kiosk_hourly_dtmin = request.POST.get("dtmin")
 		kiosk_hourly_dtreason = request.POST.get("dtreason")
+
+		# Easter Egg:  If you enter -2 for parts made (qty) then it takes Downtime Reason (dtreason) 
+		# as the new kiosk_id then reverts back to main Kiosk Screen
+		if int(kiosk_hourly_qty) == -2:
+			request.session["kiosk_id"] = kiosk_hourly_dtreason
+			request.session["route_1"] = 'kiosk_menu'
+			return direction(request)
+
+
 		
 		# Store the data in request variables so we can reroute
 		request.session["kiosk_hourly_pcell"] = kiosk_hourly_pcell
