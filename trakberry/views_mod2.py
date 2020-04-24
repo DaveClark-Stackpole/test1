@@ -14,7 +14,13 @@ import smtplib
 from smtplib import SMTP
 
 def hrly_display(request):   # This will return a tuple with hourly prod summary on last hour for each p_cell
-    
+    try:
+        aa = request.session['bounce_hrly_help']
+        bb = request.session['bounce_hrly_help_info']
+    except:
+        request.session['bounce_hrly_help'] = 0
+        request.session['bounce_hrly_help_info'] = ''
+
     hourly = ['' for x in range(0)]
     hourly_var = ['' for x in range(0)]
     ert = ['' for x in range(0)]

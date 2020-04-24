@@ -1,0 +1,26 @@
+<!-- This is the starting page for Mgmt and everything else will extend from here -->
+{% extends "mgmt.html" %}
+	{% block frame1 %}
+		<br><br><br>
+		Current Time : {{request.session.current_time}}  <br>
+		Previous Day : {{request.session.previous_time}}
+		<br><br><br>
+	{% endblock %}
+
+	{% block frame2 %}
+		<br><br><br>
+		This is the section for the 24hr scrap
+		<br><br><br>
+	{% endblock %}
+
+	{% block frame3 %}
+		<br><br><br>
+		This is the section for the OA (last 24hr and to date month)
+		<br><br><br>
+	{% endblock %}
+
+	{% block frame4 %}
+		<br><br><br>
+		This is the section for the Manpower efficiency
+		<br><br><br>
+	{% endblock %}
