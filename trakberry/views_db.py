@@ -34,7 +34,8 @@ def db_open():
   			tmp2 = cursor.fetchall()
 			return db, cursor
 
-
+# This will set the correct database based on a error acknowledgement.
+# It will aslo initialize local_toggle which is used for the workaround on templates
 def db_set(request):  # Module to set DB settings to the one that works.  Whether local or Server
 
 	try:

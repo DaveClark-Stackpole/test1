@@ -76,6 +76,38 @@ def vacation_set_current2():
 		
 	return current_first
 
+def vacation_set_current2_1():
+	t = vacation_temp()
+	month_st = t.month 
+	year_st = t.year
+	day_st = t.day 
+
+	day_st2 = day_st - 1
+	month_st2 = month_st
+	if day_st2 == 0:
+		month_st2 = month_st - 1
+		# r=8/0
+		if month_st2 == 9 or month_st2 == 4 or month_st2 == 6 or month_st2 == 11:
+			day_st2 = 30
+		elif month_st2 == 2:
+			day_st2 = 28
+		else:
+			day_st2 = 31
+	current_first = sc2(year_st,month_st,day_st)
+	current_second = sc2(year_st,month_st2,day_st2)
+	return current_first,current_second
+
+def sc2(y,m,d):
+	if int(m)<10:
+		current_first = str(y) + "-" + "0" + str(m) 
+	else:
+		current_first = str(y) + "-" + str(m) 	
+	if int(d)<10:
+		current_first = current_first + "-" + "0" + str(d)
+	else:
+		current_first = current_first + "-" + str(d)
+	return current_first
+
 def vacation_set_current77():  # This one sets hour to current one needed for whiteboard 30min past flips
 	t = vacation_temp()
 	tt = vacation_temp_v2()

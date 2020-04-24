@@ -107,19 +107,19 @@
 	<!-- Define the Containers -->
 	<style type="text/css">
 		.mainset{color:black;text-align:center;
-			/* background:rgb(179, 112, 235); */
-			float:left;width:100%}
-		.frame1 {color:black;text-align:center;background:rgb(214, 214, 214);float:left;width:60%;margin: 20px;}
-		.frame12 {color:black;text-align:left;background: rgb(211, 191, 161);border: .4px solid rgb(0, 0, 0);border-radius: 5px;float:left;width:30%;margin: 30px;}
-    .frame2{color:black;text-align:center;background:rgb(253, 186, 186);float:left;width:20%;position:relative;left:5px;}
-    .frame3{color:black;text-align:center;background:rgb(42, 165, 83);float:left;width:15%}
-    .frame4{color:black;text-align:center;background:rgb(165, 116, 42);float:left;width:15%}
-    .frame5{color:black;text-align:center;background:rgb(168, 168, 168);float:right;width:40%}
-    
-    .head1{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);background:rgb(226, 226, 226);width:100%}
-    .head2{color:black;text-align:center;float:left;font-size: 60%;border: .4px solid rgb(0, 0, 0);background: rgb(184, 167, 142);width:25%}
-    .body1{color:black;text-align:left;float: left;border: 1px solid rgb(0, 0, 0);width:25%}
-    </style>
+		/* background:rgb(179, 112, 235); */
+		float:left;width:100%}
+		.wrapper_main {background:chartreuse;width:90%;margin-left: 10px;}
+		.frame1 {color:black;text-align:center;background:rgb(139, 129, 231);float:left;width:51%;margin-bottom: 5px;}
+		.frame2{color:black;text-align:center;background:rgb(83, 134, 202);float:left;width:49%;position:relative;left:5px;margin-bottom: 5px;}
+		.frame3 {color:black;text-align:center;background:rgb(60, 158, 65);float:left;width:51%;position:relative;}
+		.frame4 {color:black;text-align:center;background:rgb(235, 142, 89);float:left;width:49%;position:relative;left:5px;}
+		.frame5{color:black;text-align:center;background:rgb(168, 168, 168);float:right;width:40%}
+		.head1{color:black;text-align:center;border: .4px solid rgb(0, 0, 0);background:rgb(114, 159, 243);width:85%}
+		.head2{color:black;text-align:center;float:left;font-size: 60%;border: .4px solid rgb(222, 231, 95);background: rgb(184, 167, 142);width:65%}
+		.body1{color:black;text-align:left;float: left;border: 1px solid rgb(0, 0, 0);width:85%}
+		.body2{color:black;text-align:left;float: left;border: 1px solid rgb(0, 0, 0);width:65%}
+	</style>
 
 {% block grid %}
 {% endblock %}
@@ -186,7 +186,7 @@
                         <ul class="dropdown-menu multi-level"  style="background-color:rgb(245, 237, 219)" >
                            <li><a href="{{request.session.local_toggle}}/mgmt_users_logins">Users Logins</a></li>
                            <li><a href="{{request.session.local_toggle}}/mgmt_production_hourly">Hourly Entries</a></li>
-                           <li><a href="{{request.session.local_toggle}}/mgmt_cycletime">Cycle Times</a></li>
+                           <li><a href="{{request.session.local_toggle}}/mgmt_test1">Test 1</a></li>
                        </ul>
                     </li>
                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
@@ -194,7 +194,7 @@
 			        </ul>	
 			
 			         <ul class="nav navbar-nav navbar-right">	
-			         <li><font size ="2" style="color:rgb(100, 100, 100)">Welcome: <b>{{request.session.mgmt_login_name}}</b></li>
+			         <li><font size ="2" style="color:rgb(100, 100, 100)">Welcome:<b>{{request.session.mgmt_login_name}}</b></li>
                      <li><a href="{{request.session.local_toggle}}/mgmt_logout" style="color:rgb(100, 100, 100)"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 
                     {% endif %}
@@ -210,8 +210,28 @@
 
 
 {% block content %}
-    {% if request.session.mgmt_login_password != 'bort' %}
-        <meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/mgmt_login_form" />
+    {% if request.session.mgmt_login_password_check = 0 %}  <!-- If login failed or required -->
+		<meta http-equiv="refresh" content="0; url={{request.session.local_toggle}}/mgmt_login_form" />
+	{% else %}  <!-- if Login passed and main start up screen -->
+		<div class="wrapper_main">
+			<div class="frame1">  <!-- Default is L24 hr Production-->
+				{% block frame1 %}
+				{% endblock %}
+			</div>
+			<div class="frame2">  <!-- Default is L24hr scrap -->
+				{% block frame2 %}
+				{% endblock %}
+			</div>
+			<div class="frame3">  <!-- Default is OA -->
+				{% block frame3 %}
+				{% endblock %}
+			</div>
+			<div class="frame4">  <!-- Default is Manpower -->
+				{% block frame4 %}
+				{% endblock %}
+			</div>
+		</div>
+
     {% endif %}
 
 {% endblock %}

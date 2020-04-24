@@ -89,6 +89,7 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #    }
 #}  
 
+# UnComment the below Database Setting to use on the PMDSDATA Server
 DATABASES = {
          'default': {
              'ENGINE': 'django.db.backends.mysql', 
@@ -110,6 +111,7 @@ DATABASES = {
 #          }
 #       }
 
+# Use the below Database Setting to use on the local Server
 # DATABASES = {
 
 #        'default': {

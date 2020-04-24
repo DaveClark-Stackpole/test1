@@ -8,7 +8,7 @@ from views2 import main_login_form
 from views_mod1 import find_current_date, mgmt_display, mgmt_display_edit
 from trakberry.views2 import login_initial
 from trakberry.views_testing import machine_list_display
-from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2, vacation_set_current5,vacation_set_current6
+from trakberry.views_vacation import vacation_temp, vacation_set_current, vacation_set_current2_1, vacation_set_current5,vacation_set_current6,vacation_set_current77
 from django.http import QueryDict
 import MySQLdb
 import json
@@ -29,27 +29,47 @@ from datetime import datetime
 
 def mgmt(request):
 	request.session["bounce"] = 0
-	return render(request, "mgmt.html")
+	mgmt_24hr_production(request)
+
+
+	return render(request, "mgmt_start.html")
+
+def mgmt_24hr_production(request):
+
+	# vt = vacation_temp()
+	vt1, vt2 = vacation_set_current2_1()
+
+	request.session["current_time"] = str(vt1)
+	request.session["previous_time"] = str(vt2)
+	return
+
+def mgmt_test1(request):
+	request.session["bounce"] = 0
+	return render(request, "mgmt_test1.html")
+
+
 
 # Reset the password so it logs out
 def mgmt_logout(request):
-	request.session["mgmt_login_password"] = " "
+	request.session["mgmt_login_password"] = ""
+	request.session["mgmt_login_password_check"] = 0
 	return render(request, "mgmt.html")
 
 def mgmt_login_form(request):	
-
-#	if request.POST:
 	if 'button1' in request.POST:
-
-
 		login_name = request.POST.get("login_name")
 		login_password = request.POST.get("login_password")
 
 		if len(login_name) < 5:
 			login_password = 'wrong'
 
-		request.session["mgmt_login_name"] = login_name
-		request.session["mgmt_login_password"] = login_password
+		if login_password == 'bort':
+			request.session["mgmt_login_password_check"] = 1
+			request.session["mgmt_login_name"] = login_name
+			request.session["mgmt_login_password"] = login_password
+		else:
+			request.session["mgmt_login_password_check"] = 0
+
 	
 		return mgmt(request)
 		
