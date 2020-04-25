@@ -28,7 +28,7 @@ def maint_mgmt(request):
 	request.session["main_body_menu_color"] = "#D2D2D2"
 	request.session["bounce"] = 0
 
-	wildcard = int(request.session["wildcard1"])
+	# wildcard = int(request.session["wildcard1"])
 	
 	whoisonit1 = 'tech'
 	whoisonit2 = 'Engineering'
