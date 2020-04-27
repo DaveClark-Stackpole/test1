@@ -76,11 +76,16 @@ def vacation_set_current2():
 		
 	return current_first
 
+# Returns todays date formatted and yesterdays date formatted properly
 def vacation_set_current2_1():
 	t = vacation_temp()
 	month_st = t.month 
 	year_st = t.year
 	day_st = t.day 
+
+	day_st = 20
+	month_st = 3
+	year_st = 2020
 
 	day_st2 = day_st - 1
 	month_st2 = month_st
@@ -90,7 +95,12 @@ def vacation_set_current2_1():
 		if month_st2 == 9 or month_st2 == 4 or month_st2 == 6 or month_st2 == 11:
 			day_st2 = 30
 		elif month_st2 == 2:
-			day_st2 = 28
+			r1 = year_st/float(4)
+			r2 = int((year_st/4))
+			if r1== r2:
+				day_st2 = 29
+			else:
+				day_st2 = 28
 		else:
 			day_st2 = 31
 	current_first = sc2(year_st,month_st,day_st)
