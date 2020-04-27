@@ -85,10 +85,8 @@ def maint_mgmt(request):
 
 	db.close()
 
-
-	
-	if wildcard == 1:
-		ch1 = request.session["maint_mgmt_login_password_check"]
+	# if wildcard == 1:
+	# 	ch1 = request.session["maint_mgmt_login_password_check"]
 
 
 	if request.POST:

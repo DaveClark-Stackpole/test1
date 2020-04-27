@@ -90,15 +90,15 @@ WSGI_APPLICATION = 'trakberry.wsgi.application'
 #}  
 
 # UnComment the below Database Setting to use on the PMDSDATA Server
-DATABASES = {
-         'default': {
-             'ENGINE': 'django.db.backends.mysql', 
-             'NAME': 'prodrptdb',                      
-             'USER': 'stuser',                      
-             'HOST': '10.4.1.224', 
-             'PASSWORD':'stp383', 
-         }
-          }
+# DATABASES = {
+#          'default': {
+#              'ENGINE': 'django.db.backends.mysql', 
+#              'NAME': 'prodrptdb',                      
+#              'USER': 'stuser',                      
+#              'HOST': '10.4.1.224', 
+#              'PASSWORD':'stp383', 
+#          }
+#           }
 
 # DATABASES = {
 #         'default': {
@@ -112,17 +112,17 @@ DATABASES = {
 #       }
 
 # Use the below Database Setting to use on the local Server
-# DATABASES = {
+DATABASES = {
 
-#        'default': {
-#            'ENGINE': 'django.db.backends.mysql',
-# 	        'NAME': 'prodrptdb',
-# 		    'USER': 'root',
-# 		    'PASSWORD':'benny6868',
-# 		    'HOST': '127.0.0.1',
-# 		    'PORT': '',
-#         }
-#      }
+       'default': {
+           'ENGINE': 'django.db.backends.mysql',
+	        'NAME': 'prodrptdb',
+		    'USER': 'root',
+		    'PASSWORD':'benny6868',
+		    'HOST': '127.0.0.1',
+		    'PORT': '',
+        }
+     }
 
 
 # Internationalization

@@ -30,17 +30,101 @@ from datetime import datetime
 def mgmt(request):
 	request.session["bounce"] = 0
 	mgmt_24hr_production(request)
-
-
 	return render(request, "mgmt_start.html")
 
-def mgmt_24hr_production(request):
+def mgmt_initialize_cat_table(request):
+	part1 = [('50-3627','GF6'),('50-3632','GF6'),('50-1713','GF6'),('50-1731','GF6'),('50-9341','10R80'),('50-0455','10R60')]
+	part1 = part1 + [('50-5214','10R140'),('50-3214','10R140'),('50-4865','GFx'),('50-9641','GFx')]
+	part1 = part1 + [('50-5401','AB1V'),('50-5404','AB1V'),('50-8670','AB1V'),('50-6729','6L Output')]
+	part1 = part1 + [('50-4900','6L Output'),('50-6686','6L Output'),('50-2421','6L Input'),('50-4916','6L Input')]
+	part1 = part1 + [('50-2407','6L Input'),('50-4748','ZF'),('50-3050','Magna'),('50-1467','Magna')]
+	db, cursor = db_set(request)
+	try:
+		cursor.execute("CREATE TABLE tkb_part_cat(Id INT PRIMARY KEY AUTO_INCREMENT,partno CHAR(50), category CHAR(50))")
+		db.commit()
+		for i in part1:
+			cursor.execute('''INSERT INTO tkb_part_cat(partno,category) VALUES(%s,%s)''', (i[0],i[1]))
+			db.commit()
+	except:
+		dummy = 1
+	db.close()
+	return
 
+def mgmt_24hr_production(request):
+	mgmt_initialize_cat_table(request)  # initialize category table if it doesn't exist
 	# vt = vacation_temp()
 	vt1, vt2 = vacation_set_current2_1()
+	sh1 = '11pm-7am'
+	sh2 = '7am-3pm'
+	sh3 = '3pm-11pm'
+	len_partno = []
+	cat_part = []
 
 	request.session["current_time"] = str(vt1)
 	request.session["previous_time"] = str(vt2)
+
+	db, cur = db_set(request) 
+	a1 = '900'
+	b1=7
+
+
+	# sql = "SELECT asset_num, actual_produced, machine, partno, down_time, comments, shift_hours_length, target  FROM sc_production1 where pdate = '%s' and shift = '%s'  and asset_num = '%s'" %(vt1,sh1,a1)
+
+	sql = "SELECT FORMAT(sum(actual_produced),0),partno FROM sc_production1 where pdate = '%s' and shift = '%s' and asset_num = '%s' GROUP by partno" %(vt1,sh1,a1)
+	cur.execute(sql)
+	tmp_mid = cur.fetchall()
+	tmp_mid2=tmp_mid[0]
+	# yy=int(tmp_mid2[0])
+	# for i in tmp_mid:
+	# 	m.append(int(i[0]))
+	# 	m.append(i[1])
+	# h = list(m)
+
+	sql1 = "SELECT asset_num, actual_produced, machine, partno, down_time, comments, shift_hours_length, target, shift  FROM sc_production1 where pdate = '%s' and shift = '%s'" %(vt2,sh2)
+	cur.execute(sql1)
+	tmp_day = cur.fetchall()
+
+	sql2 = "SELECT asset_num, actual_produced, machine, partno, down_time, comments, shift_hours_length, target, shift  FROM sc_production1 where pdate = '%s' and shift = '%s'" %(vt2,sh3)
+	cur.execute(sql2)
+	tmp_aft = cur.fetchall()
+	sql3 = sql1 + ' union all ' +  sql2
+
+	# Select all data last 24hrs in list
+	sql4 = "SELECT asset_num, actual_produced, machine, partno, down_time, comments, shift_hours_length, target, shift  FROM sc_production1 where (pdate = '%s' and shift = '%s') or (pdate = '%s' and shift = '%s') or (pdate = '%s' and shift = '%s')" %(vt2,sh3,vt2,sh2,vt1,sh1) 
+	cur.execute(sql4)
+	tmp_all2 = cur.fetchall()
+
+	sql5 = "SELECT asset_num, actual_produced, machine, partno, down_time, comments, shift_hours_length, target, shift  FROM sc_production1 where (pdate = '%s' and shift = '%s' and asset_num = '%s') or (pdate = '%s' and shift = '%s' and asset_num = '%s') or (pdate = '%s' and shift = '%s' and asset_num = '%s') ORDER BY %s %s" %(vt2,sh3,a1,vt2,sh2,a1,vt1,sh1,a1,'partno','DESC') 
+	cur.execute(sql5)
+	tmp_all = cur.fetchall()
+
+	sql6 = "SELECT FORMAT(sum(actual_produced),0),partno FROM sc_production1 where length(partno) > '%d' and (pdate = '%s' and shift = '%s' and asset_num = '%s') or (pdate = '%s' and shift = '%s' and asset_num = '%s') or (pdate = '%s' and shift = '%s' and asset_num = '%s') GROUP by partno order by %s %s" %(b1,vt2,sh3,a1,vt2,sh2,a1,vt1,sh1,a1,'partno','DESC') 
+	cur.execute(sql6)
+	tmp_sum = cur.fetchall()
+
+	sql_cat = "Select * from tkb_part_cat"
+	cur.execute(sql_cat)
+	tmp_cat = cur.fetchall()
+
+	# This will create a new list using first number as length of partno and rest as a tuple of partno and sum of 24hr parts 
+	# produced.   Make sure to refer to [1] in list as partno and [0][1] or [0][0] as other two variables
+	for x in tmp_sum:
+		len_partno.append(len(x[1]))
+		cat1 = 'unknown'
+
+		for y in tmp_cat:
+			if x[1] == y[1]:
+				cat1 = y[2]
+		cat_part.append(cat1)
+	part_totals_24hr = zip(tmp_sum,len_partno,cat_part)
+	sort1 = sorted(part_totals_24hr, key=lambda vr: vr[2])
+
+
+	request.session["24hr_production_mid"] = sort1
+	request.session["24hr_production_day"] = sort1
+	request.session["24hr_production_aft"] = tmp_aft
+
+	db.close()
 	return
 
 def mgmt_test1(request):
