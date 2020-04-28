@@ -19,8 +19,23 @@ import time
 #import datetime as dt 
 from django.core.context_processors import csrf
 
+def maint_initialize_rv(request):
+	try:
+		request.session["maint_mgmt_maint_switch"]
+	except:
+		request.session["maint_mgmt_maint_switch"] = 0
+	try:
+		request.session["55"]
+	except:
+		request.session["55"] = 3
+	
+	return
 
 def maint_mgmt(request):
+	maint_initialize_rv(request)  #initialize request variables
+	# request.session["test55"] = 1
+
+	
 
 	request.session["main_screen_color"] = "#abad97"  # Color of Background in APP
 	request.session["main_menu_color"] = "#f8fcd7"    # Color of Menu Bar in APP
@@ -28,6 +43,7 @@ def maint_mgmt(request):
 	request.session["main_body_menu_color"] = "#D2D2D2"
 	request.session["bounce"] = 0
 
+	
 	# wildcard = int(request.session["wildcard1"])
 	
 	whoisonit1 = 'tech'
