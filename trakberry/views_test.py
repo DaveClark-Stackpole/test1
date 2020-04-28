@@ -106,7 +106,7 @@ def place_test(request):
 #	E[3] = ['W','X']
 #	E[4] = ['Y','X']
 #	
-	return render(request, "test_a.html", {'List':E})
+	return render(request, "test8.html", {'A':E})
 	 
 def vacation_set_current():
 	t = vacation_temp()
